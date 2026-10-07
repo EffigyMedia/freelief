@@ -1,30 +1,7 @@
-# AGENTS.md Template (operative instructions)
+# AGENTS.md
 
-> **What this is:** a reusable, **technology-neutral** template for a project's root `AGENTS.md` —
-> the short operative brief a coding agent loads every session. `AGENTS.md` is the file that coding
-> agents from any vendor read. Beside it, the project's `CLAUDE.md` holds one import line and nothing
-> else (`CLAUDE_Pointer.md` is its exact text), so Claude Code loads the same instructions. This
-> blank stays in the shared template; only the filled result lives in the project.
->
-> **How to use:** the **Initialize** bootstrap (`Process/Development_Process.md`,
-> Phase 1) reads this file **in place** from the shared starter folder and writes the
-> project's root `AGENTS.md` from it, filling every `<PLACEHOLDER>` from the completed design doc.
-> Delete the `> guidance` blockquotes (including this one). Keep it short and *true* — it's the
-> operative summary; the shared docs hold the detail. When an instruction changes, amend the
-> project's `AGENTS.md` **and** log it in the project's instruction changelog — never edit the
-> shared corpus from project work, and never write an instruction into `CLAUDE.md`.
->
-> Everything below is stack-agnostic. The bracketed guidance shows how to fill each part; the
-> **Conventions that bite** section is where the folded-in, hard-won lessons live as principles —
-> keep the ones that apply, drop the ones that don't.
-
----
-
-<!-- The section below is the SOURCE of every project's standing policy, and the only copy of it.
-     `python Commands/materialize-projects.py --write --project Freelief` writes it into that project
-     between the same two markers, and `--all` in place of `--project` writes it into every project.
-     Edit it here and run that; do not edit a project's copy, and never copy it by hand - a hand copy
-     is a second text, and it drifts from this one and from every other copy. -->
+Guidance for any coding agent working in this repository. `CLAUDE.md` beside this file holds one
+line that loads it for Claude Code, so every agent reads the same instructions.
 
 <!-- BEGIN standing-policy - generated, do not edit here -->
 
@@ -122,45 +99,47 @@ and the fix is in the tools. Owner-decided 2026-10-03, after book projects rebui
 only one changed. A rebuild that changes nothing wastes time and tokens.
 
 <!-- END standing-policy -->
-
 ---
-
-# AGENTS.md
-
-Guidance for any coding agent working in this repository. `CLAUDE.md` beside this file holds one
-line that loads it for Claude Code, so every agent reads the same instructions.
 
 ## What this is
 
-**Freelief** — <one-line pitch: what it is and for whom>. Built in **<language / runtime>** on
-**<framework / engine / "no framework">**, targeting **<platforms / deploy targets>**.
-<One line on any load-bearing product stance — e.g. premium/offline/no-tracking, or "internal tool",
-if it constrains decisions. Delete if N/A.>
+**Freelief** — a free, open-source, offline web app that helps anyone through a panic attack or
+acute anxiety in the moment, with breathing, grounding, calming words and gentle distraction. Built
+in **plain HTML, CSS and JavaScript** with **no framework, no dependency and no build step**, as a
+**progressive web app served from GitHub Pages**, phone first and fully usable on a desktop.
+
+**It is used in a crisis. Help comes first, and it works for everyone.** The breathing guide starts
+at launch with no question, menu or notice. Every control works by touch, by keyboard and by screen
+reader. Reduced motion is honoured. No exercise is timed or scored. The app collects nothing and
+makes no network call after install. Keyboard and screen-reader use are NOT out of scope, unlike
+Effigy Arcade.
+
+**Claims are only what is verified.** Freelief never says it is clinically proven, treats, cures or
+diagnoses (REQ-025). A standard is shown as met only with a dated check for that version (REQ-029).
 
 This project runs a documentation-driven **development process**, read in place from the shared
-process docs (never copied here, never edited from project work):
+process docs (never copied here):
 
-Process docs: `<env-root>/Process/`;
-starter blanks: `<env-root>/Templates/_Project_Template/`
+Process docs: `<env-root>/Process/`; starter blanks: `<env-root>/Templates/_Project_Template/`
 
-> **`<env-root>` is the directory that holds `.code-continuum-env-root`.** To find it, go up from here,
-> parent by parent, until you find that file. Never write a drive-letter path in this file —
+> **`<env-root>` is the directory that holds `.code-continuum-env-root`.** To find it, go up from
+> here, parent by parent, until you find that file. Never write a drive-letter path in this file —
 > see `Path_Policy.md`.
 
-> **Set line — keep only if a set manifest names this project; otherwise delete it and
-> the `Project_Sets.md` bullet below.** The set's `_set/set.toml` must name this project in
-> `projects`. Both directions must resolve. A member sits **beside** `_set/` inside the set folder,
-> so from here that manifest is `../_set/set.toml`.
+**This project is in no set.** It has no set directory, shares no documents, and carries no pointer
+stubs. If it turns out to belong to a set, `Project_Sets.md` says how one is joined.
 
-**This project is in no set.** It has no set directory, shares no documents, and carries no pointer stubs. If it turns out to belong to a set, `Project_Sets.md` says how one is joined.
-
-- `docs/core/Freelief_design.md` *(project-local)* — the founding spec: vision, flows,
-  architecture, the Decision Log, and the build plan. **The source of *what* to build.** Keep it
-  living — code and docs must never disagree.
+- `docs/Design_Document.md` *(project-local)* — the founding spec: vision, flows, architecture,
+  the Decision Log, and the delivery plan. **The source of *what* to build.** Keep it living — code
+  and docs must never disagree. **It stays at this path**, because `srs.py` and `prd.py` read it
+  there (Instruction Changelog, 2026-10-07).
+- `docs/fragments/` — the store. `REQ-` records are the requirements (all agreed); `RLG-` records
+  of type `feature` are the tracker items; `UNT-` records are units of work.
+- `docs/SRS.md`, `docs/PRD.md` — generated by `srs.py` and `prd.py` from the records and the design
+  document. Regenerate them when a requirement or a marked region changes; never edit them by hand.
 - `Development_Process.md` — the operating manual: bootstrap, the feature loop, releases, and the
   trigger phrases below. **The source of *how*.**
-- `Artifact_Formats.md` — exact formats for `tracker.md`, `changelog.md`,
-  technical references.
+- `Artifact_Formats.md` — exact formats for the changelog and technical references.
 - `Performance_Testing.md` / `Audit_and_Testing.md` — perf practice; how this project audits
   itself, in rounds of four lenses. A clean round is required before a release.
 - `Path_Policy.md` — how anything names a location. **This file carries no absolute path.**
@@ -169,33 +148,19 @@ starter blanks: `<env-root>/Templates/_Project_Template/`
   where it lives, commit that repository, rematerialize, and log it here if it changes how this
   project works. **Writing into another project's repository is the breach — state it, do it
   anyway, and record it in both projects' instruction logs.**
-- `Project_Sets.md` *(set members only)* — the set rules. Short version: shared documents live once
-  in the set directory and are never copied down. Nothing else about this project changes.
-  Delete this bullet if no manifest names this project.
 - `Writing_Standard.md` — the writing standard: Simplified Technical English (ASD-STE100).
-  **All output is written in STE** — chat, every project document, source-code comments, and
-  commit messages. Identifiers and code syntax are exempt. This doc is the single owner of the
-  rules; everything else points here.
+  **All output is written in STE** except authored product prose (the calming text the app shows),
+  which is written in the voice the product needs.
 - `docs/core/Instruction_Changelog.md` *(project-local)* — dated log of amendments to *how this
-  project works*. Add an entry whenever an instruction changes (and update this file's affected
-  section, same unit of work). A documented project amendment **wins** over the shared docs on
-  conflict.
-- The **core artifacts** (design doc, `tracker.md`, `changelog.md`, the instruction log) live in
-  `docs/core/`; technical references and performance docs in their `docs/` subfolders; audit
-  findings are fragments in `docs/fragments/`; **this file and its one-line `CLAUDE.md` pointer are
-  the only .md files at the repo root** (agents load them from there).
-  *(A set changes nothing here. A set directory holds a manifest and documents, never an
-  `AGENTS.md` or a `CLAUDE.md`, so only this project's instructions load.)*
-- **Shared Knowledge Base** — `<env-root>/Process/Knowledge_Base/`:
-  the cross-project, tool-specific gotcha memory. Consult it for `<stack>` gotchas before
-  stack-specific work, and **append** new lessons there (not into the shared process docs).
-- **Model routing** — `<env-root>/Process/Model_Routing.md`: how to choose
-  the model/effort tier per task (mechanical → cheap, judgment/irreversible → strong).
-- **Routing posture** — `ROUTING_BIAS: 1` (balanced). This project's standing model/effort lean;
-  see `Model_Routing.md` §0 (**0** economy · **1** balanced · **2** quality). Change the integer
-  to make this project lean cheaper/stronger by default; a per-session choice overrides it. Set it
-  to match the project's stakes (e.g. a shipping commercial product often wants `2`; a throwaway
-  utility `0`). Absent ⇒ balanced.
+  project works*. A documented project amendment **wins** over the shared docs on conflict.
+- The core artifacts (`changelog.md`, the instruction log) live in `docs/core/`; technical
+  references and performance docs in their `docs/` subfolders; audit findings are fragments.
+  **This file and its one-line `CLAUDE.md` pointer are the only .md files at the repo root.**
+- **Shared Knowledge Base** — `<env-root>/Process/Knowledge_Base/`: consult it for web, PWA and
+  Playwright gotchas before stack-specific work, and **append** new lessons there.
+- **Model routing** — `<env-root>/Process/Model_Routing.md`.
+- **Routing posture** — `ROUTING_BIAS: 2` (quality). People use Freelief in a crisis; a wrong word
+  or a broken screen costs more than rework. A per-session choice overrides it.
 
 ## Trigger phrases
 
@@ -203,92 +168,79 @@ Summaries — the canonical procedures live in `<env-root>/Process/Development_P
 
 | Phrase | Meaning |
 |---|---|
-| **Initialize** | First run on a fresh project — full bootstrap. <Note status once done, e.g. "Done: v0.0.0.".> |
-| *(normal work)* | Feature loop: implement → `test` → track → changelog → **patch** bump → commit. One feature = one commit = one patch = one changelog entry = one tracker item to Built. |
-| **Track this: …** | Add a `TRK-NNN` to Requested in `tracker.md`; do not start it. |
-| **Resume** | New session, or the far side of a context clear — run `python <env-root>/Commands/thread.py show`. It carries the focus, the next action and its origin, the constraints in force, and the unfinished work. **Verify the working tree is clean.** Uncommitted work is an interrupted unit: ask, never silently commit or discard. Then run `<doctor>`. |
-| **Release** | Only when something ships. Run audit rounds until `audit-gate.py` prints `GATE CLEAR`; run the file audit; reconcile the tracker; **purge `output/previews/`**; run the `bench` checkpoint; **produce the distributable when the toolchain allows, and record exactly what is missing when it does not** — never skip silently; **verify `test` and `doctor` are green**; bump the version; tag; push the commit and the tag when a remote exists. A missing remote never blocks a release. |
+| **Initialize** | Done: v0.0.0, 2026-10-07. |
+| *(normal work)* | Feature loop: implement → `test` → mark the `RLG-` item built → changelog → **patch** bump in `version.js` → commit. One feature = one commit = one patch = one changelog entry = one tracker item to built. A finished slice is a **minor** bump. |
+| **Track this: …** | `python <env-root>/Commands/fragment.py new --kind ruling --type feature --status requested --title "…"`; do not start it. |
+| **Resume** | Run `python <env-root>/Commands/thread.py show`. **Verify the working tree is clean.** Uncommitted work is an interrupted unit: ask, never silently commit or discard. Then run `doctor`. |
+| **Release** | Only when something ships. Run audit rounds until `audit-gate.py` prints `GATE CLEAR`; run the file audit; re-check every crisis line and update its date; purge `output/previews/`; run `bench`; run `build` (the size check); **verify `test` and `doctor` are green**; bump the version; tag; push the commit and the tag. |
 | **Perform audit** | Run a round per `Audit_and_Testing.md`: four lenses, one finding to a fragment; change no code. |
 
 ## Commands
 
-> The toolchain may not be on PATH. Say how the commands resolve it (an env var and/or a pinned
-> default path), then list one line per command. Keep the names generic: `setup / run / test /
-> doctor / build / clean / bench`.
+Python 3.10 or later runs the commands; the tests run from a project-local `.venv` with Playwright
+and axe, which `setup` builds with the environment's `uv` (`<env-root>/Runtime/bin`). Playwright uses
+the Chrome already on the machine. Run from the repo root:
 
-The toolchain is resolved from `<ENV VAR>` or the pinned default `<PATH>`. Run from the repo
-root — a set changes nothing about how this project builds:
-
-- `<setup>` — take a fresh checkout to runnable (install deps / import assets).
-- `<doctor>` — verify readiness (toolchain, version, critical config, imports, tests). **Resume
-  runs this.**
-- `<test>` — run the test suite headlessly; exit 0 only if all pass.
-- `<run>` — launch the app. <Note if this is only a convenience and not an on-target check.>
-- `<build>` — produce the distributable (or report exactly what's missing).
-- `<clean>` / `<bench>` — clear caches; run the performance benchmark.
+- `python tools/freelief.py setup` — create `.venv` and install Playwright and axe.
+- `python tools/freelief.py doctor` — verify Python, the venv, the imports, `version.js`, every JSON
+  file and the manifest parse, and the tests are collectable. **Resume runs this.**
+- `python tools/freelief.py test [name…]` — run every `test_*` function in `tools/tests/`. It fails
+  on a file it cannot load or that holds no test.
+- `python tools/freelief.py run` — serve the folder at `http://localhost:8000`. A desktop browser is
+  a convenience, not an on-target check: the owner checks look and feel on a phone.
+- `python tools/freelief.py build` — no build step; reports the shipped size against 150 KB
+  (REQ-028) and fails over it.
+- `python tools/freelief.py clean` — remove `output/` and Python caches. Never touches `input/`.
+- `python tools/freelief.py bench` — the launch-time and size benchmark (created after slice 1).
+- **Deploy:** GitHub Pages serves `main` of `EffigyMedia/freelief`. A push deploys.
 
 ## Architecture (the load-bearing boundaries)
 
-> Name each module, its one responsibility, and what it must **not** reach into. Name the single
-> sources of truth (the one authoritative state object, the one place a rule is decided). This is
-> the section that stops future work from quietly dissolving the boundaries.
-
-- **<Module A>** — <one responsibility>; **must not** <forbidden reach>.
-- **<Module B>** — <one responsibility>; **must not** <forbidden reach>.
-- **<Single source of truth>** — <what object/function is authoritative for X; who consumes it>.
+- **Shell** (`index.html`, `app.js`) — the page frame, the screen router, the footer and the "Need
+  urgent help?" control; **must not** hold exercise logic or text.
+- **Exercises** (`exercises/*.js`) and **activities** (`activities/*.js`) — one file each, exporting
+  `start(container, ctx)` and `stop()`; **must not** touch storage, the network or literal text.
+  Activities use DOM elements, never a canvas, and have no score, timer or failure state.
+- **`settings.js`** — **the single source of truth for Settings** and the only module that touches
+  `localStorage`, with every access in try/catch.
+- **`strings.js` + `strings/en.json`** — **the single source of all user-facing text.**
+- **`crisis.js` + `data/crisis-lines.json`** — crisis lines by device region; never asks for location.
+- **`config.json`** — **every tunable**, with its committed default.
+- **`version.js`** — **the one authoritative version**, read by the page and by the service worker.
+- **`sw.js`** — the offline cache, named by the version; **must not** fetch from another origin.
 
 ## Conventions that bite if ignored
 
-> Keep the ones that apply; drop the rest. These are distilled from real projects.
-
-- **Chat output is terse by default; records are not.** Telegraphic style OK in conversation —
-  drop articles, use fragments, tables over prose; sacrifice grammar, never semantic content. No
-  preamble, no recap, no restating tool output. **Exempt: commit messages, tracker/fragment
-  bodies, changelog entries** — those are the permanent record and keep full deliberate prose.
-  The distinction is load-bearing: chat is read once and discarded; a record is read by every
-  future session, and its prose is what carries the reasoning forward.
-- **Write every output in Simplified Technical English (ASD-STE100).** This covers chat, all
-  project documents, source-code comments, and commit messages. Identifiers and code syntax stay
-  as the language needs them. The full rules live in `Process/Writing_Standard.md`;
-  read them before you write.
-- **The design doc (`docs/core/Freelief_design.md`) is the live design authority — update it in the same
-  unit of work.** Any change to a rule, a flow, or an architectural decision updates the design doc's
-  affected prose **and** adds a dated Decision Log entry (annotate superseded entries; don't delete).
-  The tracker/changelog record *that* something shipped; the design doc records the *current* rules.
-- **Every tunable lives in configuration with a committed default — never an in-code constant.**
-- **Randomness is explicit and seeded** (if the project has any): the seed/state lives in serialized
-  state; no hidden global RNG. <Delete if N/A.>
-- **Changes the automated tooling can't observe need owner verification on the target.** Headless/CI
-  and even a desktop run can't confirm rendering, audio, on-device layout/scaling, or "feel" — a green
-  test run does **not** verify them. Flag such changes for the owner to check on the real device/target
-  and say so plainly; never claim a visual/on-target result is correct from an automated run.
-- **Externally-editable config can be mangled — keep it minimal and let `doctor` guard it.** If any
-  config file is also edited by another tool (a mobile/remote editor, a GUI, a formatter), that tool
-  may re-save and silently strip or reorder settings. Keep such files comment-light, and have `doctor`
-  verify the critical settings are still present and parse — at Resume especially.
+- **Chat output is concise; records are not.** Commit messages, fragments and changelog entries
+  keep full deliberate prose.
+- **Write every output in Simplified Technical English (ASD-STE100)** — chat, documents, comments,
+  commit messages. The calming text in `strings/` is authored product prose and is exempt.
+- **The design document is the live design authority — update it in the same unit of work.** A
+  change to a rule, a flow or an architectural decision updates its prose **and** adds a dated
+  Decision Log entry (annotate superseded entries; do not delete). A changed requirement is edited
+  in its own `REQ-` record with its history beneath it; a dropped one becomes `withdrawn`.
+- **Every tunable lives in `config.json` with a committed default — never an in-code constant.**
+- **Nothing ships that loads from another origin**, and no word in a shipped file makes a health
+  claim. `test_repo.py` enforces both; keep it passing.
+- **Changes the tests cannot observe need the owner to check on a phone** — look, feel, motion,
+  sound, and how calm it is. A green test run does not verify them. Say so plainly.
+- **A screen reader and a keyboard are first-class input.** Every new control gets a test that
+  reaches and uses it by keyboard, and an axe check of its page.
+- **Crisis-line data is safety-critical.** Every line carries a last-checked date. Never add or
+  change a line without a source checked in this session, and say which.
 - **Two standard root folders: `input/` is provided, `output/` is generated.** `clean` may remove
-  all of `output/` and must never touch `input/` — it is the one place where deletion is not
-  recoverable by rebuilding. `output/` is git-ignored unless the distributable *is* the deliverable.
+  all of `output/` and must never touch `input/`.
 - **`input/` holds exactly two folders, and containment decides git.** `input/committed/` is
-  committed and pushed; `input/excluded/` never is, at any depth, with no per-file exceptions.
-  **Before any commit or push touching `input/`, stop if something looks misfiled** — material in
-  `committed/` that may not be the owner's to redistribute, or a file large enough to make the
-  repository unpushable (GitHub rejects over 100 MB, and the blob stays in history). **Say what you
-  see and wait. Do not move it, do not re-file it, and do not proceed on your own judgment** — the
-  sorting is the owner's call, and a commit that leaves the machine cannot be recalled.
-- **Preview artifacts → `output/previews/`, purged at every release.** Only the *generating*
-  script/scene is committed, never its output (a generator that lives only in a chat transcript is
-  one context-clear from being lost).
-- **A release produces the distributable when the toolchain allows; otherwise record exactly what
-  is missing** (export templates, SDK, signing identity, account) — never skip silently.
-- **Know your save format's fidelity limits — round-trip it in a test.** Serialize → deserialize →
-  re-serialize and assert equality; watch for silent precision/type loss (e.g. 64-bit integers through
-  JSON, which stores numbers as doubles and rounds them).
+  committed and pushed; `input/excluded/` never is. **Before any commit or push touching `input/`,
+  stop if something looks misfiled.** Say what you see and wait.
+- **Preview artifacts → `output/previews/`, purged at every release.** Only the generating script is
+  committed.
+- **Settings round-trip in a test**: save, reload, read, and assert the same values.
 - **Commits are authored as the project owner — no AI identity or co-author trailer — and end with
-  the trailer line `Made-with: Code Continuum`.** Feature commits
-  are local; **push at a release** to `<remote>` (`<url>`, <private/public>). `<main>` may
-  sit ahead of the remote between releases. *(A set changes none of this. Each member has its own
-  repository and its own tag space, so tags stay in the plain `vX.Y.Z` form.)*
-- **Never commit** (see root `.gitignore`): <secrets / signing keys / credentials / licensed reference
-  material / large binary masters>. Sanitize anything that must ship but contains them; enforce hardest
-  before the first push to a remote.
+  the trailer line `Made-with: Code Continuum`.** Feature commits are local. **The remote does not
+  exist yet:** the public repository `EffigyMedia/freelief` is created when slice 1 is ready, and
+  only with the owner's yes at that time (Instruction Changelog, 2026-10-07). After that, push at a
+  release or when the owner needs a build to test on the phone.
+- **Never commit** (see `.gitignore`): tokens, keys or passwords; `.venv/`; `output/`;
+  `input/excluded/`; the content of feedback emails or any other personal data.
+- **Audit pace:** run an audit round at the end of each slice, and before every release.

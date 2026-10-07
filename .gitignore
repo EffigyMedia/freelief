@@ -1,0 +1,18 @@
+# The project-local test environment. `python tools/freelief.py setup` rebuilds it.
+.venv/
+__pycache__/
+
+# Everything a command produces. `clean` removes it.
+output/
+
+# Material that never leaves this machine, at any depth. No exceptions.
+input/excluded/
+
+# Local agent settings. The shared .claude/settings.json is committed.
+.claude/settings.local.json
+
+# Never commit: tokens, keys, passwords, or personal data from feedback.
+.env
+*.key
+*.pem
+feedback/

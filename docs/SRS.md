@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `93fe2650ea1b539b` · 31 requirement(s) specified, 0 not yet
+> Store stamp `ab5c48f2deb2f8d3` · 31 requirement(s) specified, 0 not yet
 
 ## 1. Introduction
 
@@ -184,4 +184,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T07:33:57-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T13:13:52-04:00 by `Commands/srs.py` from 31 requirement record(s).

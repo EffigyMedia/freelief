@@ -18,7 +18,8 @@ narrative and the decisions. Code, records and this document must never disagree
 - **Routing posture:** `ROUTING_BIAS: 2` (quality). People use Freelief in a crisis, so a wrong
   word or a broken screen costs more than rework.
 - **Origin:** the owner's request of 2026-10-07, kept in `docs/provisional/FREELIEF_OWNER_REQUEST.md`.
-  The premise stub (`PREMISE.md`) was an unfilled template; this document supersedes it and the
+  The folder is kept on purpose: it holds the owner's own words, and every decision in it is now
+  in the Decision Log below, so it is a record and not a draft. The premise stub (`PREMISE.md`) was an unfilled template; this document supersedes it and the
   stub is removed.
 
 <!-- BEGIN srs-references - written by the interview, read by the generators -->
@@ -297,7 +298,7 @@ met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), n
 | 5 | External services | None at run time. | No network after install, no data sent. | Analytics, a feedback relay. |
 | 6 | Content and assets | Text in `strings/en.json`, owner-approved. Crisis lines in `data/crisis-lines.json`, curated and dated. Research sources in `docs/research/`. Tones generated with Web Audio at run time, so no audio files. The system font stack, so no font files. | Small, licence-free, offline. | Recorded audio; web fonts; image assets. |
 | 7 | Deployment | GitHub Pages serves `main` of the public repository `EffigyMedia/freelief`. A push deploys. Rollback is a revert commit. The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
-| 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, vendored under `tools/vendor/` for tests only and never shipped, runs the automated accessibility check. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
+| 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, from the `axe-playwright-python` package in the same venv, runs the automated accessibility check; nothing from it ships. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
 | 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright. `run`: `python -m http.server 8000`. `test`: the Playwright harnesses. `doctor`: check Python, the venv, Playwright, the manifest, the service worker and the JSON files. `build`: none — the repository is the distributable; `build` reports that and checks the size limit. `clean`: remove `output/`. `bench`: the launch-time and size benchmark. | Matches the environment's standard commands with the fewest tools. | A bundler. |
 | 10 | Version control | Git. Feature commits stay local; push at a release or for an owner device test. The remote is public. | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
 | 11 | CI/CD | None in v1. The project commands are enough at this size. | Fewer moving parts. | GitHub Actions (reconsider if volunteers send pull requests). |
@@ -550,10 +551,23 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   to keep checked. — 2026-10-07
 - **The feedback email address is decided later; the email button stays hidden until then.** —
   Owner's choice. — 2026-10-07
-- **Testing: Python and Playwright from a project-local venv, with axe-core vendored for tests
-  only.** — Real-browser tests, including offline and network-log checks, with the same toolchain
-  as Effigy Arcade. axe-core never ships, so REQ-019 holds. — Rejected: Node test runners; manual
-  testing only. — 2026-10-07 (proposed by the implementer in Stage 7; confirmed at sign-off)
+- ~~**Testing: Python and Playwright from a project-local venv, with axe-core vendored for tests
+  only.**~~ — 2026-10-07. *Superseded the same day at Initialize by the entry below.*
+- **Testing: Python and Playwright from a project-local venv, with axe-core from the
+  `axe-playwright-python` package.** — Real-browser tests, including offline and network-log
+  checks, with the same toolchain as Effigy Arcade. The package bundles axe-core, so no file is
+  downloaded and copied by hand, and nothing from it ships, so REQ-019 holds. — Rejected: axe-core
+  copied into `tools/vendor/` (a manual download to keep current); Node test runners; manual testing
+  only. — 2026-10-07
+- **The design document stays at `docs/Design_Document.md`, and the repository root holds no
+  `.md` file except `AGENTS.md` and `CLAUDE.md`.** — `srs.py` and `prd.py` read the design document
+  only at that path; `Development_Process.md` says to move it, and the two shared documents
+  disagree. — Rejected: a move to `docs/core/Freelief_design.md`. — 2026-10-07 (Initialize)
+- **The project commands are one script, `tools/freelief.py`, and the version lives in
+  `version.js`.** — One script is one place to read. `version.js` is plain script, so the page
+  loads it with a script tag and the service worker with `importScripts`, and the cache name always
+  matches the app. — Rejected: the version in `config.json` (that file is tunables) or in the
+  manifest (no standard field). — 2026-10-07 (Initialize)
 - **Activities use DOM elements, not a canvas.** — A screen reader and the keyboard must reach every
   item. — Rejected: a canvas. — 2026-10-07 (proposed by the implementer in Stage 8; confirmed at
   sign-off)

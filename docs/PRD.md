@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `93fe2650ea1b539b` · 31 requirement(s) recorded
+> Store stamp `ab5c48f2deb2f8d3` · 31 requirement(s) recorded
 
 ## The problem
 
@@ -121,4 +121,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-07T07:33:59-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-07T13:13:54-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
