@@ -11,6 +11,7 @@ import * as ground from "./exercises/ground.js";
 import * as statements from "./exercises/statements.js";
 import * as bubbles from "./activities/bubbles.js";
 import * as trace from "./activities/trace.js";
+import * as sort from "./activities/sort.js";
 import * as menu from "./screens/menu.js";
 import * as settingsScreen from "./screens/settings.js";
 import * as about from "./screens/about.js";
@@ -19,7 +20,7 @@ import * as feedback from "./screens/feedback.js";
 
 // The screens the router knows. Breathing is the default and the first screen (REQ-018).
 const ROUTES = {
-  breathe, ground, statements, bubbles, trace, menu, settings: settingsScreen, about, standards, feedback,
+  breathe, ground, statements, bubbles, trace, sort, menu, settings: settingsScreen, about, standards, feedback,
 };
 const DEFAULT_ROUTE = "breathe";
 

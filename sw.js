@@ -22,6 +22,7 @@ const FILES = [
   "exercises/statements.js",
   "activities/bubbles.js",
   "activities/trace.js",
+  "activities/sort.js",
   "screens/menu.js",
   "screens/settings.js",
   "screens/about.js",

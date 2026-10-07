@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `ab5c48f2deb2f8d3` · 31 requirement(s) specified, 0 not yet
+> Store stamp `a536b6116af915d9` · 31 requirement(s) specified, 0 not yet
 
 ## 1. Introduction
 
@@ -77,7 +77,7 @@ person's settings, on the device.
 - **REQ-007** *(should)* — Freelief can play soft tones that mark breath in and breath out. The tones are off by default and the person can turn them on.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
-- **REQ-014** *(should)* — Freelief offers a colour sort: the person puts calm colours into gradient order by drag or by keyboard, with no score and no failure.
+- **REQ-014** *(should)* — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-018** *(must)* — When Freelief opens, the paced breathing guide starts at once, with no account, sign-up, menu or question before it.
 - **REQ-020** *(must)* — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
@@ -184,4 +184,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T13:13:52-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T13:58:18-04:00 by `Commands/srs.py` from 31 requirement record(s).

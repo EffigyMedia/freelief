@@ -35,7 +35,7 @@ def test_more_ways_reaches_every_screen_by_keyboard():
         wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 2000)
         assert page.evaluate("document.activeElement.tagName") == "H1", "focus moves to the new screen"
         hrefs = page.locator(".menu-item").evaluate_all("els => els.map(e => e.getAttribute('href'))")
-        assert hrefs == ["#breathe", "#ground", "#statements", "#bubbles", "#trace", "#settings"]
+        assert hrefs == ["#breathe", "#ground", "#statements", "#bubbles", "#trace", "#sort", "#settings"]
         page.locator(".nav-link").click()
         wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 2000)
         assert not errors, errors

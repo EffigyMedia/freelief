@@ -230,7 +230,9 @@ statements come from the strings file. Outcome: the person stops when they choos
 **F5 — Distraction activities.** *Bubble field:* bubbles drift slowly; a tap or a key press pops the
 focused bubble with a soft visual (and a soft tone if tones are on). *Shape trace:* a looping shape;
 the person follows it with a finger or moves along it with the arrow keys. *Colour sort:* calm
-colour tiles to order by drag, or by keyboard (select, then move). States for all: no score, no
+colour tiles to put in order from lightest to darkest: choose a tile, then the tile to swap it with,
+by touch, mouse or keyboard; each tile names its shade for a screen reader *(changed from "drag, or
+keyboard" at slice 5; waits for the owner's confirmation, see REQ-014)*. States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
 and its action.
 
@@ -588,6 +590,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   ThroughLine, more than 175 countries, checked 2026-10-07. — Rejected: Befrienders Worldwide
   (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; proposed for owner
   confirmation)
+- **The colour sort is choose-then-swap, not drag; every tile names its hue and shade; the tiles
+  stay in one row.** — One method serves touch, mouse, keyboard and screen reader, and the shade
+  names make the task possible without sight. A row that wrapped would break the left-to-right
+  order, so the tiles shrink to fit (never under 44 pixels). It passed every automated check, so
+  under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
+  learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
+  and the owner confirms or asks for drag as an addition**)
 - **The trust pages are screens in the router, reached from three footer links on every screen:
   About and disclaimer, Standards and research, Feedback.** — One router and one contract for
   everything; the pages work offline like the rest. — Rejected: separate HTML files under

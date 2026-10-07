@@ -38,6 +38,14 @@
     "keyStepPercent": 1,
     "searchWindow": 40
   },
+  "sort": {
+    "lightness": [88, 74, 60, 46, 32],
+    "palettes": [
+      { "name": "blue", "hue": 212, "saturation": 45 },
+      { "name": "green", "hue": 150, "saturation": 30 },
+      { "name": "lavender", "hue": 265, "saturation": 30 }
+    ]
+  },
   "theme": {
     "default": "system",
     "choices": ["system", "dark", "light"]

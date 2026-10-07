@@ -10,6 +10,15 @@ audit.
 
 ---
 
+<a id="v0-5-0"></a>
+## [0.5.0] - 2026-10-07
+- Slice 5, the colour sort [RLG-005](../fragments/RLG-005.md): put five soft tiles in order from
+  lightest to darkest by choosing a tile, then the tile to swap it with, by touch, mouse or
+  keyboard. Every tile names its shade, so it works with a screen reader; the row is one tab stop
+  with arrow keys inside; "New colours" changes the palette. It passed every automated check, so it
+  ships. REQ-014 changed from "drag or keyboard" to this method and waits for the owner's
+  confirmation. All five delivery slices are now built. 48 tests; bench 132 ms, 9 ms, 95 KB.
+
 <a id="v0-4-0"></a>
 ## [0.4.0] - 2026-10-07
 - Slice 4, trust pages [RLG-004](../fragments/RLG-004.md): footer links on every screen to

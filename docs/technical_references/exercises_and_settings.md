@@ -45,6 +45,17 @@ of its current place, so the crossing cannot make it jump to the other lobe. The
 second path drawn with `stroke-dasharray` against `pathLength`. Each full forward loop updates a
 polite live line ("One loop..."); nothing is counted as a score.
 
+## Colour sort (`activities/sort.js`)
+Five tiles of one palette (`config.json` → `sort`: a hue and saturation per palette, and five
+lightness values from lightest to darkest). `data-shade` is the tile's index in that list; the row
+is sorted when every tile's shade equals its place. The first choice marks a tile
+(`aria-pressed="true"`, raised with a focus-colour outline); the second swaps the two, and choosing
+the same tile again cancels. Each tile's accessible name is "{hue}, {shade}, place N of 5", and a
+polite live line reports each choice, swap and the finished order. The row is one tab stop (roving
+`tabindex`): arrows, Home and End move between tiles. The row is a CSS grid of `--count` columns
+that shrink to fit, never under 2.75rem, so it never wraps. "New colours" moves to the next
+palette and reshuffles until the order is not already sorted.
+
 ## Settings
 `settings.js` reads `localStorage[config.settings.storageKey]` once at boot, keeps only known
 values (a stored rhythm that no longer exists in `config.json` falls back to the default), and

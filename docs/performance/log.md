@@ -2,6 +2,15 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-07 — Slice 5 checkpoint (v0.5.0)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to breathing guide | 110 ms | 132 ms | +20% | OK, within tolerance |
+| Input to visible response | 10 ms | 9 ms | -10% | OK |
+| Shipped size | 41.3 KB | 95.0 KB | +130% | OK, expected |
+Notes: all five slices are in. 55 KB of the 150 KB budget remain. Launch is near the +25%
+tolerance; lazy loading of the non-breathing screens is the planned remedy if it crosses.
+
 ## 2026-10-07 — Slice 4 checkpoint (v0.4.0)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|
