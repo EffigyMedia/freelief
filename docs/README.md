@@ -17,8 +17,7 @@ screen has a **"Need urgent help?"** button with crisis lines for your country.
 
 ## Use it
 
-Open the app in a browser: <https://effigymedia.github.io/freelief/> *(live when the first version
-is published)*. To install it, use your browser's "Add to Home Screen" or "Install" option.
+Open the app in a browser: <https://effigymedia.github.io/freelief/>. To install it, use your browser's "Add to Home Screen" or "Install" option.
 
 ## Research and standards
 

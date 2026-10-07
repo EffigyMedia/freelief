@@ -245,10 +245,11 @@ the Chrome already on the machine. Run from the repo root:
   committed.
 - **Settings round-trip in a test**: save, reload, read, and assert the same values.
 - **Commits are authored as the project owner — no AI identity or co-author trailer — and end with
-  the trailer line `Made-with: Code Continuum`.** Feature commits are local. **The remote does not
-  exist yet:** the public repository `EffigyMedia/freelief` is created when slice 1 is ready, and
-  only with the owner's yes at that time (Instruction Changelog, 2026-10-07). After that, push at a
-  release or when the owner needs a build to test on the phone.
+  the trailer line `Made-with: Code Continuum`.** Feature commits are local. **The remote is
+  `origin` = `https://github.com/EffigyMedia/freelief` (public)**, created 2026-10-07 with the
+  owner's yes. GitHub Pages serves `main` at `https://effigymedia.github.io/freelief/`, so **a push
+  is a deploy.** Push at a release, or when the owner needs a build to test on the phone — never per
+  commit.
 - **Never commit** (see `.gitignore`): tokens, keys or passwords; `.venv/`; `output/`;
   `input/excluded/`; the content of feedback emails or any other personal data.
 - **Audit pace:** run an audit round at the end of each slice, and before every release.

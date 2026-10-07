@@ -27,6 +27,16 @@ this log is only for changes to *how we work* (process/instructions).
 
 -->
 
+## 2026-10-07 (later)
+
+### The remote exists; a push deploys
+- **Instruction:** `origin` is the public repository `https://github.com/EffigyMedia/freelief`, and
+  GitHub Pages serves `main`. Push only at a release or when the owner needs a phone build.
+- **Why:** the owner approved creating and publishing it after all five slices were built. This
+  closes the entry below, "Create the GitHub repository when slice 1 is ready, public".
+- **Encoded in:** `AGENTS.md` (Conventions: commits and remote); `docs/README.md`.
+- Owner, 2026-10-07.
+
 ## 2026-10-07
 
 ### Keep the design document at `docs/Design_Document.md`

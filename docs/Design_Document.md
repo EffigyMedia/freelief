@@ -459,9 +459,6 @@ re-checked; the Standards & research page shows only what is verified.
 **Open questions.**
 - **The public feedback email address.** The owner decides, before the first release that shows
   the email button. Until then the button is hidden.
-- **Which international crisis directory the fallback links to.** Proposed at slice 1:
-  Find A Helpline (findahelpline.com), run by ThroughLine, free, more than 175 countries, checked
-  2026-10-07. The owner confirms at the slice 1 phone check.
 
 ---
 
@@ -588,8 +585,7 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   on the phone)
 - **The international directory is Find A Helpline (findahelpline.com)** — free, run by
   ThroughLine, more than 175 countries, checked 2026-10-07. — Rejected: Befrienders Worldwide
-  (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; proposed for owner
-  confirmation)
+  (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; **confirmed by the owner\n  2026-10-07**)
 - **The colour sort is choose-then-swap, not drag; every tile names its hue and shade; the tiles
   stay in one row.** — One method serves touch, mouse, keyboard and screen reader, and the shade
   names make the task possible without sight. A row that wrapped would break the left-to-right
@@ -597,6 +593,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **The public repository `EffigyMedia/freelief` exists and GitHub Pages serves `main` at
+  https://effigymedia.github.io/freelief/.** — Created after all five slices were built, with the
+  owner's yes, so the app can be checked on a phone over HTTPS. A push is now a deploy. — 2026-10-07
+  (owner)
 - **The trust pages are screens in the router, reached from three footer links on every screen:
   About and disclaimer, Standards and research, Feedback.** — One router and one contract for
   everything; the pages work offline like the rest. — Rejected: separate HTML files under
