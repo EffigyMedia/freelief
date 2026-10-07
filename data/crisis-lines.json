@@ -1,0 +1,79 @@
+{
+  "directory": {
+    "name": "Find A Helpline",
+    "url": "https://findahelpline.com/",
+    "note": "Free directory of crisis lines in more than 175 countries, run by ThroughLine.",
+    "checked": "2026-10-07"
+  },
+  "regions": {
+    "US": {
+      "country": "United States",
+      "emergency": "911",
+      "lines": [
+        {
+          "name": "988 Suicide & Crisis Lifeline",
+          "hours": "24/7, free and confidential",
+          "call": "988",
+          "text": "988",
+          "web": "https://chat.988lifeline.org/",
+          "source": "https://988lifeline.org/",
+          "checked": "2026-10-07"
+        }
+      ]
+    },
+    "CA": {
+      "country": "Canada",
+      "emergency": "911",
+      "lines": [
+        {
+          "name": "9-8-8 Suicide Crisis Helpline",
+          "hours": "24/7, English and French",
+          "call": "988",
+          "text": "988",
+          "source": "https://988.ca/",
+          "checked": "2026-10-07"
+        }
+      ]
+    },
+    "GB": {
+      "country": "United Kingdom",
+      "emergency": "999",
+      "lines": [
+        {
+          "name": "Samaritans",
+          "hours": "24/7, free from any phone",
+          "call": "116 123",
+          "source": "https://www.samaritans.org/how-we-can-help/contact-samaritan/",
+          "checked": "2026-10-07"
+        }
+      ]
+    },
+    "IE": {
+      "country": "Ireland",
+      "emergency": "112 or 999",
+      "lines": [
+        {
+          "name": "Samaritans",
+          "hours": "24/7, free from any phone",
+          "call": "116 123",
+          "source": "https://www.samaritans.org/how-we-can-help/contact-samaritan/",
+          "checked": "2026-10-07"
+        }
+      ]
+    },
+    "AU": {
+      "country": "Australia",
+      "emergency": "000",
+      "lines": [
+        {
+          "name": "Lifeline",
+          "hours": "24/7",
+          "call": "13 11 14",
+          "text": "0477 13 11 14",
+          "source": "https://www.lifeline.org.au/",
+          "checked": "2026-10-07"
+        }
+      ]
+    }
+  }
+}

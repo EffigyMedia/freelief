@@ -1,0 +1,219 @@
+/* Freelief - soft and dim. Dark by default; follows the device light setting (REQ-021).
+   Text colours meet WCAG AAA contrast (7:1) against their background. */
+
+:root {
+  color-scheme: dark light;
+  --bg: #0f1626;
+  --surface: #18223a;
+  --text: #e6ecf5;
+  --muted: #c3cde0;
+  --accent: #8fb8de;
+  --accent-soft: rgba(143, 184, 222, 0.22);
+  --focus: #ffd98a;
+  --radius: 1.25rem;
+  --target: 3rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f4f1ea;
+    --surface: #e8e3d8;
+    --text: #1d2433;
+    --muted: #353d4d;
+    --accent: #2f5b86;
+    --accent-soft: rgba(47, 91, 134, 0.18);
+    --focus: #8a4b00;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--target);
+  min-width: var(--target);
+  padding: 0.6rem 1.25rem;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover { background: var(--accent-soft); }
+
+/* ---- frame ---- */
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: max(1rem, env(safe-area-inset-top)) 1.25rem 0.5rem;
+}
+
+.brand {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.help-open {
+  border-color: var(--text);
+}
+
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.bottom {
+  padding: 0.5rem 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+  text-align: center;
+  color: var(--muted);
+}
+
+.bottom p { margin: 0.25rem 0; }
+
+.tagline { color: var(--text); }
+
+/* ---- breathing guide ---- */
+
+.breathe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.guide {
+  position: relative;
+  width: min(70vw, 50vh, 22rem);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.guide-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, var(--accent-soft), transparent 70%);
+  border: 3px solid var(--accent);
+  will-change: transform;
+}
+
+.guide-count {
+  position: relative;
+  font-size: 2.5rem;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+
+.phase {
+  margin: 0;
+  min-height: 2em;
+  font-size: 1.75rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* ---- urgent help ---- */
+
+.help {
+  width: min(100% - 2rem, 36rem);
+  max-height: calc(100% - 2rem);
+  padding: 1.5rem;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.help::backdrop { background: rgba(5, 8, 15, 0.75); }
+
+.help h2 { margin-top: 0; }
+
+.help h3 { margin: 1rem 0 0.25rem; }
+
+.emergency { font-weight: 700; }
+
+.lines { list-style: none; margin: 0; padding: 0; }
+
+.line { margin: 0.5rem 0 1rem; }
+
+.line h3 { font-size: 1.125rem; }
+
+.line-hours, .line-checked { margin: 0.25rem 0; color: var(--muted); }
+
+.line-checked { font-size: 0.95rem; }
+
+.line-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.directory {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.directory-note { color: var(--muted); }
+
+.others summary {
+  display: list-item;
+  min-height: var(--target);
+  padding: 0.6rem 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.close { margin-top: 1rem; width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}

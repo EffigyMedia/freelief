@@ -191,7 +191,12 @@ the Chrome already on the machine. Run from the repo root:
 - `python tools/freelief.py build` — no build step; reports the shipped size against 150 KB
   (REQ-028) and fails over it.
 - `python tools/freelief.py clean` — remove `output/` and Python caches. Never touches `input/`.
-- `python tools/freelief.py bench` — the launch-time and size benchmark (created after slice 1).
+- `python tools/freelief.py bench` — the launch, response and size benchmark against
+  `docs/performance/baseline.md`; it exits 1 when a target is missed.
+- `.venv/Scripts/python tools/previews.py` — screenshots to `output/previews/` for a look check.
+  `tools/make_icons.py` renders the PNG icons from `icons/icon.svg`.
+- **Browser tests use `harness.open_app` and `harness.wait_until`.** Never `wait_for_function`:
+  the app's CSP refuses it, correctly (`docs/technical_references/app_shell_and_offline.md`).
 - **Deploy:** GitHub Pages serves `main` of `EffigyMedia/freelief`. A push deploys.
 
 ## Architecture (the load-bearing boundaries)

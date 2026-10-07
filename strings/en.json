@@ -1,0 +1,30 @@
+{
+  "app.name": "Freelief",
+  "app.tagline": "Breathe with the circle. You are safe right now.",
+
+  "breathe.title": "Breathe",
+  "breathe.in": "Breathe in",
+  "breathe.holdIn": "Hold",
+  "breathe.out": "Breathe out",
+  "breathe.holdOut": "Rest",
+  "breathe.pause": "Pause",
+  "breathe.resume": "Resume",
+  "breathe.paused": "Paused. Resume when you are ready.",
+  "breathe.guideLabel": "Breathing guide",
+
+  "help.open": "Need urgent help?",
+  "help.title": "Urgent help",
+  "help.intro": "If you might act on thoughts of harming yourself, or you are not safe, reach out now. These people are there to listen.",
+  "help.emergency": "If you are in immediate danger, call {number}.",
+  "help.emergencyUnknown": "If you are in immediate danger, call your local emergency number.",
+  "help.call": "Call {number}",
+  "help.text": "Text {number}",
+  "help.chat": "Chat online",
+  "help.checked": "Last checked {date}",
+  "help.directory": "Find a helpline in your country",
+  "help.directoryNote": "{note} This link needs an internet connection.",
+  "help.otherCountries": "Lines in other countries",
+  "help.close": "Close",
+
+  "footer.selfHelp": "Freelief is a self-help tool. It is not medical care."
+}

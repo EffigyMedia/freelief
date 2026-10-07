@@ -235,11 +235,14 @@ failure, no timer; reduced motion slows or stops the drift; a screen reader anno
 and its action.
 
 **F6 — Need urgent help.** Trigger: the "Need urgent help?" control, present on every screen.
-Steps: the app reads the device language and region; it shows the crisis lines for that region
-first, each with a tap-to-call or tap-to-text link and its last-checked date; then the link to the
-international directory; then a line to call the local emergency number if in immediate danger.
-States: *unknown region* — the international directory and the emergency-number line only;
-*offline* — the curated lines still show; the directory link says it needs a network.
+Steps: the app reads the device language and region; it shows a line to call the region's
+emergency number if in immediate danger; then the crisis lines for that region, each with a
+tap-to-call or tap-to-text link and its last-checked date; then the link to the international
+directory; then a closed "Lines in other countries" list with every other curated region.
+States: *uncurated region* — the "call your local emergency number" line, the international
+directory and the other-countries list; *offline* — the curated lines still show; the directory
+link says it needs a network. *(Changed at slice 1, 2026-10-07: the emergency line moved first, and
+the other-countries list was added. See the Decision Log.)*
 
 **F7 — Settings.** Rhythm preset, tones on or off, theme override. Saved on the device at once.
 Storage that fails is ignored and the defaults stand.
@@ -448,8 +451,9 @@ re-checked; the Standards & research page shows only what is verified.
 **Open questions.**
 - **The public feedback email address.** The owner decides, before the first release that shows
   the email button. Until then the button is hidden.
-- **Which international crisis directory the fallback links to.** The implementer proposes one
-  with evidence in slice 1; the owner confirms.
+- **Which international crisis directory the fallback links to.** Proposed at slice 1:
+  Find A Helpline (findahelpline.com), run by ThroughLine, free, more than 175 countries, checked
+  2026-10-07. The owner confirms at the slice 1 phone check.
 
 ---
 
@@ -568,6 +572,19 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   loads it with a script tag and the service worker with `importScripts`, and the cache name always
   matches the app. — Rejected: the version in `config.json` (that file is tunables) or in the
   manifest (no standard field). — 2026-10-07 (Initialize)
+- **The urgent-help dialog puts the emergency number first and adds a closed "Lines in other
+  countries" list.** — In immediate danger, the emergency number is the first thing to see. The
+  device language can name the wrong country (a visitor, or a phone left on `en-US`), so every
+  curated line stays one tap away. — Rejected: the directory and the emergency line only for an
+  uncurated region, as first written in F6. — 2026-10-07 (slice 1, implementer; the owner checks it
+  on the phone)
+- **The international directory is Find A Helpline (findahelpline.com)** — free, run by
+  ThroughLine, more than 175 countries, checked 2026-10-07. — Rejected: Befrienders Worldwide
+  (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; proposed for owner
+  confirmation)
+- **The breathing guide counts the seconds of each phase and shows the count; a screen reader
+  hears only the phase name.** — The count carries the rhythm under reduced motion, and announcing
+  every second would be noise. — 2026-10-07 (slice 1, implementer)
 - **Activities use DOM elements, not a canvas.** — A screen reader and the keyboard must reach every
   item. — Rejected: a canvas. — 2026-10-07 (proposed by the implementer in Stage 8; confirmed at
   sign-off)

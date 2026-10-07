@@ -1,0 +1,13 @@
+{
+  "breathing": {
+    "defaultRhythm": "calm",
+    "rhythms": {
+      "calm": { "in": 4, "holdIn": 0, "out": 6, "holdOut": 0 }
+    },
+    "guideMinScale": 0.55,
+    "guideMaxScale": 1.0
+  },
+  "crisis": {
+    "fallbackRegion": null
+  }
+}
