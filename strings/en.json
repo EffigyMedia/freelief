@@ -2,6 +2,7 @@
   "app.name": "Freelief",
   "app.tagline": "Breathe with the circle. You are safe right now.",
 
+  "nav.label": "Screens",
   "nav.more": "More ways to calm",
   "nav.back": "Back to breathing",
   "nav.menuTitle": "More ways to calm",
@@ -117,7 +118,7 @@
   "help.directory": "Find a helpline in your country",
   "help.directoryNote": "{note} This link needs an internet connection.",
   "help.otherCountries": "Lines in other countries",
-  "help.close": "Close",
+  "help.back": "Back",
 
   "footer.about": "About and disclaimer",
   "footer.standards": "Standards and research",

@@ -27,7 +27,8 @@ const DEFAULT_ROUTE = "breathe";
 let config = null;
 let current = null;
 let main = null;
-let navLink = null;
+let moreLink = null;
+let backLink = null;
 
 async function loadConfig() {
   const response = await fetch("config.json");
@@ -72,11 +73,16 @@ function regionBlock(region, headingLevel) {
 function buildHelpDialog() {
   const { own, others, directory } = linesFor(deviceRegion());
   const dialog = element("dialog", { class: "help", id: "help", "aria-labelledby": "help-title" });
-  const close = element("button", { type: "button", class: "button close", text: t("help.close") });
-  close.addEventListener("click", () => dialog.close());
+  // The way out sits at the top and stays there while the content scrolls (owner, on the phone:
+  // a Close button at the bottom of a long list was not found).
+  const back = element("button", { type: "button", class: "button help-back", text: t("help.back") });
+  back.addEventListener("click", () => dialog.close());
+  const header = element("div", { class: "help-header" }, [
+    element("h2", { id: "help-title", text: t("help.title") }),
+    back,
+  ]);
 
   const body = [
-    element("h2", { id: "help-title", text: t("help.title") }),
     element("p", { text: t("help.intro") }),
     element("p", { class: "emergency", text: own
       ? t("help.emergency", { number: own.emergency })
@@ -97,8 +103,7 @@ function buildHelpDialog() {
       ...others.map((region) => regionBlock(region, "h3")),
     ]));
   }
-  body.push(close);
-  dialog.append(...body);
+  dialog.append(header, element("div", { class: "help-body" }, body));
   return dialog;
 }
 
@@ -113,8 +118,10 @@ function buildShell() {
     helpButton,
   ]);
   main = element("main", { id: "screen" });
-  navLink = element("a", { class: "button nav-link" });
-  const nav = element("nav", { class: "screen-nav", "aria-label": t("app.name") }, [navLink]);
+  // Every exercise and activity offers both ways on (owner, 2026-10-07).
+  moreLink = element("a", { class: "button nav-link nav-more", href: "#menu", text: t("nav.more") });
+  backLink = element("a", { class: "button nav-link nav-back", href: "#breathe", text: t("nav.back") });
+  const nav = element("nav", { class: "screen-nav", "aria-label": t("nav.label") }, [moreLink, backLink]);
   const footerLinks = element("ul", { class: "footer-links" }, [
     ["#about", "footer.about"], ["#standards", "footer.standards"], ["#feedback", "footer.feedback"],
   ].map(([href, key]) => element("li", {}, [element("a", { class: "footer-link", href, text: t(key) })])));
@@ -124,7 +131,14 @@ function buildShell() {
     element("nav", { "aria-label": t("footer.label") }, [footerLinks]),
   ]);
   const dialog = buildHelpDialog();
-  helpButton.addEventListener("click", () => dialog.showModal());
+  // The phone's back gesture closes the dialog instead of leaving the app: opening it adds a
+  // history entry, and going back closes it.
+  helpButton.addEventListener("click", () => {
+    dialog.showModal();
+    history.pushState({ freeliefHelp: true }, "");
+  });
+  window.addEventListener("popstate", () => { if (dialog.open) dialog.close(); });
+  dialog.addEventListener("close", () => { if (history.state?.freeliefHelp) history.back(); });
   document.body.replaceChildren(header, main, nav, footer, dialog);
 }
 
@@ -147,9 +161,8 @@ async function show(name, { moveFocus }) {
   });
   if (request !== showing) return;
   main.dataset.shown = name;
-  const onBreathe = name === "breathe";
-  navLink.href = onBreathe ? "#menu" : "#breathe";
-  navLink.textContent = t(onBreathe ? "nav.more" : "nav.back");
+  moreLink.hidden = name === "menu";
+  backLink.hidden = name === "breathe";
   if (moveFocus) {
     // Tell keyboard and screen-reader users where they are: focus the new screen's heading.
     const heading = main.querySelector("h1");

@@ -214,7 +214,8 @@ cache; *offline, never visited* — the browser cannot load it, which is outside
 *reduced motion* — the guide shows a still shape with a text count instead of growth; *storage
 blocked* — the default rhythm is used and nothing fails.
 
-**F2 — Change exercise or activity.** Trigger: the person taps or presses "More ways to calm".
+**F2 — Change exercise or activity.** Trigger: the person taps or presses "More ways to calm", which every
+screen except the menu shows, beside "Back to breathing".
 Steps: a short list of large items; the person chooses one; it starts. Outcome: the new exercise
 runs. Leaving any exercise returns to the breath guide. No exercise has an end state that asks for
 anything.
@@ -593,6 +594,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **Urgent help has its way out at the top: a `Back` button in a header that stays visible while the
+  content scrolls, and the phone's back gesture closes the window without leaving the app. Every
+  exercise and activity shows both `More ways to calm` and `Back to breathing`.** — The owner, testing
+  on a phone, could not find the Close button at the bottom of the window and asked for a way to
+  other methods from every method. — 2026-10-07 (owner)
 - **GitHub Pages serves a `live` branch, not `main`. Before 1.0, `live` is a public preview that
   moves only with the owner's yes; from 1.0 on, it moves only at a release that cleared the audit
   gate, to a tag. The README calls the app a preview and does not invite installs before 1.0.** —

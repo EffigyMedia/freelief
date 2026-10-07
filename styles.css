@@ -44,7 +44,9 @@
 
 .screen-nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 0.75rem;
   padding: 0 1.25rem 0.5rem;
 }
 
@@ -282,7 +284,7 @@ main {
 .help {
   width: min(100% - 2rem, 36rem);
   max-height: calc(100% - 2rem);
-  padding: 1.5rem;
+  padding: 0 1.5rem 1.5rem;
   border: 2px solid var(--accent);
   border-radius: var(--radius);
   background: var(--surface);
@@ -291,7 +293,22 @@ main {
 
 .help::backdrop { background: rgba(5, 8, 15, 0.75); }
 
-.help h2 { margin-top: 0; }
+/* The header with the way out stays at the top while the content scrolls under it. */
+.help-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 -1.5rem;
+  padding: 1rem 1.5rem 0.75rem;
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent-soft);
+}
+
+.help h2 { margin: 0; }
 
 .help h3 { margin: 1rem 0 0.25rem; }
 
@@ -331,7 +348,6 @@ main {
   font-weight: 600;
 }
 
-.close { margin-top: 1rem; width: 100%; }
 
 /* ---- distraction activities ---- */
 

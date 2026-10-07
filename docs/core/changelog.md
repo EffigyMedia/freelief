@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-5-3"></a>
+## [0.5.3] - 2026-10-07
+- From the owner's phone test: the urgent-help window has a **Back** button at the top that stays
+  visible while you scroll, and the phone's back gesture closes the window without leaving the app
+  ([AUD-044](../fragments/AUD-044.md)). Every exercise and activity now offers **More ways to calm**
+  as well as **Back to breathing**. 58 tests.
+
 <a id="v0-5-2"></a>
 ## [0.5.2] - 2026-10-07
 - Fix (audit [AUD-002](../fragments/AUD-002.md)): if Freelief cannot start, the page no longer

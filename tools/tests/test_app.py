@@ -62,7 +62,7 @@ def _help_region(locale):
     with open_app(locale=locale) as (page, _, _):
         page.locator(".help-open").click()
         dialog = page.locator("dialog.help")
-        first = dialog.locator(":scope > section.region")
+        first = dialog.locator(".help-body > section.region")
         own = first.get_attribute("data-region") if first.count() else None
         return own, dialog.locator(".emergency").inner_text(), dialog.locator(".directory a").count()
 
