@@ -1,655 +1,606 @@
-# Design Document — Conversational Blueprint
+# Freelief — Design Document
 
-> **What this is:** the template for a project's founding design document — but it is
-> **not a form to fill in**. It is an interview script for an AI design partner.
->
-> **Who reads this:** Claude Chat (or any conversational AI acting as solution architect),
-> together with the project owner, during **Phase 1 — Planning**.
->
-> **What it produces:** two things at once. A completed **`docs/Design_Document.md`** — this
-> file, with the interview guidance removed and real content in its place — and a **requirement
-> record for every obligation agreed along the way**. The document is the single source of
-> truth that Claude Code implements from in **Phase 2**; the records are what the
-> specification and the product document are generated from.
->
-> **The filename is fixed and is not a style choice.** `srs.py` and `prd.py` read
-> `docs/Design_Document.md` by that exact path. They do not search for a design-looking file,
-> because a search would find an old draft or another product's notes and lift narrative out
-> of it into a document whose first line says it was generated from this line's records.
-> Rename this file and both generators quietly stop finding anything.
+The founding design for Freelief. It records what to build and why. The requirements are records
+in `docs/fragments/` (`REQ-NNN`). This document does not restate them. It holds the structure, the
+narrative and the decisions. Code, records and this document must never disagree.
 
 ---
 
-# Part I — Instructions for the Interviewer
+## 0. Document Control
 
-You (the AI reading this) are acting as a **senior solution architect running a discovery
-session**. The owner has a rough idea; your job is to transform it into an
-implementation-ready specification through conversation. You are not a stenographer — you
-are a collaborator with opinions, experience, and the obligation to say "that's a risk"
-out loud.
-
-## Ground Rules
-
-1. **One theme at a time.** Work through the stages in Part II conversationally. Never
-   dump a wall of questions; ask 2–4 related questions, digest the answers, follow up.
-2. **Explain why before asking.** Each stage's *Why this matters* is there to be shared —
-   an owner who understands why a question matters gives better answers.
-3. **Never assume technology.** No language, framework, engine, database, cloud, SDK,
-   AI model, ide, VCS workflow, CI/CD pipeline, build system, or testing framework is a
-   default. Every technology enters the document through Stage 7 (Technology Discovery)
-   as an explicit, justified decision.
-4. **Recommend — with tradeoffs.** When the owner is unsure, don't just list options:
-   name a recommendation, give the honest tradeoffs, and let them decide. Record what was
-   rejected and why, not just what won.
-5. **Classify everything you capture** as one of:
-   - **Requirement** — the software *shall* do this. It becomes a record immediately, not a
-     line in this document. See *Recording As You Go*.
-   - **Decision** — settled; goes in the Decision Log with rationale.
-   - **Assumption** — taken as true but unverified; flagged in Stage 11.
-   - **Open question** — genuinely undecided; parked in Stage 11 so nobody silently guesses.
-6. **Capture rationale, not just answers.** "PostgreSQL" is an answer; "PostgreSQL,
-   because we need relational integrity across orders and inventory, and the owner already
-   operates one" is a decision. The rationale is what prevents relitigating later.
-7. **Challenge constructively.** Probe scope creep ("does v1 really need accounts?"),
-   missing edge cases ("what happens when the file is empty?"), unstated constraints
-   ("who pays for hosting?"), and optimistic estimates. The interview is the cheapest
-   place in the entire project to find a problem.
-8. **Play back before recording.** At the end of each stage, summarize what you're about
-   to record and get confirmation. Corrections at this point are free.
-9. **Skip explicitly, never silently.** If a stage doesn't apply (a CLI has no visual
-   design), record `N/A — <one-line reason>` in the document rather than deleting the
-   section. A visible N/A tells the implementer the topic was considered.
-10. **Adopt the owner's vocabulary.** The words the owner uses for domain concepts become
-    the project's vocabulary (Stage 4). Don't rename their world.
-11. **Don't declare done until the Readiness Checklist (Stage 13) passes.** An incomplete
-    design doc costs ten times more during implementation than one more hour of interview.
-
-## Recording As You Go
-
-Two kinds of thing leave this conversation, and they leave it by different routes. Getting
-this right is what makes the specification and the product document generate themselves
-instead of being written a second time by hand.
-
-### A requirement becomes a record the moment it is agreed
-
-**Do not collect requirements in prose and write them up afterwards.** The moment the owner
-agrees that the software *shall* do something, write it as a record, in the conversation,
-before moving on. Then say so, in one line, so the owner can correct it while it is cheap.
-
-```
-python Commands/fragment.py new --kind requirement --title "<the requirement, in one sentence>" \
-    --category function --verification test --priority must --status proposed
-```
-
-Four fields, and none of them is optional thinking:
-
-| Field | What it is | Why it is asked now |
-|---|---|---|
-| `--category` | `function`, `performance`, `usability`, `interface`, `database`, `constraint` or `attribute` | It decides which clause of the specification the requirement is printed under. A requirement with no category has nowhere to go. |
-| `--verification` | `inspection`, `analysis`, `demonstration` or `test` | How this will be shown to be met. A requirement whose verification is "we will look at it" is one nobody has thought about. |
-| `--priority` | `must`, `should` or `could` | What will not be built is a **Non-Goal** and belongs in Stage 3, not a record with a priority that reads as a plan. |
-| `--status` | `proposed` until the owner agrees, then `agreed` | A `proposed` requirement is still a question. Nothing proposed reaches the specification, which is what stops the document claiming an obligation the owner never accepted. |
-
-**One requirement, one record, stating it as it stands.** A requirement that changes is
-edited in place with its history beneath it. Do not write a second record about the same
-obligation: a reader who finds two has to work out which one is true.
-
-**The design document does not restate them.** A stage that produces requirements says so
-and moves on. Copying the requirement back into this document creates a second place for it
-to be true, and the two disagree the first time one is edited.
-
-### Narrative goes in a marked region
-
-Some of what a specification needs is not a requirement and no record can hold it: a
-purpose, a scope statement, the measure of success, a glossary. Those live in **marked
-regions** in this document, and the generators lift them out.
-
-A region looks like this, and the words go between the two comment lines:
-
-    <!-- BEGIN <region-name> - written by the interview, read by the generators -->
-    <!-- END <region-name> -->
-
-**The name in that example is a placeholder on purpose.** An example carrying a real region
-name would BE a region: it is a comment line holding the key, it sits above the stage that
-owns that name, and the reader takes the first one it finds. The specification would then
-report the clause as present and empty, and the interview's real answer, further down this
-file, would never be read. The first draft of this template did exactly that.
-
-Three rules, each earning its place:
-
-1. **Write inside the markers, never around them.** Everything outside them is yours and is
-   not read.
-2. **An empty region is reported as empty.** Leaving one blank is not the same as never
-   having been asked, and the generated document says which it was. So fill it, or say in
-   it why it is empty.
-3. **Do not delete a region you are not using.** `N/A — <reason>` inside it tells the
-   implementer the topic was considered. A deleted region reads as a document that predates
-   the question.
-
-Each region below appears at the stage whose answers fill it. You do not need to know which
-clause of which document it feeds; the name is the whole of the contract.
-
----
-
-## Calibrating Depth
-
-Ask early: *roughly how big is this?* Then scale the interview:
-
-| Tier | Feels like | Interview depth |
-|---|---|---|
-| **Utility** | Hours–days of build; single purpose; one user (often the owner) | Stages 1–3, 5, 7, **9 (brief)**, 10, 12–13 required; others usually N/A. Stage 9 may be minimal: the test approach plus an explicit, reasoned call on whether performance matters (a reasoned N/A is fine; silence is not). Aim for a document a few pages long. |
-| **Standard** | Weeks of build; real users; several subsystems | All stages, moderate depth. This is the default assumption. |
-| **Complex** | Months+; many users; integrations, compliance, or novel technical risk | All stages, full depth; expect multiple sessions and revisit stages as understanding grows. |
-
-Depth calibration changes *how much* you explore, never *whether decisions get rationale*.
-
-## The Interview Arc
-
-The stages in Part II are ordered so each builds on the last: **what and why → for whom →
-how big → in what language (domain) → doing what → feeling how → built with what → shaped
-how → verified how → delivered in what order → what could go wrong**. Follow the order by
-default, but the conversation may loop back — a technology constraint discovered in
-Stage 7 may legitimately reshape scope in Stage 3. When that happens, update the earlier
-stage and note the change in the Decision Log.
-
-## Producing the Final Document
-
-When the checklist passes:
-
-1. Write the completed document **in place, as `docs/Design_Document.md`** — same numbered
-   sections, guidance blocks removed, real content in place, every marked region filled or
-   carrying its `N/A — <reason>`. Keep decisions, rationale, and rejected alternatives
-   visible. Do not rename it and do not write it somewhere else: the generators read that
-   path and nothing else.
-2. Move every agreed requirement from `proposed` to `agreed`. Until that happens the
-   specification is empty by design, because a proposed requirement is still a question.
-3. Generate both documents and read them:
-
-   ```
-   python Commands/srs.py --line <this line>
-   python Commands/prd.py --line <this line>
-   ```
-
-   **Read what they say is missing.** A clause reading *Not supplied* names the stage its
-   content should have come from, and a clause saying the region exists and is empty means
-   the interview reached that heading and left it blank. Both are the interview telling you
-   where it stopped, while the owner is still in the room.
-4. Remind the owner: this document is **living**. During implementation, settled answers to
-   new questions land in the Decision Log; scope changes update Non-Goals; a requirement
-   that changes is edited in its own record and a requirement that is dropped becomes
-   `withdrawn` rather than deleted. The document, the records, and the code must never
-   disagree.
-
----
-
-# Part II — The Design Document Structure
-
-Each stage below has: **Why this matters** (share it), **Explore** (the questions —
-adapt, don't recite), and **Record** (the fields the final document must contain).
-
----
-
-## 0. Document Control *(required)*
-
-**Record:**
-- Version / date, owner, status (draft → interview complete → in build → stable)
-- **One-line pitch** — the whole project in a sentence: what it is and who it's for.
-- Tier (Utility / Standard / Complex) — set during depth calibration.
-- **Routing posture** — the project's default model/effort bias (`ROUTING_BIAS`: **0** economy
-  / **1** balanced / **2** quality; see `Process/Model_Routing.md` §0). Derive it from
-  the project's stakes, don't guess: a shipping/commercial product where rework is costly or
-  changes are hard to reverse leans **quality (2)**; a throwaway or exploratory utility leans
-  **economy (0)**; most projects sit **balanced (1)**. It's a default, tunable later and
-  overridable per session — but recording it here means bootstrap sets it right instead of
-  defaulting blindly. (Loose mapping, not a rule: Utility→often 0, Standard→1, Complex→often 2.)
-
-
-**Fill these regions.** They are read out of this document by the generators; everything outside the markers is yours.
-
-*`srs-references`* — The documents this specification depends on - a standard, a protocol, a supplier's sheet, another project's design. One per line, each findable by what is written here. No record carries these, so a project that depends on none says that here.
+- **Version:** 1.0, 2026-10-07.
+- **Owner:** EffigyMedia.
+- **Status:** signed off by the owner 2026-10-07; ready for Initialize.
+- **One-line pitch:** Freelief is a free, open-source, offline web app that helps anyone through a
+  panic attack or acute anxiety in the moment, with breathing, grounding, calming words and gentle
+  distraction.
+- **Tier:** Standard.
+- **Routing posture:** `ROUTING_BIAS: 2` (quality). People use Freelief in a crisis, so a wrong
+  word or a broken screen costs more than rework.
+- **Origin:** the owner's request of 2026-10-07, kept in `docs/provisional/FREELIEF_OWNER_REQUEST.md`.
+  The premise stub (`PREMISE.md`) was an unfilled template; this document supersedes it and the
+  stub is removed.
 
 <!-- BEGIN srs-references - written by the interview, read by the generators -->
+- W3C, *Web Content Accessibility Guidelines (WCAG) 2.2*, W3C Recommendation, 2023 — the
+  accessibility target (AA in full, AAA where a criterion can be met).
+- W3C, *Web Application Manifest* and WHATWG *Service Workers* — the installable offline web app.
+- GitHub Pages documentation — the host.
+- The published research for each technique. The list lives on the Standards & research page and
+  in `docs/research/` (written in slice 2), one source or more per technique (REQ-024).
 <!-- END srs-references -->
 
 ---
 
-## 1. Vision & Purpose *(required)*
+## 1. Vision & Purpose
 
-**Why this matters.** Every downstream decision — features, stack, architecture — is
-judged against the purpose. A fuzzy purpose produces a project that does many things
-poorly.
+A panic attack is sudden and frightening. The person has a racing heart, short breath and the
+feeling that something terrible will happen. It passes, usually within minutes, but in that moment
+the person has little attention, shaky hands, and often no one to help. The self-help techniques
+that work — slow breathing, grounding, calm words, gentle distraction — are simple, but they are
+hard to remember and do alone while panic takes over.
 
-**Explore.**
-- What problem does this solve? For whom? What do they do today instead, and why is that
-  inadequate?
-- Why does this deserve to be built — what's the payoff if it works?
-- Is there an existing product/tool that almost solves it? What's the gap?
-- What does wild success look like a year after release?
+The apps that offer these techniques often ask for an account, show a menu, need a network, play an
+advertisement or a subscription offer, or collect data about the person's worst moments. Many do
+not work with a screen reader or a keyboard.
 
-**Record.** Problem statement; status quo and its inadequacy; the core insight or
-opportunity; what success looks like.
-
-
-**Fill these regions.** They are read out of this document by the generators; everything outside the markers is yours.
-
-*`srs-purpose`* — Why this software exists, in a few sentences: the problem it solves and who for. This is the first thing a reader of the specification meets.
+Freelief opens straight into a breathing guide, works with no network, asks nothing of the person,
+collects nothing, and works for everyone. Success, a year after release, is a tool that people
+recommend to each other in a crisis because it simply works and is free.
 
 <!-- BEGIN srs-purpose - written by the interview, read by the generators -->
+Freelief helps a person through a panic attack or acute anxiety at the moment it happens. It gives
+self-help techniques studied in clinical research — paced breathing, 5-4-3-2-1 grounding, calming
+statements and gentle distraction activities — and a fast route to a crisis line for a person who
+may be in danger. It is for anyone, at no cost, with no account, no network and no data collection.
 <!-- END srs-purpose -->
 
-*`prd-problem`* — The problem itself, stated so that somebody who knows nothing about the solution understands it. Not the feature that answers it - the thing that is wrong today.
-
 <!-- BEGIN prd-problem - written by the interview, read by the generators -->
+During a panic attack a person cannot easily recall or perform the techniques that would calm them.
+The tools that exist put obstacles in the way at the worst moment: a sign-up, a menu, a loading
+screen, a network that is not there, an advertisement, or a screen that a screen reader or a
+keyboard cannot use. Many also record the person's crises as data. A person in distress needs help
+that starts at once, works for them as they are, and asks for nothing.
 <!-- END prd-problem -->
 
-*`srs-product-overview`* — What the product is, where it sits, and what it works with. The paragraph you would give somebody before they read a single requirement.
-
 <!-- BEGIN srs-product-overview - written by the interview, read by the generators -->
+Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
+installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
+a paced breathing guide starts at once. From there, one tap or key press reaches the other
+exercises (grounding and calming statements) and the distraction activities (a bubble field, a
+shape trace and a colour sort). Every screen has a "Need urgent help?" control that shows crisis
+lines for the person's region. Supporting pages give the self-help disclaimer, the standards
+Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
+GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
+person's settings, on the device.
 <!-- END srs-product-overview -->
 
 ---
 
-## 2. Users & Success Criteria *(required)*
+## 2. Users & Success Criteria
 
-**Why this matters.** "Who is this for" decides platform, UX depth, error-message tone,
-performance targets, and how much polish v1 needs. Success criteria become the acceptance
-bar the implementation is verified against.
+One user type: **a person in the moment.** An adult or a teen who has a panic attack or acute
+anxiety now, or who is close to one. The context is often a phone at night or in a public place,
+sometimes a desktop with a keyboard, sometimes with a screen reader or reduced motion switched on.
+They are not technical, they are not forgiving, and they have little attention.
 
-**Explore.**
-- Who are the distinct user types? What's each trying to accomplish, in what context
-  (desk, phone, terminal, another program calling an API)?
-- How technical are they? How forgiving?
-- How will you *know* it's working — what would you measure or observe? Push for concrete,
-  testable criteria ("I can process a week's invoices in under 10 minutes" beats "it's fast").
-- What's the difference between *usable*, *good*, and *done* for this project?
-
-**Record.** User types with goals and context; concrete success criteria (each one
-verifiable); explicit quality bar for v1.
-
-
-**Fill these regions.** They are read out of this document by the generators; everything outside the markers is yours.
-
-*`prd-users`* — Who it is for. The distinct user types, what each is trying to accomplish, and in what context.
+Two secondary groups use the project, not the app in a crisis:
+- **Community volunteers** who check accessibility and report problems through the feedback page.
+- **The owner**, who maintains the crisis-line list and the releases.
 
 <!-- BEGIN prd-users - written by the interview, read by the generators -->
+- **A person in the moment** — anyone who has a panic attack or acute anxiety now. They want the
+  panic to pass. They use a phone or a computer, often at night, sometimes with a screen reader, a
+  keyboard only, or reduced motion. They have little attention and shaky hands, and they must not
+  be asked for anything before help starts.
+- **A community volunteer** — a person who checks Freelief with a screen reader or a keyboard, or
+  who reports a problem. They want to report with little effort, through GitHub or email.
+- **The owner** — maintains the crisis-line list, accepts volunteer checks, and releases versions.
 <!-- END prd-users -->
 
-*`prd-success`* — How we will know it worked. A measure, not a feeling: each line something somebody could check and disagree with.
-
 <!-- BEGIN prd-success - written by the interview, read by the generators -->
+- From a cold launch, the breathing guide is visible within 1 second on a mid-range phone,
+  installed and offline, with zero taps (REQ-018, REQ-026).
+- After install, an automated test with the network disabled shows every screen working, and a
+  network log shows no request to any origin (REQ-008, REQ-015).
+- The automated accessibility check reports zero WCAG 2.2 A and AA violations on every page, on
+  every release.
+- At least one dated manual check with a screen reader and one with a keyboard alone, by a
+  volunteer, is recorded for the version on the Standards & research page before it shows WCAG
+  2.2 AA as met (REQ-029).
+- Every crisis line in the app has a last-checked date no older than the release that ships it.
+- The whole app is under 150 KB (REQ-028).
+- No text in the app says Freelief is clinically proven, treats, cures or diagnoses (REQ-025).
 <!-- END prd-success -->
+
+**Quality bar for v1.0:** every "must" requirement is met and tested; every "should" is met or is
+absent from the release; the release criteria in Stage 10 hold.
 
 ---
 
-## 3. Scope, Principles & Constraints *(required)*
+## 3. Scope, Principles & Constraints
 
-**Why this matters.** The Non-Goals list is the single most valuable section for an AI
-implementer — it prevents scope creep and gold-plating. Principles break ties when two
-good options compete. Constraints are the walls the design must fit inside.
+**Principles (tie-breakers, in order):**
+1. **Help first.** Nothing stands between the person and help: no question, menu, notice or wait.
+2. **Works for everyone.** A screen reader, a keyboard, reduced motion and shaky hands are normal
+   use, not edge cases.
+3. **Ask nothing, keep nothing.** No account, no data, no network.
+4. **True claims only.** Promote what is verified; never more.
+5. **Small and boring.** Fewer moving parts beat more features.
 
-**Explore.**
-- What are you deliberately **not** building — now, or ever? (Propose candidates: does v1
-  need auth? multi-user? mobile? offline? localization? Push each one out unless it earns
-  its place.)
-- What 3–6 principles should break ties? (e.g. "speed of use beats feature breadth",
-  "never lose user data", "boring technology over novel".)
-- Hard limits: budget, timeline, team, target platforms/OS/hardware, legal/compliance,
-  data residency, systems that must be integrated with, skills the owner wants to use or
-  avoid.
-- Greenfield or not: does this build on or integrate with code that already exists? If
-  existing: where it lives, what state it's in, and what must not break.
+**Constraints** — all hard, and recorded as `constraint` requirements: the PWA on GitHub Pages,
+offline after the first visit (REQ-008); plain HTML, CSS and JavaScript with no framework, no
+dependency and no build step (REQ-019); one strings file per language (REQ-017); claim wording
+(REQ-025); the MIT license (REQ-031). Budget is zero: no paid service and no paid audit.
 
-**Record as requirements.** A HARD constraint is a record with `--category constraint` - a
-design decision imposed from outside rather than derived from a need. A preference is not: it
-is a principle, and it belongs in this document where a tie-break can read it. A Non-Goal is
-neither, and never becomes a record: a requirement that will not be built is a plan nobody
-has, which is why `--priority` has no fourth value.
-
-**Record.** North-star principles (3–6); Non-Goals (explicit, dated); constraints
-(each marked *hard* or *preference*); greenfield, or the existing-code baseline (what it
-builds on and what must not break).
-
-
-**Fill these regions.** They are read out of this document by the generators; everything outside the markers is yours.
-
-*`srs-scope`* — What this software covers - what it does, what it does not, and where the boundary runs.
+**Greenfield.** Freelief builds on no existing code. It copies the delivery model of Effigy Arcade
+(GitHub Pages, no build step) but no code from it.
 
 <!-- BEGIN srs-scope - written by the interview, read by the generators -->
+Freelief covers self-help for a panic attack or acute anxiety at the moment it happens: paced
+breathing, 5-4-3-2-1 grounding, calming statements, three distraction activities, crisis lines by
+region, a self-help disclaimer, a Standards & research page, and a feedback page that hands a
+pre-filled report to GitHub or email. It runs in a browser and as an installed offline web app.
+The boundary: Freelief does not diagnose, treat, track, or contact anyone. It points to crisis
+lines; it does not call them. Its only stored data is the person's settings, on the device.
 <!-- END srs-scope -->
 
-*`prd-out-of-scope`* — What is deliberately not being built, and why. The Non-Goals list in prose. A reader should finish it knowing what NOT to ask for.
-
 <!-- BEGIN prd-out-of-scope - written by the interview, read by the generators -->
+Not built (decided 2026-10-07):
+- **Accounts, profiles or sign-in** — they add a step before help and store personal data.
+- **An episode log, history, mood tracking, reminders or streaks** — they store a person's worst
+  moments and add pressure. Freelief is for the moment, not a daily practice.
+- **Analytics or usage counts of any kind** — a person's crises are not telemetry.
+- **A server, including a relay to file feedback without a GitHub account** — a static site cannot
+  keep a token secret, and a server adds a network send and spam handling.
+- **Spoken voice guidance** — its quality varies by device and language. Soft tones only.
+- **Languages other than English in v1** — the strings file makes a translation a later data change.
+- **Location requests** — the region comes from the device language and region setting.
+- **Medical claims, diagnosis, or an AI chat or therapist feature** — Freelief is self-help, not
+  medical care.
+- **Native app-store versions** — the web app installs to the home screen.
+- **A paid accessibility audit** — volunteers do the manual checks.
 <!-- END prd-out-of-scope -->
 
 ---
 
-## 4. Domain Model & Vocabulary *(required for Standard+; brief for Utility)*
+## 4. Domain Model & Vocabulary
 
-**Why this matters.** The core "nouns" of the system and their relationships become the
-shared language of the code, UI, docs, and database. Consistent naming here prevents the
-implementer from inventing synonyms across the codebase — a real and expensive failure mode.
+| Term | Meaning |
+|---|---|
+| **Exercise** | A guided self-help technique: paced breathing, 5-4-3-2-1 grounding, or calming statements. |
+| **Activity** | A distraction activity: the bubble field, the shape trace, or the colour sort. No score, no failure, no timer. |
+| **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
+| **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
+| **Calming statement** | One short, steady line of text, shown one at a time. |
+| **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
+| **Region** | The country taken from the device language and region setting. Never from location. |
+| **Settings** | The only stored data: the chosen rhythm, tones on or off, and the light or dark choice if overridden. On the device only. |
+| **Standard** | An external standard Freelief claims to meet, such as WCAG 2.2 AA. It has a level, a check date, and the tester of the manual check. |
+| **Source** | A published research citation behind a technique. |
 
-**Explore.**
-- What are the 5–15 things this system is *about*? For each: what is it, what are its key
-  attributes, what's its lifecycle (created how, changed by what, deleted when)?
-- How do they relate? ("An Order has many Items; a User owns many Orders.")
-- Are there terms the owner uses that have a precise meaning in their world? Capture the
-  precise meaning, not the dictionary one.
-
-**Record as requirements.** What must PERSIST, and what must stay true of it, is a record with
-`--category database` - a retention period, a uniqueness rule, a thing that survives a restart.
-The entity list itself stays here: it is vocabulary, and vocabulary is not an obligation.
-
-**Record.** Entity list with definitions, key attributes, and relationships; a
-relationship summary (prose or simple diagram); any term with a project-specific meaning.
-
-
-**Fill these regions.** They are read out of this document by the generators; everything outside the markers is yours.
-
-*`srs-definitions`* — The terms this project uses with a precise meaning, defined. The nouns from the domain model, in the owner's words rather than the dictionary's.
+Relations: each Exercise and Activity cites one or more Sources. A Region has zero or more Crisis
+lines; a Region with none falls back to the international directory. Settings persist across
+restarts on the device (REQ-023, REQ-015).
 
 <!-- BEGIN srs-definitions - written by the interview, read by the generators -->
+- **Exercise** — a guided self-help technique: paced breathing, 5-4-3-2-1 grounding, or calming
+  statements.
+- **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
+  the shape trace, or the colour sort.
+- **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
+- **Rhythm** — a breathing preset, given as the seconds of each phase.
+- **Crisis line** — a service for a person in danger, with a region, a way to reach it, and a
+  last-checked date.
+- **Region** — the country taken from the device language and region setting, never from location.
+- **Settings** — the only data Freelief stores: rhythm, tones, and theme, on the device only.
+- **Standard** — an external standard Freelief claims, with its level, check date and tester.
+- **Source** — a published research citation behind a technique.
 <!-- END srs-definitions -->
 
 ---
 
-## 5. Functional Specification *(required)*
+## 5. Functional Specification
 
-**Why this matters.** This is *what the software does* — the section the implementer
-returns to most. Numbered flows let the build plan and tracker reference them precisely.
-Edge cases spelled out here don't become bugs later.
+The requirements are the records `REQ-001` to `REQ-031`. Their priority is the feature list. The
+flows below are the structure.
 
-**Explore.**
-- **Flows:** what do users (or calling systems) actually do, step by step? Trigger →
-  steps → outcome, happy path plus the important alternates. Number them (F1, F2 …).
-- **Features, prioritized:** Must / Should / Could (or the owner's scheme). Everything
-  "Could" is a candidate Non-Goal — challenge it.
-- **States & edge cases:** for each flow — empty state, loading/in-progress, success,
-  failure, cancellation. What happens with missing, invalid, huge, or malicious input?
-  Concurrent use? Interrupted mid-operation?
-- **Inputs/outputs & interfaces:** file formats, validation rules, CLI flags, endpoints,
-  function signatures — whatever the system's surface is.
-- **Integrations** *(as applicable)*: external services, APIs, hardware, data sources.
-  For each: auth model, rate limits, cost, and behavior when it's down.
-- **Permissions & auth** *(as applicable)*: who may do what; sensitive operations.
+**F1 — Launch to breathing.** Trigger: the person opens Freelief. Steps: the shell paints; the
+breath guide starts with the saved rhythm (or the default) and one calm line. Outcome: the person
+breathes with the guide. States: *first visit online* — the service worker installs and caches the
+app in the background, and the guide does not wait for it; *offline, installed* — served from
+cache; *offline, never visited* — the browser cannot load it, which is outside the app's control;
+*reduced motion* — the guide shows a still shape with a text count instead of growth; *storage
+blocked* — the default rhythm is used and nothing fails.
 
-**Record here.** Numbered flows, each with its states and edge cases; the integration list with
-what happens when each is down; the permission model or N/A. These are structure - how the
-software hangs together - and they belong in this document.
+**F2 — Change exercise or activity.** Trigger: the person taps or presses "More ways to calm".
+Steps: a short list of large items; the person chooses one; it starts. Outcome: the new exercise
+runs. Leaving any exercise returns to the breath guide. No exercise has an end state that asks for
+anything.
 
-**Record as requirements.** Every *shall* that comes out of this stage is a record, written as
-it is agreed and not collected into a list here. The prioritized feature list is NOT written in
-this document at all: it is the set of records, and their priorities are the `--priority` field.
-Writing it twice makes two places for it to be true.
+**F3 — Grounding.** Steps: five prompts in order (5 things you see, 4 you can touch, 3 you hear,
+2 you smell, 1 you taste). The person advances with a large "Next" control or a key. No input is
+typed or stored. Outcome: a closing calm line and a return to breathing. Edge: the person can go
+back or stop at any step.
 
-- What the software does: `--category function`.
-- What it exchanges, and in what shape - file formats, CLI flags, endpoints, signatures, the
-  surface of each integration: `--category interface`.
+**F4 — Calming statements.** Steps: one statement at a time; the person advances when ready. The
+statements come from the strings file. Outcome: the person stops when they choose.
 
-An edge case is usually a requirement, not a note. "Rejects a file over 2 GB with a named
-error" is verifiable and belongs in a record; "we should think about big files" is neither.
+**F5 — Distraction activities.** *Bubble field:* bubbles drift slowly; a tap or a key press pops the
+focused bubble with a soft visual (and a soft tone if tones are on). *Shape trace:* a looping shape;
+the person follows it with a finger or moves along it with the arrow keys. *Colour sort:* calm
+colour tiles to order by drag, or by keyboard (select, then move). States for all: no score, no
+failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
+and its action.
 
----
+**F6 — Need urgent help.** Trigger: the "Need urgent help?" control, present on every screen.
+Steps: the app reads the device language and region; it shows the crisis lines for that region
+first, each with a tap-to-call or tap-to-text link and its last-checked date; then the link to the
+international directory; then a line to call the local emergency number if in immediate danger.
+States: *unknown region* — the international directory and the emergency-number line only;
+*offline* — the curated lines still show; the directory link says it needs a network.
 
-## 6. Experience & Interface *(as applicable — anything with a user-facing surface)*
+**F7 — Settings.** Rhythm preset, tones on or off, theme override. Saved on the device at once.
+Storage that fails is ignored and the defaults stand.
 
-**Why this matters.** "How it should feel" can't be inferred from a feature list. This
-applies to CLIs and APIs too — ergonomics is experience. For anything visual, direction
-recorded here saves rounds of rework later; for aesthetic decisions, the Development
-Process has the implementer present *variants* before committing, and this section is
-what those variants are judged against.
+**F8 — Disclaimer, Standards & research.** The footer links to the disclaimer page and to the
+Standards & research page. The Standards & research page shows each verified standard with its
+level, check date and tester, the sources for each technique, and a link to the feedback page.
 
-**Explore.**
-- Interaction model: what does using it feel like? What must be instant, what may be slow?
-  What's the information hierarchy — what does the user see first?
-- Visual direction *(GUI only)*: look and feel, layout, references/inspiration, design
-  system if any.
-- Accessibility & internationalization: targets, languages, formats — or an explicit N/A.
-- Content & tone: error messages, empty states, naming — who is the software "being"
-  when it talks?
+**F9 — Feedback.** Trigger: the feedback page. Steps: the person chooses "Accessibility check" or
+"Report a problem"; the page shows the pre-filled text (app version, browser, device type, and a
+checklist for an accessibility check); the person edits it; they choose "Open on GitHub" (a new
+issue URL with the template, title and body in its query) or "Send by email" (a `mailto:` link with
+subject and body). Outcome: the person's own browser or mail app takes over; the app sends nothing.
+Edge: until the public email address is decided, the email button is hidden.
 
-**Record here.** Interaction principles; visual direction with references or N/A;
-tone-of-voice notes.
+**Integrations.** None at run time. The only outbound links are ones the person chooses: phone,
+text, the crisis directory, GitHub and email. If GitHub is down, the issue page does not load and
+the email route remains.
 
-**Record as requirements.** An accessibility or internationalization target that somebody
-could fail is a record with `--category usability`, not a note: "every control reachable
-by keyboard" can be verified and "accessible" cannot. A target with no way to check it
-is an aspiration, and the interview is where that difference is cheapest to find.
+**Permissions and auth.** N/A — no accounts and no roles. Anyone may use every part of the app.
 
 ---
 
-## 7. Technology Discovery *(required — the stage where the stack is chosen, never assumed)*
+## 6. Experience & Interface
 
-**Why this matters.** Technology choices are the least reversible decisions in the
-project. Made implicitly, they're made badly. Each choice below must be **discovered**
-from the requirements above and **justified** — with alternatives named and rejected for
-stated reasons. The owner's existing skills, infrastructure, and preferences are
-legitimate inputs; silence is not.
+**Interaction principles.** Help first: the breath guide is the first and default screen. One clear
+action per screen. Large targets (at least 44 by 44 CSS pixels, larger for the main actions). No
+timer, no score, no failure, no surprise sound, no sudden motion. Every control works by touch, by
+keyboard and by screen reader, with a visible focus ring. The "Need urgent help?" control is always
+in the same place.
 
-**Explore — work through each, in roughly this order, letting earlier answers constrain
-later ones:**
+**Visual direction.** Soft and dim. A deep night-blue or slate background with one soft accent and
+large rounded type. Dark by default, and it follows the device light or dark setting, with an
+override in Settings. AAA contrast for text. No images in v1: shapes are drawn with CSS or SVG.
+The implementer shows the owner variants before the look is fixed.
 
-1. **Delivery platform(s):** desktop, mobile, web, terminal, server, embedded, plugin —
-   where does this run? (Driven by Stage 2's users-in-context.)
-2. **Language & runtime:** what fits the platform, the problem domain, the performance
-   needs, and the owner's ability to maintain it later?
-3. **Frameworks, engines & key libraries:** what does the heavy lifting? What should
-   deliberately *not* be used, and why?
-4. **Persistence:** does state need to survive restarts? Files, embedded DB, server DB,
-   cloud storage — sized to actual need, not habit.
-5. **External services & APIs:** anything bought/rented rather than built — including AI
-   models/services if the project calls for them. Note cost, keys, quotas, offline behavior.
-6. **Content & assets** *(as applicable)*: what non-code content does the product need —
-   art, audio, fonts, copy, datasets, reference material? For each kind: who or what
-   produces it (owner-made, commissioned, licensed, generated), the pipeline and formats,
-   and the **license terms**. Anything licensed or third-party feeds the never-commit
-   list (item 10) and must not silently depend on a CDN or external host at runtime.
-7. **Deployment & distribution:** how does it reach users — an executable, a package, an
-   app store, a hosted service, an internal path? What are the environments (dev / prod /
-   others)? What's the release and rollback story?
-8. **Testing toolchain:** what will run the tests the Quality stage defines? How will
-   tests be invoked reproducibly?
-9. **Development environment & tooling:** how are toolchains and dependencies isolated
-   and reproduced? (Per-project environments, containerized, system — a *decision*, with
-   the owner's machine hygiene preferences as input.) What are the standard project
-   commands (`setup` / `run` / `test` / `doctor` / `build` / `clean` — see the Development
-   Process) implemented with?
-10. **Version control & backup:** which VCS, what workflow (the Development Process
-    assumes commit/tag/checkpoint capabilities), where's the offsite copy, and is the
-    remote private or public? What must *never* be committed (secrets, PII, licensed
-    material) — this drives the ignore rules at bootstrap.
-11. **CI/CD** *(as applicable)*: is automation warranted at this scale, or do the
-    project commands suffice?
+**Tone of voice.** Warm, steady, short and plain. Second person, present tense: "Breathe in." "You
+are safe right now." Never clinical, never cheerful, never blaming. Errors are calm and say what
+still works.
 
-**Interviewer guidance.** Prefer boring, well-documented technology unless the project's
-core value demands otherwise. Minimize the count of moving parts. Every "we might need it
-later" is a candidate for the Non-Goals list, not the stack.
-
-**Record.** For each numbered item: the **decision**, the **rationale**, and the
-**alternatives rejected with reasons**. Plus: pinned versions where relevant; license or
-cost constraints; the never-commit list.
+**Accessibility and internationalization.** WCAG 2.2 AA in full and AAA where a criterion can be
+met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), no time limits
+(REQ-011), contrast and theme (REQ-021). English only, with one strings file per language
+(REQ-017).
 
 ---
 
-## 8. Architecture *(required for Standard+; a paragraph may suffice for Utility)*
+## 7. Technology Discovery
 
-**Why this matters.** Module boundaries are the single best insurance for steering an AI
-on a codebase the owner won't read line-by-line: a failure or change in one module stays
-contained. Contracts let modules evolve independently. Naming the hard problems up front
-is how they get de-risked instead of discovered.
+| # | Item | Decision | Rationale | Rejected |
+|---|---|---|---|---|
+| 1 | Platform | A progressive web app, phone first, that works on desktop with a keyboard. | Reaches every device with no store, installs to the home screen, works offline. | Native apps (cost, review, two codebases). |
+| 2 | Language and runtime | HTML, CSS and modern JavaScript (ES modules) in the browser. | Runs everywhere with nothing to install or build. | TypeScript (needs a build step). |
+| 3 | Frameworks and libraries | None. No third-party code ships. | Smallest download, fastest load, nothing to break or update. | Preact or any framework (a dependency and a build step). |
+| 4 | Persistence | `localStorage` for Settings only, behind one module, with every access in try/catch. | Settings are small and on-device; nothing else is stored. | IndexedDB (more than needed). |
+| 5 | External services | None at run time. | No network after install, no data sent. | Analytics, a feedback relay. |
+| 6 | Content and assets | Text in `strings/en.json`, owner-approved. Crisis lines in `data/crisis-lines.json`, curated and dated. Research sources in `docs/research/`. Tones generated with Web Audio at run time, so no audio files. The system font stack, so no font files. | Small, licence-free, offline. | Recorded audio; web fonts; image assets. |
+| 7 | Deployment | GitHub Pages serves `main` of the public repository `EffigyMedia/freelief`. A push deploys. Rollback is a revert commit. The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
+| 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, vendored under `tools/vendor/` for tests only and never shipped, runs the automated accessibility check. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
+| 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright. `run`: `python -m http.server 8000`. `test`: the Playwright harnesses. `doctor`: check Python, the venv, Playwright, the manifest, the service worker and the JSON files. `build`: none — the repository is the distributable; `build` reports that and checks the size limit. `clean`: remove `output/`. `bench`: the launch-time and size benchmark. | Matches the environment's standard commands with the fewest tools. | A bundler. |
+| 10 | Version control | Git. Feature commits stay local; push at a release or for an owner device test. The remote is public. | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
+| 11 | CI/CD | None in v1. The project commands are enough at this size. | Fewer moving parts. | GitHub Actions (reconsider if volunteers send pull requests). |
 
-**Explore.**
-- **Modules:** what are the components, what does each own, and what must it *not* reach
-  into? (One responsibility per module; one owning module per concern.)
-- **Data model & state:** where does state live? Schemas/structures, migrations, data
-  lifecycle (created, retained, deleted).
-- **Contracts:** the interfaces between modules and to the outside — signatures,
-  request/response shapes, error contracts, versioning.
-- **Data flow:** how information moves; sources of truth; sync vs async; caching.
-- **Hard problems:** what's genuinely difficult or novel here? What's the riskiest
-  assumption? How will each be de-risked — prototype first, use a library, simplify scope?
-  What should be built *last* because it's the biggest tuning/complexity risk?
-- **Configuration & tunables:** centralize knobs (limits, thresholds, flags, environment
-  values) so behavior changes without touching logic. **Every tunable lives in
-  configuration with a committed default — never as an edited-in-place code constant.**
-  (Hard-won lesson: "temporary" code-constant tweaks leak into commits or get lost.)
-- **Cross-cutting concerns:** error handling, logging/observability, security, privacy,
-  data integrity, offline/resilience — state the *target*, not the intent ("no PII in
-  logs", "any crash leaves user data recoverable").
-
-**Record.** Module list with responsibilities and forbidden dependencies; data model and
-state locations; key contracts; hard-problem list with de-risking plans; tunables with
-defaults; cross-cutting targets.
+**Never commit:** any token, key or password; `.venv/`; `output/`; the content of feedback emails
+or any other personal data from a volunteer or a user; licensed material without a licence that
+allows redistribution.
 
 ---
 
-## 9. Quality & Performance Strategy *(required)*
+## 8. Architecture
 
-**Why this matters.** "It works" is a claim; tests are evidence. And performance treated
-as an end-phase task is how projects ship slow — targets set here feed the continuous
-performance practice (`Performance_Testing.md`) that runs from the first slice onward.
+Each file below is one module with one responsibility.
 
-**Explore.**
-- **Testing strategy:** what kinds of tests (unit / integration / end-to-end / manual)
-  earn their keep at this tier? What must *never* break — the critical scenarios that get
-  regression tests first? What does "passing" mean per feature?
-- **Performance targets:** which operations matter to a user's experience of speed? Set
-  explicit, measurable targets for the handful that count (startup time, key-flow latency,
-  throughput, memory ceiling, frame rate, bundle size — whatever fits this project type).
-  A target you can't measure is a wish.
-- **Performance workloads:** what would a *representative workload* look like for
-  benchmarking — realistic data sizes, realistic usage patterns?
-- **Security & privacy:** what's sensitive here? What's the threat worth defending
-  against at this tier — and what's explicitly out of scope?
+| Module | Owns | Must not |
+|---|---|---|
+| `index.html` + `app.js` (**shell**) | The page frame, the screen router, the footer, and the "Need urgent help?" control. | Contain exercise logic or text. |
+| `exercises/breathe.js`, `ground.js`, `statements.js` | One exercise each. | Read storage or the network; hold text. |
+| `activities/bubbles.js`, `trace.js`, `sort.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
+| `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
+| `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
+| `crisis.js` + `data/crisis-lines.json` | The choice of crisis lines from the device region. | Ask for location. |
+| `audio.js` | The soft tones with Web Audio. | Play anything when tones are off. |
+| `motion.js` | Reduced-motion detection; every animation asks it. | — |
+| `config.json` | **Every tunable**, with its committed default. | — |
+| `sw.js` | The offline cache, versioned by the app version. | Fetch from any other origin. |
+| `manifest.webmanifest` | Installation: name, icons, colours. | — |
+| `pages/` | The disclaimer, Standards & research, and feedback pages. | Send data. |
 
-**Record here.** Test types with scope; the never-break scenario list; per-feature
-acceptance meaning; the security and privacy posture as prose.
+**Data and state.** Settings in `localStorage` under one versioned key. Everything else is static
+files cached by the service worker. Nothing is created, changed or deleted by the person except
+their Settings.
 
-**Record as requirements.** This stage produces the non-functional half of the
-specification, and it is the half most often lost to prose:
+**Contracts.** Each exercise and activity exports `start(container, ctx)` and `stop()`. `ctx`
+gives `strings`, `settings` (read-only), `config`, `motion` and `audio`. The shell owns which one
+runs. `crisis.js` exports `linesFor(regionCode)`, which returns the curated lines and the fallback.
 
-- A performance target: `--category performance`, and it is not a requirement until it
-  carries a metric, a threshold AND the workload it is measured under. "Fast" is not a
-  requirement; "renders a 300-page book in under 90 seconds on the reference machine" is.
-- Reliability, availability, security, maintainability, portability:
-  `--category attribute`.
+**Tunables (`config.json`):** rhythm presets and the default (4-in, 6-out); tone frequencies and
+volume; bubble count and drift speed; shape-trace speed; colour-sort tile count; the international
+directory URL; the feedback repository URL and the email address (empty until decided).
 
-`--verification` earns its keep here. A performance requirement is almost always `test`;
-a security posture is often `analysis` or `inspection`. Saying which one stops a reader
-assuming the strongest.
+**Hard problems and de-risking.**
+1. *Offline install and update.* Proven first, in the walking skeleton, with an offline test and
+   an update test.
+2. *Accessible activities.* The bubble field and the colour sort use DOM elements, not a canvas,
+   so a screen reader and the keyboard reach every item. The colour sort is built last.
+3. *Launch in 1 second.* Inline the critical CSS, defer everything but the breath guide, and
+   benchmark from the first slice.
 
----
-
-## 10. Delivery Plan *(required)*
-
-**Why this matters.** Building in vertical slices — each one runnable end to end — keeps
-the codebase coherent and lets a non-expert steer. The first slice is the most important
-decision in the plan: it must prove the *riskiest assumption*, because if that fails, the
-project pivots while it's still cheap.
-
-**Explore.**
-- **⭐ The walking skeleton:** what is the smallest end-to-end thing that proves the
-  riskiest assumption (from Stage 8's hard problems)? Specify it tightly: goal, what's in,
-  what's *explicitly excluded*, and "done when".
-- **Subsequent slices:** ordered milestones after the skeleton, one-line goal each. Defer
-  the hardest tuning-heavy systems until the spine is proven.
-- **Definition of done per slice:** works, tested, performance spot-checked, documented,
-  committed — what's the bar before moving on?
-- **Release criteria:** which success criteria (Stage 2) must hold before this is a 1.0?
-
-**Record.** First slice (goal / assumption tested / in / out / done-when); ordered slice
-list; per-slice definition of done; release criteria.
+**Cross-cutting targets.** No request to another origin from the app, ever. No console errors.
+Every storage access in try/catch, so blocked storage never breaks a screen. No personal data in
+any log. Any failure leaves the breath guide and the crisis lines usable.
 
 ---
 
-## 11. Risks, Assumptions & Open Questions *(required)*
+## 9. Quality & Performance Strategy
 
-**Why this matters.** Risks with mitigations get managed; unstated risks get discovered.
-Assumptions, if wrong, change the plan — they need to be visible so they can be tested
-early. Open questions parked here are the implementer's signal to **ask rather than
-guess**.
+**Tests (Playwright, real browser):**
+- *Smoke:* every page loads with a clean console.
+- *Offline:* after one visit, with the network off, every screen works; the network log shows no
+  request to any other origin.
+- *Accessibility:* axe-core on every page and state, with zero A and AA violations; a keyboard-only
+  walk through every flow.
+- *Reduced motion:* with the media feature set, no element animates.
+- *Settings round trip:* save, reload, read, and assert the same values; blocked storage falls back
+  to the defaults.
+- *Crisis lines:* each sample region shows its lines; an unknown region shows the fallback.
+- *Update:* a new cache version replaces the old one.
+- *Claims:* a scan of the strings and pages for forbidden claim words (REQ-025).
 
-**Explore.** Walk back through the document: what's technically risky, scope-risky, or
-externally dependent? What have we taken as true without checking? What's still undecided?
+**Never break:** the breath guide at launch; the "Need urgent help?" control on every screen;
+offline use; keyboard and screen-reader use.
 
-**Record.** Risk → mitigation pairs; assumption list (each with "how we'd find out");
-open questions (each with who decides and by when it matters).
+**Manual:** a dated volunteer check with a screen reader (NVDA, VoiceOver or TalkBack) and with a
+keyboard alone, before a standard is shown (REQ-029). Owner checks on a real phone for look and
+feel, which a test cannot see.
 
+**Performance:** the targets are REQ-026 (1 s to the breath guide), REQ-027 (100 ms response) and
+REQ-028 (150 KB). Workload: a cold launch of the installed app, offline, on a mid-range phone, or
+a Playwright run with CPU throttled 4x as its stand-in. `bench` records all three per release.
 
-**Fill these regions.** They are read out of this document by the generators; everything outside the markers is yours.
+**Security and privacy.** Nothing sensitive is stored or sent. The threats worth defending against
+are a supply-chain change (none: no third-party code ships), a tampered crisis line (every change
+goes through a reviewed commit), and a misleading claim (REQ-025). A Content Security Policy that
+allows only the app's own origin backs up the no-network rule.
 
-*`srs-assumptions`* — What is taken as true without having been verified, and what this software depends on that it does not control. Each one a thing that would change the plan if it turned out to be false.
+---
+
+## 10. Delivery Plan
+
+**Slice 1 — walking skeleton: breathe, help, offline.**
+- *Assumption tested:* a plain PWA on GitHub Pages can install, work offline, start the breath
+  guide within 1 second, and be fully usable by keyboard and screen reader.
+- *In:* the shell, the breath guide with the default rhythm, the "Need urgent help?" control with
+  the first curated crisis lines and the directory fallback, the self-help line, the manifest, the
+  service worker, `config.json`, `strings/en.json`, the test harness and `bench`.
+- *Out:* other exercises, activities, tones, presets, Settings, the supporting pages.
+- *Done when:* the offline, accessibility, smoke and crisis tests pass; `bench` meets REQ-026 and
+  REQ-028; the owner has checked it on a phone; then the public repository is created (with the
+  owner's yes) and pushed.
+
+**Slice 2 — exercises.** Grounding, calming statements, rhythm presets, Settings, soft tones, and
+the research sources for each technique.
+
+**Slice 3 — distraction.** The bubble field and the shape trace.
+
+**Slice 4 — trust pages.** The disclaimer page, the Standards & research page, the feedback page,
+and the GitHub issue templates.
+
+**Slice 5 — colour sort.** Built last, as the hardest to make accessible. It ships only if it passes.
+
+**Definition of done per slice:** it works, `test` is green, `bench` is spot-checked, the design
+document and records agree with the code, and it is committed.
+
+**Release criteria for 1.0:** every "must" requirement is met; every success criterion in Stage 2
+holds; an audit round clears the gate (`audit-gate.py` prints `GATE CLEAR`); every crisis line is
+re-checked; the Standards & research page shows only what is verified.
+
+---
+
+## 11. Risks, Assumptions & Open Questions
+
+| Risk | Mitigation |
+|---|---|
+| A person in danger uses the app instead of getting help. | The "Need urgent help?" control is on every screen, and the self-help line is on the main screen. |
+| A crisis line in the list goes out of service. | Each line has a last-checked date; a release re-checks every line; the international directory is the fallback. |
+| A claim overstates the evidence and breaks health-claim rules. | REQ-025 fixes the wording; each technique cites its research (REQ-024); a test scans for forbidden words. |
+| A standard is promoted that the app does not meet. | REQ-029: a standard is shown only with a dated automated and manual check for that version. |
+| No volunteer comes forward for the manual check. | No standard is shown as met; the app still works; the owner can ask in accessibility communities. |
+| A movement or a sound makes a person feel worse. | Reduced motion is honoured (REQ-010); tones are off by default (REQ-007); nothing is timed or scored. |
+| The colour sort cannot be made fully accessible. | It is "should", not "must", and built last; it ships only when it passes. |
+| The offline cache serves an old version after an update. | The cache name carries the version; an update test covers it. |
 
 <!-- BEGIN srs-assumptions - written by the interview, read by the generators -->
+- The crisis lines in the curated list stay in service between checks. Each line carries a
+  last-checked date, and a release re-checks them.
+- Community volunteers will do the manual accessibility checks. If none come forward, no
+  standard is shown as met (REQ-029), and the product still works.
+- GitHub Pages stays free for a public repository and serves the app over HTTPS, which an
+  installable offline web app needs.
+- A mid-range phone can show the breathing guide within 1 second of a cold offline launch with a
+  plain HTML, CSS and JavaScript app under 150 KB.
+- The device language and region setting is a good enough guide to the person's country for
+  choosing crisis lines.
 <!-- END srs-assumptions -->
 
----
-
-## 12. Decision Log *(required — seeded during the interview, grows for the project's life)*
-
-**Why this matters.** This is the project's memory. Fixed decisions with rationale stop
-the implementer — and the owner — from relitigating them, and make future reversals
-informed rather than accidental.
-
-**Record.** One line per settled decision:
-`**[Decision]** — [rationale] — [alternatives rejected] — [date]`
-Stage 7's technology decisions all appear here (or are referenced here). During
-implementation, every materially ambiguous question the implementer asks gets its answer
-recorded here.
+**Open questions.**
+- **The public feedback email address.** The owner decides, before the first release that shows
+  the email button. Until then the button is hidden.
+- **Which international crisis directory the fallback links to.** The implementer proposes one
+  with evidence in slice 1; the owner confirms.
 
 ---
 
-## 13. Implementation Readiness Checklist *(required — the interview isn't done until this passes)*
+## 12. Decision Log
 
-Work through this with the owner before writing the final document:
+All owner-decided 2026-10-07 in the design interview unless a line says otherwise.
 
-- [ ] The one-line pitch, success criteria, and Non-Goals exist and agree with each other.
-- [ ] Every flow in Stage 5 has its edge cases and failure states specified.
-- [ ] **Every agreed obligation is a requirement RECORD, not a line in this document.** Run
-      `python Commands/srs.py --stdout` and read clause 3: what is not there does not exist.
-- [ ] **Every requirement carries a category, a verification method and a priority**, and none
-      of the three was chosen to get past the command. A wrong category prints a requirement
-      under the wrong clause; a wrong verification claims a strength nobody has.
-- [ ] **Every marked region is filled, or carries `N/A — <reason>`.** A region left blank is
-      reported as blank, which says the interview reached it and stopped.
-- [ ] **Both generated documents have been produced and read**, and every clause still saying
-      *Not supplied* is one the owner agrees should say that.
-- [ ] Every technology in the project appears in Stage 7 with rationale — nothing entered
-      by assumption.
-- [ ] The never-commit list exists (secrets / PII / licensed material) and matches the
-      constraints, content sources, and integrations discussed.
-- [ ] Module boundaries exist and no two modules own the same concern.
-- [ ] Every performance target has a metric, a threshold, and a workload.
-- [ ] The walking skeleton is defined tightly enough to build without further questions.
-- [ ] Every open question is either resolved into the Decision Log or explicitly parked
-      in Stage 11.
-- [ ] All skipped sections say `N/A — <reason>`, not nothing.
-- [ ] The owner has read the Non-Goals and Decision Log and agrees they're right.
-
-When all boxes check: finish `docs/Design_Document.md` in place, move every agreed requirement
-from `proposed` to `agreed`, and direct the owner to open the
-project folder in Claude Code and say **Initialize**, naming the template generation to
-use (e.g. `Templates/_Project_Template/` — see its `START_HERE.md`); the
-bootstrap reads `Development_Process.md` from the generation's shared process folder
-(`Process/`).
+- **"Accessible like Effigy Arcade" means both readings: reachable and usable in distress.** — A
+  person in a panic attack needs the app to load at once with no network, and also needs it to work
+  with shaky hands, a screen reader, a keyboard or reduced motion. — Rejected: only one reading. —
+  2026-10-07
+- **The first version offers paced breathing, 5-4-3-2-1 grounding, calming statements and
+  distraction activities.** — These are the common self-help techniques for acute panic, and
+  distraction was the owner's explicit addition. — Rejected for now: an episode log, because it
+  stores personal data. — 2026-10-07
+- **The distraction activities are a bubble field, a shape trace and a colour sort.** — Each one
+  has no score, no failure and no timer. — Rejected: a counting task. The colour sort is "should"
+  and not "must", because a keyboard and screen-reader path for it is the hardest to build. —
+  2026-10-07
+- **A "Need urgent help?" control on every screen opens crisis lines by region, chosen from the
+  device language and region setting.** — A person who may be in danger must reach a human fast,
+  and asking for location adds a prompt and a privacy cost. — Rejected: one fixed line; an
+  emergency number only. — 2026-10-07
+- **The self-help statement is one quiet line on the main screen, with the full text on the
+  disclaimer page.** — Nothing may stand between the person and help. — Rejected: a first-run
+  notice; About page only. — 2026-10-07
+- ~~**The disclaimer page lists every standard Freelief meets, with its level and the date of the
+  last check, and lists only verified ones.**~~ — 2026-10-07. *Superseded the same day by the
+  "Standards & research" page below.*
+- **A "Standards & research" page promotes every verified standard, with its level and the date of
+  the last check, and cites research for each technique.** — The owner wants the standards used as
+  a selling point. A claim that a check has not proven would mislead. — Rejected: a section of the
+  disclaimer page; a pop-up window, which is harder to make accessible. — 2026-10-07
+- **Only clinically researched techniques. Claims say "built on techniques studied in clinical
+  research" and never "clinically proven", "treats" or "cures".** — In most markets a health claim
+  for an app is regulated (FTC and FDA in the US, ASA and MHRA in the UK). Freelief itself has had
+  no clinical study. A review or certification, such as by a clinician or ORCHA, may be claimed only
+  after it is granted. — Rejected: stronger wording such as "clinically proven to reduce panic". —
+  2026-10-07
+- **Soft tones mark the breath, off by default. No spoken voice.** — Tones need no recorded assets
+  and no translation. — Rejected: spoken guidance (quality varies by device and language); silent
+  only. — 2026-10-07
+- **Freelief collects no personal data and makes no network call after install.** — A person's
+  worst moments are not telemetry. — Rejected: anonymous usage counts. — 2026-10-07
+- **Accessibility target: WCAG 2.2 AA in full, and AAA wherever a criterion can be met.** — The
+  users are in distress, so the stricter bar fits. — Rejected: AA only; no named standard. —
+  2026-10-07
+- **English only in the first version, with all text in one strings file per language.** — This
+  keeps the first version small and makes a later translation a data change. — Rejected: English
+  and Spanish at launch; English with no translation structure. — 2026-10-07
+- **Freelief is for anyone, in the moment: no sign-up, no profile, no history.** — Rejected: a daily
+  practice with reminders or streaks, which add stored data and pressure; a clinician-shaped tool.
+  — 2026-10-07
+- **On launch, the breathing guide starts at once.** — It asks zero decisions of the person in the
+  worst moment. Other exercises are one tap away. — Rejected: a menu first; a question first. —
+  2026-10-07
+- **Plain HTML, CSS and JavaScript as a progressive web app on GitHub Pages, with no framework, no
+  dependency and no build step.** — It gives the smallest download, the fastest load and nothing to
+  break, as in Effigy Arcade. — Rejected: a small framework such as Preact. — 2026-10-07
+- **Tier: Standard.** — Rejected: Utility. — 2026-10-07
+- **Routing posture: 2 (quality).** — People use Freelief in a crisis, so a wrong word or a broken
+  screen costs more than rework. — Rejected: 1 (balanced). — 2026-10-07
+- **Look: soft and dim. A dark calm theme by default that follows the device light or dark setting,
+  with AAA text contrast.** — It does not glare at night, when many attacks happen. — Rejected: light
+  and airy; nature imagery, which needs assets and contrast care. — 2026-10-07
+- **Crisis lines: a small curated list in the app, each line with a last-checked date, plus a link
+  to an international directory.** — The common lines work offline, and a dated entry shows when it
+  needs a check. — Rejected: a directory link only, which needs a network in a crisis; a large
+  built-in list, which goes stale. — 2026-10-07
+- **Breathing rhythm: presets, with 4-in 6-out as the default, a slower rhythm and box breathing.**
+  — Rejected: one fixed rhythm; full sliders, which are too much to choose in distress. — 2026-10-07
+- **Strict performance targets: the breathing guide is visible within 1 s of a cold, offline launch
+  on a mid-range phone; every input responds within 100 ms; the whole app is under 150 KB.** — In a
+  panic attack every second of wait is felt. — Rejected: looser targets (3 s, 500 KB). — 2026-10-07
+- **The walking skeleton is breathing, help and offline: an installable offline web app on GitHub
+  Pages, the breathing guide at launch, the "Need urgent help?" crisis list, the self-help line, and
+  a full keyboard and screen-reader path.** — It proves the riskiest parts end to end. — Rejected:
+  breathing only; all exercises in a rough form. — 2026-10-07
+- **Accessibility claims are checked by an automated tool on every page and by a dated manual pass
+  with a screen reader and a keyboard. The manual pass comes from community volunteers, for example
+  from Reddit.** — Freelief is a free, open-source tool with no budget for a paid audit. Automated
+  tools find only part of the WCAG issues, so a claim needs the manual pass too. — Rejected:
+  automated only; a paid external audit. — 2026-10-07
+- **Freelief is free and open source under the MIT license.** — The owner's stance: a free relief
+  tool. MIT is short and lets anyone reuse the code with credit. — Rejected: GPL-3.0; MIT for code
+  with CC BY for the text. — 2026-10-07
+- **A feedback page in the app opens a pre-filled GitHub issue, or a pre-filled email for people
+  with no GitHub account.** — Volunteers can report checks and problems with little effort. The
+  person sees and edits every word, and the app itself sends nothing. — Rejected: the app writes to
+  the repository directly, because a static site cannot keep a GitHub token secret, so anyone could
+  take it and misuse the repository; a relay server, because it adds a server, a network send and
+  spam handling; GitHub only. — 2026-10-07
+- **The GitHub repository EffigyMedia/freelief is created, public, when the first slice is ready.**
+  — Public, so that GitHub Pages is free and the source is open. — Rejected: create it now, private
+  or public. — 2026-10-07
+- **The first curated crisis lines cover the US, the UK, Canada, Australia and Ireland.** — These
+  are the main English-speaking regions, which matches the English-only first version. Every other
+  region gets the international directory. — Rejected: US only; a wider list, which has more lines
+  to keep checked. — 2026-10-07
+- **The feedback email address is decided later; the email button stays hidden until then.** —
+  Owner's choice. — 2026-10-07
+- **Testing: Python and Playwright from a project-local venv, with axe-core vendored for tests
+  only.** — Real-browser tests, including offline and network-log checks, with the same toolchain
+  as Effigy Arcade. axe-core never ships, so REQ-019 holds. — Rejected: Node test runners; manual
+  testing only. — 2026-10-07 (proposed by the implementer in Stage 7; confirmed at sign-off)
+- **Activities use DOM elements, not a canvas.** — A screen reader and the keyboard must reach every
+  item. — Rejected: a canvas. — 2026-10-07 (proposed by the implementer in Stage 8; confirmed at
+  sign-off)
 
 ---
 
-## 14. Glossary *(optional)*
+## 13. Implementation Readiness Checklist
 
-Definitions for acronyms and project-specific terms not already covered by Stage 4.
+- [x] The one-line pitch, success criteria, and Non-Goals exist and agree with each other.
+- [x] Every flow in Stage 5 has its edge cases and failure states specified.
+- [x] Every agreed obligation is a requirement record (`REQ-001` to `REQ-031`).
+- [x] Every requirement carries a category, a verification method and a priority.
+- [x] Every marked region is filled.
+- [x] Both generated documents have been produced and read: `docs/SRS.md` and `docs/PRD.md`,
+      31 of 31 requirements, no clause *Not supplied*.
+- [x] Every technology appears in Stage 7 with rationale.
+- [x] The never-commit list exists.
+- [x] Module boundaries exist and no two modules own the same concern.
+- [x] Every performance target has a metric, a threshold, and a workload.
+- [x] The walking skeleton is defined tightly enough to build without further questions.
+- [x] Every open question is resolved or parked in Stage 11.
+- [x] No section is skipped.
+- [x] The owner has read the Non-Goals and Decision Log and agrees they are right (2026-10-07).
 
+---
 
-**Fill these regions.** They are read out of this document by the generators; everything outside the markers is yours.
-
-*`srs-acronyms`* — Every acronym and abbreviation this project uses, expanded. A reader who meets one in the specification looks here.
+## 14. Glossary
 
 <!-- BEGIN srs-acronyms - written by the interview, read by the generators -->
+- **ASA** — Advertising Standards Authority (UK).
+- **CBT** — cognitive behavioural therapy.
+- **CSP** — Content Security Policy.
+- **DBT** — dialectical behaviour therapy.
+- **FDA** — Food and Drug Administration (US).
+- **FTC** — Federal Trade Commission (US).
+- **MHRA** — Medicines and Healthcare products Regulatory Agency (UK).
+- **ORCHA** — Organisation for the Review of Care and Health Apps.
+- **PWA** — progressive web app.
+- **WCAG** — Web Content Accessibility Guidelines.
 <!-- END srs-acronyms -->
 
 ---
 
-## 15. Change Log *(maintained for the document itself)*
+## 15. Change Log
 
-- **[vX.Y — YYYY-MM-DD]** — what changed in this document and why.
+- **v0.1 — 2026-10-07** — Interview started; decisions recorded as they were made.
+- **v0.2 — 2026-10-07** — Interview complete. Interview guidance removed; every stage filled;
+  `PREMISE.md` superseded. Waiting for the owner's sign-off.
+- **v1.0 — 2026-10-07** — The owner signed off. All 31 requirements moved to `agreed`; the SRS and
+  PRD generated; the first crisis-line regions decided.
