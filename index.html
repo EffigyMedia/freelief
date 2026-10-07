@@ -16,5 +16,16 @@
   <script type="module" src="app.js"></script>
 </head>
 <body>
+  <!-- The fallback (AUD-002). It shows when JavaScript is off or the app cannot start, and the app
+       replaces it once it can draw everything. Its text is the one exception to REQ-017 (all text
+       in strings/en.json): it must show even when that file cannot load. -->
+  <main id="fallback" class="fallback">
+    <p class="brand">Freelief</p>
+    <h1>Breathe slowly</h1>
+    <p>Breathe in while you count to four. Breathe out while you count to six. Do this again, at your own pace. You are safe right now.</p>
+    <p class="emergency">If you are in danger, or might harm yourself, call your local emergency number now.</p>
+    <p><a class="button" href="https://findahelpline.com/" rel="noopener">Find a helpline in your country</a></p>
+    <p class="self-help">Freelief is a self-help tool. It is not medical care.</p>
+  </main>
 </body>
 </html>

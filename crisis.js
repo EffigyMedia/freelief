@@ -3,9 +3,16 @@
 
 let data = null;
 
+// A failed load is not fatal (AUD-002): the help dialog still shows the emergency-number line and
+// the directory link from config.json, with no curated lines.
 export async function loadCrisisLines() {
-  const response = await fetch("data/crisis-lines.json");
-  data = await response.json();
+  try {
+    const response = await fetch("data/crisis-lines.json");
+    if (!response.ok) throw new Error(`crisis lines: HTTP ${response.status}`);
+    data = await response.json();
+  } catch {
+    data = null;
+  }
 }
 
 // The two-letter region of the device, such as "GB" from "en-GB", or null when none is set.
@@ -23,6 +30,7 @@ export function deviceRegion(languages = navigator.languages || [navigator.langu
 
 // The lines for one region, the other curated regions, and the international directory.
 export function linesFor(regionCode) {
+  if (!data) return { own: null, others: [], directory: null };
   const regions = data.regions;
   const own = regionCode && regions[regionCode] ? { code: regionCode, ...regions[regionCode] } : null;
   const others = Object.entries(regions)

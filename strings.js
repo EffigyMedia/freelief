@@ -5,6 +5,7 @@ let table = {};
 
 export async function loadStrings(lang = "en") {
   const response = await fetch(`strings/${lang}.json`);
+  if (!response.ok) throw new Error(`strings: HTTP ${response.status}`);
   table = await response.json();
 }
 

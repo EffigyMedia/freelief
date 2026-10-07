@@ -31,6 +31,7 @@ let navLink = null;
 
 async function loadConfig() {
   const response = await fetch("config.json");
+  if (!response.ok) throw new Error(`config: HTTP ${response.status}`);
   return response.json();
 }
 
@@ -82,15 +83,21 @@ function buildHelpDialog() {
       : t("help.emergencyUnknown") }),
   ];
   if (own) body.push(regionBlock(own, "h3"));
+  // With no crisis data, the directory link still comes from config.json (AUD-002).
+  const directoryUrl = directory ? directory.url : config.crisis.directoryUrl;
   body.push(element("p", { class: "directory" }, [
-    element("a", { class: "button", href: directory.url, rel: "noopener", text: t("help.directory") }),
-    element("span", { class: "directory-note", text: t("help.directoryNote", { note: directory.note }) }),
+    element("a", { class: "button", href: directoryUrl, rel: "noopener", text: t("help.directory") }),
+    directory
+      ? element("span", { class: "directory-note", text: t("help.directoryNote", { note: directory.note }) })
+      : null,
   ]));
-  const details = element("details", { class: "others" }, [
-    element("summary", { text: t("help.otherCountries") }),
-    ...others.map((region) => regionBlock(region, "h3")),
-  ]);
-  body.push(details, close);
+  if (others.length) {
+    body.push(element("details", { class: "others" }, [
+      element("summary", { text: t("help.otherCountries") }),
+      ...others.map((region) => regionBlock(region, "h3")),
+    ]));
+  }
+  body.push(close);
   dialog.append(...body);
   return dialog;
 }
@@ -158,6 +165,9 @@ function applyTheme(theme) {
   else document.documentElement.dataset.theme = theme;
 }
 
+// If config.json, the strings or a module cannot load, the static fallback in index.html stays on
+// screen: a breathing line, the emergency instruction and the directory link (AUD-002). The shell
+// replaces it only once it can draw everything.
 async function boot() {
   const [loaded] = await Promise.all([loadConfig(), loadStrings("en"), loadCrisisLines()]);
   config = loaded;
@@ -189,4 +199,8 @@ if ("serviceWorker" in navigator) {
     });
 }
 
-boot();
+boot().catch((error) => {
+  // Keep the reason, so a field report can be debugged; the fallback stays on screen.
+  console.error("Freelief could not start:", error);
+  document.documentElement.dataset.ready = "fallback";
+});

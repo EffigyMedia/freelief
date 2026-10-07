@@ -10,6 +10,14 @@ audit.
 
 ---
 
+<a id="v0-5-2"></a>
+## [0.5.2] - 2026-10-07
+- Fix (audit [AUD-002](../fragments/AUD-002.md)): if Freelief cannot start, the page no longer
+  stays blank. A static fallback shows how to breathe, says to call the local emergency number, and
+  links the helpline directory, even with JavaScript off. If only the crisis-lines file fails, the
+  app runs and the help dialog keeps the emergency line and the directory. Start-up errors are
+  logged. Restored the `crisis` section of `config.json`, lost in slice 2. 55 tests.
+
 <a id="v0-5-1"></a>
 ## [0.5.1] - 2026-10-07
 - Fix (audit [AUD-001](../fragments/AUD-001.md), [AUD-014](../fragments/AUD-014.md),

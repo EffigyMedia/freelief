@@ -185,6 +185,18 @@ body {
 
 .button:hover { background: var(--accent-soft); }
 
+/* ---- the static fallback in index.html (AUD-002) ---- */
+
+.fallback {
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+}
+
+.fallback h1 { margin: 0.5rem 0; font-size: 1.75rem; }
+
 /* ---- frame ---- */
 
 .top {
