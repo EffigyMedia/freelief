@@ -593,6 +593,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **GitHub Pages serves a `live` branch, not `main`. Before 1.0, `live` is a public preview that
+  moves only with the owner's yes; from 1.0 on, it moves only at a release that cleared the audit
+  gate, to a tag. The README calls the app a preview and does not invite installs before 1.0.** —
+  A push to `main` was a public deploy, so the release gate never applied to what users got
+  (AUD-003). `live` was created at 75e923f, the v0.5.0 already deployed; that build is a preview,
+  not a release, so it has no release tag. — Rejected: gating every push to `main`. — 2026-10-07
+  (owner)
 - **Start-up fails soft. `index.html` holds a static fallback (a breathing line, the emergency
   instruction, the directory link, the self-help line) that shows with JavaScript off or when the app
   cannot start; the app replaces it once it can draw everything. A failed crisis-lines file is not
@@ -605,7 +612,7 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   worker to fetch any missing file, and Freelief deletes only its own `freelief-` caches. — Rejected:
   a free GitHub organization or a custom domain for an origin of its own. Accepted risk: a cache
   deleted while the person is offline cannot be repaired until they are online. — 2026-10-07 (owner)
-- **The public repository `EffigyMedia/freelief` exists and GitHub Pages serves `main` at
+- **The public repository `EffigyMedia/freelief` exists and GitHub Pages serves `main` *(changed the same day: it serves `live`, see above)* at
   https://effigymedia.github.io/freelief/.** — Created after all five slices were built, with the
   owner's yes, so the app can be checked on a phone over HTTPS. A push is now a deploy. — 2026-10-07
   (owner)

@@ -3,7 +3,8 @@
 **Help through a panic attack or strong anxiety, right now.** Free, offline and private.
 
 Freelief opens straight into a breathing guide. From there, one tap reaches 5-4-3-2-1 grounding,
-calming words, and two gentle distraction activities (popping bubbles and tracing a shape). Every
+calming words, and three gentle distraction activities (popping bubbles, tracing a shape and sorting
+colours). Every
 screen has a **"Need urgent help?"** button with crisis lines for your country.
 
 - **Free and open source** (MIT license). No account, no advertising, no analytics.
@@ -15,9 +16,12 @@ screen has a **"Need urgent help?"** button with crisis lines for your country.
 > Freelief is a self-help tool. It is not medical care and does not replace a doctor, a therapist
 > or emergency services. If you are in danger, call your local emergency number.
 
-## Use it
+## Preview
 
-Open the app in a browser: <https://effigymedia.github.io/freelief/>. To install it, use your browser's "Add to Home Screen" or "Install" option.
+**Freelief is in preview and not yet released.** A preview build is at
+<https://effigymedia.github.io/freelief/> so that people can test it and check it with assistive
+technology. Please do not rely on it yet. Version 1.0 will be the first release, after a full
+release audit; this page will then say how to install it.
 
 ## Research and standards
 

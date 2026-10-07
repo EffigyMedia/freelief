@@ -172,7 +172,7 @@ Summaries — the canonical procedures live in `<env-root>/Process/Development_P
 | *(normal work)* | Feature loop: implement → `test` → mark the `RLG-` item built → changelog → **patch** bump in `version.js` → commit. One feature = one commit = one patch = one changelog entry = one tracker item to built. A finished slice is a **minor** bump. |
 | **Track this: …** | `python <env-root>/Commands/fragment.py new --kind ruling --type feature --status requested --title "…"`; do not start it. |
 | **Resume** | Run `python <env-root>/Commands/thread.py show`. **Verify the working tree is clean.** Uncommitted work is an interrupted unit: ask, never silently commit or discard. Then run `doctor`. |
-| **Release** | Only when something ships. Run audit rounds until `audit-gate.py` prints `GATE CLEAR`; run the file audit; re-check every crisis line and update its date; purge `output/previews/`; run `bench`; run `build` (the size check); **verify `test` and `doctor` are green**; bump the version; tag; push the commit and the tag. |
+| **Release** | Only when something ships. Run audit rounds until `audit-gate.py` prints `GATE CLEAR`; then move `live` to the tag (`git push origin vX.Y.Z:live`); run the file audit; re-check every crisis line and update its date; purge `output/previews/`; run `bench`; run `build` (the size check); **verify `test` and `doctor` are green**; bump the version; tag; push the commit and the tag. |
 | **Perform audit** | Run a round per `Audit_and_Testing.md`: four lenses, one finding to a fragment; change no code. |
 
 ## Commands
@@ -197,7 +197,8 @@ the Chrome already on the machine. Run from the repo root:
   `tools/make_icons.py` renders the PNG icons from `icons/icon.svg`.
 - **Browser tests use `harness.open_app` and `harness.wait_until`.** Never `wait_for_function`:
   the app's CSP refuses it, correctly (`docs/technical_references/app_shell_and_offline.md`).
-- **Deploy:** GitHub Pages serves `main` of `EffigyMedia/freelief`. A push deploys.
+- **Deploy:** GitHub Pages serves the `live` branch of `EffigyMedia/freelief`. Moving `live` deploys;
+  pushing `main` does not (see Conventions).
 
 ## Architecture (the load-bearing boundaries)
 
@@ -247,9 +248,12 @@ the Chrome already on the machine. Run from the repo root:
 - **Commits are authored as the project owner — no AI identity or co-author trailer — and end with
   the trailer line `Made-with: Code Continuum`.** Feature commits are local. **The remote is
   `origin` = `https://github.com/EffigyMedia/freelief` (public)**, created 2026-10-07 with the
-  owner's yes. GitHub Pages serves `main` at `https://effigymedia.github.io/freelief/`, so **a push
-  is a deploy.** Push at a release, or when the owner needs a build to test on the phone — never per
-  commit.
+  owner's yes. GitHub Pages serves the **`live` branch, not `main`**, at
+  `https://effigymedia.github.io/freelief/` (AUD-003). **Pushing `main` deploys nothing**, so push it
+  freely. **Moving `live` is a deploy.** Before 1.0, `live` is a public *preview*: move it only with
+  the owner's yes for that move, and the README says it is a preview. From 1.0 on, `live` moves only
+  at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tagged commit:
+  `git push origin vX.Y.Z:live`.
 - **Never commit** (see `.gitignore`): tokens, keys or passwords; `.venv/`; `output/`;
   `input/excluded/`; the content of feedback emails or any other personal data.
 - **Audit pace:** run an audit round at the end of each slice, and before every release.

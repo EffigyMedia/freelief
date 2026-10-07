@@ -27,9 +27,23 @@ this log is only for changes to *how we work* (process/instructions).
 
 -->
 
+## 2026-10-07 (later still)
+
+### Pages serves the `live` branch; main no longer deploys
+- **Instruction:** GitHub Pages serves `live`. Pushing `main` deploys nothing. Before 1.0, `live` is
+  a public preview and moves only with the owner's yes for that move; from 1.0 on it moves only at a
+  release, after `audit-gate.py` prints `GATE CLEAR`, to a tag. The README says the app is a preview
+  and does not invite installs until 1.0.
+- **Why:** audit finding AUD-003. A push to `main` was a public deploy, so the release gate could
+  never apply to what users get. The owner chose a separate `live` branch and to keep the site up as
+  a marked preview. This replaces "a push deploys" in the entry below.
+- **Encoded in:** `AGENTS.md` (Commands: Deploy; Conventions: commits and remote; Release);
+  `docs/README.md`; GitHub Pages source set to `live`.
+- Owner, 2026-10-07.
+
 ## 2026-10-07 (later)
 
-### The remote exists; a push deploys
+### The remote exists; a push deploys *(replaced by the entry above)*
 - **Instruction:** `origin` is the public repository `https://github.com/EffigyMedia/freelief`, and
   GitHub Pages serves `main`. Push only at a release or when the owner needs a phone build.
 - **Why:** the owner approved creating and publishing it after all five slices were built. This
