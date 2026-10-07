@@ -1,0 +1,11 @@
+# The tools this project needs. RLG-196, and Process/Tool_Registry.md.
+#
+# Empty because this project has not asked for anything yet. Declare a tool when this project first
+# wants one, in the same unit of work - the declaration is what authorizes going to get it.
+#
+# When this project stops needing a tool, move it to `retired`. Never delete the line, and nothing
+# is ever uninstalled: another project on this machine may still need it.
+
+required = []
+optional = []
+retired  = []

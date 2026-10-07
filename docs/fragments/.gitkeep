@@ -1,0 +1,8 @@
+# This file exists so the store reaches the repository.
+#
+# Git does not track an empty directory. Without this, a clone of this project would
+# have no docs/fragments/, and a session opening here would walk up and file its units
+# in the environment's store instead of this one.
+#
+# It is not a fragment and nothing reads it: the store is globbed for *.md.
+# Delete it once this store holds a record of its own, or leave it - it costs nothing.

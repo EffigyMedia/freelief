@@ -1,0 +1,41 @@
+# Freelief - this project's own tunables.
+#
+# Copy this to the project root as `config.toml` at standup and tune the numbers. It is the project's
+# file: nothing regenerates it and nothing checks its contents against this template, because a
+# cadence a project has tuned is the project's decision and not drift.
+#
+# Scoping is root -> set -> project. A value set here answers for this project only, and anything
+# absent falls back to the level above.
+#
+# Config holds the threshold; it never holds the tally. *Every 3 clears* is a tunable and belongs
+# here. *We are 2 clears in* is mutable state and lives in this project's store as a `QUE-` fragment,
+# because it has to travel with the drive.
+
+[maintenance]
+# Every N context clears in THIS project queues this task. The clear itself never runs one - queuing
+# costs nothing, so clearing stays free, and the task is picked up as an ordinary unit on the far
+# side of the clear with fresh context, which is the better condition to audit in anyway.
+#
+# A project's clears are its own. They are counted in this project's tally and paced by this file,
+# and the environment's maintenance is paced by its own. A project's count is its own, so a
+# cadence written here comes due on this project's clears and on nothing else.
+
+# Find orphaned, stray and misplaced files; propose, never delete. Three is the ruled number.
+file_audit = 3
+
+# Run the checkers and report what changed. In a project this is the checks that answer about a
+# line - the structural read of this project's own store - and the environment's gates are skipped
+# and named. Cheap, so it runs often.
+gate_sweep = 2
+
+# Two tasks are deliberately absent, and adding them is this project's call rather than a default.
+#
+# `knowledge_base_check` asks whether a stretch of work wrote down what it learned. The knowledge
+# base it reads is the environment's shared one, so a project queuing it is a project asking a
+# question about somebody else's document. Add it if this project keeps its own technical references
+# actively enough for the question to bite.
+#
+# `coherence_review` reads the whole store for contradictions in meaning. It is the most expensive
+# member of the class by a distance, and it earns its keep against a store large enough to hold two
+# decisions that disagree. Add it when this project's store is big enough for that to be likely, and
+# give it a long count.
