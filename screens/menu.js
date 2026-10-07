@@ -4,6 +4,8 @@ const ITEMS = [
   { route: "breathe", label: "nav.breathe", hint: "nav.breatheHint" },
   { route: "ground", label: "nav.ground", hint: "nav.groundHint" },
   { route: "statements", label: "nav.statements", hint: "nav.statementsHint" },
+  { route: "bubbles", label: "nav.bubbles", hint: "nav.bubblesHint" },
+  { route: "trace", label: "nav.trace", hint: "nav.traceHint" },
   { route: "settings", label: "nav.settings", hint: "nav.settingsHint" },
 ];
 

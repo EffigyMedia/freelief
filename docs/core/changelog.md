@@ -10,6 +10,16 @@ audit.
 
 ---
 
+<a id="v0-3-0"></a>
+## [0.3.0] - 2026-10-07
+- Slice 3, distraction [RLG-003](../fragments/RLG-003.md): "Pop bubbles" (soft bubbles that
+  drift slowly, popped by tap or key, replaced a moment later, with a control to stop the drifting
+  and no movement under reduced motion) and "Trace a shape" (a figure eight to follow with a finger
+  or the arrow keys, read by a screen reader as a slider). No score, no failure, no timer. A soft
+  pop tone when tones are on. Three distraction sources added to `docs/research/sources.md`,
+  including the caveat that distraction can act as a safety behaviour. Fixed on the way: bubbles
+  could overlap and cover each other's touch targets. 33 tests; bench 124 ms, 9 ms, 70 KB.
+
 <a id="v0-2-0"></a>
 ## [0.2.0] - 2026-10-07
 - Slice 2, the exercises [RLG-002](../fragments/RLG-002.md): "More ways to calm" leads to

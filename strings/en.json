@@ -11,6 +11,10 @@
   "nav.groundHint": "Notice what is around you, one sense at a time.",
   "nav.statements": "Calming words",
   "nav.statementsHint": "Steady words to read slowly.",
+  "nav.bubbles": "Pop bubbles",
+  "nav.bubblesHint": "Slow, soft bubbles. Pop as many as you like.",
+  "nav.trace": "Trace a shape",
+  "nav.traceHint": "Follow a slow loop with your finger or the arrow keys.",
   "nav.settings": "Settings",
   "nav.settingsHint": "Breathing rhythm, soft tones and colours.",
 
@@ -53,6 +57,20 @@
     "One breath at a time.",
     "You are doing well. Stay with it."
   ],
+
+  "bubbles.title": "Pop bubbles",
+  "bubbles.intro": "Tap a bubble, or move to one and press Enter. There is nothing to win.",
+  "bubbles.fieldLabel": "Bubbles",
+  "bubbles.bubbleLabel": "Bubble",
+  "bubbles.pauseMotion": "Stop the drifting",
+  "bubbles.resumeMotion": "Let them drift",
+
+  "trace.title": "Trace a shape",
+  "trace.intro": "Move the dot slowly around the loop with your finger, or with the arrow keys. Go at your own pace.",
+  "trace.sliderLabel": "Dot on the loop",
+  "trace.position": "{percent} percent around the loop",
+  "trace.oneLoop": "One loop. Keep going for as long as you like.",
+  "trace.loops": "{count} loops. Keep going for as long as you like.",
 
   "settings.title": "Settings",
   "settings.rhythm": "Breathing rhythm",

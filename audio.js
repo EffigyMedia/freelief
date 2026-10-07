@@ -25,22 +25,32 @@ export function unlockAudio() {
   ensureContext();
 }
 
-// One soft tone for a breathing phase: a sine wave that swells and fades.
-export function cue(phaseKey) {
-  if (!getSetting("tones") || !toneConfig) return;
+// A sine wave that swells and fades. Silent unless the tones setting is on.
+function tone(frequency, attack, release) {
+  if (!getSetting("tones") || !toneConfig || !frequency) return;
   const ctx = ensureContext();
   if (!ctx) return;
-  const frequency = toneConfig.frequencies[phaseKey];
-  if (!frequency) return;
   const now = ctx.currentTime;
   const oscillator = ctx.createOscillator();
   const gain = ctx.createGain();
   oscillator.type = "sine";
   oscillator.frequency.value = frequency;
   gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(toneConfig.volume, now + toneConfig.attackSeconds);
-  gain.gain.linearRampToValueAtTime(0, now + toneConfig.attackSeconds + toneConfig.releaseSeconds);
+  gain.gain.linearRampToValueAtTime(toneConfig.volume, now + attack);
+  gain.gain.linearRampToValueAtTime(0, now + attack + release);
   oscillator.connect(gain).connect(ctx.destination);
   oscillator.start(now);
-  oscillator.stop(now + toneConfig.attackSeconds + toneConfig.releaseSeconds + 0.05);
+  oscillator.stop(now + attack + release + 0.05);
+}
+
+// One soft tone for a breathing phase.
+export function cue(phaseKey) {
+  if (!toneConfig) return;
+  tone(toneConfig.frequencies[phaseKey], toneConfig.attackSeconds, toneConfig.releaseSeconds);
+}
+
+// A short, soft tone when a bubble pops.
+export function pop() {
+  if (!toneConfig) return;
+  tone(toneConfig.popFrequency, toneConfig.popAttackSeconds, toneConfig.popReleaseSeconds);
 }

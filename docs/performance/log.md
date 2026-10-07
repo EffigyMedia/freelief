@@ -2,6 +2,15 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-07 — Slice 3 checkpoint (v0.3.0)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to breathing guide | 110 ms | 124 ms | +13% | OK |
+| Input to visible response | 10 ms | 9 ms | -10% | OK |
+| Shipped size | 41.3 KB | 70.2 KB | +70% | OK, expected |
+Notes: two activity modules, their strings and styles. 80 KB of the 150 KB budget remain for slices
+4 and 5.
+
 ## 2026-10-07 — Slice 2 checkpoint (v0.2.0)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|

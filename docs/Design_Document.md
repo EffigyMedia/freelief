@@ -588,6 +588,22 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   ThroughLine, more than 175 countries, checked 2026-10-07. — Rejected: Befrienders Worldwide
   (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; proposed for owner
   confirmation)
+- **Bubbles sit one to a slot in a 3 x 3 grid, never at a free random place.** — Random places let
+  one bubble cover another's touch target, which the axe target-size check caught at random. —
+  Rejected: random placement with an overlap test (more code, same result). — 2026-10-07 (slice 3,
+  implementer)
+- **Bubble drift has a "Stop the drifting" control, and under reduced motion the bubbles do not
+  move at all.** — WCAG 2.2.2 asks that movement lasting over five seconds can be paused. —
+  2026-10-07 (slice 3, implementer)
+- **The shape trace is a figure eight, and its marker is a `role="slider"` with a percent value.**
+  — A slider is the pattern a screen reader already knows for "a position along a track", and the
+  arrow keys move it. A pointer is matched to the shape only near the marker, so the crossing in
+  the middle cannot make it jump. — 2026-10-07 (slice 3, implementer)
+- **Distraction is offered for the moment, never as a way to overcome panic.** — Research on safety
+  behaviours (Helbig-Lang & Petermann 2010) says escape behaviours, which can include distraction,
+  may keep an anxiety disorder going. Freelief's activity text says "there is nothing to win" and
+  makes no claim. The Standards & research page (slice 4) must say that frequent attacks call for
+  treatment. — 2026-10-07 (slice 3, implementer; a design concern for the owner to read)
 - **Screens are addressed by URL hash, and the menu and Settings live in `screens/`.** — The
   browser Back button works with no extra code, and the exercises stay free of storage: the
   Settings screen is not an exercise, and it writes only through `settings.js`. — Rejected: a

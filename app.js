@@ -9,11 +9,13 @@ import * as motion from "./motion.js";
 import * as breathe from "./exercises/breathe.js";
 import * as ground from "./exercises/ground.js";
 import * as statements from "./exercises/statements.js";
+import * as bubbles from "./activities/bubbles.js";
+import * as trace from "./activities/trace.js";
 import * as menu from "./screens/menu.js";
 import * as settingsScreen from "./screens/settings.js";
 
 // The screens the router knows. Breathing is the default and the first screen (REQ-018).
-const ROUTES = { breathe, ground, statements, menu, settings: settingsScreen };
+const ROUTES = { breathe, ground, statements, bubbles, trace, menu, settings: settingsScreen };
 const DEFAULT_ROUTE = "breathe";
 
 let config = null;

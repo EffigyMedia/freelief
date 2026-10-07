@@ -15,7 +15,28 @@
     "volume": 0.06,
     "attackSeconds": 0.4,
     "releaseSeconds": 1.6,
-    "frequencies": { "in": 261.63, "holdIn": 329.63, "out": 196.0, "holdOut": 220.0 }
+    "frequencies": { "in": 261.63, "holdIn": 329.63, "out": 196.0, "holdOut": 220.0 },
+    "popFrequency": 523.25,
+    "popAttackSeconds": 0.02,
+    "popReleaseSeconds": 0.35
+  },
+  "bubbles": {
+    "count": 6,
+    "columns": 3,
+    "rows": 3,
+    "driftX": 12,
+    "driftY": 24,
+    "minSize": 56,
+    "maxSize": 104,
+    "popMs": 320,
+    "respawnMs": 1400,
+    "driftSecondsMin": 6,
+    "driftSecondsMax": 11
+  },
+  "trace": {
+    "samples": 400,
+    "keyStepPercent": 1,
+    "searchWindow": 40
   },
   "theme": {
     "default": "system",

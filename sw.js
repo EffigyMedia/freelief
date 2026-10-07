@@ -20,6 +20,8 @@ const FILES = [
   "exercises/breathe.js",
   "exercises/ground.js",
   "exercises/statements.js",
+  "activities/bubbles.js",
+  "activities/trace.js",
   "screens/menu.js",
   "screens/settings.js",
   "config.json",

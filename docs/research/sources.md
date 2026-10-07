@@ -53,6 +53,25 @@ These sources support the *techniques*. No study has tested Freelief itself.
    body sensations. It is the reason Freelief's statements name the sensations as passing and
    not dangerous-sounding. A theory paper, not a trial.
 
-## Distraction activities
+## Distraction activities (bubble field, shape trace)
 
-Sources are added with slice 3.
+7. Webb, T. L., Miles, E., & Sheeran, P. (2012). Dealing with feeling: A meta-analysis of the
+   effectiveness of strategies derived from the process model of emotion regulation.
+   *Psychological Bulletin*, 138(4), 775–808. https://doi.org/10.1037/a0027600 — checked
+   2026-10-07.
+   *Evidence:* a meta-analysis of experiments on emotion-regulation strategies. Turning attention
+   to something else (attentional deployment, which includes distraction) changed emotional
+   outcomes, with a small effect overall. Short-term regulation, not a treatment.
+8. Curry, N. A., & Kasser, T. (2005). Can coloring mandalas reduce anxiety? *Art Therapy*, 22(2),
+   81–85. https://doi.org/10.1080/07421656.2005.10129441 — checked 2026-10-07.
+   *Evidence:* a randomized experiment with 84 students. Twenty minutes of colouring a structured
+   pattern reduced induced anxiety more than free drawing. It supports a structured, repetitive
+   visual task, such as tracing a loop; it did not test bubbles or tracing.
+9. Helbig-Lang, S., & Petermann, F. (2010). Tolerate or eliminate? A systematic review on the effects
+   of safety behavior across anxiety disorders. *Clinical Psychology: Science and Practice*, 17(3),
+   218–233. https://doi.org/10.1111/j.1468-2850.2010.01213.x — checked 2026-10-07.
+   *Evidence and caveat:* a systematic review. Behaviours used to escape anxiety, which can include
+   distraction, may keep an anxiety disorder going in the long term, though the evidence is mixed.
+   **This is why Freelief offers distraction for the moment and never presents it as a way to
+   overcome panic.** A person with frequent attacks is better served by treatment, and the
+   Standards & research page says so.

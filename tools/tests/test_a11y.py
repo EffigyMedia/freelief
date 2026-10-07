@@ -12,7 +12,7 @@ OPTIONS = {
     "rules": {"color-contrast-enhanced": {"enabled": True}},
     "resultTypes": ["violations"],
 }
-SCREENS = ["breathe", "menu", "ground", "statements", "settings"]
+SCREENS = ["breathe", "menu", "ground", "statements", "bubbles", "trace", "settings"]
 
 
 def _violations(page):
