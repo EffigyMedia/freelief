@@ -8,6 +8,12 @@ export async function loadStrings(lang = "en") {
   table = await response.json();
 }
 
+// A list of strings, such as the calming statements.
+export function list(key) {
+  const value = table[key];
+  return Array.isArray(value) ? value : [];
+}
+
 export function t(key, values = {}) {
   const text = table[key];
   if (text === undefined) {

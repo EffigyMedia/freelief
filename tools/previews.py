@@ -7,9 +7,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "tests"))
-from harness import ROOT, open_app  # noqa: E402
+from harness import ROOT, open_app, wait_until  # noqa: E402
 
 OUT = ROOT / "output" / "previews"
+SCREENS = ["breathe", "menu", "ground", "statements", "settings"]
 
 
 def main() -> None:
@@ -18,8 +19,11 @@ def main() -> None:
         for name, viewport in (("phone", {"width": 390, "height": 844}),
                                ("desktop", {"width": 1280, "height": 800})):
             with open_app(color_scheme=scheme, viewport=viewport, locale="en-GB") as (page, _, _):
-                page.wait_for_timeout(2500)
-                page.screenshot(path=str(OUT / f"{name}-{scheme}-breathe.png"))
+                for screen in SCREENS:
+                    page.evaluate(f"location.hash = '{screen}'")
+                    wait_until(page, f"document.querySelector('main').dataset.screen === '{screen}'")
+                    page.wait_for_timeout(2500 if screen == "breathe" else 200)
+                    page.screenshot(path=str(OUT / f"{name}-{scheme}-{screen}.png"))
                 page.locator(".help-open").click()
                 page.wait_for_timeout(200)
                 page.screenshot(path=str(OUT / f"{name}-{scheme}-help.png"))

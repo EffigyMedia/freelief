@@ -206,6 +206,9 @@ the Chrome already on the machine. Run from the repo root:
 - **Exercises** (`exercises/*.js`) and **activities** (`activities/*.js`) — one file each, exporting
   `start(container, ctx)` and `stop()`; **must not** touch storage, the network or literal text.
   Activities use DOM elements, never a canvas, and have no score, timer or failure state.
+- **Screens** (`screens/menu.js`, `screens/settings.js`) — the menu and the Settings screen, same
+  contract. Routing is by URL hash (`#breathe` is the default); a new screen is added to `ROUTES`
+  in `app.js` and to `FILES` in `sw.js`.
 - **`settings.js`** — **the single source of truth for Settings** and the only module that touches
   `localStorage`, with every access in try/catch.
 - **`strings.js` + `strings/en.json`** — **the single source of all user-facing text.**

@@ -1,13 +1,27 @@
 {
   "breathing": {
     "defaultRhythm": "calm",
+    "rhythmOrder": ["calm", "slow", "box"],
     "rhythms": {
-      "calm": { "in": 4, "holdIn": 0, "out": 6, "holdOut": 0 }
+      "calm": { "in": 4, "holdIn": 0, "out": 6, "holdOut": 0 },
+      "slow": { "in": 5, "holdIn": 0, "out": 7, "holdOut": 0 },
+      "box":  { "in": 4, "holdIn": 4, "out": 4, "holdOut": 4 }
     },
     "guideMinScale": 0.55,
     "guideMaxScale": 1.0
   },
-  "crisis": {
-    "fallbackRegion": null
+  "tones": {
+    "enabledByDefault": false,
+    "volume": 0.06,
+    "attackSeconds": 0.4,
+    "releaseSeconds": 1.6,
+    "frequencies": { "in": 261.63, "holdIn": 329.63, "out": 196.0, "holdOut": 220.0 }
+  },
+  "theme": {
+    "default": "system",
+    "choices": ["system", "dark", "light"]
+  },
+  "settings": {
+    "storageKey": "freelief.settings.v1"
   }
 }

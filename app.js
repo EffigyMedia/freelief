@@ -1,10 +1,25 @@
 // The shell: the page frame, the screen router, the footer and the "Need urgent help?" control.
 // It holds no exercise logic and no literal text (AGENTS.md, Architecture).
 
-import { loadStrings, t } from "./strings.js";
+import { loadStrings, t, list } from "./strings.js";
 import { loadCrisisLines, deviceRegion, linesFor } from "./crisis.js";
+import { initSettings, getSetting, onSettingChange } from "./settings.js";
+import * as audio from "./audio.js";
 import * as motion from "./motion.js";
 import * as breathe from "./exercises/breathe.js";
+import * as ground from "./exercises/ground.js";
+import * as statements from "./exercises/statements.js";
+import * as menu from "./screens/menu.js";
+import * as settingsScreen from "./screens/settings.js";
+
+// The screens the router knows. Breathing is the default and the first screen (REQ-018).
+const ROUTES = { breathe, ground, statements, menu, settings: settingsScreen };
+const DEFAULT_ROUTE = "breathe";
+
+let config = null;
+let current = null;
+let main = null;
+let navLink = null;
 
 async function loadConfig() {
   const response = await fetch("config.json");
@@ -20,6 +35,8 @@ function element(tag, attributes = {}, children = []) {
   for (const child of [].concat(children)) if (child) node.append(child);
   return node;
 }
+
+// ---- urgent help -------------------------------------------------------------------------
 
 const dial = (number) => number.replace(/[^\d+]/g, "");
 
@@ -70,6 +87,8 @@ function buildHelpDialog() {
   return dialog;
 }
 
+// ---- frame and router --------------------------------------------------------------------
+
 function buildShell() {
   const helpButton = element("button", {
     type: "button", class: "button help-open", "aria-haspopup": "dialog", text: t("help.open"),
@@ -78,22 +97,59 @@ function buildShell() {
     element("p", { class: "brand", text: t("app.name") }),
     helpButton,
   ]);
-  const main = element("main", { id: "screen" });
+  main = element("main", { id: "screen" });
+  navLink = element("a", { class: "button nav-link" });
+  const nav = element("nav", { class: "screen-nav", "aria-label": t("app.name") }, [navLink]);
   const footer = element("footer", { class: "bottom" }, [
     element("p", { class: "tagline", text: t("app.tagline") }),
     element("p", { class: "self-help", text: t("footer.selfHelp") }),
   ]);
   const dialog = buildHelpDialog();
   helpButton.addEventListener("click", () => dialog.showModal());
-  document.body.replaceChildren(header, main, footer, dialog);
-  return main;
+  document.body.replaceChildren(header, main, nav, footer, dialog);
+}
+
+function routeName() {
+  const name = location.hash.replace(/^#/, "");
+  return name in ROUTES ? name : DEFAULT_ROUTE;
+}
+
+function show(name, { moveFocus }) {
+  if (current) current.stop();
+  current = ROUTES[name];
+  main.dataset.screen = name;
+  current.start(main, {
+    t, list, config, motion, audio, rhythm: getSetting("rhythm"),
+  });
+  const onBreathe = name === "breathe";
+  navLink.href = onBreathe ? "#menu" : "#breathe";
+  navLink.textContent = t(onBreathe ? "nav.more" : "nav.back");
+  if (moveFocus) {
+    // Tell keyboard and screen-reader users where they are: focus the new screen's heading.
+    const heading = main.querySelector("h1");
+    if (heading) {
+      heading.setAttribute("tabindex", "-1");
+      heading.focus();
+    }
+  }
+}
+
+function applyTheme(theme) {
+  if (theme === "system") delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = theme;
 }
 
 async function boot() {
-  const [config] = await Promise.all([loadConfig(), loadStrings("en"), loadCrisisLines()]);
+  const [loaded] = await Promise.all([loadConfig(), loadStrings("en"), loadCrisisLines()]);
+  config = loaded;
+  initSettings(config);
+  audio.initAudio(config);
+  applyTheme(getSetting("theme"));
+  onSettingChange((name, value) => { if (name === "theme") applyTheme(value); });
   document.title = t("app.name");
-  const main = buildShell();
-  breathe.start(main, { t, config, motion, rhythm: config.breathing.defaultRhythm });
+  buildShell();
+  show(routeName(), { moveFocus: false });
+  window.addEventListener("hashchange", () => show(routeName(), { moveFocus: true }));
   document.documentElement.dataset.ready = "true";
   performance.mark("freelief-ready");
 }

@@ -40,6 +40,8 @@ def base_url() -> str:
         handler = functools.partial(_QuietHandler, directory=str(ROOT))
         _server = socketserver.ThreadingTCPServer(("127.0.0.1", 0), handler)
         _server.daemon_threads = True
+        # A browser that closes a page mid-download aborts the socket; that is not a test failure.
+        _server.handle_error = lambda request, address: None
         threading.Thread(target=_server.serve_forever, daemon=True).start()
         atexit.register(_server.shutdown)
     return f"http://localhost:{_server.server_address[1]}/"
@@ -60,11 +62,13 @@ def browser():
 
 @contextmanager
 def open_app(locale="en-US", color_scheme="dark", reduced_motion="no-preference",
-             viewport=None, service_workers="allow"):
+             viewport=None, service_workers="allow", init_script=None):
     """Open the app in a fresh context. Yields (page, errors, requests)."""
     context = browser().new_context(
         locale=locale, color_scheme=color_scheme, reduced_motion=reduced_motion,
         viewport=viewport or {"width": 390, "height": 844}, service_workers=service_workers)
+    if init_script:
+        context.add_init_script(init_script)
     page = context.new_page()
     errors: list[str] = []
     requests: list[str] = []

@@ -329,7 +329,13 @@ Each file below is one module with one responsibility.
 | `config.json` | **Every tunable**, with its committed default. | — |
 | `sw.js` | The offline cache, versioned by the app version. | Fetch from any other origin. |
 | `manifest.webmanifest` | Installation: name, icons, colours. | — |
+| `screens/menu.js`, `screens/settings.js` | The "More ways to calm" list, and the Settings screen. The Settings screen changes Settings only through `settings.js`. | Touch `localStorage` directly. |
 | `pages/` | The disclaimer, Standards & research, and feedback pages. | Send data. |
+
+**Routing (added at slice 2).** Each screen has a URL hash (`#breathe`, `#menu`, `#ground`,
+`#statements`, `#settings`); no hash means `#breathe`. The browser Back button therefore works, and
+an unknown hash falls back to breathing. On a change of screen the shell focuses the new screen's
+heading, so a screen reader announces where the person is.
 
 **Data and state.** Settings in `localStorage` under one versioned key. Everything else is static
 files cached by the service worker. Nothing is created, changed or deleted by the person except
@@ -582,6 +588,17 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   ThroughLine, more than 175 countries, checked 2026-10-07. — Rejected: Befrienders Worldwide
   (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; proposed for owner
   confirmation)
+- **Screens are addressed by URL hash, and the menu and Settings live in `screens/`.** — The
+  browser Back button works with no extra code, and the exercises stay free of storage: the
+  Settings screen is not an exercise, and it writes only through `settings.js`. — Rejected: a
+  router with no URL (Back would leave the app); Settings inside an exercise module. —
+  2026-10-07 (slice 2, implementer)
+- **Grounding and calming words keep focus on the control the person used; the new text is a
+  polite live region.** — Moving focus to the text on every step would send a keyboard user back
+  to the start of the page each time. — 2026-10-07 (slice 2, implementer)
+- **The slower rhythm is 5 in, 7 out; box breathing is 4-4-4-4.** — Both stay under 10 breaths a
+  minute (Zaccaro 2018); box breathing was one arm of Balban 2023. — 2026-10-07 (slice 2,
+  implementer)
 - **The breathing guide counts the seconds of each phase and shows the count; a screen reader
   hears only the phase name.** — The count carries the rhythm under reduced motion, and announcing
   every second would be noise. — 2026-10-07 (slice 1, implementer)

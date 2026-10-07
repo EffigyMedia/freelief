@@ -35,18 +35,22 @@ export function start(container, ctx) {
   const phaseLabel = container.querySelector(".phase");
   const pauseButton = container.querySelector(".pause");
 
-  state = { timers: [], index: 0, paused: false };
+  // This run's own state. A pending frame or timer from a stopped run checks it and does nothing.
+  const run = { timers: [], index: 0, paused: false, frame: 0 };
+  state = run;
 
   const scaleFor = (which) => (which === "max" ? breathing.guideMaxScale : breathing.guideMinScale);
 
   function clearTimers() {
-    state.timers.forEach(clearTimeout);
-    state.timers = [];
+    run.timers.forEach(clearTimeout);
+    run.timers = [];
   }
 
   function runPhase() {
-    const phase = phases[state.index];
+    if (state !== run || run.paused) return;
+    const phase = phases[run.index];
     phaseLabel.textContent = t(`breathe.${phase.key}`);
+    ctx.audio.cue(phase.key);
     if (motion.reducedMotion()) {
       circle.style.transition = "none";
       circle.style.transform = "scale(0.8)";
@@ -55,16 +59,16 @@ export function start(container, ctx) {
       circle.style.transform = `scale(${scaleFor(phase.scale)})`;
     }
     for (let second = 0; second < phase.seconds; second++) {
-      state.timers.push(setTimeout(() => { count.textContent = String(second + 1); }, second * 1000));
+      run.timers.push(setTimeout(() => { count.textContent = String(second + 1); }, second * 1000));
     }
-    state.timers.push(setTimeout(() => {
-      state.index = (state.index + 1) % phases.length;
+    run.timers.push(setTimeout(() => {
+      run.index = (run.index + 1) % phases.length;
       runPhase();
     }, phase.seconds * 1000));
   }
 
   function setPaused(paused) {
-    state.paused = paused;
+    run.paused = paused;
     pauseButton.textContent = t(paused ? "breathe.resume" : "breathe.pause");
     pauseButton.setAttribute("aria-pressed", String(paused));
     clearTimers();
@@ -79,19 +83,20 @@ export function start(container, ctx) {
     }
   }
 
-  pauseButton.addEventListener("click", () => setPaused(!state.paused));
+  pauseButton.addEventListener("click", () => setPaused(!run.paused));
 
   // Start from the out-breath scale, so the first in-breath grows the circle.
   circle.style.transition = "none";
   circle.style.transform = `scale(${breathing.guideMinScale})`;
   pauseButton.textContent = t("breathe.pause");
   pauseButton.setAttribute("aria-pressed", "false");
-  requestAnimationFrame(() => requestAnimationFrame(runPhase));
+  run.frame = requestAnimationFrame(() => { run.frame = requestAnimationFrame(runPhase); });
 }
 
 export function stop() {
   if (state) {
     state.timers.forEach(clearTimeout);
+    cancelAnimationFrame(state.frame);
     state = null;
   }
 }
