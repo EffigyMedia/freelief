@@ -10,6 +10,14 @@ audit.
 
 ---
 
+<a id="v0-5-1"></a>
+## [0.5.1] - 2026-10-07
+- Fix (audit [AUD-001](../fragments/AUD-001.md), [AUD-014](../fragments/AUD-014.md),
+  [AUD-013](../fragments/AUD-013.md)): Freelief's offline copy repairs itself after another app on
+  the shared `effigymedia.github.io` origin deletes it; Freelief no longer deletes other apps'
+  caches; the offline copy is always fetched fresh, past the browser's HTTP cache. Three new tests,
+  including a real version update. 51 tests.
+
 <a id="v0-5-0"></a>
 ## [0.5.0] - 2026-10-07
 - Slice 5, the colour sort [RLG-005](../fragments/RLG-005.md): put five soft tiles in order from

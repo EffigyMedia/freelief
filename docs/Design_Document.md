@@ -593,6 +593,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **Freelief stays on the shared origin `effigymedia.github.io` and repairs its own offline cache.**
+  — Other apps on that origin may delete its cache (AUD-001). On each online launch the page asks the
+  worker to fetch any missing file, and Freelief deletes only its own `freelief-` caches. — Rejected:
+  a free GitHub organization or a custom domain for an origin of its own. Accepted risk: a cache
+  deleted while the person is offline cannot be repaired until they are online. — 2026-10-07 (owner)
 - **The public repository `EffigyMedia/freelief` exists and GitHub Pages serves `main` at
   https://effigymedia.github.io/freelief/.** — Created after all five slices were built, with the
   owner's yes, so the app can be checked on a phone over HTTPS. A push is now a deploy. — 2026-10-07

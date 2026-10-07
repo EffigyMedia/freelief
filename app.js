@@ -173,10 +173,20 @@ async function boot() {
   performance.mark("freelief-ready");
 }
 
+// Another app on the shared origin may have deleted Freelief's offline cache (AUD-001). On each
+// launch while online, ask the worker to fetch any file the cache is missing.
+async function healOfflineCache() {
+  if (!navigator.onLine) return;
+  const registration = await navigator.serviceWorker.ready;
+  if (registration.active) registration.active.postMessage("heal");
+}
+
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(() => {
-    // Offline support is lost, but the app still works online.
-  });
+  navigator.serviceWorker.register("sw.js")
+    .then(healOfflineCache)
+    .catch(() => {
+      // Offline support is lost, but the app still works online.
+    });
 }
 
 boot();

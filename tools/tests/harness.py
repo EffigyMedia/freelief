@@ -34,17 +34,23 @@ class _QuietHandler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 
+def serve(directory: Path) -> str:
+    """Serve a directory on a new free localhost port; return its URL."""
+    handler = functools.partial(_QuietHandler, directory=str(directory))
+    server = socketserver.ThreadingTCPServer(("127.0.0.1", 0), handler)
+    server.daemon_threads = True
+    # A browser that closes a page mid-download aborts the socket; that is not a test failure.
+    server.handle_error = lambda request, address: None
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    atexit.register(server.shutdown)
+    return f"http://localhost:{server.server_address[1]}/"
+
+
 def base_url() -> str:
     global _server
     if _server is None:
-        handler = functools.partial(_QuietHandler, directory=str(ROOT))
-        _server = socketserver.ThreadingTCPServer(("127.0.0.1", 0), handler)
-        _server.daemon_threads = True
-        # A browser that closes a page mid-download aborts the socket; that is not a test failure.
-        _server.handle_error = lambda request, address: None
-        threading.Thread(target=_server.serve_forever, daemon=True).start()
-        atexit.register(_server.shutdown)
-    return f"http://localhost:{_server.server_address[1]}/"
+        _server = serve(ROOT)
+    return _server
 
 
 def browser():

@@ -42,8 +42,20 @@ after you check its source in the same session, and set `checked` to that date.
 
 ## Offline
 `sw.js` imports `version.js` and names its cache `freelief-<version>`. Install pre-caches the
-`FILES` list and calls `skipWaiting`; activate deletes every other Freelief cache and claims the
-clients. Fetch answers same-origin GET requests from the cache first, then the network; it ignores
-every other request. `test_offline.py` fails when a shipped file is missing from `FILES` or a
+`FILES` list with `cache: "reload"`, past the browser's HTTP cache (AUD-013), and calls
+`skipWaiting`. Activate deletes only caches whose name starts with `freelief-` and is not the
+current one, then claims the clients. Fetch answers same-origin GET requests from the cache first;
+on a miss it fetches from the network and stores a good response in the cache. It ignores every
+other request.
+
+**The origin is shared** (`effigymedia.github.io` also serves Effigy Arcade, Tiny Arcade and
+Drinax Ref Console), so CacheStorage and `localStorage` are shared too (AUD-001). Another app's
+worker may delete Freelief's cache; the owner chose to stay on this origin with self-repair
+(2026-10-07). On each online launch `app.js` posts `"heal"` to the active worker, which fetches any
+`FILES` entry missing from the cache. `test_offline.py` deletes every cache, reloads online,
+reloads offline, and expects the guide and the help control; another test runs a real version
+update from a scratch copy and checks that a foreign cache survives and the old Freelief cache
+goes. **Freelief must never delete a cache it does not own.** The arcades were told about their
+own cleanup code through their inboxes. `test_offline.py` fails when a shipped file is missing from `FILES` or a
 listed file does not exist, so **add every new shipped file to `FILES`** and bump the version so
 the cache is replaced.
