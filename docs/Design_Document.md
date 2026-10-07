@@ -605,8 +605,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   cannot start; the app replaces it once it can draw everything. A failed crisis-lines file is not
   fatal: the help dialog keeps the emergency line and the directory from `config.json`.** — Design
   section 8 says any failure leaves the guide and the crisis route usable (AUD-002). The fallback text
-  is the one exception to REQ-017. — 2026-10-07 (implementer, for AUD-002; the REQ-017 exception waits
-  for the owner)
+  is the one exception to REQ-017. — 2026-10-07 (implementer, for AUD-002; the owner accepted the REQ-017
+  exception the same day)
 - **Freelief stays on the shared origin `effigymedia.github.io` and repairs its own offline cache.**
   — Other apps on that origin may delete its cache (AUD-001). On each online launch the page asks the
   worker to fetch any missing file, and Freelief deletes only its own `freelief-` caches. — Rejected:
