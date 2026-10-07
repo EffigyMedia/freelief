@@ -142,7 +142,57 @@
     "samples": 400,
     "keyStepPercent": 1,
     "searchWindow": 40,
-    "glassFullSpeedSteps": 6
+    "glassFullSpeedSteps": 6,
+    "shapes": [
+      {
+        "id": "eight",
+        "note": 523.25
+      },
+      {
+        "id": "circle",
+        "note": 587.33
+      },
+      {
+        "id": "wave",
+        "note": 659.25
+      },
+      {
+        "id": "flower",
+        "note": 783.99
+      },
+      {
+        "id": "star",
+        "note": 880.0
+      },
+      {
+        "id": "heart",
+        "note": 523.25
+      },
+      {
+        "id": "cardioid",
+        "note": 587.33
+      },
+      {
+        "id": "trefoil",
+        "note": 659.25
+      },
+      {
+        "id": "lissajous",
+        "note": 783.99
+      },
+      {
+        "id": "squircle",
+        "note": 880.0
+      },
+      {
+        "id": "egg",
+        "note": 523.25
+      },
+      {
+        "id": "clover",
+        "note": 587.33
+      }
+    ]
   },
   "sort": {
     "lightness": [

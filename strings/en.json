@@ -1,7 +1,6 @@
 {
   "app.name": "Freelief",
   "app.tagline": "Breathe with the circle. You are safe right now.",
-
   "nav.label": "Screens",
   "nav.more": "More ways to calm",
   "nav.back": "Back to breathing",
@@ -20,7 +19,6 @@
   "nav.sortHint": "Put soft colours in order, from light to dark.",
   "nav.settings": "Settings",
   "nav.settingsHint": "Breathing rhythm, sounds and colours.",
-
   "breathe.title": "Breathe",
   "breathe.in": "Breathe in",
   "breathe.holdIn": "Hold",
@@ -30,7 +28,6 @@
   "breathe.resume": "Resume",
   "breathe.paused": "Paused. Resume when you are ready.",
   "breathe.guideLabel": "Breathing guide",
-
   "ground.title": "Ground yourself",
   "ground.intro": "Take your time. There is no right answer.",
   "ground.step": "Step {count} of 5",
@@ -43,7 +40,6 @@
   "ground.next": "Next",
   "ground.previous": "Back",
   "ground.again": "Start again",
-
   "statements.title": "Calming words",
   "statements.position": "{index} of {total}",
   "statements.next": "Next",
@@ -60,21 +56,32 @@
     "One breath at a time.",
     "You are doing well. Stay with it."
   ],
-
   "bubbles.title": "Pop bubbles",
   "bubbles.intro": "Tap a bubble, or move to one and press Enter. There is nothing to win.",
   "bubbles.fieldLabel": "Bubbles",
   "bubbles.bubbleLabel": "Bubble",
   "bubbles.pauseMotion": "Stop the drifting",
   "bubbles.resumeMotion": "Let them drift",
-
   "trace.title": "Trace a shape",
   "trace.intro": "Move the dot slowly around the loop with your finger, or with the arrow keys. Go at your own pace.",
   "trace.sliderLabel": "Dot on the loop",
+  "trace.newShape": "New shape",
+  "trace.shapeName": "Shape: {name}",
+  "trace.shape.eight": "Figure eight",
+  "trace.shape.circle": "Circle",
+  "trace.shape.wave": "Ripple",
+  "trace.shape.flower": "Flower",
+  "trace.shape.star": "Star",
+  "trace.shape.heart": "Heart",
+  "trace.shape.cardioid": "Petal",
+  "trace.shape.trefoil": "Trefoil knot",
+  "trace.shape.lissajous": "Weave",
+  "trace.shape.squircle": "Soft square",
+  "trace.shape.egg": "Egg",
+  "trace.shape.clover": "Clover",
   "trace.position": "{percent} percent around the loop",
   "trace.oneLoop": "One loop. Keep going for as long as you like.",
   "trace.loops": "{count} loops. Keep going for as long as you like.",
-
   "sort.title": "Sort colours",
   "sort.intro": "Put the tiles in order, from lightest on the left to darkest on the right. Choose a tile, then choose the tile to swap it with. Arrow keys move between tiles.",
   "sort.tileLabel": "{hue}, {shade}",
@@ -92,7 +99,6 @@
   "sort.swapped": "Swapped. {name} is now in place {position}.",
   "sort.done": "All in order, from lightest to darkest. Choose New colours for another set, or stay here.",
   "sort.newColours": "New colours",
-
   "settings.title": "Settings",
   "settings.rhythm": "Breathing rhythm",
   "settings.rhythm.calm": "Calm: in for 4, out for 6",
@@ -105,7 +111,6 @@
   "settings.theme.dark": "Dark",
   "settings.theme.light": "Light",
   "settings.saved": "Saved on this device only.",
-
   "help.open": "Need urgent help?",
   "help.title": "Urgent help",
   "help.intro": "If you might act on thoughts of harming yourself, or you are not safe, reach out now. These people are there to listen.",
@@ -119,12 +124,10 @@
   "help.directoryNote": "{note} This link needs an internet connection.",
   "help.otherCountries": "Lines in other countries",
   "help.back": "Back",
-
   "footer.about": "About and disclaimer",
   "footer.standards": "Standards and research",
   "footer.feedback": "Feedback",
   "footer.label": "About Freelief",
-
   "about.title": "About Freelief",
   "about.selfHelpHeading": "Self-help, not medical care",
   "about.selfHelp1": "Freelief is a free self-help tool for moments of panic or strong anxiety. It is not medical care. It does not diagnose or treat any condition, and it does not replace a doctor, a therapist or emergency services.",
@@ -137,7 +140,6 @@
   "about.open1": "Freelief is free to use and its source code is open, under the MIT license.",
   "about.sourceLink": "See the source code",
   "about.version": "Version {version}",
-
   "standards.title": "Standards and research",
   "standards.standardsHeading": "Standards",
   "standards.verifiedIntro": "Freelief meets these standards. Each one was checked by people, with a screen reader and with a keyboard only, for this version:",
@@ -156,7 +158,6 @@
   "standards.evidence.distraction": "Turning attention to a simple, structured task can ease strong feelings for a short time. But research also suggests that relying on distraction can keep anxiety going over the long term. Use these activities for the moment, and talk to a professional if panic comes back often.",
   "standards.sourcesLabel": "Sources",
   "standards.checked": "checked {date}",
-
   "feedback.title": "Feedback",
   "feedback.intro": "Tell us what works, what does not, and how Freelief works with your screen reader or keyboard. Nothing is sent by Freelief itself: you read and edit the message, then send it yourself.",
   "feedback.kind": "What would you like to send?",

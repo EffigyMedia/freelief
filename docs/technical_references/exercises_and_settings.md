@@ -38,7 +38,11 @@ reduced motion no bubble gets `.drifting` and the toggle is hidden. **Playwright
 drifting bubble normally** (it is never "stable"); tests use `click(force=True)`.
 
 ## Shape trace (`activities/trace.js`)
-A figure eight sampled at `samples` points in a 400 x 240 `viewBox`. The whole SVG sits inside a
+Twelve closed shapes, each a formula of t from 0 to 1 in `SHAPES`; `config.json` → `trace.shapes` sets
+their order and each one's glass note (a C major pentatonic). A shape is sampled at `samples` points and
+scaled, keeping its proportions, into a 400 x 240 `viewBox`. `New shape` moves to the next one and
+resets the position and the loop count; the shape's name is a polite live line. While the dot moves,
+`audio.glass(note)` sustains a singing-glass tone that follows the speed. The whole SVG sits inside a
 `role="slider"` element with `aria-valuenow` as a percent and `aria-valuetext`. Arrow keys move by
 `keyStepPercent`; a pointer moves the marker to the nearest sample within `searchWindow` samples
 of its current place, so the crossing cannot make it jump to the other lobe. The traced part is a

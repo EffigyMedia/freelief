@@ -112,7 +112,7 @@ export function cue(phaseKey, seconds) {
 // The shape trace's "singing glass" (owner, 2026-10-07): a sustained, slightly beating tone, like a
 // wet finger on a crystal rim. It sounds only while the person moves, louder with speed, and
 // fades when they stop. Returns { move(speed), stop() }.
-export function glass() {
+export function glass(frequency) {
   let voice = null;
   let idle = 0;
 
@@ -127,7 +127,7 @@ export function glass() {
         const oscillator = ctx.createOscillator();
         const partial = ctx.createGain();
         oscillator.type = "sine";
-        oscillator.frequency.value = settings.frequency * ratio + detune;
+        oscillator.frequency.value = (frequency || settings.frequency) * ratio + detune;
         partial.gain.value = level / 2;
         oscillator.connect(partial).connect(master);
         oscillator.start();

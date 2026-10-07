@@ -90,3 +90,27 @@ def test_trace_follows_a_pointer_along_the_shape():
             page.mouse.move(x - i * 6, y + i * 3)
         page.mouse.up()
         assert int(page.locator("[role=slider]").get_attribute("aria-valuenow")) > 0
+
+
+def test_new_shape_moves_through_every_shape_and_each_can_be_traced():
+    shapes = CONFIG["trace"]["shapes"]
+    assert len(shapes) >= 10, "many shapes (owner, 2026-10-07)"
+    with open_app() as (page, errors, _):
+        go(page, "trace")
+        seen = []
+        for shape in shapes:
+            name = page.locator(".trace-name").inner_text()
+            assert name == f"Shape: {STRINGS['trace.shape.' + shape['id']]}"
+            d = page.locator(".trace-shape").get_attribute("d")
+            assert d.startswith("M") and "NaN" not in d, shape["id"]
+            seen.append(d)
+            slider = page.locator("[role=slider]")
+            slider.focus()
+            for _ in range(10):
+                page.keyboard.press("ArrowRight")
+            assert int(slider.get_attribute("aria-valuenow")) >= 9, shape["id"]
+            page.locator(".new-shape").click()
+        assert len(set(seen)) == len(shapes), "every shape is different"
+        assert page.locator(".trace-name").inner_text().endswith(STRINGS["trace.shape." + shapes[0]["id"]]), \
+            "after the last shape comes the first again"
+        assert not errors, errors

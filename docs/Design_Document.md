@@ -593,6 +593,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **The shape trace offers twelve shapes (figure eight, circle, ripple, flower, star, heart, petal,
+  trefoil knot, weave, soft square, egg, clover), one at a time, with a `New shape` control; each shape
+  sings on its own note of a C major pentatonic scale.** — The owner asked for many more shapes. The
+  shapes are drawn from formulas, so no asset ships. — 2026-10-07 (owner)
 - **Sounds are on by default, with one Sounds switch in Settings. A soft tone lasts each breathing
   phase; the activities have short cues; the shape trace sounds like a singing crystal glass while the
   person moves. Nothing plays before the first tap or key press. No spoken voice.** — The owner asked

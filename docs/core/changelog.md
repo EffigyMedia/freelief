@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-5"></a>
+## [0.5.5] - 2026-10-07
+- **Trace a shape** now has twelve shapes: figure eight, circle, ripple, flower, star, heart, petal,
+  trefoil knot, weave, soft square, egg and clover. **New shape** moves to the next one, and each
+  shape sings on its own note. 64 tests.
+
 <a id="v0-5-4"></a>
 ## [0.5.4] - 2026-10-07
 - Sounds, as the owner asked ([REQ-007](../fragments/REQ-007.md) changed): subtle sounds are on by

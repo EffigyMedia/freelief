@@ -424,6 +424,8 @@ main {
 }
 
 .trace-loops { margin: 0; min-height: 1.5em; color: var(--muted); }
+
+.trace-name { margin: 0; font-weight: 600; }
 /* One row, always: the order is left to right. Tiles shrink to fit, never under 44px. */
 .sort-tiles {
   display: grid;
