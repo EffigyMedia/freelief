@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "tests"))
 from harness import ROOT, open_app, wait_until  # noqa: E402
 
 OUT = ROOT / "output" / "previews"
-SCREENS = ["breathe", "menu", "ground", "statements", "bubbles", "trace", "settings"]
+SCREENS = ["breathe", "menu", "ground", "statements", "bubbles", "trace", "settings", "about", "standards", "feedback"]
 
 
 def main() -> None:
@@ -21,7 +21,7 @@ def main() -> None:
             with open_app(color_scheme=scheme, viewport=viewport, locale="en-GB") as (page, _, _):
                 for screen in SCREENS:
                     page.evaluate(f"location.hash = '{screen}'")
-                    wait_until(page, f"document.querySelector('main').dataset.screen === '{screen}'")
+                    wait_until(page, f"document.querySelector('main').dataset.shown === '{screen}'")
                     page.wait_for_timeout(2500 if screen == "breathe" else 200)
                     page.screenshot(path=str(OUT / f"{name}-{scheme}-{screen}.png"))
                 page.locator(".help-open").click()

@@ -330,7 +330,7 @@ Each file below is one module with one responsibility.
 | `sw.js` | The offline cache, versioned by the app version. | Fetch from any other origin. |
 | `manifest.webmanifest` | Installation: name, icons, colours. | — |
 | `screens/menu.js`, `screens/settings.js` | The "More ways to calm" list, and the Settings screen. The Settings screen changes Settings only through `settings.js`. | Touch `localStorage` directly. |
-| `pages/` | The disclaimer, Standards & research, and feedback pages. | Send data. |
+| `screens/about.js`, `standards.js`, `feedback.js` | The disclaimer (About), Standards & research, and Feedback pages. *(First planned as `pages/`; built as screens at slice 4, with the same contract and router.)* | Send data. |
 
 **Routing (added at slice 2).** Each screen has a URL hash (`#breathe`, `#menu`, `#ground`,
 `#statements`, `#settings`); no hash means `#breathe`. The browser Back button therefore works, and
@@ -588,6 +588,22 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   ThroughLine, more than 175 countries, checked 2026-10-07. — Rejected: Befrienders Worldwide
   (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; proposed for owner
   confirmation)
+- **The trust pages are screens in the router, reached from three footer links on every screen:
+  About and disclaimer, Standards and research, Feedback.** — One router and one contract for
+  everything; the pages work offline like the rest. — Rejected: separate HTML files under
+  `pages/`, which would need their own shell and cache entries. — 2026-10-07 (slice 4,
+  implementer)
+- **With no verified standard, the Standards page says what Freelief is built to and that no
+  standard is claimed yet.** — REQ-029 forbids a claim before a manual check; the owner still wants
+  the standards work visible. Verified standards come from `data/standards.json`, which stays empty
+  until a volunteer check is recorded. — 2026-10-07 (slice 4, implementer)
+- **The claim-wording test exempts exactly one string (the disclaimer's "does not diagnose or
+  treat") and the research citations file, and a second test fails if an exempt string stops
+  denying.** — The disclaimer must name what Freelief does not do, and paper titles are quoted as
+  published. — Rejected: a looser pattern for the whole app. — 2026-10-07 (slice 4, implementer)
+- **Feedback carries only the app version, the browser and the device type, in text the person
+  edits; switching the kind of message never erases words the person typed.** — 2026-10-07
+  (slice 4, implementer)
 - **Bubbles sit one to a slot in a 3 x 3 grid, never at a free random place.** — Random places let
   one bubble cover another's touch target, which the axe target-size check caught at random. —
   Rejected: random placement with an overlap test (more code, same result). — 2026-10-07 (slice 3,

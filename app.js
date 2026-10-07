@@ -13,9 +13,14 @@ import * as bubbles from "./activities/bubbles.js";
 import * as trace from "./activities/trace.js";
 import * as menu from "./screens/menu.js";
 import * as settingsScreen from "./screens/settings.js";
+import * as about from "./screens/about.js";
+import * as standards from "./screens/standards.js";
+import * as feedback from "./screens/feedback.js";
 
 // The screens the router knows. Breathing is the default and the first screen (REQ-018).
-const ROUTES = { breathe, ground, statements, bubbles, trace, menu, settings: settingsScreen };
+const ROUTES = {
+  breathe, ground, statements, bubbles, trace, menu, settings: settingsScreen, about, standards, feedback,
+};
 const DEFAULT_ROUTE = "breathe";
 
 let config = null;
@@ -102,9 +107,13 @@ function buildShell() {
   main = element("main", { id: "screen" });
   navLink = element("a", { class: "button nav-link" });
   const nav = element("nav", { class: "screen-nav", "aria-label": t("app.name") }, [navLink]);
+  const footerLinks = element("ul", { class: "footer-links" }, [
+    ["#about", "footer.about"], ["#standards", "footer.standards"], ["#feedback", "footer.feedback"],
+  ].map(([href, key]) => element("li", {}, [element("a", { class: "footer-link", href, text: t(key) })])));
   const footer = element("footer", { class: "bottom" }, [
     element("p", { class: "tagline", text: t("app.tagline") }),
     element("p", { class: "self-help", text: t("footer.selfHelp") }),
+    element("nav", { "aria-label": t("footer.label") }, [footerLinks]),
   ]);
   const dialog = buildHelpDialog();
   helpButton.addEventListener("click", () => dialog.showModal());
@@ -116,13 +125,20 @@ function routeName() {
   return name in ROUTES ? name : DEFAULT_ROUTE;
 }
 
-function show(name, { moveFocus }) {
+let showing = 0;
+
+async function show(name, { moveFocus }) {
   if (current) current.stop();
   current = ROUTES[name];
+  const request = ++showing;
   main.dataset.screen = name;
-  current.start(main, {
+  delete main.dataset.shown;
+  // A screen may load data first (Standards and research), so wait for it before focusing.
+  await current.start(main, {
     t, list, config, motion, audio, rhythm: getSetting("rhythm"),
   });
+  if (request !== showing) return;
+  main.dataset.shown = name;
   const onBreathe = name === "breathe";
   navLink.href = onBreathe ? "#menu" : "#breathe";
   navLink.textContent = t(onBreathe ? "nav.more" : "nav.back");
@@ -150,7 +166,7 @@ async function boot() {
   onSettingChange((name, value) => { if (name === "theme") applyTheme(value); });
   document.title = t("app.name");
   buildShell();
-  show(routeName(), { moveFocus: false });
+  await show(routeName(), { moveFocus: false });
   window.addEventListener("hashchange", () => show(routeName(), { moveFocus: true }));
   document.documentElement.dataset.ready = "true";
   performance.mark("freelief-ready");

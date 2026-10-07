@@ -25,19 +25,19 @@ Object.defineProperty(window, 'localStorage', {
 
 def go(page, route):
     page.evaluate(f"location.hash = '{route}'")
-    wait_until(page, f"document.querySelector('main').dataset.screen === '{route}'", 2000)
+    wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 2000)
 
 
 def test_more_ways_reaches_every_screen_by_keyboard():
     with open_app() as (page, errors, _):
         page.locator(".nav-link").focus()
         page.keyboard.press("Enter")
-        wait_until(page, "document.querySelector('main').dataset.screen === 'menu'", 2000)
+        wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 2000)
         assert page.evaluate("document.activeElement.tagName") == "H1", "focus moves to the new screen"
         hrefs = page.locator(".menu-item").evaluate_all("els => els.map(e => e.getAttribute('href'))")
         assert hrefs == ["#breathe", "#ground", "#statements", "#bubbles", "#trace", "#settings"]
         page.locator(".nav-link").click()
-        wait_until(page, "document.querySelector('main').dataset.screen === 'breathe'", 2000)
+        wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 2000)
         assert not errors, errors
 
 

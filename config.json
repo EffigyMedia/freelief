@@ -44,5 +44,11 @@
   },
   "settings": {
     "storageKey": "freelief.settings.v1"
+  },
+  "project": {
+    "sourceUrl": "https://github.com/EffigyMedia/freelief",
+    "newIssueUrl": "https://github.com/EffigyMedia/freelief/issues/new",
+    "issueTemplates": { "accessibility": "accessibility-check.md", "problem": "problem-report.md" },
+    "feedbackEmail": ""
   }
 }

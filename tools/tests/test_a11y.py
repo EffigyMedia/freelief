@@ -12,7 +12,7 @@ OPTIONS = {
     "rules": {"color-contrast-enhanced": {"enabled": True}},
     "resultTypes": ["violations"],
 }
-SCREENS = ["breathe", "menu", "ground", "statements", "bubbles", "trace", "settings"]
+SCREENS = ["breathe", "menu", "ground", "statements", "bubbles", "trace", "settings", "about", "standards", "feedback"]
 
 
 def _violations(page):
@@ -25,7 +25,7 @@ def _check(color_scheme):
     with open_app(color_scheme=color_scheme) as (page, _, _):
         for screen in SCREENS:
             page.evaluate(f"location.hash = '{screen}'")
-            wait_until(page, f"document.querySelector('main').dataset.screen === '{screen}'", 2000)
+            wait_until(page, f"document.querySelector('main').dataset.shown === '{screen}'", 2000)
             page.wait_for_timeout(150)
             problems += [f"[{screen}] {p}" for p in _violations(page)]
         page.locator(".help-open").click()

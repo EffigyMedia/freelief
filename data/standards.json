@@ -1,0 +1,4 @@
+{
+  "_rule": "REQ-029: list a standard here only when an automated check of every page passes AND a manual check with a screen reader and with a keyboard alone is recorded for this version, with its date and tester. Empty means no standard is claimed.",
+  "verified": []
+}

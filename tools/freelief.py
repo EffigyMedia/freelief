@@ -29,7 +29,7 @@ PORT = 8000
 SIZE_LIMIT_BYTES = 150 * 1024
 
 # Tracked paths that are NOT part of the app a visitor downloads.
-NOT_SHIPPED = ("docs/", "tools/", "input/", ".claude/", ".gitignore", ".gitattributes",
+NOT_SHIPPED = ("docs/", "tools/", "input/", ".claude/", ".github/", ".gitignore", ".gitattributes",
                "AGENTS.md", "CLAUDE.md", "config.toml", "tools.toml", "LICENSE", ".nojekyll")
 
 PIP_PACKAGES = ("playwright", "axe-playwright-python")

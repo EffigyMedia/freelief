@@ -20,10 +20,30 @@ EXTERNAL_LOAD = re.compile(
     re.IGNORECASE)
 
 
+# The only text allowed to use claim words, each for a stated reason. Anything else fails.
+# - The disclaimer says what Freelief does NOT do ("does not diagnose or treat"). REQ-006.
+# - Research citations quote the titles of published papers as they are. REQ-024.
+CLAIM_EXEMPT_STRINGS = {"about.selfHelp1"}
+CLAIM_EXEMPT_FILES = {"data/research.json"}
+
+
 def shipped_text():
     for path in freelief.shipped_files():
         if path.suffix in TEXT_SUFFIXES:
             yield path, path.read_text("utf-8")
+
+
+def claim_text():
+    """Shipped text that must make no health claim, with the stated exemptions taken out."""
+    import json
+    for path, text in shipped_text():
+        relative = path.relative_to(freelief.ROOT).as_posix()
+        if relative in CLAIM_EXEMPT_FILES:
+            continue
+        if relative.startswith("strings/") and relative.endswith(".json"):
+            table = json.loads(text)
+            text = json.dumps({k: v for k, v in table.items() if k not in CLAIM_EXEMPT_STRINGS})
+        yield path, text
 
 
 def test_version_has_one_valid_home():
@@ -32,7 +52,7 @@ def test_version_has_one_valid_home():
 
 def test_no_forbidden_health_claims():
     hits = [f"{p.relative_to(freelief.ROOT)}: {m.group(0)!r}"
-            for p, text in shipped_text() for m in FORBIDDEN_CLAIMS.finditer(text)]
+            for p, text in claim_text() for m in FORBIDDEN_CLAIMS.finditer(text)]
     assert not hits, "forbidden claim wording (REQ-025): " + "; ".join(hits)
 
 
@@ -44,3 +64,15 @@ def test_nothing_loads_from_another_origin():
 def test_license_is_mit():
     text = (freelief.ROOT / "LICENSE").read_text("utf-8")
     assert text.startswith("MIT License"), "LICENSE must be the MIT license (REQ-031)"
+
+
+def test_the_claim_exemptions_still_say_not():
+    # An exempt string earns its exemption only by denying the claim. If it stops saying "not",
+    # the exemption would hide a real claim.
+    import json
+    table = json.loads((freelief.ROOT / "strings" / "en.json").read_text("utf-8"))
+    for key in CLAIM_EXEMPT_STRINGS:
+        assert key in table, f"exempt key {key} no longer exists; remove it from the exemptions"
+        hits = FORBIDDEN_CLAIMS.findall(table[key])
+        if hits:
+            assert re.search(r"\b(not|no)\b", table[key]), f"{key} uses claim words without a denial"

@@ -10,6 +10,17 @@ audit.
 
 ---
 
+<a id="v0-4-0"></a>
+## [0.4.0] - 2026-10-07
+- Slice 4, trust pages [RLG-004](../fragments/RLG-004.md): footer links on every screen to
+  **About and disclaimer** (self-help not medical care, when to see a professional, privacy, the
+  open license, the version), **Standards and research** (what Freelief is built to, no standard
+  claimed until people verify it, and every technique with its sources and an honest strength of
+  evidence), and **Feedback** (a pre-filled, editable GitHub issue; the email choice waits for an
+  address). Two GitHub issue templates. `docs/README.md` for the public repository. The
+  claim-wording test now has one named exemption for the disclaimer's denial. 43 tests; bench
+  132 ms, 9 ms, 89 KB.
+
 <a id="v0-3-0"></a>
 ## [0.3.0] - 2026-10-07
 - Slice 3, distraction [RLG-003](../fragments/RLG-003.md): "Pop bubbles" (soft bubbles that

@@ -10,7 +10,7 @@ STRINGS = json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
 
 def go(page, route):
     page.evaluate(f"location.hash = '{route}'")
-    wait_until(page, f"document.querySelector('main').dataset.screen === '{route}'", 2000)
+    wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 2000)
 
 
 def test_a_popped_bubble_is_replaced_and_nothing_is_scored():

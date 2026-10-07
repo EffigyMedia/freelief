@@ -1,0 +1,55 @@
+{
+  "techniques": [
+    { "id": "breathing", "sources": ["balban2023", "zaccaro2018", "meuret2010"] },
+    { "id": "grounding", "sources": ["scott2025"] },
+    { "id": "statements", "sources": ["saunders1996", "clark1986"] },
+    { "id": "distraction", "sources": ["webb2012", "curry2005", "helbiglang2010"] }
+  ],
+  "sources": {
+    "balban2023": {
+      "citation": "Balban, M. Y., Neri, E., Kogon, M. M., et al. (2023). Brief structured respiration practices enhance mood and reduce physiological arousal. Cell Reports Medicine, 4(1), 100895.",
+      "url": "https://doi.org/10.1016/j.xcrm.2022.100895",
+      "checked": "2026-10-07"
+    },
+    "zaccaro2018": {
+      "citation": "Zaccaro, A., Piarulli, A., Laurino, M., et al. (2018). How breath-control can change your life: A systematic review on psycho-physiological correlates of slow breathing. Frontiers in Human Neuroscience, 12, 353.",
+      "url": "https://doi.org/10.3389/fnhum.2018.00353",
+      "checked": "2026-10-07"
+    },
+    "meuret2010": {
+      "citation": "Meuret, A. E., Rosenfield, D., Seidel, A., Bhaskara, L., & Hofmann, S. G. (2010). Respiratory and cognitive mediators of treatment change in panic disorder: Evidence for intervention specificity. Journal of Consulting and Clinical Psychology, 78(5), 691-704.",
+      "url": "https://doi.org/10.1037/a0019552",
+      "checked": "2026-10-07"
+    },
+    "scott2025": {
+      "citation": "Scott, K. M., & Duncan, K. (2025). Ground yourself: Using five senses technique to cope with test anxiety among nursing students. Teaching and Learning in Nursing.",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1557308725002999",
+      "checked": "2026-10-07"
+    },
+    "saunders1996": {
+      "citation": "Saunders, T., Driskell, J. E., Johnston, J. H., & Salas, E. (1996). The effect of stress inoculation training on anxiety and performance. Journal of Occupational Health Psychology, 1(2), 170-186.",
+      "url": "https://doi.org/10.1037/1076-8998.1.2.170",
+      "checked": "2026-10-07"
+    },
+    "clark1986": {
+      "citation": "Clark, D. M. (1986). A cognitive approach to panic. Behaviour Research and Therapy, 24(4), 461-470.",
+      "url": "https://doi.org/10.1016/0005-7967(86)90011-2",
+      "checked": "2026-10-07"
+    },
+    "webb2012": {
+      "citation": "Webb, T. L., Miles, E., & Sheeran, P. (2012). Dealing with feeling: A meta-analysis of the effectiveness of strategies derived from the process model of emotion regulation. Psychological Bulletin, 138(4), 775-808.",
+      "url": "https://doi.org/10.1037/a0027600",
+      "checked": "2026-10-07"
+    },
+    "curry2005": {
+      "citation": "Curry, N. A., & Kasser, T. (2005). Can coloring mandalas reduce anxiety? Art Therapy, 22(2), 81-85.",
+      "url": "https://doi.org/10.1080/07421656.2005.10129441",
+      "checked": "2026-10-07"
+    },
+    "helbiglang2010": {
+      "citation": "Helbig-Lang, S., & Petermann, F. (2010). Tolerate or eliminate? A systematic review on the effects of safety behavior across anxiety disorders. Clinical Psychology: Science and Practice, 17(3), 218-233.",
+      "url": "https://doi.org/10.1111/j.1468-2850.2010.01213.x",
+      "checked": "2026-10-07"
+    }
+  }
+}
