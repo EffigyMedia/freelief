@@ -1,0 +1,106 @@
+"""The Calm screen (owner, 2026-10-07): musical pads, shapes that come and go, and a black screen
+that one tap or key brings back."""
+
+import json
+
+from harness import ROOT, open_app, wait_until
+
+CONFIG = json.loads((ROOT / "config.json").read_text("utf-8"))
+STRINGS = json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
+
+OSC_PROBE = """
+window.__osc = [];
+const create = AudioContext.prototype.createOscillator;
+AudioContext.prototype.createOscillator = function () {
+  const node = create.call(this);
+  const record = { stop: null, ctx: this };
+  window.__osc.push(record);
+  const stop = node.stop.bind(node);
+  node.stop = (when) => { record.stop = when ?? this.currentTime; return stop(when); };
+  return node;
+};
+"""
+
+
+def go(page, route):
+    page.evaluate(f"location.hash = '{route}'")
+    wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 3000)
+
+
+def test_calm_plays_pads_and_stops_them_on_leaving():
+    with open_app(init_script=OSC_PROBE) as (page, _, _):
+        page.locator(".guide").click()  # the first gesture unlocks sound
+        go(page, "calm")
+        voices = len(CONFIG["sounds"]["pads"]["chords"][0]) * 2
+        wait_until(page, f"window.__osc.length >= {voices}", 3000)
+        go(page, "breathe")
+        later = page.evaluate("window.__osc.every(o => o.stop !== null && o.stop - o.ctx.currentTime < 3)")
+        assert later, "leaving Calm stops the music"
+
+
+def test_calm_is_silent_with_sounds_off_and_says_so():
+    with open_app(init_script=OSC_PROBE) as (page, _, _):
+        go(page, "settings")
+        page.locator("input[name=sounds]").uncheck()
+        go(page, "calm")
+        page.wait_for_timeout(500)
+        assert page.evaluate("window.__osc.length") == 0
+        assert page.locator(".calm-sound-note").is_visible()
+
+
+def test_shapes_come_and_go():
+    with open_app() as (page, errors, _):
+        go(page, "calm")
+        wait_until(page, "document.querySelectorAll('.calm-field > g').length >= 2", 6000)
+        count = page.evaluate("document.querySelectorAll('.calm-field > g').length")
+        assert count <= CONFIG["calm"]["maxShapes"]
+        assert page.evaluate("getComputedStyle(document.querySelector('.calm-shape')).animationName") \
+            == "calm-come-and-go"
+        assert not errors, errors
+
+
+def test_shapes_only_fade_under_reduced_motion():
+    with open_app(reduced_motion="reduce") as (page, _, _):
+        go(page, "calm")
+        wait_until(page, "document.querySelectorAll('.calm-shape').length >= 1", 4000)
+        style = page.evaluate("""(() => { const s = getComputedStyle(document.querySelector('.calm-shape'));
+            return [s.animationName, s.animationDuration]; })()""")
+        assert style[0] == "calm-fade" and style[1] != "0s", style
+
+
+def test_black_screen_covers_everything_and_one_tap_brings_it_back():
+    with open_app() as (page, _, _):
+        go(page, "calm")
+        page.locator(".black-screen").click()
+        cover = page.locator(".black-cover")
+        assert cover.is_visible()
+        assert page.evaluate("getComputedStyle(document.querySelector('.black-cover')).backgroundColor") \
+            == "rgb(0, 0, 0)"
+        assert page.evaluate("document.elementFromPoint(innerWidth / 2, 20).classList.contains('black-cover')"), \
+            "the cover sits over the header too"
+        assert cover.get_attribute("aria-label") == STRINGS["calm.blackLabel"]
+        page.mouse.click(100, 400)
+        assert page.locator(".black-cover").count() == 0
+        assert page.evaluate("document.activeElement.classList.contains('black-screen')")
+
+
+def test_black_screen_works_by_keyboard():
+    with open_app() as (page, _, _):
+        go(page, "calm")
+        page.locator(".black-screen").focus()
+        page.keyboard.press("Enter")
+        assert page.evaluate("document.activeElement.classList.contains('black-cover')")
+        page.keyboard.press("Escape")
+        assert page.locator(".black-cover").count() == 0
+        page.keyboard.press("Enter")
+        page.keyboard.press("Space")
+        assert page.locator(".black-cover").count() == 0
+
+
+def test_leaving_calm_removes_the_black_screen():
+    with open_app() as (page, _, _):
+        go(page, "calm")
+        page.locator(".black-screen").click()
+        page.evaluate("location.hash = 'breathe'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 3000)
+        assert page.locator(".black-cover").count() == 0

@@ -12,6 +12,7 @@ import * as statements from "./exercises/statements.js";
 import * as bubbles from "./activities/bubbles.js";
 import * as trace from "./activities/trace.js";
 import * as sort from "./activities/sort.js";
+import * as calm from "./activities/calm.js";
 import * as menu from "./screens/menu.js";
 import * as settingsScreen from "./screens/settings.js";
 import * as about from "./screens/about.js";
@@ -20,7 +21,7 @@ import * as feedback from "./screens/feedback.js";
 
 // The screens the router knows. Breathing is the default and the first screen (REQ-018).
 const ROUTES = {
-  breathe, ground, statements, bubbles, trace, sort, menu, settings: settingsScreen, about, standards, feedback,
+  breathe, ground, statements, bubbles, trace, sort, calm, menu, settings: settingsScreen, about, standards, feedback,
 };
 const DEFAULT_ROUTE = "breathe";
 
@@ -157,7 +158,7 @@ async function show(name, { moveFocus }) {
   delete main.dataset.shown;
   // A screen may load data first (Standards and research), so wait for it before focusing.
   await current.start(main, {
-    t, list, config, motion, audio, rhythm: getSetting("rhythm"),
+    t, list, config, motion, audio, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
   });
   if (request !== showing) return;
   main.dataset.shown = name;

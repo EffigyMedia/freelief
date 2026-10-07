@@ -123,6 +123,44 @@
       "riseSeconds": 0.12,
       "fallSeconds": 0.45,
       "idleMs": 180
+    },
+    "pads": {
+      "volume": 0.05,
+      "cutoffHz": 900,
+      "detuneCents": 7,
+      "chordSeconds": 10,
+      "attackSeconds": 3.5,
+      "releaseSeconds": 5,
+      "chords": [
+        [
+          130.81,
+          164.81,
+          196.0,
+          246.94,
+          293.66
+        ],
+        [
+          110.0,
+          130.81,
+          164.81,
+          196.0,
+          246.94
+        ],
+        [
+          87.31,
+          110.0,
+          130.81,
+          164.81,
+          220.0
+        ],
+        [
+          98.0,
+          130.81,
+          146.83,
+          196.0,
+          293.66
+        ]
+      ]
     }
   },
   "bubbles": {
@@ -242,5 +280,12 @@
       "problem": "problem-report.md"
     },
     "feedbackEmail": ""
+  },
+  "calm": {
+    "shapeEveryMs": 2600,
+    "shapeLifeSeconds": 13,
+    "maxShapes": 6,
+    "minSize": 50,
+    "maxSize": 130
   }
 }

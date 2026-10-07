@@ -457,6 +457,57 @@ main {
 
 .sort-status { margin: 0; min-height: 3em; }
 
+/* ---- Calm ---- */
+
+.calm-field {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+}
+
+.calm-shape {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-name: calm-come-and-go;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+/* Under reduced motion the shapes only fade; they do not grow or turn. */
+.calm-shape.still { animation-name: calm-fade; }
+
+@keyframes calm-come-and-go {
+  0% { opacity: 0; transform: scale(0.85) rotate(0deg); }
+  35%, 65% { opacity: 0.75; }
+  100% { opacity: 0; transform: scale(1.1) rotate(var(--spin)); }
+}
+
+@keyframes calm-fade {
+  0%, 100% { opacity: 0; }
+  35%, 65% { opacity: 0.75; }
+}
+
+/* Black screen: one large button over everything, in pure black. */
+.black-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: #000;
+  cursor: none;
+}
+
+.black-cover:focus-visible { outline: none; }
+
 /* ---- about, standards and research, feedback ---- */
 
 .page {
@@ -523,7 +574,7 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *:not(.calm-shape), *::before, *::after {
     transition-duration: 0s !important;
     animation-duration: 0s !important;
   }

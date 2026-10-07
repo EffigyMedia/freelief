@@ -593,6 +593,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **A Calm screen plays slow musical pads (four gentle chords of detuned triangle waves through a
+  low-pass filter) while simple geometric shapes fade in and out. A `Black screen` button covers
+  everything in black; one tap or key brings the screen back, and the music keeps playing. Under reduced
+  motion the shapes only fade.** — The owner asked for a zen sound mode with musical pads, shapes that
+  come and go like a screen saver, and a black screen. The black screen is one large button, so touch,
+  keyboard and screen readers can all leave it. — 2026-10-07 (owner)
 - **The shape trace offers twelve shapes (figure eight, circle, ripple, flower, star, heart, petal,
   trefoil knot, weave, soft square, egg, clover), one at a time, with a `New shape` control; each shape
   sings on its own note of a C major pentatonic scale.** — The owner asked for many more shapes. The

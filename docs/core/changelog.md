@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-5-6"></a>
+## [0.5.6] - 2026-10-07
+- New **Calm** screen, as the owner asked: slow musical pads, soft geometric shapes that fade in and
+  out like a screen saver, and a **Black screen** button (one tap brings the screen back; the music
+  keeps playing). Fixed in the tests: the test server refused connections when the service worker
+  fetched every file at once, which made one test fail at random. 71 tests.
+
 <a id="v0-5-5"></a>
 ## [0.5.5] - 2026-10-07
 - **Trace a shape** now has twelve shapes: figure eight, circle, ripple, flower, star, heart, petal,

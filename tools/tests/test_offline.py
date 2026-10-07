@@ -25,13 +25,19 @@ def test_cache_list_matches_the_shipped_files():
 
 
 def test_the_app_works_offline_after_one_visit():
-    with open_app(service_workers="allow") as (page, _, _):
+    with open_app(service_workers="allow") as (page, errors, _):
         page.evaluate("navigator.serviceWorker.ready")
         page.reload()
         wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
         page.context.set_offline(True)
         page.reload()
-        page.wait_for_selector("html[data-ready='true']", timeout=5000)
+        try:
+            page.wait_for_selector("html[data-ready='true']", timeout=10000)
+        except Exception as error:
+            state = page.evaluate("""(async () => ({ ready: document.documentElement.dataset.ready,
+                keys: await caches.keys(),
+                entries: (await (await caches.open('freelief-' + self.FREELIEF_VERSION)).keys()).length }))()""")
+            raise AssertionError(f"offline launch did not finish: {state}; console: {errors}") from error
         assert page.locator(".guide").is_visible()
         page.locator(".help-open").click()
         assert page.locator("dialog.help li.line").count() >= 1

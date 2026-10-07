@@ -109,6 +109,61 @@ export function cue(phaseKey, seconds) {
   };
 }
 
+// The Calm screen's music (owner, 2026-10-07): slow, soft pads that move through a few gentle
+// chords. Each chord note is two slightly detuned triangle waves through a low-pass filter, with
+// long swells, and each chord overlaps the next. Returns { stop() }. Silent when sounds are off.
+export function pads() {
+  if (!canPlay()) return { stop: SILENT };
+  const ctx = ensureContext();
+  if (!ctx) return { stop: SILENT };
+  const settings = sounds.pads;
+  const master = ctx.createGain();
+  master.gain.value = settings.volume;
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.value = settings.cutoffHz;
+  filter.connect(master).connect(ctx.destination);
+  const live = new Set();
+  let chord = 0;
+  let timer = 0;
+
+  function playChord() {
+    const start = ctx.currentTime;
+    const end = start + settings.chordSeconds + settings.releaseSeconds;
+    for (const frequency of settings.chords[chord % settings.chords.length]) {
+      const voice = ctx.createGain();
+      voice.gain.setValueAtTime(0, start);
+      voice.gain.linearRampToValueAtTime(1, start + settings.attackSeconds);
+      voice.gain.setValueAtTime(1, start + settings.chordSeconds);
+      voice.gain.linearRampToValueAtTime(0, end);
+      voice.connect(filter);
+      for (const cents of [-settings.detuneCents, settings.detuneCents]) {
+        const oscillator = ctx.createOscillator();
+        oscillator.type = "triangle";
+        oscillator.frequency.value = frequency;
+        oscillator.detune.value = cents;
+        oscillator.connect(voice);
+        oscillator.start(start);
+        oscillator.stop(end + 0.05);
+        live.add(oscillator);
+        oscillator.onended = () => live.delete(oscillator);
+      }
+    }
+    chord += 1;
+    timer = setTimeout(playChord, settings.chordSeconds * 1000);
+  }
+
+  playChord();
+  return {
+    stop() {
+      clearTimeout(timer);
+      const now = ctx.currentTime;
+      master.gain.setTargetAtTime(0, now, 0.4);
+      live.forEach((oscillator) => { try { oscillator.stop(now + 2); } catch { /* already stopped */ } });
+    },
+  };
+}
+
 // The shape trace's "singing glass" (owner, 2026-10-07): a sustained, slightly beating tone, like a
 // wet finger on a crystal rim. It sounds only while the person moves, louder with speed, and
 // fades when they stop. Returns { move(speed), stop() }.

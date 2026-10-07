@@ -7,6 +7,7 @@ const ITEMS = [
   { route: "bubbles", label: "nav.bubbles", hint: "nav.bubblesHint" },
   { route: "trace", label: "nav.trace", hint: "nav.traceHint" },
   { route: "sort", label: "nav.sort", hint: "nav.sortHint" },
+  { route: "calm", label: "nav.calm", hint: "nav.calmHint" },
   { route: "settings", label: "nav.settings", hint: "nav.settingsHint" },
 ];
 

@@ -2,6 +2,15 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-07 — Checkpoint (v0.5.6, after sounds, shapes and Calm)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to breathing guide | 110 ms | 224 ms | +104% | REGRESSION → RLG-006 (within the 1 s target) |
+| Input to visible response | 10 ms | 11 ms | +10% | OK |
+| Shipped size | 41.3 KB | 120.2 KB | +191% | OK, expected; 30 KB of budget left |
+Notes: two runs, 231 ms and 224 ms. Every screen is imported before the first paint. The fix is the
+planned lazy loading of the non-breathing screens.
+
 ## 2026-10-07 — Slice 5 checkpoint (v0.5.0)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|

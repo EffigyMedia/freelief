@@ -30,6 +30,7 @@ const FILES = [
   "activities/bubbles.js",
   "activities/trace.js",
   "activities/sort.js",
+  "activities/calm.js",
   "screens/menu.js",
   "screens/settings.js",
   "screens/about.js",

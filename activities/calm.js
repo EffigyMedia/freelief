@@ -1,0 +1,98 @@
+// Calm (owner, 2026-10-07): slow musical pads, and simple geometric shapes that fade in and out
+// like a screen saver. "Black screen" covers everything in black; one tap or key brings the
+// screen back, and the music keeps playing. Nothing to do, nothing to win.
+// Under reduced motion the shapes do not move or grow; they only fade.
+
+let run = null;
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+// Each shape is drawn inside a 100 x 100 box, as an SVG element name and its attributes.
+const FORMS = [
+  ["circle", { cx: 50, cy: 50, r: 40 }],
+  ["polygon", { points: "50,8 92,84 8,84" }],
+  ["rect", { x: 14, y: 14, width: 72, height: 72, rx: 6 }],
+  ["polygon", { points: "50,6 89,28 89,72 50,94 11,72 11,28" }],
+  ["polygon", { points: "50,6 94,50 50,94 6,50" }],
+  ["circle", { cx: 50, cy: 50, r: 24 }],
+];
+
+export function start(container, ctx) {
+  stop();
+  const { t, config, motion, audio } = ctx;
+  const settings = config.calm;
+  const still = motion.reducedMotion();
+
+  container.innerHTML = `
+    <section class="activity calm">
+      <h1>${t("calm.title")}</h1>
+      <p class="exercise-intro">${t("calm.intro")}</p>
+      <svg class="calm-field" viewBox="0 0 400 300" aria-hidden="true" focusable="false"></svg>
+      <p class="hint calm-sound-note" hidden>${t("calm.soundsOff")}</p>
+      <div class="exercise-actions">
+        <button type="button" class="button black-screen" aria-describedby="black-hint">${t("calm.blackScreen")}</button>
+      </div>
+      <p id="black-hint" class="hint">${t("calm.blackHint")}</p>
+    </section>`;
+
+  const field = container.querySelector(".calm-field");
+  const blackButton = container.querySelector(".black-screen");
+  const current = { timers: [], music: audio.pads(), cover: null };
+  run = current;
+  container.querySelector(".calm-sound-note").hidden = ctx.soundsOn;
+
+  const random = (min, max) => min + Math.random() * (max - min);
+
+  function addShape() {
+    if (run !== current) return;
+    if (field.childElementCount < settings.maxShapes) {
+      const [tag, attributes] = FORMS[Math.floor(Math.random() * FORMS.length)];
+      const size = random(settings.minSize, settings.maxSize);
+      const group = document.createElementNS(SVG_NS, "g");
+      const x = random(0, 400 - size), y = random(0, 300 - size);
+      group.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(size / 100).toFixed(3)})`);
+      const inner = document.createElementNS(SVG_NS, "g");
+      inner.setAttribute("class", still ? "calm-shape still" : "calm-shape");
+      inner.style.animationDuration = `${settings.shapeLifeSeconds}s`;
+      inner.style.setProperty("--spin", `${random(-25, 25).toFixed(0)}deg`);
+      const shape = document.createElementNS(SVG_NS, tag);
+      for (const [name, value] of Object.entries(attributes)) shape.setAttribute(name, value);
+      inner.append(shape);
+      group.append(inner);
+      field.append(group);
+      current.timers.push(setTimeout(() => group.remove(), settings.shapeLifeSeconds * 1000));
+    }
+    current.timers.push(setTimeout(addShape, settings.shapeEveryMs));
+  }
+
+  // The black screen is one large button over everything, so a tap, Enter, Space or Escape all
+  // bring the screen back, and a screen reader can name it.
+  function blackOut() {
+    const cover = document.createElement("button");
+    cover.type = "button";
+    cover.className = "black-cover";
+    cover.setAttribute("aria-label", t("calm.blackLabel"));
+    const restore = () => {
+      cover.remove();
+      current.cover = null;
+      blackButton.focus();
+    };
+    cover.addEventListener("click", restore);
+    cover.addEventListener("keydown", (event) => { if (event.key === "Escape") restore(); });
+    document.body.append(cover);
+    current.cover = cover;
+    cover.focus();
+  }
+
+  blackButton.addEventListener("click", blackOut);
+  addShape();
+}
+
+export function stop() {
+  if (run) {
+    run.timers.forEach(clearTimeout);
+    run.music.stop();
+    if (run.cover) run.cover.remove();
+  }
+  run = null;
+}

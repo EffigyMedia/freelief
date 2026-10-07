@@ -60,6 +60,16 @@ polite live line reports each choice, swap and the finished order. The row is on
 that shrink to fit, never under 2.75rem, so it never wraps. "New colours" moves to the next
 palette and reshuffles until the order is not already sorted.
 
+## Calm (`activities/calm.js`)
+`audio.pads()` plays the chords in `config.json` → `sounds.pads`: each chord note is two triangle waves
+detuned by `detuneCents`, through one low-pass filter, swelling over `attackSeconds`; a new chord starts every
+`chordSeconds` and the old one fades over `releaseSeconds`. `stop()` fades the master and stops every voice.
+The field adds one shape every `calm.shapeEveryMs` (up to `maxShapes`), each living `shapeLifeSeconds` in a CSS
+animation: `calm-come-and-go` (fade, slow growth and a small turn) or, under reduced motion, `calm-fade`. The
+global reduced-motion rule exempts `.calm-shape` so the fade keeps its length. `Black screen` appends one
+full-screen black `<button>` to `body`: a click, Enter, Space or Escape removes it and returns focus. Leaving
+the screen stops the music and removes the cover.
+
 ## Settings
 `settings.js` reads `localStorage[config.settings.storageKey]` once at boot, keeps only known
 values (a stored rhythm that no longer exists in `config.json` falls back to the default), and

@@ -24,7 +24,19 @@ _playwright = None
 _browser = None
 
 
+class _Server(socketserver.ThreadingTCPServer):
+    # The service worker requests every file at once on install. Python's default listen queue of
+    # 5 then refuses connections on Windows, which looks like an app that cannot start.
+    request_queue_size = 128
+    daemon_threads = True
+    allow_reuse_address = True
+
+
 class _QuietHandler(http.server.SimpleHTTPRequestHandler):
+    # Keep connections open between requests. With HTTP/1.0 every file is a new socket, and the
+    # suite's many service-worker installs exhaust Windows' socket buffers (ERR_NO_BUFFER_SPACE).
+    protocol_version = "HTTP/1.1"
+
     def log_message(self, *args):
         pass
 
@@ -37,8 +49,7 @@ class _QuietHandler(http.server.SimpleHTTPRequestHandler):
 def serve(directory: Path) -> str:
     """Serve a directory on a new free localhost port; return its URL."""
     handler = functools.partial(_QuietHandler, directory=str(directory))
-    server = socketserver.ThreadingTCPServer(("127.0.0.1", 0), handler)
-    server.daemon_threads = True
+    server = _Server(("127.0.0.1", 0), handler)
     # A browser that closes a page mid-download aborts the socket; that is not a test failure.
     server.handle_error = lambda request, address: None
     threading.Thread(target=server.serve_forever, daemon=True).start()
@@ -82,7 +93,12 @@ def open_app(locale="en-US", color_scheme="dark", reduced_motion="no-preference"
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.on("request", lambda r: requests.append(r.url))
     page.goto(base_url())
-    page.wait_for_selector("html[data-ready='true']", timeout=5000)
+    try:
+        page.wait_for_selector("html[data-ready='true']", timeout=5000)
+    except Exception as error:
+        ready = page.evaluate("document.documentElement.dataset.ready")
+        context.close()
+        raise AssertionError(f"the app did not start: ready={ready}; console: {errors}") from error
     try:
         yield page, errors, requests
     finally:
