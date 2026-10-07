@@ -43,7 +43,7 @@ export function start(container, ctx) {
   const marker = container.querySelector(".trace-marker");
   const slider = container.querySelector(".trace-slider");
   const loopsText = container.querySelector(".trace-loops");
-  const current = { index: 0, travelled: 0, loops: 0, dragging: false };
+  const current = { index: 0, travelled: 0, loops: 0, dragging: false, glass: ctx.audio.glass() };
   run = current;
 
   function render() {
@@ -58,11 +58,13 @@ export function start(container, ctx) {
 
   // Move by a number of sample steps; a full loop forward is noted, gently.
   function move(steps) {
+    if (steps !== 0) current.glass.move(Math.abs(steps) / settings.glassFullSpeedSteps);
     current.index = (current.index + steps + last) % last;
     current.travelled += steps;
     if (current.travelled >= last) {
       current.travelled -= last;
       current.loops += 1;
+      ctx.audio.play("loop");
       loopsText.textContent = t(current.loops === 1 ? "trace.oneLoop" : "trace.loops", { count: current.loops });
     } else if (current.travelled < 0) {
       current.travelled = 0;
@@ -111,5 +113,6 @@ export function start(container, ctx) {
 }
 
 export function stop() {
+  if (run) run.glass.stop();
   run = null;
 }

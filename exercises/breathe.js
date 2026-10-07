@@ -36,7 +36,7 @@ export function start(container, ctx) {
   const pauseButton = container.querySelector(".pause");
 
   // This run's own state. A pending frame or timer from a stopped run checks it and does nothing.
-  const run = { timers: [], index: 0, paused: false, frame: 0 };
+  const run = { timers: [], index: 0, paused: false, frame: 0, stopTone: () => {} };
   state = run;
 
   const scaleFor = (which) => (which === "max" ? breathing.guideMaxScale : breathing.guideMinScale);
@@ -50,7 +50,8 @@ export function start(container, ctx) {
     if (state !== run || run.paused) return;
     const phase = phases[run.index];
     phaseLabel.textContent = t(`breathe.${phase.key}`);
-    ctx.audio.cue(phase.key);
+    run.stopTone();
+    run.stopTone = ctx.audio.cue(phase.key, phase.seconds);
     if (motion.reducedMotion()) {
       circle.style.transition = "none";
       circle.style.transform = "scale(0.8)";
@@ -73,6 +74,7 @@ export function start(container, ctx) {
     pauseButton.setAttribute("aria-pressed", String(paused));
     clearTimers();
     if (paused) {
+      run.stopTone();
       phaseLabel.textContent = t("breathe.paused");
       count.textContent = "";
       const current = getComputedStyle(circle).transform;
@@ -97,6 +99,7 @@ export function stop() {
   if (state) {
     state.timers.forEach(clearTimeout);
     cancelAnimationFrame(state.frame);
+    state.stopTone();
     state = null;
   }
 }

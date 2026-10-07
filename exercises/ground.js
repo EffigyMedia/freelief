@@ -42,6 +42,7 @@ export function start(container, ctx) {
   });
   next.addEventListener("click", () => {
     index = index === steps.length ? 0 : index + 1;
+    ctx.audio.play("step");
     render();
   });
 

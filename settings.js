@@ -11,7 +11,7 @@ export function initSettings(config) {
   key = config.settings.storageKey;
   defaults = {
     rhythm: config.breathing.defaultRhythm,
-    tones: config.tones.enabledByDefault,
+    sounds: config.sounds.enabledByDefault,
     theme: config.theme.default,
   };
   let stored = {};
@@ -21,8 +21,11 @@ export function initSettings(config) {
     stored = {};
   }
   values = { ...defaults };
-  if (stored.rhythm in config.breathing.rhythms) values.rhythm = stored.rhythm;
-  if (typeof stored.tones === "boolean") values.tones = stored.tones;
+  // Own keys only: a stored name such as "constructor" must not pass (audit, inherited names).
+  if (Object.hasOwn(config.breathing.rhythms, stored.rhythm)) values.rhythm = stored.rhythm;
+  // Sounds are a new key (2026-10-07): an old stored `tones: false` was never a choice, because
+  // tones were off by default, so it does not carry over.
+  if (typeof stored.sounds === "boolean") values.sounds = stored.sounds;
   if (config.theme.choices.includes(stored.theme)) values.theme = stored.theme;
 }
 

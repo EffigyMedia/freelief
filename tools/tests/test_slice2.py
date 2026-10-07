@@ -79,16 +79,16 @@ def test_settings_round_trip_through_a_reload():
         go(page, "settings")
         page.locator("input[name=rhythm][value=box]").check()
         page.locator("input[name=theme][value=light]").check()
-        page.locator("input[name=tones]").check()
+        page.locator("input[name=sounds]").uncheck()
         page.reload()
         wait_until(page, "document.documentElement.dataset.ready === 'true'")
         go(page, "settings")
         assert page.locator("input[name=rhythm][value=box]").is_checked()
         assert page.locator("input[name=theme][value=light]").is_checked()
-        assert page.locator("input[name=tones]").is_checked()
+        assert not page.locator("input[name=sounds]").is_checked()
         assert page.evaluate("document.documentElement.dataset.theme") == "light"
         stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v1')"))
-        assert stored == {"rhythm": "box", "tones": True, "theme": "light"}
+        assert stored == {"rhythm": "box", "sounds": False, "theme": "light"}
 
 
 def test_blocked_storage_falls_back_to_defaults():
@@ -109,15 +109,35 @@ def test_box_rhythm_holds_after_the_in_breath():
         wait_until(page, "document.querySelector('.phase').textContent === 'Hold'", 6000)
 
 
-def test_tones_stay_silent_by_default_and_play_when_on():
-    with open_app(init_script=TONE_PROBE) as (page, _, _):
+def test_sounds_are_on_by_default_after_a_tap_and_silent_when_off():
+    # REQ-007 as changed 2026-10-07: sounds are on by default; one switch turns them all off.
+    # Browsers allow sound only after a gesture, so nothing plays before the first tap.
+    with open_app(init_script=TONE_PROBE) as (page, errors, _):
         page.wait_for_timeout(1200)
-        assert page.evaluate("window.__tones") == 0, "tones are off by default (REQ-007)"
+        assert page.evaluate("window.__tones") == 0, "nothing plays before the first tap"
+        page.locator(".guide").click()
+        wait_until(page, "window.__tones >= 1", 7000)
         go(page, "settings")
-        page.locator("input[name=tones]").check()
-        go(page, "breathe")
-        wait_until(page, "window.__tones >= 1", 3000)
+        assert page.locator("input[name=sounds]").is_checked()
+        page.locator("input[name=sounds]").uncheck()
+        go(page, "bubbles")
+        before = page.evaluate("window.__tones")
+        page.locator("button.bubble").first.click(force=True)
+        page.wait_for_timeout(300)
+        assert page.evaluate("window.__tones") == before, "no sound once the switch is off"
+        assert not [e for e in errors if "AudioContext" in e], errors
 
+
+def test_each_activity_plays_its_cue():
+    with open_app(init_script=TONE_PROBE) as (page, _, _):
+        page.locator(".guide").click()  # the first gesture unlocks sound
+        for route, action in (("bubbles", lambda: page.locator("button.bubble").first.click(force=True)),
+                              ("ground", lambda: page.locator(".next").click()),
+                              ("statements", lambda: page.locator(".next").click())):
+            go(page, route)
+            before = page.evaluate("window.__tones")
+            action()
+            wait_until(page, f"window.__tones > {before}", 2000)
 
 def test_dark_override_beats_a_light_device():
     with open_app(color_scheme="light") as (page, _, _):

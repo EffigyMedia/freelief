@@ -1,8 +1,1066 @@
 {
- "stamp": "a536b6116af915d9",
- "generated": "2026-10-07T13:58:18-04:00",
- "count": 59,
+ "stamp": "56be7fc264e7318a",
+ "generated": "2026-10-07T19:35:10-04:00",
+ "count": 135,
  "entries": [
+  {
+   "id": "AUD-001",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "in-flight",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Two other apps on the same origin delete Freelief's offline cache, and Freelief then fails to open offline until its next version",
+   "blocks": [],
+   "caused_by": [
+    "UNT-011"
+   ],
+   "see_also": [
+    "RVW-002"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-002",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "in-flight",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Boot has no failure path: one failed start-up fetch or module leaves a blank page with no breathing guide and no 'Need urgent help?' control",
+   "blocks": [],
+   "caused_by": [
+    "UNT-012"
+   ],
+   "see_also": [
+    "RVW-002",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-003",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "in-flight",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Any push to main is a public deploy, but the rules call a phone-test push 'not a release', so the audit gate never applies to what users get, and v0.5.0 is live without a round",
+   "blocks": [],
+   "caused_by": [
+    "UNT-013"
+   ],
+   "see_also": [
+    "RVW-004",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-004",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Freelief shares its web origin with three other sites, and any of them can rewrite its offline cache and settings",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-003"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-005",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The router accepts inherited object names from the URL hash, so a link such as #constructor gives a blank app and a stuck router",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-003"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-006",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The Feedback page does not tell the person that a GitHub issue is public",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-003",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-007",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The design's control against a tampered crisis line ('every change goes through a reviewed commit') is not in place",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-003"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-008",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "A failed data load on a deep link to Standards stops the router, and from another screen it leaves a frozen copy of the previous screen",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-009",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The update test that the design names as the mitigation for a stale offline cache does not exist",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002",
+    "RVW-004",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-010",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Nothing checks that a change to a shipped file comes with a version bump, so installed users can keep an old file, including a changed crisis line, indefinitely",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-011",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "test and build check the working tree, not the commit that GitHub Pages deploys",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-012",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The browser that the tests, bench and icon tool need is not installed by setup, not checked by doctor and not declared",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-013",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "in-flight",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The worker's precache fills a new versioned cache through the browser HTTP cache, so a new version can freeze old files",
+   "blocks": [],
+   "caused_by": [
+    "UNT-011"
+   ],
+   "see_also": [
+    "RVW-002",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-014",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "in-flight",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Freelief's activate deletes every cache on the shared origin, not only its own",
+   "blocks": [],
+   "caused_by": [
+    "UNT-011"
+   ],
+   "see_also": [
+    "RVW-002"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-015",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The colour sort shipped under a rule that dropped the manual accessibility check that RLG-005 requires",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-016",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "REQ-014 carries status 'agreed' although the implementer rewrote its text and the owner has not agreed to it",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-017",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "RLG-001 is marked built while its own done-when (the owner's phone check) is still open, no owner check for any slice is recorded, and slices 2 to 5 were built on top of it",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-018",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The colour sort is missing from the Standards and research page and sources.md, and nothing maps an activity to a technique",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-019",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The emergency number in the urgent-help dialog is plain text, not a tap-to-call link",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-020",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "REQ-030 (must) requires the email route, but the design allows a release with the email button hidden",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-021",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The project's audit pace was not followed: no round ran at the end of slices 1 to 4",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-022",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The declared ROUTING_BIAS 2 is not in force: every unit ran at bias 1",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-023",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "A recorded standard has no version, so a claim outlives the version it was checked for",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-024",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The success criterion that crisis-line dates are no older than the release has no check and no release date to check against",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-025",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The claim 'sends nothing after install' omits the browser's update check to GitHub on each online launch",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-026",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "A device with no region set is shown the lines and emergency number of a guessed country, not the unknown-region path",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-027",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The offline test and the network test cover only breathing and the help dialog, not every screen",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-028",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "No supported-browser baseline is stated, and the suite runs only in Chromium for a phone-first app",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-029",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "`run` serves the whole repository, including .git, .venv and input/excluded, on all network interfaces",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-003"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-030",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "in-flight",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The stored-settings check accepts inherited object names, so a stored rhythm of 'constructor' breaks the breathing guide",
+   "blocks": [],
+   "caused_by": [
+    "UNT-016"
+   ],
+   "see_also": [
+    "RVW-003"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-031",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "No test guards the CSP, and the static external-load check misses common forms",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-003"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-032",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "setup installs the test dependencies unpinned and with no lock file",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-003",
+    "RVW-002"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-033",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Pages build HTML from data with escaping that is not consistent",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-003"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-034",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "doctor reports the tests collectable after only counting files, and AGENTS.md repeats the claim",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002",
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-035",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "doctor silently skips a JSON file that is missing",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-036",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "doctor does not check the service worker or two of the shipped JSON files, though the design says it does",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-037",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "bench fails with a raw traceback when the .venv is missing",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-038",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The breathing guide and the bubble field keep every timer id for the whole session",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-002"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-039",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "User-facing text outside the strings file breaks REQ-017",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-040",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "in-flight",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The public README still describes two distraction activities; the colour sort is not named",
+   "blocks": [],
+   "caused_by": [
+    "UNT-013"
+   ],
+   "see_also": [
+    "RVW-004",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-041",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Design Stage 8 disagrees with the code on the ctx contract, the tunables, the routes and inline CSS",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-042",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "AGENTS.md Architecture lists only the menu and Settings as screens",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-043",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The tagline 'Breathe with the circle' shows on every screen, including screens with no circle",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-044",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "in-flight",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The urgent-help dialog can be closed by touch only from its bottom, after all the content",
+   "blocks": [],
+   "caused_by": [
+    "UNT-015"
+   ],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-045",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The design document has a literal '\\n' in the Decision Log and a stale Document Control",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-046",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The reduced-motion guide scale is an in-code constant, not a config.json tunable",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-047",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "motion.onMotionChange is exported but nothing calls it",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-048",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "No record shows the look variants that the design says the implementer shows the owner",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-004",
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-049",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Saved 'tones on' plays nothing at launch until the person taps, and nothing says so",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-050",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Forced-colors (high contrast) mode is not handled, so the colour-sort tiles can look the same",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-051",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The design does not say what happens when the phone screen sleeps during breathing",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-052",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The 'Chat online' crisis link does not say that it needs a network",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-053",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "No stated handling exists for a feedback issue from a person who is in danger",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-054",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "No procedure turns a volunteer accessibility check into a recorded standard",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-001"
+   ],
+   "supersedes": []
+  },
   {
    "id": "CHN-001",
    "kind": "chain",
@@ -242,6 +1300,176 @@
    "supersedes": []
   },
   {
+   "id": "EVD-014",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T13:59:37-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `slice 5 test suite passes (48 tests)` of [[UNT-008]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-015",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T13:59:44-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `bench meets targets at v0.5.0` of [[UNT-008]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-016",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:04:33-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `the remote main matches the local commit that was pushed` of [[UNT-009]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-017",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:04:35-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `GitHub Pages reports the site built` of [[UNT-009]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-018",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:39:19-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `full suite passes with the cache self-repair (51 tests)` of [[UNT-011]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-019",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:44:41-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `full suite passes with the fail-soft start-up (55 tests)` of [[UNT-012]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-020",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:46:14-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `GitHub Pages serves the live branch` of [[UNT-013]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-021",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:46:16-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `live branch is the deployed v0.5.0 commit` of [[UNT-013]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-022",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T19:03:42-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `live branch is at the v0.5.2 commit` of [[UNT-014]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "EVD-023",
+   "kind": "evidence",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T19:08:30-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "step `full suite passes with the top Back button and the nav links (58 tests)` of [[UNT-015]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
    "id": "REQ-001",
    "kind": "requirement",
    "type": null,
@@ -354,7 +1582,7 @@
    "created": "2026-10-07T06:42:31-04:00",
    "precision": "second",
    "age_days": 0,
-   "title": "Freelief can play soft tones that mark breath in and breath out. The tones are off by default and the person can turn them on.",
+   "title": "Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.",
    "blocks": [],
    "caused_by": [],
    "see_also": [],
@@ -877,7 +2105,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-07T13:11:39-04:00",
    "precision": "second",
    "age_days": 0,
@@ -886,6 +2114,82 @@
    "caused_by": [],
    "see_also": [
     "REQ-014"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RVW-001",
+   "kind": "review",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "the omission lens of round [[UNT-010]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "UNT-010"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RVW-002",
+   "kind": "review",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "the operations lens of round [[UNT-010]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "UNT-010"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RVW-003",
+   "kind": "review",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "the security lens of round [[UNT-010]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "UNT-010"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RVW-004",
+   "kind": "review",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-07T14:24:38-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "the whole-design lens of round [[UNT-010]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "UNT-010"
    ],
    "supersedes": []
   },
@@ -1046,7 +2350,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "open",
+   "status": "closed",
    "created": "2026-10-07T13:54:31-04:00",
    "precision": "second",
    "age_days": 0,
@@ -1054,6 +2358,155 @@
    "blocks": [],
    "caused_by": [
     "RLG-005"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-009",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T14:03:01-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Publish Freelief: create the public repository, push, enable GitHub Pages",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-010",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T14:04:58-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Design audit round after slices 1 to 5 (v0.5.0)",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-011",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T14:28:49-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Fix AUD-001, AUD-014, AUD-019: offline cache self-repair on a shared origin",
+   "blocks": [],
+   "caused_by": [
+    "AUD-001",
+    "AUD-014",
+    "AUD-019",
+    "AUD-013"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-012",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T14:40:01-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Fix AUD-002: start-up fails soft, with a static fallback that keeps the emergency route",
+   "blocks": [],
+   "caused_by": [
+    "AUD-002"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-013",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T14:45:12-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Fix AUD-003: serve GitHub Pages from a 'live' branch; pre-1.0 builds are a marked preview",
+   "blocks": [],
+   "caused_by": [
+    "AUD-003"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-014",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T19:02:48-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Move the live preview to v0.5.2 and record the owner's acceptance of the REQ-017 exception",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-015",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T19:04:02-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Owner feedback: Back at the top of urgent help, phone back closes it, More ways to calm on every exercise",
+   "blocks": [],
+   "caused_by": [
+    "AUD-044"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-016",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "open",
+   "created": "2026-10-07T19:29:25-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Sounds on by default: subtle cues for every activity, one Sounds switch in Settings",
+   "blocks": [],
+   "caused_by": [
+    "REQ-007"
    ],
    "see_also": [],
    "supersedes": []

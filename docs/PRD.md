@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `a536b6116af915d9` · 31 requirement(s) recorded
+> Store stamp `56be7fc264e7318a` · 31 requirement(s) recorded
 
 ## The problem
 
@@ -95,7 +95,7 @@ Not built (decided 2026-10-07):
 
 ### Should have
 
-- **REQ-007** — Freelief can play soft tones that mark breath in and breath out. The tones are off by default and the person can turn them on.
+- **REQ-007** — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.
 - **REQ-014** — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-023** — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
 
@@ -121,4 +121,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-07T13:58:20-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-07T19:35:12-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

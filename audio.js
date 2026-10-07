@@ -1,13 +1,27 @@
-// Soft tones that mark the breath (REQ-007). Generated with Web Audio, so no audio file ships.
-// Off by default; nothing plays unless the person turns tones on in Settings.
+// Subtle sounds (REQ-007): soft tones for the breath and short cues for the activities. Generated
+// with Web Audio, so no audio file ships. On by default; one "Sounds" switch in Settings turns all
+// of them off (owner, 2026-10-07).
+//
+// Browsers allow sound only after the person's first tap or key press. Until then nothing is
+// created, so no "AudioContext was not allowed to start" warning appears; the first gesture
+// anywhere in the app unlocks sound, and the breathing tones begin at the next phase.
 
 import { getSetting } from "./settings.js";
 
 let context = null;
-let toneConfig = null;
+let sounds = null;
+let unlocked = false;
 
 export function initAudio(config) {
-  toneConfig = config.tones;
+  sounds = config.sounds;
+  const unlock = () => {
+    unlocked = true;
+    if (getSetting("sounds")) ensureContext();
+    window.removeEventListener("pointerdown", unlock, true);
+    window.removeEventListener("keydown", unlock, true);
+  };
+  window.addEventListener("pointerdown", unlock, true);
+  window.addEventListener("keydown", unlock, true);
 }
 
 function ensureContext() {
@@ -20,37 +34,134 @@ function ensureContext() {
   return context;
 }
 
-// Call from a user gesture (turning tones on), so the browser allows sound.
+// Call from a user gesture (turning sounds on), so the browser allows sound.
 export function unlockAudio() {
+  unlocked = true;
   ensureContext();
 }
 
-// A sine wave that swells and fades. Silent unless the tones setting is on.
-function tone(frequency, attack, release) {
-  if (!getSetting("tones") || !toneConfig || !frequency) return;
-  const ctx = ensureContext();
-  if (!ctx) return;
-  const now = ctx.currentTime;
+// One sine note that swells and fades, starting `delay` seconds from now.
+function note(ctx, frequency, delay, attack, release, volume) {
+  const start = ctx.currentTime + delay;
   const oscillator = ctx.createOscillator();
   const gain = ctx.createGain();
   oscillator.type = "sine";
   oscillator.frequency.value = frequency;
-  gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(toneConfig.volume, now + attack);
-  gain.gain.linearRampToValueAtTime(0, now + attack + release);
+  gain.gain.setValueAtTime(0, start);
+  gain.gain.linearRampToValueAtTime(volume, start + attack);
+  gain.gain.linearRampToValueAtTime(0, start + attack + release);
   oscillator.connect(gain).connect(ctx.destination);
-  oscillator.start(now);
-  oscillator.stop(now + attack + release + 0.05);
+  oscillator.start(start);
+  oscillator.stop(start + attack + release + 0.05);
 }
 
-// One soft tone for a breathing phase.
-export function cue(phaseKey) {
-  if (!toneConfig) return;
-  tone(toneConfig.frequencies[phaseKey], toneConfig.attackSeconds, toneConfig.releaseSeconds);
+function canPlay() {
+  return sounds && unlocked && getSetting("sounds");
+}
+
+// A named cue from config.json → sounds.cues: one or more notes, a gap apart.
+export function play(name) {
+  if (!canPlay()) return;
+  const cue = sounds.cues[name];
+  const ctx = cue && ensureContext();
+  if (!ctx) return;
+  cue.notes.forEach((frequency, i) =>
+    note(ctx, frequency, i * cue.gapSeconds, cue.attackSeconds, cue.releaseSeconds, cue.volume));
+}
+
+const SILENT = () => {};
+
+// A soft tone that lasts the whole breathing phase (owner, 2026-10-07): it swells in, holds, and
+// fades out as the phase ends. A quiet octave above the note warms it. Returns a function that
+// stops the tone at once (pause, or leaving the screen).
+export function cue(phaseKey, seconds) {
+  if (!canPlay()) return SILENT;
+  const breath = sounds.breath;
+  const frequency = breath.frequencies[phaseKey];
+  const ctx = frequency && ensureContext();
+  if (!ctx) return SILENT;
+  const start = ctx.currentTime;
+  const end = start + seconds;
+  const attack = Math.min(breath.attackSeconds, seconds * 0.3);
+  const release = Math.min(breath.releaseSeconds, seconds * 0.4);
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, start);
+  gain.gain.linearRampToValueAtTime(breath.volume, start + attack);
+  gain.gain.setValueAtTime(breath.volume, end - release);
+  gain.gain.linearRampToValueAtTime(0, end);
+  gain.connect(ctx.destination);
+  const voices = [[frequency, 1], [frequency * 2, breath.octaveLevel]].map(([hz, level]) => {
+    const oscillator = ctx.createOscillator();
+    const voice = ctx.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = hz;
+    voice.gain.value = level;
+    oscillator.connect(voice).connect(gain);
+    oscillator.start(start);
+    oscillator.stop(end + 0.05);
+    return oscillator;
+  });
+  return () => {
+    const now = ctx.currentTime;
+    gain.gain.cancelScheduledValues(now);
+    gain.gain.setTargetAtTime(0, now, 0.08);
+    voices.forEach((oscillator) => { try { oscillator.stop(now + 0.4); } catch { /* already stopped */ } });
+  };
+}
+
+// The shape trace's "singing glass" (owner, 2026-10-07): a sustained, slightly beating tone, like a
+// wet finger on a crystal rim. It sounds only while the person moves, louder with speed, and
+// fades when they stop. Returns { move(speed), stop() }.
+export function glass() {
+  let voice = null;
+  let idle = 0;
+
+  function build(ctx) {
+    const settings = sounds.glass;
+    const master = ctx.createGain();
+    master.gain.value = 0;
+    master.connect(ctx.destination);
+    const oscillators = [];
+    for (const [ratio, level] of settings.partials) {
+      for (const detune of [0, settings.beatHz]) {
+        const oscillator = ctx.createOscillator();
+        const partial = ctx.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.value = settings.frequency * ratio + detune;
+        partial.gain.value = level / 2;
+        oscillator.connect(partial).connect(master);
+        oscillator.start();
+        oscillators.push(oscillator);
+      }
+    }
+    return { ctx, master, oscillators, settings };
+  }
+
+  return {
+    move(speed) {
+      if (!canPlay()) return;
+      const ctx = ensureContext();
+      if (!ctx) return;
+      voice = voice || build(ctx);
+      const level = Math.min(1, Math.max(0.35, speed)) * voice.settings.volume;
+      voice.master.gain.setTargetAtTime(level, ctx.currentTime, voice.settings.riseSeconds);
+      clearTimeout(idle);
+      idle = setTimeout(() => {
+        if (voice) voice.master.gain.setTargetAtTime(0, voice.ctx.currentTime, voice.settings.fallSeconds);
+      }, voice.settings.idleMs);
+    },
+    stop() {
+      clearTimeout(idle);
+      if (!voice) return;
+      const { ctx, master, oscillators } = voice;
+      master.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
+      oscillators.forEach((oscillator) => oscillator.stop(ctx.currentTime + 0.6));
+      voice = null;
+    },
+  };
 }
 
 // A short, soft tone when a bubble pops.
 export function pop() {
-  if (!toneConfig) return;
-  tone(toneConfig.popFrequency, toneConfig.popAttackSeconds, toneConfig.popReleaseSeconds);
+  play("pop");
 }

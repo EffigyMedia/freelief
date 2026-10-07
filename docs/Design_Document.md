@@ -499,9 +499,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   no clinical study. A review or certification, such as by a clinician or ORCHA, may be claimed only
   after it is granted. — Rejected: stronger wording such as "clinically proven to reduce panic". —
   2026-10-07
-- **Soft tones mark the breath, off by default. No spoken voice.** — Tones need no recorded assets
-  and no translation. — Rejected: spoken guidance (quality varies by device and language); silent
-  only. — 2026-10-07
+- ~~**Soft tones mark the breath, off by default. No spoken voice.**~~ — 2026-10-07. *Superseded the
+  same day by the owner: sounds on by default, see below. No spoken voice still stands.*
 - **Freelief collects no personal data and makes no network call after install.** — A person's
   worst moments are not telemetry. — Rejected: anonymous usage counts. — 2026-10-07
 - **Accessibility target: WCAG 2.2 AA in full, and AAA wherever a criterion can be met.** — The
@@ -594,6 +593,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **Sounds are on by default, with one Sounds switch in Settings. A soft tone lasts each breathing
+  phase; the activities have short cues; the shape trace sounds like a singing crystal glass while the
+  person moves. Nothing plays before the first tap or key press. No spoken voice.** — The owner asked
+  for more, subtle sounds, on by default (REQ-007 changed). Browsers block sound before a gesture,
+  and creating audio early would log a warning, so the first gesture unlocks it. — Rejected: tones off
+  by default (the first decision). — 2026-10-07 (owner)
 - **Urgent help has its way out at the top: a `Back` button in a header that stays visible while the
   content scrolls, and the phone's back gesture closes the window without leaving the app. Every
   exercise and activity shows both `More ways to calm` and `Back to breathing`.** — The owner, testing

@@ -1,4 +1,4 @@
-// Settings: breathing rhythm, soft tones and colours (REQ-023, REQ-007, REQ-021). Every change is
+// Settings: breathing rhythm, sounds and colours (REQ-023, REQ-007, REQ-021). Every change is
 // saved at once through settings.js, the only module that touches storage.
 
 import { getSetting, setSetting } from "../settings.js";
@@ -28,11 +28,11 @@ export function start(container, ctx) {
       </fieldset>
       <div class="toggle">
         <label class="choice">
-          <input type="checkbox" name="tones" ${getSetting("tones") ? "checked" : ""}
-                 aria-describedby="tones-hint">
-          <span>${t("settings.tones")}</span>
+          <input type="checkbox" name="sounds" ${getSetting("sounds") ? "checked" : ""}
+                 aria-describedby="sounds-hint">
+          <span>${t("settings.sounds")}</span>
         </label>
-        <p id="tones-hint" class="hint">${t("settings.tonesHint")}</p>
+        <p id="sounds-hint" class="hint">${t("settings.soundsHint")}</p>
       </div>
       <p class="hint">${t("settings.saved")}</p>
     </section>`;
@@ -41,9 +41,9 @@ export function start(container, ctx) {
     input.addEventListener("change", () => setSetting("rhythm", input.value)));
   container.querySelectorAll("input[name=theme]").forEach((input) =>
     input.addEventListener("change", () => setSetting("theme", input.value)));
-  container.querySelector("input[name=tones]").addEventListener("change", (event) => {
+  container.querySelector("input[name=sounds]").addEventListener("change", (event) => {
     if (event.target.checked) unlockAudio();
-    setSetting("tones", event.target.checked);
+    setSetting("sounds", event.target.checked);
   });
 }
 

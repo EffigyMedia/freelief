@@ -80,6 +80,7 @@ export function start(container, ctx) {
   function choose(position) {
     if (current.chosen === null) {
       current.chosen = position;
+      ctx.audio.play("choose");
       status.textContent = t("sort.chosen", { name: shadeName(current.order[position]) });
       render(position);
       return;
@@ -92,6 +93,7 @@ export function start(container, ctx) {
       return;
     }
     [current.order[from], current.order[position]] = [current.order[position], current.order[from]];
+    ctx.audio.play(isSorted() ? "done" : "swap");
     status.textContent = isSorted()
       ? t("sort.done")
       : t("sort.swapped", { name: shadeName(current.order[position]), position: position + 1 });

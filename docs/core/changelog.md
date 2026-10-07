@@ -10,6 +10,15 @@ audit.
 
 ---
 
+<a id="v0-5-4"></a>
+## [0.5.4] - 2026-10-07
+- Sounds, as the owner asked ([REQ-007](../fragments/REQ-007.md) changed): subtle sounds are on by
+  default, with one **Sounds** switch in Settings. Each breathing tone now lasts its whole phase and
+  stops on Pause. New cues: a chime on Next in grounding and calming words, a singing crystal glass
+  while tracing a shape (louder with speed, fading when you stop), a two-note chime per loop, and a
+  click and a rising phrase in the colour sort. Nothing plays before your first tap. Also: a stored
+  rhythm name such as "constructor" no longer passes the settings check. 63 tests.
+
 <a id="v0-5-3"></a>
 ## [0.5.3] - 2026-10-07
 - From the owner's phone test: the urgent-help window has a **Back** button at the top that stays

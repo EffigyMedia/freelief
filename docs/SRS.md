@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `a536b6116af915d9` · 31 requirement(s) specified, 0 not yet
+> Store stamp `56be7fc264e7318a` · 31 requirement(s) specified, 0 not yet
 
 ## 1. Introduction
 
@@ -74,7 +74,7 @@ person's settings, on the device.
 - **REQ-004** *(must)* — Freelief offers interactive calming activities whose purpose is to distract the person from panic.
 - **REQ-005** *(must)* — Every screen shows a 'Need urgent help?' control that opens a list of crisis lines chosen from the device language and region setting, without a request for location.
 - **REQ-006** *(must)* — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
-- **REQ-007** *(should)* — Freelief can play soft tones that mark breath in and breath out. The tones are off by default and the person can turn them on.
+- **REQ-007** *(should)* — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
 - **REQ-014** *(should)* — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, with no score and no failure.
@@ -184,4 +184,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T13:58:18-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T19:35:10-04:00 by `Commands/srs.py` from 31 requirement record(s).

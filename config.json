@@ -1,24 +1,129 @@
 {
   "breathing": {
     "defaultRhythm": "calm",
-    "rhythmOrder": ["calm", "slow", "box"],
+    "rhythmOrder": [
+      "calm",
+      "slow",
+      "box"
+    ],
     "rhythms": {
-      "calm": { "in": 4, "holdIn": 0, "out": 6, "holdOut": 0 },
-      "slow": { "in": 5, "holdIn": 0, "out": 7, "holdOut": 0 },
-      "box":  { "in": 4, "holdIn": 4, "out": 4, "holdOut": 4 }
+      "calm": {
+        "in": 4,
+        "holdIn": 0,
+        "out": 6,
+        "holdOut": 0
+      },
+      "slow": {
+        "in": 5,
+        "holdIn": 0,
+        "out": 7,
+        "holdOut": 0
+      },
+      "box": {
+        "in": 4,
+        "holdIn": 4,
+        "out": 4,
+        "holdOut": 4
+      }
     },
     "guideMinScale": 0.55,
     "guideMaxScale": 1.0
   },
-  "tones": {
-    "enabledByDefault": false,
-    "volume": 0.06,
-    "attackSeconds": 0.4,
-    "releaseSeconds": 1.6,
-    "frequencies": { "in": 261.63, "holdIn": 329.63, "out": 196.0, "holdOut": 220.0 },
-    "popFrequency": 523.25,
-    "popAttackSeconds": 0.02,
-    "popReleaseSeconds": 0.35
+  "sounds": {
+    "enabledByDefault": true,
+    "breath": {
+      "volume": 0.05,
+      "attackSeconds": 1.0,
+      "releaseSeconds": 1.2,
+      "frequencies": {
+        "in": 261.63,
+        "holdIn": 329.63,
+        "out": 196.0,
+        "holdOut": 220.0
+      },
+      "octaveLevel": 0.18
+    },
+    "cues": {
+      "pop": {
+        "notes": [
+          523.25
+        ],
+        "gapSeconds": 0,
+        "attackSeconds": 0.01,
+        "releaseSeconds": 0.3,
+        "volume": 0.05
+      },
+      "step": {
+        "notes": [
+          587.33
+        ],
+        "gapSeconds": 0,
+        "attackSeconds": 0.02,
+        "releaseSeconds": 0.9,
+        "volume": 0.035
+      },
+      "loop": {
+        "notes": [
+          523.25,
+          783.99
+        ],
+        "gapSeconds": 0.16,
+        "attackSeconds": 0.02,
+        "releaseSeconds": 1.0,
+        "volume": 0.035
+      },
+      "choose": {
+        "notes": [
+          440.0
+        ],
+        "gapSeconds": 0,
+        "attackSeconds": 0.01,
+        "releaseSeconds": 0.2,
+        "volume": 0.03
+      },
+      "swap": {
+        "notes": [
+          392.0
+        ],
+        "gapSeconds": 0,
+        "attackSeconds": 0.01,
+        "releaseSeconds": 0.25,
+        "volume": 0.035
+      },
+      "done": {
+        "notes": [
+          523.25,
+          659.25,
+          783.99
+        ],
+        "gapSeconds": 0.14,
+        "attackSeconds": 0.02,
+        "releaseSeconds": 1.1,
+        "volume": 0.035
+      }
+    },
+    "glass": {
+      "frequency": 659.25,
+      "partials": [
+        [
+          1,
+          1.0
+        ],
+        [
+          2.01,
+          0.14
+        ],
+        [
+          3.03,
+          0.05
+        ]
+      ],
+      "beatHz": 1.4,
+      "volume": 0.05,
+      "riseSeconds": 0.12,
+      "fallSeconds": 0.45,
+      "idleMs": 180
+    }
   },
   "bubbles": {
     "count": 6,
@@ -36,19 +141,42 @@
   "trace": {
     "samples": 400,
     "keyStepPercent": 1,
-    "searchWindow": 40
+    "searchWindow": 40,
+    "glassFullSpeedSteps": 6
   },
   "sort": {
-    "lightness": [88, 74, 60, 46, 32],
+    "lightness": [
+      88,
+      74,
+      60,
+      46,
+      32
+    ],
     "palettes": [
-      { "name": "blue", "hue": 212, "saturation": 45 },
-      { "name": "green", "hue": 150, "saturation": 30 },
-      { "name": "lavender", "hue": 265, "saturation": 30 }
+      {
+        "name": "blue",
+        "hue": 212,
+        "saturation": 45
+      },
+      {
+        "name": "green",
+        "hue": 150,
+        "saturation": 30
+      },
+      {
+        "name": "lavender",
+        "hue": 265,
+        "saturation": 30
+      }
     ]
   },
   "theme": {
     "default": "system",
-    "choices": ["system", "dark", "light"]
+    "choices": [
+      "system",
+      "dark",
+      "light"
+    ]
   },
   "settings": {
     "storageKey": "freelief.settings.v1"
@@ -59,7 +187,10 @@
   "project": {
     "sourceUrl": "https://github.com/EffigyMedia/freelief",
     "newIssueUrl": "https://github.com/EffigyMedia/freelief/issues/new",
-    "issueTemplates": { "accessibility": "accessibility-check.md", "problem": "problem-report.md" },
+    "issueTemplates": {
+      "accessibility": "accessibility-check.md",
+      "problem": "problem-report.md"
+    },
     "feedbackEmail": ""
   }
 }

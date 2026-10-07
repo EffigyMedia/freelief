@@ -34,6 +34,7 @@ export function start(container, ctx) {
   });
   container.querySelector(".next").addEventListener("click", () => {
     index = (index + 1) % statements.length;
+    ctx.audio.play("step");
     render();
   });
 
