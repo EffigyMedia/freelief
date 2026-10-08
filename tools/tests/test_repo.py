@@ -1,5 +1,6 @@
 """Repository rules that hold for every file that ships, whatever the slice."""
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -76,3 +77,15 @@ def test_the_claim_exemptions_still_say_not():
         hits = FORBIDDEN_CLAIMS.findall(table[key])
         if hits:
             assert re.search(r"\b(not|no)\b", table[key]), f"{key} uses claim words without a denial"
+
+BRITISH = re.compile(r"\b(colour|centre|licence|behaviour|favourite|grey|organis|recognis|visualis)", re.I)
+
+
+def test_user_facing_text_uses_american_spelling():
+    # Owner, 2026-10-07: American spelling across the app. Code identifiers are not user-facing.
+    strings = json.loads((freelief.ROOT / "strings" / "en.json").read_text("utf-8"))
+    texts = [v for v in strings.values() if isinstance(v, str)]
+    texts += [v for v in strings.values() if isinstance(v, list) for v in v]
+    texts += [(freelief.ROOT / name).read_text("utf-8") for name in ("index.html", "manifest.webmanifest")]
+    found = sorted({m.group(0) for text in texts for m in BRITISH.finditer(text)})
+    assert not found, f"British spelling in user-facing text: {found}"

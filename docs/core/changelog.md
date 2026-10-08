@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-21"></a>
+## [0.5.21] - 2026-10-07
+- The app now uses American spelling everywhere ("Sort colors", "Colors" in Settings).
+- **Calm** is renamed **Visualizer**. [RLG-010](../fragments/RLG-010.md). 88 tests.
+
 <a id="v0-5-20"></a>
 ## [0.5.20] - 2026-10-07
 - The activities no longer show instruction text above them. A screen reader still reads how to

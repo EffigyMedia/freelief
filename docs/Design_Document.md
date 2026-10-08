@@ -67,7 +67,8 @@ that starts at once, works for them as they are, and asks for nothing.
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 a paced breathing guide starts at once. From there, one tap or key press reaches the distraction
-activities (a bubble field, a shape trace and a colour sort) and the Calm screen. Every screen has a "Need urgent help?" control that shows crisis
+activities (a bubble field, a shape trace and a colour sort) and the Visualizer (music or rain
+with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
 GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
@@ -637,6 +638,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   hidden text after the heading, and the colour sort's row still names it with
   `aria-describedby`. — Rejected: delete the text, which leaves a screen-reader user without the
   method. — 2026-10-07 (owner; UNT-033)
+- **All user-facing text uses American spelling, and the Calm screen is named "Visualizer".** —
+  Owner's decision. "Visualizer" says what the screen is: sound with soft moving shapes, with
+  nothing to do. The route stays `#calm`, and code names (`calm.js`, `config.json` → `calm`, string
+  keys such as `sort.newColours`) are unchanged, because a person never sees them. This document and
+  the code comments keep their existing spelling; `test_repo.py` guards only the text a person
+  sees. — 2026-10-07 (owner; UNT-034)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
