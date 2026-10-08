@@ -188,7 +188,7 @@ the Chrome already on the machine. Run from the repo root:
   on a file it cannot load or that holds no test.
 - `python tools/freelief.py run` — serve the folder at `http://localhost:8000`. A desktop browser is
   a convenience, not an on-target check: the owner checks look and feel on a phone.
-- `python tools/freelief.py build` — no build step; reports the shipped size against 150 KB
+- `python tools/freelief.py build` — no build step; reports the shipped size against 250 KB
   (REQ-028) and fails over it.
 - `python tools/freelief.py clean` — remove `output/` and Python caches. Never touches `input/`.
 - `python tools/freelief.py bench` — the launch, response and size benchmark against

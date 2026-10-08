@@ -25,7 +25,7 @@ Seven runs; the median and the worst are recorded. Results go to `output/bench.j
 |---|---|---|---|---|
 | Launch to first screen (REQ-026) | < 1000 ms | 155 ms | — | +25%, and never over target |
 | Input to visible response (REQ-027) | < 100 ms | 69 ms | — | +25%, and never over 100 ms |
-| Shipped size (REQ-028) | < 150 KB | 130.3 KB | — | any growth is noted in the log |
+| Shipped size (REQ-028) | < 250 KB (was 150 KB until 2026-10-07) | 130.3 KB | — | any growth is noted in the log |
 
 *Before the re-baseline (v0.1.0): launch to the breathing guide 110 ms; Pause response 10 ms;
 41.3 KB.* The urgent-help response is close to its target: a 30% rise would cross it, so watch it.

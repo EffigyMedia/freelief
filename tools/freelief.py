@@ -26,7 +26,7 @@ VERSION_FILE = ROOT / "version.js"
 PORT = 8000
 
 # The size limit of everything that ships (REQ-028).
-SIZE_LIMIT_BYTES = 150 * 1024
+SIZE_LIMIT_BYTES = 250 * 1024  # raised from 150 KB by the owner, 2026-10-07 (REQ-028)
 
 # Tracked paths that are NOT part of the app a visitor downloads.
 NOT_SHIPPED = ("docs/", "tools/", "input/", ".claude/", ".github/", ".gitignore", ".gitattributes",

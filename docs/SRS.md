@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `dba128ea6c1593fe` · 31 requirement(s) specified, 0 not yet
+> Store stamp `6f480907bf20f4a1` · 31 requirement(s) specified, 0 not yet
 
 ## 1. Introduction
 
@@ -97,7 +97,7 @@ person's settings, on the device.
 
 - **REQ-026** *(must)* — On a mid-range phone, installed and offline, the first screen (the menu) is visible within 1 second of a cold launch.
 - **REQ-027** *(must)* — Every tap or key press gets a visible response within 100 milliseconds on a mid-range phone.
-- **REQ-028** *(must)* — The whole app, with every file the offline cache stores, is under 150 KB.
+- **REQ-028** *(must)* — The whole app, with every file the offline cache stores, is under 250 KB.
 
 ### 3.5 Logical database requirements
 
@@ -184,4 +184,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T21:25:54-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T22:26:12-04:00 by `Commands/srs.py` from 31 requirement record(s).
