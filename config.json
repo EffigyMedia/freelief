@@ -314,8 +314,7 @@
     "lifeSeconds": 3.4,
     "maxRipples": 9,
     "trailSpacing": 48,
-    "keyboardMargin": 48,
-    "clickAfterPointerMs": 600
+    "keyboardMargin": 48
   },
   "mandala": {
     "palette": [

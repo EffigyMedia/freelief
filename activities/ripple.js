@@ -20,7 +20,7 @@ export function start(container, ctx) {
     </section>`;
 
   const pond = container.querySelector(".pond");
-  const current = { timers: [], last: null, pointerAt: -Infinity };
+  const current = { timers: [], last: null, fromPointer: false };
   run = current;
 
   function ripple(x, y) {
@@ -52,7 +52,7 @@ export function start(container, ctx) {
   pond.addEventListener("pointerdown", (event) => {
     if (event.button !== 0) return;
     pond.setPointerCapture?.(event.pointerId);
-    current.pointerAt = performance.now();
+    current.fromPointer = true;
     current.last = local(event);
     ripple(current.last.x, current.last.y);
     ctx.haptic("ripple"); // the touch only: the trail of a drag is continuous, so it stays still
@@ -69,11 +69,16 @@ export function start(container, ctx) {
 
   const endTrail = () => { current.last = null; };
   pond.addEventListener("pointerup", endTrail);
-  pond.addEventListener("pointercancel", endTrail);
+  pond.addEventListener("pointercancel", () => { endTrail(); current.fromPointer = false; });
 
   // A key press, or a screen reader's activation, sends a click with no pointer down before it.
+  // The click that follows a touch or a drag belongs to that touch, however long it took.
+  pond.addEventListener("keydown", () => { current.fromPointer = false; });
   pond.addEventListener("click", () => {
-    if (performance.now() - current.pointerAt < settings.clickAfterPointerMs) return;
+    if (current.fromPointer) {
+      current.fromPointer = false;
+      return;
+    }
     const margin = settings.keyboardMargin;
     const width = Math.max(pond.clientWidth - 2 * margin, 1);
     const height = Math.max(pond.clientHeight - 2 * margin, 1);

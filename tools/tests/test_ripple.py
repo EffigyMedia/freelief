@@ -50,11 +50,26 @@ def test_a_finger_drawn_across_the_water_leaves_a_trail_but_never_too_many():
         page.mouse.move(pond["x"] + 20 + SETTINGS["trailSpacing"] * 3.5, y, steps=12)
         page.mouse.up()
         assert sets(page).count() == 4, "one ripple at the touch, then one every trailSpacing pixels"
+        # Count every ripple made and the most on the water at once. Ripples also clear themselves
+        # after a few seconds, so a count taken at the end would depend on how fast the drag ran.
+        page.evaluate("""(() => { const pond = document.querySelector('.pond');
+            window.__made = 0; window.__most = pond.querySelectorAll('.ripple-set').length;
+            new MutationObserver((records) => {
+              for (const r of records) window.__made += [...r.addedNodes].filter(n => n.classList?.contains('ripple-set')).length;
+              window.__most = Math.max(window.__most, pond.querySelectorAll('.ripple-set').length);
+            }).observe(pond, { childList: true }); })()""")
         page.mouse.move(pond["x"] + 10, pond["y"] + 20)
         page.mouse.down()
         page.mouse.move(pond["x"] + pond["width"] - 10, pond["y"] + pond["height"] - 20, steps=40)
         page.mouse.up()
-        assert sets(page).count() == SETTINGS["maxRipples"]
+        made = page.evaluate("window.__made")
+        assert made > SETTINGS["maxRipples"], f"the long drag left a trail ({made} ripples)"
+        # The cap, checked with quick key presses, so the drag's speed on this machine cannot matter.
+        page.locator(".pond").focus()
+        for _ in range(SETTINGS["maxRipples"] + 4):
+            page.keyboard.press("Enter")
+        most = page.evaluate("window.__most")
+        assert most == SETTINGS["maxRipples"], f"never more than maxRipples at once ({most})"
         assert page.locator(".pond").evaluate("e => getComputedStyle(e).touchAction") == "none"
 
 
@@ -123,3 +138,21 @@ AudioContext.prototype.createBiquadFilter = function () {
         last = page.evaluate("(() => { const f = window.__filters.at(-1); return [f.type, f.frequency.value]; })()")
         assert last == ["lowpass", CONFIG["sounds"]["drop"]["lowpassHz"]]
         assert CONFIG["sounds"]["drop"]["lowpassHz"] < CONFIG["sounds"]["drop"]["endHz"]
+
+
+def test_a_slow_drag_is_never_followed_by_a_stray_random_ripple():
+    # The click after a long drag once counted as a key press and added a random ripple.
+    with open_app() as (page, _, _):
+        go(page, "ripple")
+        pond = page.locator(".pond").bounding_box()
+        y = pond["y"] + pond["height"] / 2
+        page.mouse.move(pond["x"] + 20, y)
+        page.mouse.down()
+        page.wait_for_timeout(900)  # longer than any time window could allow
+        page.mouse.move(pond["x"] + 20 + SETTINGS["trailSpacing"] * 1.5, y, steps=4)
+        page.mouse.up()
+        lefts = page.locator(".ripple-set").evaluate_all("els => els.map(e => parseFloat(e.style.left))")
+        assert len(lefts) == 2 and all(left <= 20 + SETTINGS["trailSpacing"] * 1.5 + 1 for left in lefts), lefts
+        page.locator(".pond").focus()
+        page.keyboard.press("Enter")
+        assert page.locator(".ripple-set").count() == 3, "a key press after a drag still makes a ripple"

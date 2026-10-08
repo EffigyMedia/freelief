@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-6-5"></a>
+## [0.6.5] - 2026-10-08
+- Fixed: in the **Ripple pond**, a slow drag no longer adds a stray ripple somewhere else when you
+  lift your finger. [RLG-032](../fragments/RLG-032.md). 136 tests.
+- Correction to 0.6.4: that version had 135 tests, not 134.
+
 <a id="v0-6-4"></a>
 ## [0.6.4] - 2026-10-08
 - Fixed: if a screen fails to open, Freelief shows the menu and every link keeps working. If even

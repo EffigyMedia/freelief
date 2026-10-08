@@ -860,6 +860,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   `#menu`) when a screen's start fails, as it already did when a screen could not load. Standards
   checks both of its data loads. If the menu itself cannot start after the shell is built, the
   static fallback from `index.html` is put back. — 2026-10-08 (UNT-069)
+- **The ripple pond tells a touch's click from a key press by a flag, not by time.** — A click
+  within 600 ms of a touch was ignored, but a slow drag lasts longer, so its click counted as a key
+  press and added a random ripple. Now a touch sets a flag that its click clears; a key press or a
+  cancelled touch clears it too. `ripple.clickAfterPointerMs` is removed. Found when the suite ran on
+  a slower machine. — 2026-10-08 (UNT-070)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
