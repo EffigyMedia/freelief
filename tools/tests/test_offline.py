@@ -57,6 +57,7 @@ def test_the_manifest_makes_the_app_installable():
     sizes = {icon["sizes"] for icon in manifest["icons"]}
     assert {"192x192", "512x512"} <= sizes
     assert manifest["display"] == "standalone"
+    assert manifest["orientation"] == "portrait", "owner, 2026-10-07: portrait only once installed"
     for icon in manifest["icons"]:
         assert (ROOT / icon["src"]).is_file(), icon["src"]
 

@@ -10,6 +10,10 @@ audit.
 
 ---
 
+<a id="v0-5-31"></a>
+## [0.5.31] - 2026-10-07
+- Installed on a phone, Freelief now stays in portrait. [RLG-022](../fragments/RLG-022.md). 106 tests.
+
 <a id="v0-5-30"></a>
 ## [0.5.30] - 2026-10-07
 - **Visualizer**: the rain is 25% quieter, on its own and in Both. [RLG-023](../fragments/RLG-023.md).

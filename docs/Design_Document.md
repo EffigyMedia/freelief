@@ -700,6 +700,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   route. Freelief still never asks for location. — Rejected: the long list (owner); saving the
   dialog's choice (a person helping someone else would change the owner's default). — 2026-10-07
   (owner; UNT-042)
+- **The installed app is portrait only.** — Owner request. The manifest sets `"orientation":
+  "portrait"`, which a phone applies to the installed app. A browser tab cannot be locked to an
+  orientation (the Screen Orientation API locks only in full screen), and a desktop ignores the
+  setting, so in a tab and on a desktop the app still works in any shape. — Rejected: a "turn your
+  phone" screen in landscape, which would block help in a crisis. — 2026-10-07 (owner; UNT-045)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
