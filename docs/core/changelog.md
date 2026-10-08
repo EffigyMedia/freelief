@@ -14,6 +14,7 @@ audit.
 ## [0.6.15] - 2026-10-08
 - Internal: the supported browsers are Chrome, Safari and Firefox, and the core paths are now also
   tested in Safari's engine. [AUD-028](../fragments/AUD-028.md). 149 tests.
+- The live preview moved to 0.6.15 on 2026-10-08, with the owner's yes in chat ("Yes, move live").
 
 <a id="v0-6-14"></a>
 ## [0.6.14] - 2026-10-08
