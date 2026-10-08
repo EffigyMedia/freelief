@@ -18,6 +18,7 @@ audit.
   pond, mandala coloring, the Visualizer), drag in the color sort, vibration, the country list and
   saved region, sources for every activity, and the safety, bug, records and polish fixes from
   design audit round UNT-051.
+- The live preview moved to 0.6.0 on 2026-10-08, with the owner's yes in chat ("Yes, move live").
 
 <a id="v0-5-48"></a>
 ## [0.5.48] - 2026-10-08
