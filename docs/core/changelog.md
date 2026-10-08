@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-23"></a>
+## [0.5.23] - 2026-10-07
+- New activity: the **Ripple pond**. Touch still water, or draw a finger across it, and soft
+  ripples spread out with a quiet water drop. A key press makes a ripple too.
+  [RLG-013](../fragments/RLG-013.md), [REQ-032](../fragments/REQ-032.md). 95 tests.
+
 <a id="v0-5-22"></a>
 ## [0.5.22] - 2026-10-07
 - **Visualizer**: the rain is softer, with quieter, rounder drops.

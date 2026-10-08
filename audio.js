@@ -265,6 +265,28 @@ export function pop() {
   thump.stop(now + settings.thumpSeconds + 0.02);
 }
 
+// A water drop for the ripple pond (REQ-032): a short sine whose pitch rises fast, the "plip" of a
+// drop on still water, a little different each time.
+export function drop() {
+  if (!canPlay()) return;
+  const ctx = ensureContext();
+  if (!ctx) return;
+  const settings = sounds.drop;
+  const now = ctx.currentTime;
+  const pitch = 1 + settings.pitchVariation * (Math.random() * 2 - 1);
+  const oscillator = ctx.createOscillator();
+  const gain = ctx.createGain();
+  oscillator.type = "sine";
+  oscillator.frequency.setValueAtTime(settings.startHz * pitch, now);
+  oscillator.frequency.exponentialRampToValueAtTime(settings.endHz * pitch, now + settings.riseSeconds);
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(settings.volume, now + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + settings.seconds);
+  oscillator.connect(gain).connect(ctx.destination);
+  oscillator.start(now);
+  oscillator.stop(now + settings.seconds + 0.02);
+}
+
 // The Calm screen's rain (owner: an atonal mode, "noise like rain"): looping noise, shaped by a
 // low-pass and a high-pass filter, whose level breathes slowly, with soft drops now and then.
 // `level` scales the volume (the Both mix). Returns { stop() }. Silent when sounds are off.

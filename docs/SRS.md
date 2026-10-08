@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `b69175dabeb47b4e` · 29 requirement(s) specified, 2 not yet
+> Store stamp `47bbf032cdb33744` · 30 requirement(s) specified, 2 not yet
 
 ## 1. Introduction
 
@@ -29,7 +29,8 @@ lines; it does not call them. Its only stored data is the person's settings, on 
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 a paced breathing guide starts at once. From there, one tap or key press reaches the distraction
-activities (a bubble field, a shape trace and a colour sort) and the Calm screen. Every screen has a "Need urgent help?" control that shows crisis
+activities (a bubble field, a shape trace, a colour sort and a ripple pond) and the Visualizer (music or rain
+with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
 GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
@@ -39,7 +40,7 @@ person's settings, on the device.
 
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, or the colour sort.
+  the shape trace, the colour sort, or the ripple pond.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
 - **Crisis line** — a service for a person in danger, with a region, a way to reach it, and a
@@ -80,6 +81,7 @@ person's settings, on the device.
 - **REQ-023** *(should)* — The person can choose a breathing rhythm from presets (box breathing by default, 4-in 6-out, and a slower rhythm), and the choice is remembered on the device.
 - **REQ-024** *(must)* — Every technique in Freelief is one studied in published clinical research, and the Standards & research page cites at least one source for each technique.
 - **REQ-030** *(must)* — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report) and, as a second choice, a pre-filled email to the public project address. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
+- **REQ-032** *(should)* — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 
 ### 3.3 Usability requirements
 
@@ -132,6 +134,7 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-023 | 3.2 | test | agreed |
 | REQ-024 | 3.2 | inspection | agreed |
 | REQ-030 | 3.2 | test | agreed |
+| REQ-032 | 3.2 | test | agreed |
 | REQ-009 | 3.3 | test | agreed |
 | REQ-010 | 3.3 | test | agreed |
 | REQ-011 | 3.3 | inspection | agreed |
@@ -178,4 +181,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T23:01:16-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T23:31:37-04:00 by `Commands/srs.py` from 32 requirement record(s).

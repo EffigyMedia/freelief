@@ -1,7 +1,7 @@
 {
- "stamp": "b69175dabeb47b4e",
- "generated": "2026-10-07T23:01:16-04:00",
- "count": 179,
+ "stamp": "47bbf032cdb33744",
+ "generated": "2026-10-07T23:31:37-04:00",
+ "count": 185,
  "entries": [
   {
    "id": "AUD-001",
@@ -2309,6 +2309,23 @@
    "supersedes": []
   },
   {
+   "id": "REQ-032",
+   "kind": "requirement",
+   "type": null,
+   "category": "function",
+   "verification": "test",
+   "priority": "should",
+   "status": "agreed",
+   "created": "2026-10-07T23:26:29-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
    "id": "RLG-001",
    "kind": "ruling",
    "type": "feature",
@@ -2511,7 +2528,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-07T22:56:47-04:00",
    "precision": "second",
    "age_days": 0,
@@ -2528,7 +2545,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-07T22:56:48-04:00",
    "precision": "second",
    "age_days": 0,
@@ -2545,14 +2562,17 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-07T22:56:49-04:00",
    "precision": "second",
    "age_days": 0,
    "title": "Remove Ground yourself and Calming words (weak research)",
    "blocks": [],
    "caused_by": [],
-   "see_also": [],
+   "see_also": [
+    "REQ-002",
+    "REQ-003"
+   ],
    "supersedes": []
   },
   {
@@ -2596,7 +2616,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-07T22:56:53-04:00",
    "precision": "second",
    "age_days": 0,
@@ -3279,7 +3299,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "open",
+   "status": "closed",
    "created": "2026-10-07T22:57:39-04:00",
    "precision": "second",
    "age_days": 0,
@@ -3289,6 +3309,101 @@
     "RLG-012",
     "REQ-002",
     "REQ-003"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-033",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T23:05:06-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Remove the extra text above each activity",
+   "blocks": [],
+   "caused_by": [
+    "RLG-011"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-034",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T23:08:13-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "American spelling in shipped text; Calm renamed Visualizer",
+   "blocks": [],
+   "caused_by": [
+    "RLG-010"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-035",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T23:13:28-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Visualizer: softer rain and a mixed Both mode",
+   "blocks": [],
+   "caused_by": [
+    "RLG-015"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-036",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T23:24:41-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Restore two Visualizer tests lost in UNT-035",
+   "blocks": [],
+   "caused_by": [
+    "RLG-015"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-037",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "open",
+   "created": "2026-10-07T23:26:30-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Ripple pond activity",
+   "blocks": [],
+   "caused_by": [
+    "RLG-013"
    ],
    "see_also": [],
    "supersedes": []

@@ -3,7 +3,7 @@ gesture closes it, and every exercise and activity offers "More ways to calm".""
 
 from harness import open_app, wait_until
 
-EXERCISES = ["bubbles", "trace", "sort", "calm"]
+EXERCISES = ["bubbles", "trace", "sort", "ripple", "calm"]
 
 
 def go(page, route):

@@ -67,7 +67,7 @@ that starts at once, works for them as they are, and asks for nothing.
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 a paced breathing guide starts at once. From there, one tap or key press reaches the distraction
-activities (a bubble field, a shape trace and a colour sort) and the Visualizer (music or rain
+activities (a bubble field, a shape trace, a colour sort and a ripple pond) and the Visualizer (music or rain
 with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
@@ -169,7 +169,7 @@ Not built (decided 2026-10-07):
 | Term | Meaning |
 |---|---|
 | **Exercise** | A guided self-help technique: paced breathing. |
-| **Activity** | A distraction activity: the bubble field, the shape trace, or the colour sort. No score, no failure, no timer. |
+| **Activity** | A distraction activity: the bubble field, the shape trace, the colour sort, or the ripple pond. No score, no failure, no timer. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
@@ -185,7 +185,7 @@ restarts on the device (REQ-023, REQ-015).
 <!-- BEGIN srs-definitions - written by the interview, read by the generators -->
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, or the colour sort.
+  the shape trace, the colour sort, or the ripple pond.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
 - **Crisis line** — a service for a person in danger, with a region, a way to reach it, and a
@@ -234,7 +234,10 @@ the person follows it with a finger or moves along it with the arrow keys. *Colo
 colour tiles to put in order from lightest to darkest: choose a tile, then the tile to swap it with,
 by touch, mouse or keyboard; or drag a tile onto another tile to swap the two, by touch or mouse.
 Each tile names its shade for a screen reader *(changed from "drag, or keyboard" at slice 5; drag
-added back beside choose-then-swap by the owner's decision, 2026-10-07, see REQ-014)*. States for all: no score, no
+added back beside choose-then-swap by the owner's decision, 2026-10-07, see REQ-014)*. *Ripple
+pond (REQ-032, added 2026-10-07):* still water; a touch makes soft rings spread from that point,
+and a finger drawn across it leaves a trail of ripples; a key press or a screen reader's activation
+makes a ripple at a random place; each ripple plays a soft water drop. States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
 and its action.
 
@@ -324,7 +327,7 @@ Each file below is one module with one responsibility.
 |---|---|---|
 | `index.html` + `app.js` (**shell**) | The page frame, the screen router, the footer, and the "Need urgent help?" control. | Contain exercise logic or text. |
 | `exercises/breathe.js` | The breathing exercise. *(`ground.js` and `statements.js` were removed 2026-10-07.)* | Read storage or the network; hold text. |
-| `activities/bubbles.js`, `trace.js`, `sort.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
+| `activities/bubbles.js`, `trace.js`, `sort.js`, `ripple.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
 | `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
 | `crisis.js` + `data/crisis-lines.json` | The choice of crisis lines from the device region. | Ask for location. |
@@ -650,6 +653,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   a 90 ms decay and a wider band). Both plays the pads at 0.9 and the rain at 0.6 of their own
   levels (`config.json` → `calm.bothMix`), so the rain sits under the music. — 2026-10-07 (owner;
   UNT-035)
+- **A ripple pond is added as a distraction activity.** — The owner chose it to take one of the
+  places of the removed grounding and calming words. The pond is one real button, so touch, mouse,
+  keyboard and screen reader all reach it; a key press makes a ripple at a random place because a
+  keyboard has no point to touch. A drag leaves a ripple every `ripple.trailSpacing` pixels, and at
+  most `ripple.maxRipples` show at once. Under reduced motion a ring fades at a middle size and
+  does not spread. Its research is the same as for the other distraction activities; it has none
+  of its own, and the Standards page does not claim any. — Rejected: a canvas (the architecture
+  rule). — 2026-10-07 (owner; UNT-037)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

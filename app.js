@@ -18,6 +18,7 @@ const ROUTES = {
   bubbles: () => import("./activities/bubbles.js"),
   trace: () => import("./activities/trace.js"),
   sort: () => import("./activities/sort.js"),
+  ripple: () => import("./activities/ripple.js"),
   calm: () => import("./activities/calm.js"),
   settings: () => import("./screens/settings.js"),
   about: () => import("./screens/about.js"),

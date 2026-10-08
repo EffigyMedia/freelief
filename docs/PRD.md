@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `b69175dabeb47b4e` · 31 requirement(s) recorded
+> Store stamp `47bbf032cdb33744` · 32 requirement(s) recorded
 
 ## The problem
 
@@ -96,6 +96,7 @@ Not built (decided 2026-10-07):
 - **REQ-007** — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.
 - **REQ-014** — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
 - **REQ-023** — The person can choose a breathing rhythm from presets (box breathing by default, 4-in 6-out, and a slower rhythm), and the choice is remembered on the device.
+- **REQ-032** — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 
 
 ## Where it stands
@@ -103,11 +104,11 @@ Not built (decided 2026-10-07):
 | | Count |
 |---|---|
 | Verified — shown to be met | 0 |
-| Agreed — specified, not yet shown | 29 |
+| Agreed — specified, not yet shown | 30 |
 | Proposed — waiting on a decision | 0 |
 | Withdrawn — no longer required | 2 |
 
-Of the 29 requirement(s) in the specification, 0 (0%) have had their verification carried out.
+Of the 30 requirement(s) in the specification, 0 (0%) have had their verification carried out.
 
 ## What has to land before what
 
@@ -122,4 +123,4 @@ Of the 29 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-07T23:01:18-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-07T23:31:40-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
