@@ -36,7 +36,7 @@ export function start(container, ctx) {
   const pauseButton = container.querySelector(".pause");
 
   // This run's own state. A pending frame or timer from a stopped run checks it and does nothing.
-  const run = { timers: [], index: 0, paused: false, frame: 0, stopTone: () => {} };
+  const run = { timers: [], index: 0, paused: false, frame: 0, stopTone: () => {}, wake: ctx.keepAwake() };
   state = run;
 
   const scaleFor = (which) => (which === "max" ? breathing.guideMaxScale : breathing.guideMinScale);
@@ -100,6 +100,7 @@ export function stop() {
     state.timers.forEach(clearTimeout);
     cancelAnimationFrame(state.frame);
     state.stopTone();
+    state.wake();
     state = null;
   }
 }

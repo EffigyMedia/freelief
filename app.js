@@ -5,6 +5,7 @@ import { loadStrings, t, list } from "./strings.js";
 import { loadCrisisLines, activeRegion, linesFor, regionList } from "./crisis.js";
 import { initSettings, getSetting, setSetting, onSettingChange } from "./settings.js";
 import { initHaptics, pulse as haptic } from "./haptics.js";
+import { keepAwake } from "./wakelock.js";
 import * as audio from "./audio.js";
 import * as motion from "./motion.js";
 import * as menu from "./screens/menu.js";
@@ -89,6 +90,9 @@ function buildHelpDialog() {
   ]);
 
   const emergency = element("p", { class: "emergency" });
+  // The emergency number is the first thing to tap, not only to read (design review, 2026-10-08).
+  // The numbers come from the region's own emergency text, so "112 or 999" gives two buttons.
+  const emergencyCalls = element("div", { class: "emergency-calls" });
   const lines = element("div", { class: "region-lines" });
   const regions = regionList();
   const select = element("select", { id: "help-country", class: "country-select" }, [
@@ -105,6 +109,8 @@ function buildHelpDialog() {
     emergency.textContent = own
       ? t("help.emergency", { number: own.emergency })
       : t("help.emergencyUnknown");
+    emergencyCalls.replaceChildren(...(own ? (own.emergency.match(/\d+/g) || []) : []).map((number) =>
+      element("a", { class: "button primary emergency-call", href: `tel:${number}`, text: t("help.call", { number }) })));
     lines.replaceChildren(...(own ? [regionBlock(own, "h3")] : []));
     select.value = own ? own.code : "";
   }
@@ -117,6 +123,7 @@ function buildHelpDialog() {
     element("p", { text: t("help.intro") }),
     picker,
     emergency,
+    emergencyCalls,
     lines,
     element("p", { class: "directory" }, [
       element("a", { class: "button", href: directoryUrl, rel: "noopener", text: t("help.directory") }),
@@ -176,6 +183,8 @@ function buildShell() {
   // history entry, and going back closes it.
   helpButton.addEventListener("click", () => {
     showRegion(activeRegion(getSetting("helpRegion")));
+    // Nothing plays over the crisis lines (AUD-074): sound waits until help closes.
+    audio.applySound(false);
     dialog.showModal();
     // A modal dialog blocks taps on the page, but on a phone a swipe on the backdrop still scrolls
     // the page under it (owner report). The page does not scroll while help is open.
@@ -185,6 +194,7 @@ function buildShell() {
   window.addEventListener("popstate", () => { if (dialog.open) dialog.close(); });
   dialog.addEventListener("close", () => {
     document.documentElement.classList.remove("help-is-open");
+    if (getSetting("sounds")) audio.applySound(true);
     if (history.state?.freeliefHelp) history.back();
   });
   document.body.replaceChildren(header, nav, main, footer, dialog);
@@ -218,7 +228,7 @@ async function show(name, { moveFocus }) {
   current = screen;
   // A screen may load data first (Standards and research), so wait for it before focusing.
   await current.start(main, {
-    t, list, config, motion, audio, haptic, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
+    t, list, config, motion, audio, haptic, keepAwake, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
   });
   if (request !== showing) return;
   main.dataset.shown = name;
@@ -253,6 +263,12 @@ async function boot() {
   buildShell();
   await show(routeName(), { moveFocus: false });
   window.addEventListener("hashchange", () => show(routeName(), { moveFocus: true }));
+  // Silence while Freelief is out of sight, for example during a call to a line (AUD-074).
+  document.addEventListener("visibilitychange", () => {
+    const helpOpen = document.querySelector("dialog.help")?.open;
+    if (document.visibilityState === "hidden") audio.applySound(false);
+    else if (getSetting("sounds") && !helpOpen) audio.applySound(true);
+  });
   document.documentElement.dataset.ready = "true";
   performance.mark("freelief-ready");
 }

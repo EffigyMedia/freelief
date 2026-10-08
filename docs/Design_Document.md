@@ -245,12 +245,14 @@ States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
 and its action.
 
-**F6 — Need urgent help.** Trigger: the "Need urgent help?" control, present on every screen.
+**F6 — Need urgent help.** Trigger: the "Need urgent help?" control, present on every screen
+(the Visualizer's black screen is the one exception: one tap brings it back).
 Steps: the app takes the region saved in Settings, or else reads the device language and region;
 it shows a Country list set to that region; a line to call the region's emergency number if in
-immediate danger; then the crisis lines for that region, each with a tap-to-call or tap-to-text
+immediate danger, with a Call button for each emergency number; then the crisis lines for that region, each with a tap-to-call or tap-to-text
 link and its last-checked date; then the link to the international directory. The Country list
-shows another curated region, or "Another country", for this visit only.
+shows another curated region, or "Another country", for this visit only. Sound waits while the dialog is
+open and while the app is hidden.
 States: *uncurated region* — the "call your local emergency number" line and the international
 directory; *offline* — the curated lines still show; the directory
 link says it needs a network. *(Changed at slice 1, 2026-10-07: the emergency line moved first, and
@@ -744,6 +746,17 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   Visualizer's music. Sounds stay on by default. On a phone narrower than 430 px the header is
   tighter (16 px help label, 44 px round buttons), so "Need urgent help?" stays on one line from
   360 px. — Rejected: off by default; a switch only in Settings. — 2026-10-08 (owner; UNT-053)
+- **Safety fixes from the design review and round UNT-051.** — The owner chose to fix safety first.
+  (1) The emergency number is a Call button, the first tap target in urgent help; the numbers come
+  from the region's own emergency text, so "112 or 999" gives two buttons, and no number is guessed
+  for an uncurated country. (2) Sound waits while urgent help is open and while Freelief is hidden,
+  for example during a call to a line, and comes back only if sound is on (AUD-074). (3) Breathing
+  and the Visualizer hold a screen wake lock, so the phone does not dim or lock mid-breath; a
+  browser without the API lets the screen sleep. (4) The Visualizer's full screen has its own "Need
+  urgent help?" button, which leaves full screen and opens help (AUD-075). (5) The black screen is
+  the one state without the help control; one tap or key brings the screen and the control back,
+  and while it is black no shape is added and the stage does not animate, which saves power. —
+  2026-10-08 (owner; UNT-054)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

@@ -375,6 +375,8 @@ main {
 .help h3 { margin: 1rem 0 0.25rem; }
 
 .emergency { font-weight: 700; }
+.emergency-calls { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin: 0 0 0.75rem; }
+.emergency-call { font-size: 1.15rem; }
 
 /* The country list in urgent help and in Settings: a large, plain select. */
 .country-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
@@ -791,7 +793,21 @@ main {
   background: #05070d;
 }
 .calm-stage.full .calm-field { width: 100vw; height: 100vh; border-radius: 0; }
-.calm-exit { position: absolute; top: 1rem; right: 1rem; background: var(--surface); }
+/* In full screen: the way to urgent help and the way out, at the top right. */
+.calm-stage-actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.calm-stage-actions .button { background: var(--surface); }
+.calm-help { border-color: var(--text); }
+/* Under the black screen the stage stops moving, so nothing unseen is drawn. */
+.calm-stage.asleep .calm-field { visibility: hidden; animation-play-state: paused; }
+.calm-stage.asleep .calm-shape { animation-play-state: paused; }
 .calm-shape > * { animation: calm-pulse 9s ease-in-out infinite alternate; }
 
 @keyframes calm-sky {

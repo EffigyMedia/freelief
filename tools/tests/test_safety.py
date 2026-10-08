@@ -1,0 +1,113 @@
+"""Safety fixes from the design review and round UNT-051 (owner, 2026-10-08): a tappable emergency
+number, silence over urgent help and in the background, the screen kept awake, a way to help from
+the Visualizer's full screen, and nothing drawn under its black screen."""
+
+import json
+
+from harness import ROOT, open_app, wait_until
+
+CONFIG = json.loads((ROOT / "config.json").read_text("utf-8"))
+
+OSC_PROBE = """
+window.__ctx = [];
+const create = AudioContext.prototype.createOscillator;
+AudioContext.prototype.createOscillator = function () {
+  if (!window.__ctx.includes(this)) window.__ctx.push(this);
+  return create.call(this);
+};
+"""
+
+WAKE_PROBE = """
+window.__wake = { requests: 0, held: 0 };
+Object.defineProperty(navigator, 'wakeLock', { configurable: true, value: {
+  request: async () => {
+    window.__wake.requests += 1; window.__wake.held += 1;
+    const sentinel = new EventTarget();
+    sentinel.release = async () => { window.__wake.held -= 1; sentinel.dispatchEvent(new Event('release')); };
+    return sentinel;
+  } } });
+"""
+
+
+def go(page, route):
+    page.evaluate(f"location.hash = '{route}'")
+    wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 3000)
+
+
+def test_the_emergency_number_is_the_first_thing_to_tap():
+    with open_app(locale="en-GB") as (page, _, _):
+        page.locator(".help-open").click()
+        calls = page.locator(".emergency-calls a")
+        assert calls.count() == 1 and calls.first.get_attribute("href") == "tel:999"
+        assert calls.first.inner_text() == "Call 999"
+        first_tel = page.locator("dialog.help a[href^='tel:']").first
+        assert first_tel.get_attribute("class").split().count("emergency-call") == 1, "it comes before the lines"
+        page.locator("#help-country").select_option("IE")
+        assert page.locator(".emergency-calls a").evaluate_all("as => as.map(a => a.getAttribute('href'))") == \
+            ["tel:112", "tel:999"], "'112 or 999' gives a button for each"
+        page.locator("#help-country").select_option("")
+        assert page.locator(".emergency-calls a").count() == 0, "no number is guessed for another country"
+        assert page.locator(".directory a").count() == 1
+
+
+def test_sound_waits_while_urgent_help_is_open_and_while_the_app_is_hidden():
+    with open_app(init_script=OSC_PROBE) as (page, errors, _):
+        page.locator(".guide").click()  # the first gesture unlocks sound
+        go(page, "calm")
+        wait_until(page, "window.__ctx.length > 0 && window.__ctx[0].state === 'running'", 3000)
+        page.locator(".help-open").click()
+        wait_until(page, "window.__ctx[0].state === 'suspended'", 2000)
+        page.locator("dialog.help .help-back").click()
+        wait_until(page, "window.__ctx[0].state === 'running'", 2000)
+        hide = """Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => '%s' });
+                  document.dispatchEvent(new Event('visibilitychange'));"""
+        page.evaluate(hide % "hidden")
+        wait_until(page, "window.__ctx[0].state === 'suspended'", 2000)
+        page.evaluate(hide % "visible")
+        wait_until(page, "window.__ctx[0].state === 'running'", 2000)
+        # With sound off, closing help does not bring sound back.
+        page.locator("button.sound-toggle").click()
+        page.locator(".help-open").click()
+        page.locator("dialog.help .help-back").click()
+        page.wait_for_timeout(300)
+        assert page.evaluate("window.__ctx[0].state") == "suspended"
+        assert not errors, errors
+
+
+def test_breathing_and_the_visualizer_keep_the_screen_awake_and_let_it_sleep_after():
+    with open_app(init_script=WAKE_PROBE, route="menu") as (page, _, _):
+        assert page.evaluate("window.__wake.held") == 0, "the menu lets the screen sleep"
+        go(page, "breathe")
+        wait_until(page, "window.__wake.held === 1", 2000)
+        go(page, "calm")
+        wait_until(page, "window.__wake.held === 1 && window.__wake.requests >= 2", 2000)
+        go(page, "bubbles")
+        wait_until(page, "window.__wake.held === 0", 2000)
+
+
+def test_full_screen_keeps_a_way_to_urgent_help():
+    with open_app() as (page, _, _):
+        go(page, "calm")
+        assert page.locator(".calm-help").is_hidden()
+        page.locator(".full-screen").click()
+        helper = page.locator(".calm-help")
+        assert helper.is_visible() and helper.inner_text() == "Need urgent help?"
+        helper.click()
+        assert page.locator("dialog.help").evaluate("d => d.open")
+        assert "full" not in page.locator(".calm-stage").get_attribute("class")
+
+
+def test_nothing_is_drawn_under_the_black_screen_and_one_tap_brings_help_back():
+    fast = CONFIG["calm"]["shapeEveryMs"]
+    with open_app() as (page, _, _):
+        go(page, "calm")
+        page.locator(".black-screen").click()
+        assert "asleep" in page.locator(".calm-stage").get_attribute("class")
+        assert page.locator(".calm-field").evaluate("e => getComputedStyle(e).visibility") == "hidden"
+        before = page.evaluate("document.querySelector('.calm-field').childElementCount")
+        page.wait_for_timeout(int(fast * 2.5))
+        after = page.evaluate("document.querySelector('.calm-field').childElementCount")
+        assert after <= before, "no new shape is added while the screen is black"
+        page.locator(".black-cover").click()
+        assert "asleep" not in page.locator(".calm-stage").get_attribute("class")
+        assert page.locator(".help-open").is_visible(), "one tap from black, help is in reach again"

@@ -10,6 +10,14 @@ audit.
 
 ---
 
+<a id="v0-5-39"></a>
+## [0.5.39] - 2026-10-08
+- **Need urgent help?** now has a **Call** button for the emergency number, first in the window.
+- Sound goes quiet while urgent help is open, and while you are on a call or in another app.
+- The screen stays on during breathing and the Visualizer.
+- The Visualizer's full screen keeps a **Need urgent help?** button. Under the black screen the
+  shapes stop, to save battery. [RLG-027](../fragments/RLG-027.md). 118 tests.
+
 <a id="v0-5-38"></a>
 ## [0.5.38] - 2026-10-08
 - **Sound** is now a speaker button at the top of every screen, crossed out when off. Off is

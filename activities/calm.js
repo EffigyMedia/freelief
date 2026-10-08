@@ -36,7 +36,10 @@ export function start(container, ctx) {
       </fieldset>
       <div class="calm-stage">
         <svg class="calm-field" viewBox="0 0 400 300" aria-hidden="true" focusable="false"></svg>
-        <button type="button" class="button calm-exit" hidden>${t("calm.exitFullScreen")}</button>
+        <div class="calm-stage-actions" hidden>
+          <button type="button" class="button calm-help">${t("help.open")}</button>
+          <button type="button" class="button calm-exit">${t("calm.exitFullScreen")}</button>
+        </div>
       </div>
       <p class="hint calm-sound-note" hidden>${t("calm.soundsOff")}</p>
       <div class="exercise-actions">
@@ -47,6 +50,7 @@ export function start(container, ctx) {
     </section>`;
 
   const field = container.querySelector(".calm-field");
+  const stageBox = container.querySelector(".calm-stage");
   const blackButton = container.querySelector(".black-screen");
   // Music (tonal pads), Rain (atonal noise) or Both, remembered in Settings (owner, 2026-10-07).
   // Both plays the two at once, each at its own level from config.json, so the rain sits under
@@ -58,7 +62,8 @@ export function start(container, ctx) {
     const parts = [audio.pads(mix.music), audio.rain(mix.rain)];
     return { stop() { parts.forEach((part) => part.stop()); } };
   }
-  const current = { timers: [], music: playMode(getSetting("calmMode")), cover: null, playMode };
+  const current = { timers: [], music: playMode(getSetting("calmMode")), cover: null, playMode,
+    wake: ctx.keepAwake() };
   run = current;
   current.note = container.querySelector(".calm-sound-note");
   current.note.hidden = ctx.soundsOn;
@@ -67,7 +72,8 @@ export function start(container, ctx) {
 
   function addShape() {
     if (run !== current) return;
-    if (field.childElementCount < settings.maxShapes) {
+    // Under the black screen nothing new is drawn, which saves power (owner, 2026-10-08).
+    if (!current.cover && field.childElementCount < settings.maxShapes) {
       const [tag, attributes] = FORMS[Math.floor(Math.random() * FORMS.length)];
       const size = random(settings.minSize, settings.maxSize);
       const group = document.createElementNS(SVG_NS, "g");
@@ -97,12 +103,15 @@ export function start(container, ctx) {
     const restore = () => {
       cover.remove();
       current.cover = null;
+      stageBox.classList.remove("asleep");
       blackButton.focus();
     };
     cover.addEventListener("click", restore);
     cover.addEventListener("keydown", (event) => { if (event.key === "Escape") restore(); });
     document.body.append(cover);
     current.cover = cover;
+    // The shapes and the sky stop moving under the cover: nothing unseen is drawn.
+    stageBox.classList.add("asleep");
     cover.focus();
   }
 
@@ -114,22 +123,28 @@ export function start(container, ctx) {
 
   // Full screen (owner, 2026-10-07): the stage fills the screen. The browser's own full screen is
   // used where it exists; the CSS class does the work everywhere, including phones without it.
-  const stage = container.querySelector(".calm-stage");
+  const stage = stageBox;
   const exit = container.querySelector(".calm-exit");
+  const stageActions = container.querySelector(".calm-stage-actions");
   const fullButton = container.querySelector(".full-screen");
   function leaveFull() {
     stage.classList.remove("full");
-    exit.hidden = true;
+    stageActions.hidden = true;
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     fullButton.focus();
   }
   fullButton.addEventListener("click", () => {
     stage.classList.add("full");
-    exit.hidden = false;
+    stageActions.hidden = false;
     stage.requestFullscreen?.().catch(() => {});
     exit.focus();
   });
   exit.addEventListener("click", leaveFull);
+  // The way to urgent help stays in full screen (AUD-075): it leaves full screen and opens help.
+  container.querySelector(".calm-help").addEventListener("click", () => {
+    leaveFull();
+    document.querySelector(".help-open").click();
+  });
   stage.addEventListener("keydown", (event) => { if (event.key === "Escape") leaveFull(); });
   current.leaveFull = () => { if (stage.classList.contains("full")) leaveFull(); };
 
@@ -149,6 +164,7 @@ export function stop() {
   if (run) {
     run.timers.forEach(clearTimeout);
     run.music.stop();
+    run.wake();
     if (run.cover) run.cover.remove();
     if (run.leaveFull && document.fullscreenElement) document.exitFullscreen().catch(() => {});
   }
