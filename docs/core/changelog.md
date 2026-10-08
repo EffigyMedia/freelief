@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-27"></a>
+## [0.5.27] - 2026-10-07
+- Fixed: with **Need urgent help?** open, a swipe could scroll the app behind it. The app behind
+  now stays still until the window closes. [RLG-019](../fragments/RLG-019.md). 103 tests.
+
 <a id="v0-5-26"></a>
 ## [0.5.26] - 2026-10-07
 - New activity: **Color a mandala**. Choose a soft color, then tap a shape to fill it. Three

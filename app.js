@@ -143,10 +143,16 @@ function buildShell() {
   // history entry, and going back closes it.
   helpButton.addEventListener("click", () => {
     dialog.showModal();
+    // A modal dialog blocks taps on the page, but on a phone a swipe on the backdrop still scrolls
+    // the page under it (owner report). The page does not scroll while help is open.
+    document.documentElement.classList.add("help-is-open");
     history.pushState({ freeliefHelp: true }, "");
   });
   window.addEventListener("popstate", () => { if (dialog.open) dialog.close(); });
-  dialog.addEventListener("close", () => { if (history.state?.freeliefHelp) history.back(); });
+  dialog.addEventListener("close", () => {
+    document.documentElement.classList.remove("help-is-open");
+    if (history.state?.freeliefHelp) history.back();
+  });
   document.body.replaceChildren(header, nav, main, footer, dialog);
 }
 

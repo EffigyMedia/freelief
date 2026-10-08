@@ -318,6 +318,11 @@ main {
 
 .help::backdrop { background: rgba(5, 8, 15, 0.75); }
 
+/* While help is open, the page under it does not scroll, and a scroll that reaches the end of the
+   help list stops there instead of moving the page (owner report: the page "touched through"). */
+.help-is-open, .help-is-open body { overflow: hidden; }
+.help { overscroll-behavior: contain; }
+
 /* The header with the way out stays at the top while the content scrolls under it. */
 .help-header {
   position: sticky;

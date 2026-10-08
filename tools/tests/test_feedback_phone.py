@@ -51,3 +51,31 @@ def test_every_screen_goes_back_to_the_menu():
             assert back.get_attribute("href") == "#menu", screen
         go(page, "menu")
         assert page.locator(".nav-back").is_hidden()
+
+def test_the_page_under_urgent_help_takes_no_touch():
+    # Owner report, 2026-10-07: with help open, a swipe on the backdrop scrolled the app under it.
+    with open_app(route="menu", viewport={"width": 390, "height": 640}) as (page, _, _):
+        cdp = page.context.new_cdp_session(page)
+
+        def swipe(x, y0, y1):
+            cdp.send("Input.dispatchTouchEvent", {"type": "touchStart", "touchPoints": [{"x": x, "y": y0}]})
+            for i in range(1, 11):
+                cdp.send("Input.dispatchTouchEvent", {"type": "touchMove", "touchPoints": [
+                    {"x": x, "y": y0 + (y1 - y0) * i / 10}]})
+            cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
+            page.wait_for_timeout(500)
+
+        assert page.evaluate("document.documentElement.scrollHeight > innerHeight"), "the page can scroll"
+        page.locator(".help-open").click()
+        swipe(5, 600, 100)  # on the backdrop, outside the dialog
+        assert page.evaluate("scrollY") == 0, "the page under the dialog did not move"
+        for _ in range(4):
+            swipe(200, 500, 100)  # inside the dialog, past the end of its list
+        assert page.evaluate("document.querySelector('dialog.help').scrollTop") > 0, "the help list scrolls"
+        assert page.evaluate("scrollY") == 0, "a scroll at the end of the list does not move the page"
+        cdp.send("Input.dispatchTouchEvent", {"type": "touchStart", "touchPoints": [{"x": 5, "y": 600}]})
+        cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
+        assert page.evaluate("location.hash") == "#menu" and page.evaluate("document.querySelector('dialog.help').open")
+        page.locator("dialog.help .help-back").click()
+        swipe(200, 600, 100)
+        assert page.evaluate("scrollY") > 0, "the page scrolls again once help is closed"

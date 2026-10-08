@@ -683,6 +683,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   2.5.8); the swatches are 48 px. A tap replaces a fill; there is no eraser and no end. — Rejected:
   a canvas (the architecture rule); a fixed image (size, and no names). — 2026-10-07 (owner;
   UNT-040)
+- **While urgent help is open, the page under it does not scroll.** — The owner reported that the
+  app under the open dialog still took touches. Taps were already blocked by the modal dialog, but
+  a swipe on the backdrop scrolled the page under it, and a scroll past the end of the help list
+  could move the page too. The shell now sets `overflow: hidden` on the page while the dialog is
+  open, and the dialog has `overscroll-behavior: contain`. — 2026-10-07 (owner report; UNT-041)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
