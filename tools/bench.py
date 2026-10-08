@@ -22,6 +22,12 @@ CPU_SLOWDOWN = 4
 LAUNCH_TARGET_MS = 1000
 RESPONSE_TARGET_MS = 100
 
+# The recorded baseline (docs/performance/baseline.md) and its tolerance. Over tolerance prints FLAG
+# but does not fail: a flagged metric goes into docs/performance/log.md, and only a missed target
+# fails (AUD-058). Keep these in step with baseline.md when it is re-baselined.
+BASELINE = {"launch_ms": 178, "response_ms": 74, "size_kb": 188.7}
+TIMING_TOLERANCE = 0.25  # +25% for the two timings; any size growth is flagged
+
 # Response: from a click on "Need urgent help?" (on every screen) to the next frame after the dialog
 # opens. It was the breathing screen's Pause button until the menu became the first screen.
 RESPONSE_PROBE = """() => new Promise(resolve => {
@@ -73,16 +79,22 @@ def main() -> int:
     out.write_text(json.dumps(result, indent=2) + "\n", "utf-8")
 
     checks = [
-        ("Launch to first screen (REQ-026)", result["launch_ms"], LAUNCH_TARGET_MS, "ms"),
-        ("Input to visible response (REQ-027)", result["response_ms"], RESPONSE_TARGET_MS, "ms"),
-        ("Shipped size (REQ-028)", result["size_kb"], freelief.SIZE_LIMIT_BYTES / 1024, "KB"),
+        ("Launch to first screen (REQ-026)", "launch_ms", LAUNCH_TARGET_MS, "ms", TIMING_TOLERANCE),
+        ("Input to visible response (REQ-027)", "response_ms", RESPONSE_TARGET_MS, "ms", TIMING_TOLERANCE),
+        ("Shipped size (REQ-028)", "size_kb", freelief.SIZE_LIMIT_BYTES / 1024, "KB", 0.0),
     ]
     print(f"Freelief {result['version']} - {result['workload']}")
     failed = False
-    for label, value, target, unit in checks:
+    for label, key, target, unit, tolerance in checks:
+        value, baseline = result[key], BASELINE[key]
         ok = value <= target
         failed |= not ok
-        print(f"[{' OK ' if ok else 'FAIL'}] {label}: {value} {unit} (target {target:g} {unit})")
+        change = (value - baseline) / baseline
+        flagged = ok and change > tolerance
+        status = "FAIL" if not ok else ("FLAG" if flagged else " OK ")
+        print(f"[{status}] {label}: {value} {unit} (target {target:g} {unit}; "
+              f"baseline {baseline:g} {unit}, {change:+.0%})")
+    print("A FLAG does not fail: record it in docs/performance/log.md (AUD-058).")
     return 1 if failed else 0
 
 

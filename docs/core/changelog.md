@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-6-3"></a>
+## [0.6.3] - 2026-10-08
+- Internal: the benchmark flags a figure that drifts past its tolerance, and the performance
+  baseline is renewed at the end of slice 6 (178 ms launch, 74 ms response, 188.7 KB).
+  [AUD-058](../fragments/AUD-058.md). 133 tests.
+
 <a id="v0-6-2"></a>
 ## [0.6.2] - 2026-10-08
 - Sturdier offline copy: if the browser's storage fails, Freelief loads from the internet in place

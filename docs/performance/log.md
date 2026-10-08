@@ -2,6 +2,18 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-08 — Slice 6 checkpoint and re-baseline (v0.6.2)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to first screen (the menu) | 155 ms | 178 ms | +15% | OK; RE-BASELINED |
+| Response: Need urgent help? opens | 69 ms | 74 ms | +8% | OK; RE-BASELINED; 26 ms of headroom |
+| Shipped size | 130.3 KB | 188.7 KB | +45% | FLAG, expected; RE-BASELINED; 61 KB of budget left |
+Notes: two runs agreed (177.3 and 177.7 ms; 74.7 and 74.2 ms). Slice 6 added the ripple pond,
+mandala coloring and the Visualizer, vibration, the screen wake lock, the country list, the header
+sound button, the research sources for every activity and longer strings; the SVG logo saved 25.6
+KB. The audit round's 207.8 ms (AUD-058) was a single run on a busy machine. bench now flags a
+metric over tolerance (AUD-058). Watch the response: the help dialog grew with the Call buttons.
+
 ## 2026-10-07 — Re-baseline (v0.5.10)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|
