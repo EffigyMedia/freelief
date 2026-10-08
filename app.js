@@ -15,8 +15,6 @@ import * as menu from "./screens/menu.js";
 const ROUTES = {
   menu: () => Promise.resolve(menu),
   breathe: () => import("./exercises/breathe.js"),
-  ground: () => import("./exercises/ground.js"),
-  statements: () => import("./exercises/statements.js"),
   bubbles: () => import("./activities/bubbles.js"),
   trace: () => import("./activities/trace.js"),
   sort: () => import("./activities/sort.js"),

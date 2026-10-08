@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-19"></a>
+## [0.5.19] - 2026-10-07
+- **Ground yourself** and **Calming words** are removed. Their research was weak, and Freelief
+  offers only what it can back. Standards & research no longer lists them.
+  [RLG-012](../fragments/RLG-012.md). 86 tests.
+
 <a id="v0-5-18"></a>
 ## [0.5.18] - 2026-10-07
 - **Box breathing** (in 4, hold 4, out 4, rest 4) is now the default rhythm and is listed first in

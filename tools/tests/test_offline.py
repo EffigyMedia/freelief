@@ -46,7 +46,7 @@ def test_the_app_works_offline_after_one_visit():
         wait_until(page, "!(history.state && history.state.freeliefHelp)", 2000)
         page.wait_for_timeout(200)
         # Screens other than breathing load on first visit (RLG-006); offline they come from the cache.
-        for route in ("ground", "calm", "standards"):
+        for route in ("trace", "calm", "standards"):
             page.evaluate(f"location.hash = '{route}'")
             wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 5000)
 

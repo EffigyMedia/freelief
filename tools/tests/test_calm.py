@@ -162,7 +162,7 @@ def test_back_to_menu_is_at_the_top_of_every_screen_and_the_footer_does_not_ment
             return nav.compareDocumentPosition(document.querySelector('main')) & Node.DOCUMENT_POSITION_FOLLOWING; })()""")
         assert above, "Back to menu comes before the Settings screen"
         assert "circle" not in page.locator(".tagline").inner_text().lower()
-        for route in ["ground", "sort", "about", "feedback"]:
+        for route in ["trace", "sort", "about", "feedback"]:
             go(page, route)
             nav = page.locator(".screen-nav").bounding_box()
             screen = page.locator("main").bounding_box()

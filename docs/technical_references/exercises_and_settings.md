@@ -15,16 +15,13 @@ frame queued before `stop()` runs against a cleared state and throws.
 ## Router
 `app.js` maps the URL hash to a module in `ROUTES`. No hash, or an unknown one, shows `breathe`.
 A `hashchange` focuses the new screen's `<h1>` (given `tabindex="-1"`), so a screen reader
-announces the screen; the first screen at launch takes no focus. The nav link under the screen is
-"More ways to calm" (`#menu`) on the breathing screen and "Back to breathing" (`#breathe`) on every
-other screen.
+announces the screen; the first screen at launch takes no focus. The "Back to menu" row (`#menu`) sits
+between the header and the screen on every screen, and the whole row is hidden on the menu
+(UNT-030).
 
-## Grounding and calming words
-Both are steppers with Back and Next. The text is a polite live region; focus stays on the button
-the person used. Grounding has five steps, then a closing line, and "Start again" loops it. Back
-is hidden on the first step; `[hidden]` is forced to `display: none !important` because `.button`
-sets `display`. Calming words come from the `statements.list` array in `strings/en.json` and wrap
-around in both directions.
+## Grounding and calming words (removed 2026-10-07, UNT-032)
+Both screens were removed for weak research. One lesson from them still applies everywhere:
+`[hidden]` is forced to `display: none !important`, because `.button` sets `display`.
 
 ## Bubble field (`activities/bubbles.js`)
 The field is a `<ul>` of absolutely placed `<li>`, each holding one `<button class="bubble">`. The

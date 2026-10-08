@@ -12,8 +12,7 @@ narrative and the decisions. Code, records and this document must never disagree
 - **Owner:** EffigyMedia.
 - **Status:** signed off by the owner 2026-10-07; ready for Initialize.
 - **One-line pitch:** Freelief is a free, open-source, offline web app that helps anyone through a
-  panic attack or acute anxiety in the moment, with breathing, grounding, calming words and gentle
-  distraction.
+  panic attack or acute anxiety in the moment, with breathing and gentle distraction.
 - **Tier:** Standard.
 - **Routing posture:** `ROUTING_BIAS: 2` (quality). People use Freelief in a crisis, so a wrong
   word or a broken screen costs more than rework.
@@ -38,7 +37,7 @@ narrative and the decisions. Code, records and this document must never disagree
 A panic attack is sudden and frightening. The person has a racing heart, short breath and the
 feeling that something terrible will happen. It passes, usually within minutes, but in that moment
 the person has little attention, shaky hands, and often no one to help. The self-help techniques
-that work — slow breathing, grounding, calm words, gentle distraction — are simple, but they are
+that help — slow breathing and gentle distraction — are simple, but they are
 hard to remember and do alone while panic takes over.
 
 The apps that offer these techniques often ask for an account, show a menu, need a network, play an
@@ -51,8 +50,8 @@ recommend to each other in a crisis because it simply works and is free.
 
 <!-- BEGIN srs-purpose - written by the interview, read by the generators -->
 Freelief helps a person through a panic attack or acute anxiety at the moment it happens. It gives
-self-help techniques studied in clinical research — paced breathing, 5-4-3-2-1 grounding, calming
-statements and gentle distraction activities — and a fast route to a crisis line for a person who
+self-help techniques studied in clinical research — paced breathing and gentle distraction
+activities — and a fast route to a crisis line for a person who
 may be in danger. It is for anyone, at no cost, with no account, no network and no data collection.
 <!-- END srs-purpose -->
 
@@ -67,9 +66,8 @@ that starts at once, works for them as they are, and asks for nothing.
 <!-- BEGIN srs-product-overview - written by the interview, read by the generators -->
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
-a paced breathing guide starts at once. From there, one tap or key press reaches the other
-exercises (grounding and calming statements) and the distraction activities (a bubble field, a
-shape trace and a colour sort). Every screen has a "Need urgent help?" control that shows crisis
+a paced breathing guide starts at once. From there, one tap or key press reaches the distraction
+activities (a bubble field, a shape trace and a colour sort) and the Calm screen. Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
 GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
@@ -139,7 +137,7 @@ dependency and no build step (REQ-019); one strings file per language (REQ-017);
 
 <!-- BEGIN srs-scope - written by the interview, read by the generators -->
 Freelief covers self-help for a panic attack or acute anxiety at the moment it happens: paced
-breathing, 5-4-3-2-1 grounding, calming statements, three distraction activities, crisis lines by
+breathing, distraction activities, crisis lines by
 region, a self-help disclaimer, a Standards & research page, and a feedback page that hands a
 pre-filled report to GitHub or email. It runs in a browser and as an installed offline web app.
 The boundary: Freelief does not diagnose, treat, track, or contact anyone. It points to crisis
@@ -169,11 +167,10 @@ Not built (decided 2026-10-07):
 
 | Term | Meaning |
 |---|---|
-| **Exercise** | A guided self-help technique: paced breathing, 5-4-3-2-1 grounding, or calming statements. |
+| **Exercise** | A guided self-help technique: paced breathing. |
 | **Activity** | A distraction activity: the bubble field, the shape trace, or the colour sort. No score, no failure, no timer. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
-| **Calming statement** | One short, steady line of text, shown one at a time. |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
 | **Region** | The country taken from the device language and region setting. Never from location. |
 | **Settings** | The only stored data: the chosen rhythm, tones on or off, and the light or dark choice if overridden. On the device only. |
@@ -185,8 +182,7 @@ lines; a Region with none falls back to the international directory. Settings pe
 restarts on the device (REQ-023, REQ-015).
 
 <!-- BEGIN srs-definitions - written by the interview, read by the generators -->
-- **Exercise** — a guided self-help technique: paced breathing, 5-4-3-2-1 grounding, or calming
-  statements.
+- **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
   the shape trace, or the colour sort.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
@@ -221,12 +217,14 @@ Steps: a short list of large items; the person chooses one; it starts. Outcome: 
 runs. Leaving any exercise returns to the breath guide. No exercise has an end state that asks for
 anything.
 
-**F3 — Grounding.** Steps: five prompts in order (5 things you see, 4 you can touch, 3 you hear,
+**F3 — Grounding.** *Withdrawn 2026-10-07 (owner): removed for weak research; see REQ-002 and the
+Decision Log.* Steps: five prompts in order (5 things you see, 4 you can touch, 3 you hear,
 2 you smell, 1 you taste). The person advances with a large "Next" control or a key. No input is
 typed or stored. Outcome: a closing calm line and a return to breathing. Edge: the person can go
 back or stop at any step.
 
-**F4 — Calming statements.** Steps: one statement at a time; the person advances when ready. The
+**F4 — Calming statements.** *Withdrawn 2026-10-07 (owner): removed for weak research; see REQ-003
+and the Decision Log.* Steps: one statement at a time; the person advances when ready. The
 statements come from the strings file. Outcome: the person stops when they choose.
 
 **F5 — Distraction activities.** *Bubble field:* bubbles drift slowly; a tap or a key press pops the
@@ -324,7 +322,7 @@ Each file below is one module with one responsibility.
 | Module | Owns | Must not |
 |---|---|---|
 | `index.html` + `app.js` (**shell**) | The page frame, the screen router, the footer, and the "Need urgent help?" control. | Contain exercise logic or text. |
-| `exercises/breathe.js`, `ground.js`, `statements.js` | One exercise each. | Read storage or the network; hold text. |
+| `exercises/breathe.js` | The breathing exercise. *(`ground.js` and `statements.js` were removed 2026-10-07.)* | Read storage or the network; hold text. |
 | `activities/bubbles.js`, `trace.js`, `sort.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
 | `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
@@ -337,8 +335,8 @@ Each file below is one module with one responsibility.
 | `screens/menu.js`, `screens/settings.js` | The "More ways to calm" list, and the Settings screen. The Settings screen changes Settings only through `settings.js`. | Touch `localStorage` directly. |
 | `screens/about.js`, `standards.js`, `feedback.js` | The disclaimer (About), Standards & research, and Feedback pages. *(First planned as `pages/`; built as screens at slice 4, with the same contract and router.)* | Send data. |
 
-**Routing (added at slice 2).** Each screen has a URL hash (`#breathe`, `#menu`, `#ground`,
-`#statements`, `#settings`); no hash means `#breathe`. The browser Back button therefore works, and
+**Routing (added at slice 2).** Each screen has a URL hash (`#breathe`, `#menu`, `#settings`
+and one per activity); no hash means `#breathe`. The browser Back button therefore works, and
 an unknown hash falls back to breathing. On a change of screen the shell focuses the new screen's
 heading, so a screen reader announces where the person is.
 
@@ -415,7 +413,8 @@ allows only the app's own origin backs up the no-network rule.
   owner's yes) and pushed.
 
 **Slice 2 — exercises.** Grounding, calming statements, rhythm presets, Settings, soft tones, and
-the research sources for each technique.
+the research sources for each technique. *(Grounding and calming statements were removed
+2026-10-07.)*
 
 **Slice 3 — distraction.** The bubble field and the shape trace.
 
@@ -476,7 +475,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **The first version offers paced breathing, 5-4-3-2-1 grounding, calming statements and
   distraction activities.** — These are the common self-help techniques for acute panic, and
   distraction was the owner's explicit addition. — Rejected for now: an episode log, because it
-  stores personal data. — 2026-10-07
+  stores personal data. — 2026-10-07 *Amended 2026-10-07 (owner, UNT-032): grounding and calming
+  statements are removed; see the entry below.*
+- **Ground yourself (5-4-3-2-1 grounding) and Calming words are removed.** — The owner did not like
+  them, and their research was weak: the one grounding study was small, uncontrolled and about test
+  anxiety, and the support for calming statements was indirect (coping self-talk as one part of
+  stress inoculation training and of cognitive therapy). Freelief offers only techniques it can
+  back. Interactive activities take their places (a ripple pond and mandala coloring, tracked as
+  RLG-013 and RLG-014). — Rejected: keep them with a weaker claim. — 2026-10-07 (owner; UNT-032)
 - **The distraction activities are a bubble field, a shape trace and a colour sort.** — Each one
   has no score, no failure and no timer. — Rejected: a counting task. The colour sort is "should"
   and not "must", because a keyboard and screen-reader path for it is the hardest to build. —
@@ -730,7 +736,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   2026-10-07 (slice 2, implementer)
 - **Grounding and calming words keep focus on the control the person used; the new text is a
   polite live region.** — Moving focus to the text on every step would send a keyboard user back
-  to the start of the page each time. — 2026-10-07 (slice 2, implementer)
+  to the start of the page each time. — 2026-10-07 (slice 2, implementer) *Both screens were
+  removed 2026-10-07 (UNT-032).*
 - **The slower rhythm is 5 in, 7 out; box breathing is 4-4-4-4.** — Both stay under 10 breaths a
   minute (Zaccaro 2018); box breathing was one arm of Balban 2023. — 2026-10-07 (slice 2,
   implementer)

@@ -18,7 +18,7 @@ def go(page, route):
 
 def test_footer_links_reach_every_page_from_every_screen():
     with open_app() as (page, errors, _):
-        for screen in ("breathe", "ground", "settings"):
+        for screen in ("breathe", "trace", "settings"):
             go(page, screen)
             hrefs = page.locator(".footer-link").evaluate_all("els => els.map(e => e.getAttribute('href'))")
             assert hrefs == ["#about", "#standards", "#feedback"], screen
@@ -68,7 +68,6 @@ def test_every_technique_cites_dated_sources():
             assert links.count() == len(technique["sources"]) >= 1
             for i, source_id in enumerate(technique["sources"]):
                 assert links.nth(i).get_attribute("href") == RESEARCH["sources"][source_id]["url"]
-        assert "limited" in page.locator("section.technique[data-technique='grounding']").inner_text()
 
 
 def _link_query(page):

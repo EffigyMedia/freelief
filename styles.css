@@ -71,22 +71,13 @@
 /* Headings take focus only so a screen reader announces the new screen. They are not controls. */
 h1:focus, h1:focus-visible { outline: none; }
 
-.exercise-intro, .hint, .step-count { margin: 0; color: var(--muted); }
-
-.prompt {
-  margin: 0;
-  min-height: 5em;
-  font-size: 1.6rem;
-  line-height: 1.4;
-}
+.exercise-intro, .hint { margin: 0; color: var(--muted); }
 
 .exercise-actions {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
 }
-
-.exercise-actions .next { margin-left: auto; }
 
 .menu-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
 
@@ -642,7 +633,6 @@ main {
 
 /* Centre every button outside the header (owner, 2026-10-07). */
 .exercise-actions { justify-content: center; }
-.exercise-actions .next { margin-left: 0; }
 .directory, .send-choice, .app-version, .about-version { text-align: center; align-items: center; }
 .line-actions { justify-content: center; }
 .line, .region > h3 { text-align: center; }

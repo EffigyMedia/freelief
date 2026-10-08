@@ -130,6 +130,6 @@ def test_an_inherited_name_in_the_hash_falls_back_to_the_menu():
             page.evaluate(f"location.hash = '{name}'")
             wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 3000)
             assert page.locator(".menu-item").first.is_visible(), name
-        page.evaluate("location.hash = 'ground'")
-        wait_until(page, "document.querySelector('main').dataset.shown === 'ground'", 3000)
+        page.evaluate("location.hash = 'trace'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'trace'", 3000)
         assert not [e for e in errors if "could not" in e], errors

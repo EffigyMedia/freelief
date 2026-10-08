@@ -1,4 +1,4 @@
-"""Slice 2 in a real browser: grounding, calming words, settings, rhythm presets, tones, themes."""
+"""Slice 2 in a real browser: the menu, settings, rhythm presets, tones, themes."""
 
 import json
 
@@ -35,7 +35,7 @@ def test_the_menu_is_home_and_reaches_every_screen_by_keyboard():
     with open_app(route=None) as (page, errors, _):
         assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
         hrefs = page.locator(".menu-item").evaluate_all("els => els.map(e => e.getAttribute('href'))")
-        assert hrefs == ["#breathe", "#ground", "#statements", "#bubbles", "#trace", "#sort", "#calm"]
+        assert hrefs == ["#breathe", "#bubbles", "#trace", "#sort", "#calm"]
         page.locator(".menu-item").first.focus()
         page.keyboard.press("Enter")
         wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 2000)
@@ -55,38 +55,6 @@ def test_the_settings_gear_is_at_the_top_right_on_every_screen():
             assert box["x"] + box["width"] > 360 - 40 and box["y"] < 60, f"{screen}: gear at {box}"
         page.locator("a.gear").click()
         wait_until(page, "document.querySelector('main').dataset.shown === 'settings'", 2000)
-
-
-def test_grounding_walks_five_steps_and_back():
-    with open_app() as (page, _, _):
-        go(page, "ground")
-        prompt = page.locator(".prompt")
-        assert prompt.inner_text() == STRINGS["ground.5"]
-        assert page.locator(".previous").is_hidden()
-        next_button = page.locator(".next")
-        next_button.focus()
-        for step in ("4", "3", "2", "1"):
-            page.keyboard.press("Enter")
-            assert prompt.inner_text() == STRINGS[f"ground.{step}"]
-        page.keyboard.press("Enter")
-        assert prompt.inner_text() == STRINGS["ground.done"]
-        assert next_button.inner_text() == STRINGS["ground.again"]
-        page.locator(".previous").click()
-        assert prompt.inner_text() == STRINGS["ground.1"]
-        assert prompt.get_attribute("aria-live") == "polite"
-
-
-def test_calming_words_advance_and_wrap():
-    with open_app() as (page, _, _):
-        go(page, "statements")
-        statements = STRINGS["statements.list"]
-        text = page.locator(".statement")
-        assert text.inner_text() == statements[0]
-        page.locator(".next").click()
-        assert text.inner_text() == statements[1]
-        page.locator(".previous").click()
-        page.locator(".previous").click()
-        assert text.inner_text() == statements[-1], "the list wraps; there is no end"
 
 
 def test_settings_round_trip_through_a_reload():
@@ -150,8 +118,7 @@ def test_each_activity_plays_its_cue():
     with open_app(init_script=TONE_PROBE) as (page, _, _):
         page.locator(".guide").click()  # the first gesture unlocks sound
         for route, action in (("bubbles", lambda: page.locator("button.bubble").first.click(force=True)),
-                              ("ground", lambda: page.locator(".next").click()),
-                              ("statements", lambda: page.locator(".next").click())):
+                              ("sort", lambda: page.locator(".sort-tile").first.click())):
             go(page, route)
             before = page.evaluate("window.__tones")
             action()

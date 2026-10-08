@@ -4,21 +4,21 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `cf0e72604e42f91f` · 31 requirement(s) specified, 0 not yet
+> Store stamp `b69175dabeb47b4e` · 29 requirement(s) specified, 2 not yet
 
 ## 1. Introduction
 
 ### 1.1 Purpose
 
 Freelief helps a person through a panic attack or acute anxiety at the moment it happens. It gives
-self-help techniques studied in clinical research — paced breathing, 5-4-3-2-1 grounding, calming
-statements and gentle distraction activities — and a fast route to a crisis line for a person who
+self-help techniques studied in clinical research — paced breathing and gentle distraction
+activities — and a fast route to a crisis line for a person who
 may be in danger. It is for anyone, at no cost, with no account, no network and no data collection.
 
 ### 1.2 Scope
 
 Freelief covers self-help for a panic attack or acute anxiety at the moment it happens: paced
-breathing, 5-4-3-2-1 grounding, calming statements, three distraction activities, crisis lines by
+breathing, distraction activities, crisis lines by
 region, a self-help disclaimer, a Standards & research page, and a feedback page that hands a
 pre-filled report to GitHub or email. It runs in a browser and as an installed offline web app.
 The boundary: Freelief does not diagnose, treat, track, or contact anyone. It points to crisis
@@ -28,9 +28,8 @@ lines; it does not call them. Its only stored data is the person's settings, on 
 
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
-a paced breathing guide starts at once. From there, one tap or key press reaches the other
-exercises (grounding and calming statements) and the distraction activities (a bubble field, a
-shape trace and a colour sort). Every screen has a "Need urgent help?" control that shows crisis
+a paced breathing guide starts at once. From there, one tap or key press reaches the distraction
+activities (a bubble field, a shape trace and a colour sort) and the Calm screen. Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
 GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
@@ -38,8 +37,7 @@ person's settings, on the device.
 
 ### 1.4 Definitions
 
-- **Exercise** — a guided self-help technique: paced breathing, 5-4-3-2-1 grounding, or calming
-  statements.
+- **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
   the shape trace, or the colour sort.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
@@ -69,8 +67,6 @@ person's settings, on the device.
 ### 3.2 Functions
 
 - **REQ-001** *(must)* — Freelief offers a paced breathing exercise with a visual breath guide.
-- **REQ-002** *(must)* — Freelief offers a 5-4-3-2-1 sensory grounding exercise that the person steps through at their own pace.
-- **REQ-003** *(must)* — Freelief offers calming statements, shown one at a time, that the person advances at their own pace.
 - **REQ-004** *(must)* — Freelief offers interactive calming activities whose purpose is to distract the person from panic.
 - **REQ-005** *(must)* — Every screen shows a 'Need urgent help?' control that opens a list of crisis lines chosen from the device language and region setting, without a request for location.
 - **REQ-006** *(must)* — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
@@ -123,8 +119,6 @@ How each requirement above is shown to be met. The method is recorded on the req
 | Requirement | Clause | Method | Status |
 |---|---|---|---|
 | REQ-001 | 3.2 | test | agreed |
-| REQ-002 | 3.2 | test | agreed |
-| REQ-003 | 3.2 | test | agreed |
 | REQ-004 | 3.2 | demonstration | agreed |
 | REQ-005 | 3.2 | test | agreed |
 | REQ-006 | 3.2 | inspection | agreed |
@@ -184,4 +178,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T22:56:08-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T23:01:16-04:00 by `Commands/srs.py` from 31 requirement record(s).

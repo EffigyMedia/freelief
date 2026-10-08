@@ -9,19 +9,6 @@
       ]
     },
     {
-      "id": "grounding",
-      "sources": [
-        "scott2025"
-      ]
-    },
-    {
-      "id": "statements",
-      "sources": [
-        "saunders1996",
-        "clark1986"
-      ]
-    },
-    {
       "id": "distraction",
       "sources": [
         "webb2012",
@@ -51,21 +38,6 @@
     "meuret2010": {
       "citation": "Meuret, A. E., Rosenfield, D., Seidel, A., Bhaskara, L., & Hofmann, S. G. (2010). Respiratory and cognitive mediators of treatment change in panic disorder: Evidence for intervention specificity. Journal of Consulting and Clinical Psychology, 78(5), 691-704.",
       "url": "https://doi.org/10.1037/a0019552",
-      "checked": "2026-10-07"
-    },
-    "scott2025": {
-      "citation": "Scott, K. M., & Duncan, K. (2025). Ground yourself: Using five senses technique to cope with test anxiety among nursing students. Teaching and Learning in Nursing.",
-      "url": "https://www.sciencedirect.com/science/article/pii/S1557308725002999",
-      "checked": "2026-10-07"
-    },
-    "saunders1996": {
-      "citation": "Saunders, T., Driskell, J. E., Johnston, J. H., & Salas, E. (1996). The effect of stress inoculation training on anxiety and performance. Journal of Occupational Health Psychology, 1(2), 170-186.",
-      "url": "https://doi.org/10.1037/1076-8998.1.2.170",
-      "checked": "2026-10-07"
-    },
-    "clark1986": {
-      "citation": "Clark, D. M. (1986). A cognitive approach to panic. Behaviour Research and Therapy, 24(4), 461-470.",
-      "url": "https://doi.org/10.1016/0005-7967(86)90011-2",
       "checked": "2026-10-07"
     },
     "webb2012": {

@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `cf0e72604e42f91f` · 31 requirement(s) recorded
+> Store stamp `b69175dabeb47b4e` · 31 requirement(s) recorded
 
 ## The problem
 
@@ -65,8 +65,6 @@ Not built (decided 2026-10-07):
 ### Must have
 
 - **REQ-001** — Freelief offers a paced breathing exercise with a visual breath guide.
-- **REQ-002** — Freelief offers a 5-4-3-2-1 sensory grounding exercise that the person steps through at their own pace.
-- **REQ-003** — Freelief offers calming statements, shown one at a time, that the person advances at their own pace.
 - **REQ-004** — Freelief offers interactive calming activities whose purpose is to distract the person from panic.
 - **REQ-005** — Every screen shows a 'Need urgent help?' control that opens a list of crisis lines chosen from the device language and region setting, without a request for location.
 - **REQ-006** — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
@@ -105,11 +103,11 @@ Not built (decided 2026-10-07):
 | | Count |
 |---|---|
 | Verified — shown to be met | 0 |
-| Agreed — specified, not yet shown | 31 |
+| Agreed — specified, not yet shown | 29 |
 | Proposed — waiting on a decision | 0 |
-| Withdrawn — no longer required | 0 |
+| Withdrawn — no longer required | 2 |
 
-Of the 31 requirement(s) in the specification, 0 (0%) have had their verification carried out.
+Of the 29 requirement(s) in the specification, 0 (0%) have had their verification carried out.
 
 ## What has to land before what
 
@@ -117,8 +115,11 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ## What we dropped
 
-*Nothing has been withdrawn.*
+2 requirement(s) were once required and are not any more. They are kept rather than deleted, so the argument for dropping them survives with them - the reason is in each record, beneath the requirement itself.
+
+- **REQ-002** — Freelief offers a 5-4-3-2-1 sensory grounding exercise that the person steps through at their own pace.
+- **REQ-003** — Freelief offers calming statements, shown one at a time, that the person advances at their own pace.
 
 ---
 
-Generated 2026-10-07T22:56:10-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-07T23:01:18-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
