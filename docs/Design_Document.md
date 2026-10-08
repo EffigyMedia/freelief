@@ -460,6 +460,15 @@ and the GitHub issue templates.
 
 **Slice 5 — colour sort.** Built last, as the hardest to make accessible. It ships only if it passes.
 
+**Slice 6 — owner polish, new activities, safety and settings fixes (v0.5.1 to v0.6.0).** *Added
+2026-10-08 by the owner's ruling on AUD-068: the work after slice 5 is one named slice.* It covers
+the owner's changes from the phone (menu first, layout, sounds, colors, logo), the removal of
+grounding and calming words, the ripple pond, mandala coloring and the Visualizer, vibration, the
+country list and saved region, the sources for every activity, and the fixes from design audit round
+UNT-051. Done when: the round's safety, bug, records and polish fixes the owner chose are built and
+tested, and the version is bumped to 0.6.0. Round UNT-051 is this slice's audit. Later work is
+planned as named slices, each closed by an audit round and a minor bump.
+
 **Definition of done per slice:** it works, `test` is green, `bench` is spot-checked, the design
 document and records agree with the code, and it is committed.
 

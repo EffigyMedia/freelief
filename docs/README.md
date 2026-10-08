@@ -23,6 +23,9 @@ shapes). Every screen has a **"Need urgent help?"** button with crisis lines for
 technology. Please do not rely on it yet. Version 1.0 will be the first release, after a full
 release audit; this page will then say how to install it.
 
+The preview serves **v0.5.34** (moved 2026-10-08 with the owner's yes). Each move of the preview is
+recorded in `docs/core/changelog.md` with the owner's yes, and this line names the version it serves.
+
 ## Research and standards
 
 Each technique is built on published research, and the app's **Standards and research** page

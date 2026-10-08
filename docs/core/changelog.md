@@ -10,6 +10,15 @@ audit.
 
 ---
 
+<a id="v0-5-45"></a>
+## [0.5.45] - 2026-10-08
+- Records only. The Delivery Plan names slice 6, which closes at 0.6.0.
+- The live preview record, written down late (AUD-073): in the session of 2026-10-07 to 2026-10-08
+  the owner said yes in chat to each move of `live`, to v0.5.16, v0.5.25, v0.5.27 and v0.5.34. The
+  earlier moves, up to v0.5.15, have no record of a yes beyond UNT-014. The preview serves v0.5.34.
+  From now on each move is recorded in the entry of the version it serves.
+  [AUD-068](../fragments/AUD-068.md), [AUD-073](../fragments/AUD-073.md). 127 tests.
+
 <a id="v0-5-44"></a>
 ## [0.5.44] - 2026-10-08
 - **About** now names every setting Freelief saves on your device: breathing rhythm, sound,
