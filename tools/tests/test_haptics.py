@@ -65,7 +65,10 @@ def test_the_switch_turns_it_off_and_the_choice_is_saved():
         assert switch.is_checked(), "on by default"
         # Owner, 2026-10-07: say plainly where it does not work.
         hint = page.locator("#haptics-hint").inner_text()
-        assert "does not work on iPhone, in Safari or in Firefox" in hint
+        assert "Android only" in hint and "not iPhone" in hint
+        size = page.locator("#haptics-hint").evaluate("e => parseFloat(getComputedStyle(e).fontSize)")
+        body = page.evaluate("parseFloat(getComputedStyle(document.body).fontSize)")
+        assert size < body, "the hint is smaller than body text"
         assert switch.get_attribute("aria-describedby") == "haptics-hint"
         page.locator("input[name=haptics]").focus()
         page.keyboard.press("Space")

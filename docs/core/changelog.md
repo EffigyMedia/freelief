@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-34"></a>
+## [0.5.34] - 2026-10-08
+- The **Vibration** hint is shorter and smaller: "A short buzz on taps. Android only (Chrome,
+  Samsung Internet), not iPhone." [RLG-024](../fragments/RLG-024.md). 110 tests.
+
 <a id="v0-5-33"></a>
 ## [0.5.33] - 2026-10-08
 - The **Vibration** hint in Settings now says exactly where it works: Chrome and Samsung Internet

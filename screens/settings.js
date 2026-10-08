@@ -42,7 +42,7 @@ export function start(container, ctx) {
                  aria-describedby="haptics-hint">
           <span>${t("settings.haptics")}</span>
         </label>
-        <p id="haptics-hint" class="hint">${t("settings.hapticsHint")}</p>
+        <p id="haptics-hint" class="hint small-hint">${t("settings.hapticsHint")}</p>
       </div>
       <div class="region-setting">
         <label class="field-label" for="help-region">${t("settings.region")}</label>
