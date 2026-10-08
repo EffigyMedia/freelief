@@ -68,27 +68,45 @@ def base_url() -> str:
     return _server
 
 
-def browser():
-    global _playwright, _browser
-    if _browser is None:
+def _driver():
+    global _playwright
+    if _playwright is None:
         _playwright = sync_playwright().start()
-        try:
-            _browser = _playwright.chromium.launch(channel="chrome")
-        except Exception:
-            _browser = _playwright.chromium.launch()
         atexit.register(_playwright.stop)
+    return _playwright
+
+
+def browser():
+    global _browser
+    if _browser is None:
+        try:
+            _browser = _driver().chromium.launch(channel="chrome")
+        except Exception:
+            _browser = _driver().chromium.launch()
         atexit.register(_browser.close)
     return _browser
 
 
+_engines = {}
+
+
+def engine(name: str):
+    """Playwright's WebKit (Safari's engine) or Firefox, for the supported-browser tests (AUD-028).
+    It raises when the engine cannot start, with the reason."""
+    if name not in _engines:
+        _engines[name] = getattr(_driver(), name).launch()
+        atexit.register(_engines[name].close)
+    return _engines[name]
+
+
 @contextmanager
 def open_app(locale="en-US", color_scheme="dark", reduced_motion="no-preference",
-             viewport=None, service_workers="block", init_script=None, route="breathe"):
+             viewport=None, service_workers="block", init_script=None, route="breathe", on=None):
     """Open the app in a fresh context, on `route`. Yields (page, errors, requests).
 
     The app opens on the menu; most tests are about one screen, so they start there. Pass
     route=None to open the app as a person does."""
-    context = browser().new_context(
+    context = (on or browser()).new_context(
         locale=locale, color_scheme=color_scheme, reduced_motion=reduced_motion,
         viewport=viewport or {"width": 390, "height": 844}, service_workers=service_workers)
     if init_script:

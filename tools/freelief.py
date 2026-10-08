@@ -143,6 +143,20 @@ def cmd_doctor(_: argparse.Namespace) -> int:
                                 cwd=ROOT, capture_output=True, text=True)
         check(launch.returncode == 0, f"a browser launches for the tests ({launch.stdout.strip() or 'none'})",
               "install Google Chrome, or run: .venv python -m playwright install chromium")
+        # The supported-browser engines (AUD-028). WebKit is required; Firefox is reported until its
+        # engine can start here (it needs the Microsoft Visual C++ runtime on Windows; RLG-033).
+        for name, required in (("webkit", True), ("firefox", False)):
+            probe = subprocess.run([str(VENV_PY), "-c",
+                                    "import sys; sys.path.insert(0, 'tools/tests'); import harness; "
+                                    f"print(harness.engine('{name}').version)"],
+                                   cwd=ROOT, capture_output=True, text=True)
+            ok = probe.returncode == 0
+            if required or ok:
+                check(ok, f"{name} launches for the browser tests ({probe.stdout.strip() or 'none'})",
+                      f"run: .venv python -m playwright install {name}")
+            else:
+                print(f"[WARN] {name} cannot start here, so its browser tests do not run "
+                      "(install the Microsoft Visual C++ runtime; see RLG-033)")
     check(read_version() is not None, "version.js holds FREELIEF_VERSION = \"X.Y.Z\"")
     import json
     # Every JSON file that ships; a missing one fails, it is not skipped (AUD-035).

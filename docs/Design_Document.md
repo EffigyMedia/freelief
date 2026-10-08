@@ -333,7 +333,7 @@ met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), n
 
 | # | Item | Decision | Rationale | Rejected |
 |---|---|---|---|---|
-| 1 | Platform | A progressive web app, phone first, that works on desktop with a keyboard. | Reaches every device with no store, installs to the home screen, works offline. | Native apps (cost, review, two codebases). |
+| 1 | Platform | A progressive web app, phone first, that works on desktop with a keyboard. Supported browsers: the current and previous major versions of Chrome (Android and desktop), Safari (iPhone and Mac) and Firefox (owner, 2026-10-08). | Reaches every device with no store, installs to the home screen, works offline. | Native apps (cost, review, two codebases). |
 | 2 | Language and runtime | HTML, CSS and modern JavaScript (ES modules) in the browser. | Runs everywhere with nothing to install or build. | TypeScript (needs a build step). |
 | 3 | Frameworks and libraries | None. No third-party code ships. | Smallest download, fastest load, nothing to break or update. | Preact or any framework (a dependency and a build step). |
 | 4 | Persistence | `localStorage` for Settings only, behind one module, with every access in try/catch. | Settings are small and on-device; nothing else is stored. | IndexedDB (more than needed). |
@@ -926,6 +926,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   rounded buttons and the calm blue accent, as they stand after the changes made from the phone on
   2026-10-07 and 2026-10-08 (AUD-048). No separate variants were shown; the owner chose by using the
   app. — 2026-10-08 (owner)
+- **Freelief supports Chrome, Safari and Firefox, and the never-break paths are tested in WebKit.** —
+  The audit (AUD-028) found no stated baseline and a suite that ran only in Chromium, though many
+  phones use Safari. The owner named the current and previous major versions of Chrome, Safari and
+  Firefox. The whole suite runs in Chrome; `test_engines.py` runs the never-break paths (menu,
+  breathing, urgent help, three activities, the sound button) in Playwright's WebKit, Safari's
+  engine. Firefox's engine cannot start on the development machine until the Microsoft Visual C++
+  runtime is installed, which is the owner's step (RLG-033); `doctor` warns until then. —
+  2026-10-08 (owner; UNT-081)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

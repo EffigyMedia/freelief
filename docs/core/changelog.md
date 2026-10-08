@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-6-15"></a>
+## [0.6.15] - 2026-10-08
+- Internal: the supported browsers are Chrome, Safari and Firefox, and the core paths are now also
+  tested in Safari's engine. [AUD-028](../fragments/AUD-028.md). 149 tests.
+
 <a id="v0-6-14"></a>
 ## [0.6.14] - 2026-10-08
 - **About** says exactly what reaches the internet: "Freelief sends nothing about you. The only

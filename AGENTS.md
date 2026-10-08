@@ -186,7 +186,9 @@ the Chrome already on the machine. Run from the repo root:
 - `python tools/freelief.py doctor` — verify Python, the venv, the imports, that a browser launches for
   the tests, `version.js`, that every shipped JSON file exists and parses, that `sw.js` imports
   `version.js` and lists only files that exist, and that every test file compiles. **Resume runs this.**
-- `python tools/freelief.py test [name…]` — run every `test_*` function in `tools/tests/`. It fails
+- `python tools/freelief.py test [name…]` — run every `test_*` function in `tools/tests/`. The
+  supported browsers are Chrome, Safari and Firefox; `test_engines.py` also runs the never-break paths
+  in WebKit, from `playwright install webkit`. It fails
   on a file it cannot load or that holds no test.
 - `python tools/freelief.py run` — serve the folder at `http://localhost:8000`. A desktop browser is
   a convenience, not an on-target check: the owner checks look and feel on a phone.
