@@ -266,7 +266,7 @@ export function pop() {
 }
 
 // A water drop for the ripple pond (REQ-032): a short sine whose pitch rises fast, the "plip" of a
-// drop on still water, a little different each time.
+// drop on still water, a little different each time, through a low-pass filter that mutes it.
 export function drop() {
   if (!canPlay()) return;
   const ctx = ensureContext();
@@ -282,7 +282,10 @@ export function drop() {
   gain.gain.setValueAtTime(0, now);
   gain.gain.linearRampToValueAtTime(settings.volume, now + 0.005);
   gain.gain.exponentialRampToValueAtTime(0.0001, now + settings.seconds);
-  oscillator.connect(gain).connect(ctx.destination);
+  const muffle = ctx.createBiquadFilter();
+  muffle.type = "lowpass";
+  muffle.frequency.value = settings.lowpassHz;
+  oscillator.connect(gain).connect(muffle).connect(ctx.destination);
   oscillator.start(now);
   oscillator.stop(now + settings.seconds + 0.02);
 }

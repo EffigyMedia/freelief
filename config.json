@@ -180,12 +180,13 @@
       "dropQ": 4
     },
     "drop": {
-      "startHz": 520,
-      "endHz": 1250,
-      "riseSeconds": 0.09,
-      "seconds": 0.32,
-      "volume": 0.022,
-      "pitchVariation": 0.2
+      "startHz": 360,
+      "endHz": 760,
+      "riseSeconds": 0.11,
+      "seconds": 0.4,
+      "volume": 0.014,
+      "pitchVariation": 0.2,
+      "lowpassHz": 700
     }
   },
   "bubbles": {

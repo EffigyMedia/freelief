@@ -105,3 +105,21 @@ def test_each_ripple_plays_a_drop():
         before = page.evaluate("window.__osc")
         page.locator(".pond").click(position={"x": 100, "y": 100})
         wait_until(page, f"window.__osc > {before}", 2000)
+
+
+def test_the_drop_is_muted_by_a_low_pass_filter():
+    # Owner, 2026-10-07: "a bit more muted".
+    probe = """
+window.__filters = [];
+const createFilter = AudioContext.prototype.createBiquadFilter;
+AudioContext.prototype.createBiquadFilter = function () {
+  const node = createFilter.call(this); window.__filters.push(node); return node; };
+"""
+    with open_app(init_script=probe) as (page, _, _):
+        page.locator(".guide").click()
+        go(page, "ripple")
+        page.locator(".pond").click(position={"x": 100, "y": 100})
+        wait_until(page, "window.__filters.length > 0", 2000)
+        last = page.evaluate("(() => { const f = window.__filters.at(-1); return [f.type, f.frequency.value]; })()")
+        assert last == ["lowpass", CONFIG["sounds"]["drop"]["lowpassHz"]]
+        assert CONFIG["sounds"]["drop"]["lowpassHz"] < CONFIG["sounds"]["drop"]["endHz"]

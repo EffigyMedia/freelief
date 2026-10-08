@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-29"></a>
+## [0.5.29] - 2026-10-07
+- **Ripple pond**: the water drop is softer and more muted: lower, quieter, and filtered.
+  [RLG-021](../fragments/RLG-021.md). 106 tests.
+- Correction to 0.5.28: that version had 105 tests, not 107.
+
 <a id="v0-5-28"></a>
 ## [0.5.28] - 2026-10-07
 - **Need urgent help?** now shows one country at a time, with a **Country** list to see another,
