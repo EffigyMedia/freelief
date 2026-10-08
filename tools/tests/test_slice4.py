@@ -123,4 +123,4 @@ def test_about_credits_effigy_media_with_logo_and_website():
         assert page.evaluate("document.querySelector('img.maker-logo').naturalWidth") > 0, "the logo loads"
         link = page.locator(".maker a")
         assert link.get_attribute("href") == "https://www.effigymedia.com"
-        assert "Effigy Media" in page.locator(".maker").inner_text()
+        assert "Alexander Steele, Effigy Media" in page.locator(".maker").inner_text()

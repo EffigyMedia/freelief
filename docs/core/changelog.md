@@ -10,6 +10,10 @@ audit.
 
 ---
 
+<a id="v0-5-15"></a>
+## [0.5.15] - 2026-10-07
+- **About** credits the maker by name: "Freelief is made by Alexander Steele, Effigy Media."
+
 <a id="v0-5-14"></a>
 ## [0.5.14] - 2026-10-07
 - **About** now credits the maker: "Made by" with the Effigy Media logo and a link to
