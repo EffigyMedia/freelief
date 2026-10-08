@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-6-2"></a>
+## [0.6.2] - 2026-10-08
+- Sturdier offline copy: if the browser's storage fails, Freelief loads from the internet in place
+  of showing an error, and a failed self-repair is logged. No visible change.
+  [AUD-059](../fragments/AUD-059.md), [AUD-060](../fragments/AUD-060.md). 133 tests.
+
 <a id="v0-6-1"></a>
 ## [0.6.1] - 2026-10-08
 - **Feedback**: a **Copy message** button. Open on GitHub no longer puts your message in the web

@@ -113,6 +113,6 @@ self.addEventListener("fetch", (event) => {
         }
         return response;
       });
-    }),
+    }).catch(() => fetch(event.request)), // a Cache Storage fault falls back to the network (AUD-059)
   );
 });

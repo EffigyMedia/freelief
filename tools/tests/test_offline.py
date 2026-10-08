@@ -281,3 +281,18 @@ def test_a_screen_that_cannot_load_falls_back_and_fixes_the_address():
             wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 5000)
         finally:
             context.close()
+
+
+def test_a_cache_fault_falls_back_to_the_network_and_a_repair_reply_is_heard():
+    # AUD-059: a rejecting Cache Storage must not answer every request with a network error.
+    source = (ROOT / "sw.js").read_text("utf-8")
+    assert "}).catch(() => fetch(event.request))" in source
+    # AUD-060: the page listens for the worker's repair reply.
+    shell = (ROOT / "app.js").read_text("utf-8")
+    assert "event.data.heal === false" in shell
+    with open_app(service_workers="allow", route="menu") as (page, errors, _):
+        page.evaluate("navigator.serviceWorker.ready")
+        page.reload()
+        wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
+        page.wait_for_selector("html[data-ready='true']", timeout=5000)
+        assert not [e for e in errors if "repair" in e], "a working repair reports nothing"

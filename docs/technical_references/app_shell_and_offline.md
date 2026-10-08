@@ -50,14 +50,15 @@ after you check its source in the same session, and set `checked` to that date.
 calls `skipWaiting` only when a page posts `"skip"` (AUD-057). Activate deletes only caches whose name starts with `freelief-` and is not the
 current one, then claims the clients. Fetch answers same-origin GET requests from **this version's cache only** (`caches.open(CACHE)`,
 never `caches.match()`, which searches every cache and let an old version's files reach a new one);
-on a miss it fetches from the network and stores a good response in the cache. It ignores every
-other request.
+on a miss it fetches from the network and stores a good response in the cache. If the cache lookup
+itself fails, it falls back to the network (AUD-059). It ignores every other request.
 
 **The origin is shared** (`effigymedia.github.io` also serves Effigy Arcade, Tiny Arcade and
 Drinax Ref Console), so CacheStorage and `localStorage` are shared too (AUD-001). Another app's
 worker may delete Freelief's cache; the owner chose to stay on this origin with self-repair
 (2026-10-07). On each online launch `app.js` posts `"heal"` to the active worker, which fetches any
-`FILES` entry missing from the cache. `test_offline.py` deletes every cache, reloads online,
+`FILES` entry missing from the cache, and replies `{ heal }`; `app.js` logs a failed repair with
+`console.warn` (AUD-060). `test_offline.py` deletes every cache, reloads online,
 reloads offline, and expects the guide and the help control; another test runs a real version
 update from a scratch copy and checks that a foreign cache survives and the old Freelief cache
 goes. **Freelief must never delete a cache it does not own.** The arcades were told about their

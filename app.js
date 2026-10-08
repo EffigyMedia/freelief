@@ -291,6 +291,11 @@ async function boot() {
 // launch while online, ask the worker to fetch any file the cache is missing.
 async function healOfflineCache() {
   if (!navigator.onLine) return;
+  // The worker replies whether the repair worked (AUD-060). A failure is logged for a field report;
+  // the app still runs, and the next online launch tries again.
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    if (event.data && event.data.heal === false) console.warn("Freelief could not repair its offline copy.");
+  });
   const registration = await navigator.serviceWorker.ready;
   if (registration.active) registration.active.postMessage("heal");
 }
