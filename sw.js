@@ -57,8 +57,12 @@ function precache() {
     .then((cache) => cache.addAll(FILES.map((file) => new Request(file, { cache: "reload" }))));
 }
 
+// A new version installs into its own cache and then waits. The page lets it take over when that
+// is safe: on a fresh open, before the first touch, or when the person presses Update now. A
+// version never changes under a page the person is using, so an old page never loads new files
+// (AUD-057).
 self.addEventListener("install", (event) => {
-  event.waitUntil(precache().then(() => self.skipWaiting()));
+  event.waitUntil(precache());
 });
 
 self.addEventListener("activate", (event) => {
@@ -75,6 +79,10 @@ self.addEventListener("activate", (event) => {
 // again, so a cache that another app deleted, and that refilled only partly, becomes whole.
 // The reply says whether it worked.
 self.addEventListener("message", (event) => {
+  if (event.data === "skip") {
+    self.skipWaiting();
+    return;
+  }
   if (event.data !== "heal") return;
   const reply = (ok) => event.source && event.source.postMessage({ heal: ok });
   event.waitUntil(

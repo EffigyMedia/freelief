@@ -774,6 +774,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   network first; if that fails, everything stays and the screen says "Could not update. This
   version still works offline." A new version installs in its own cache and takes over; only when
   the version is already current is the copy refreshed in full. — 2026-10-08 (UNT-056)
+- **A new version waits until it is safe to take over.** — The audit (AUD-057) found that after a
+  touch, a new version took over mid-session and served its new screens to the old page. Now the
+  worker installs and waits; the page lets it take over only before the first touch (and then
+  reloads once) or when the person presses Update now. After a touch the page keeps its own
+  version, files and all, and the next open gets the new one. A screen that cannot load falls back
+  to the menu and the address becomes `#menu`, so the failed screen's link works again. —
+  2026-10-08 (UNT-057)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

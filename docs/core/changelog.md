@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-42"></a>
+## [0.5.42] - 2026-10-08
+- Fixed: a new version no longer changes under you once you have started using Freelief. It
+  waits for the next time you open it. [AUD-057](../fragments/AUD-057.md). 123 tests.
+
 <a id="v0-5-41"></a>
 ## [0.5.41] - 2026-10-08
 - Fixed: **Update now** checks the connection before it removes anything. On a broken or sign-in

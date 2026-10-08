@@ -221,7 +221,11 @@ async function show(name, { moveFocus }) {
     // A screen that cannot load (offline with a damaged cache) falls back to breathing, which is
     // always loaded, so the person is never left on a blank or frozen screen.
     console.error(`Freelief could not load the ${name} screen:`, error);
-    if (name !== DEFAULT_ROUTE) return show(DEFAULT_ROUTE, { moveFocus });
+    if (name !== DEFAULT_ROUTE) {
+      // The address names the screen shown, so the failed screen's link works again (AUD-057).
+      history.replaceState(history.state, "", `#${DEFAULT_ROUTE}`);
+      return show(DEFAULT_ROUTE, { moveFocus });
+    }
     throw error;
   }
   if (request !== showing) return;
@@ -281,9 +285,10 @@ async function healOfflineCache() {
   if (registration.active) registration.active.postMessage("heal");
 }
 
-// When a new version's worker takes over before the person has touched anything, reload once, so
-// they get the new version at once and never a page built from two versions. Once they have
-// touched or typed, never interrupt them: the new version then applies at the next open.
+// A new version waits after it installs (sw.js). Before the person has touched anything, the page
+// lets it take over and reloads once, so they get the new version at once and never a page built
+// from two versions. Once they have touched or typed, the new version waits for the next open, and
+// this page keeps the version it started with, files and all (AUD-057).
 if ("serviceWorker" in navigator) {
   const hadController = Boolean(navigator.serviceWorker.controller);
   let interacted = false;
@@ -291,17 +296,26 @@ if ("serviceWorker" in navigator) {
   const touched = () => { interacted = true; };
   window.addEventListener("pointerdown", touched, { capture: true, once: true });
   window.addEventListener("keydown", touched, { capture: true, once: true });
+  const offerTakeover = (worker) => {
+    if (worker && hadController && !interacted) worker.postMessage("skip");
+  };
   navigator.serviceWorker.addEventListener("controllerchange", () => {
     if (hadController && !interacted && !reloaded) {
       reloaded = true;
       location.reload();
     }
   });
-}
-
-if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js")
-    .then(healOfflineCache)
+    .then((registration) => {
+      offerTakeover(registration.waiting);
+      registration.addEventListener("updatefound", () => {
+        const worker = registration.installing;
+        worker?.addEventListener("statechange", () => {
+          if (worker.state === "installed") offerTakeover(worker);
+        });
+      });
+      return healOfflineCache();
+    })
     .catch(() => {
       // Offline support is lost, but the app still works online.
     });

@@ -90,12 +90,15 @@ async function updateNow(status, t) {
   }
   const incoming = registration.installing || registration.waiting;
   if (incoming) {
+    // The new version waits after it installs (sw.js); the person asked for it, so it takes over.
     const settled = await new Promise((resolve) => {
-      if (incoming.state === "activated") resolve(true);
-      incoming.addEventListener("statechange", () => {
+      const check = () => {
+        if (incoming.state === "installed") incoming.postMessage("skip");
         if (incoming.state === "activated") resolve(true);
         if (incoming.state === "redundant") resolve(false);
-      });
+      };
+      incoming.addEventListener("statechange", check);
+      check();
     });
     if (settled) location.reload();
     else status.textContent = t("settings.updateFailed");

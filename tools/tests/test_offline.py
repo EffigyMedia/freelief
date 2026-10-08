@@ -218,3 +218,66 @@ def test_update_now_on_a_captive_connection_keeps_the_offline_copy():
             assert page.locator(".help-open").is_visible(), "it still works offline"
         finally:
             context.close()
+
+
+def _app_copy(temp):
+    import shutil
+    app = Path(temp) / "app"
+    shutil.copytree(ROOT, app, ignore=shutil.ignore_patterns(
+        ".git", ".venv", "output", "input", "docs", "tools", "__pycache__", ".claude", ".github"))
+    return app
+
+
+def test_after_a_touch_a_new_version_waits_and_the_session_keeps_its_own_files():
+    # AUD-057: an update after the person has touched the app must not mix versions. The page keeps
+    # the version it started with, a lazy screen still loads, and the next open gets the new version.
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = context.new_page()
+            page.goto(url + "#menu")
+            page.evaluate("navigator.serviceWorker.ready")
+            page.reload()
+            wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            old = page.evaluate("self.FREELIEF_VERSION")
+            page.locator(".menu-item").first.click()  # a touch
+            (app / "version.js").write_text('self.FREELIEF_VERSION = "9.9.7";\n', "utf-8")
+            mandala = app / "activities" / "mandala.js"
+            mandala.write_text(mandala.read_text("utf-8").replace("export function start", "export function start_renamed"), "utf-8")
+            page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
+            wait_until(page, "navigator.serviceWorker.getRegistration().then(r => Boolean(r.waiting))", 10000)
+            page.wait_for_timeout(500)
+            assert page.evaluate("self.FREELIEF_VERSION") == old, "the page was not reloaded under the person"
+            page.evaluate("location.hash = 'mandala'")
+            wait_until(page, "document.querySelector('main').dataset.shown === 'mandala'", 5000)
+            assert page.locator(".mandala-part").count() > 0, "the old version's screen loads from its own cache"
+            page.close()
+            fresh = context.new_page()  # the next open
+            fresh.goto(url + "#menu")
+            wait_until(fresh, "self.FREELIEF_VERSION === '9.9.7'", 10000)
+        finally:
+            context.close()
+
+
+def test_a_screen_that_cannot_load_falls_back_and_fixes_the_address():
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        (app / "activities" / "ripple.js").unlink()
+        url = serve(app)
+        context = browser().new_context(service_workers="block")
+        try:
+            page = context.new_page()
+            page.goto(url + "#menu")
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            page.evaluate("location.hash = 'ripple'")
+            wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 5000)
+            assert page.evaluate("location.hash") == "#menu", "the address names the screen shown"
+            page.locator(".menu-item[href='#ripple']").click()
+            wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 5000)
+        finally:
+            context.close()
