@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-16"></a>
+## [0.5.16] - 2026-10-07
+- **Sort colours**: drag a tile onto another tile to swap the two, by touch or mouse. Choosing a
+  tile and then the tile to swap it with still works, by touch, mouse or keyboard.
+  [RLG-007](../fragments/RLG-007.md). 87 tests.
+
 <a id="v0-5-15"></a>
 ## [0.5.15] - 2026-10-07
 - **About** credits the maker by name: "Freelief is made by Alexander Steele, Effigy Media."

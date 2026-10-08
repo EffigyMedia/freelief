@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `6f480907bf20f4a1` · 31 requirement(s) specified, 0 not yet
+> Store stamp `9e0ba1a05408facb` · 31 requirement(s) specified, 0 not yet
 
 ## 1. Introduction
 
@@ -77,7 +77,7 @@ person's settings, on the device.
 - **REQ-007** *(should)* — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
-- **REQ-014** *(should)* — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, with no score and no failure.
+- **REQ-014** *(should)* — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
 - **REQ-018** *(must)* — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-020** *(must)* — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
@@ -184,4 +184,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T22:26:12-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T22:39:45-04:00 by `Commands/srs.py` from 31 requirement record(s).

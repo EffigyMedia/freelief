@@ -233,8 +233,9 @@ statements come from the strings file. Outcome: the person stops when they choos
 focused bubble with a soft visual (and a soft tone if tones are on). *Shape trace:* a looping shape;
 the person follows it with a finger or moves along it with the arrow keys. *Colour sort:* calm
 colour tiles to put in order from lightest to darkest: choose a tile, then the tile to swap it with,
-by touch, mouse or keyboard; each tile names its shade for a screen reader *(changed from "drag, or
-keyboard" at slice 5; waits for the owner's confirmation, see REQ-014)*. States for all: no score, no
+by touch, mouse or keyboard; or drag a tile onto another tile to swap the two, by touch or mouse.
+Each tile names its shade for a screen reader *(changed from "drag, or keyboard" at slice 5; drag
+added back beside choose-then-swap by the owner's decision, 2026-10-07, see REQ-014)*. States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
 and its action.
 
@@ -592,7 +593,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   order, so the tiles shrink to fit (never under 44 pixels). It passed every automated check, so
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
-  and the owner confirms or asks for drag as an addition**)
+  and the owner confirms or asks for drag as an addition**). *Amended 2026-10-07: the owner asked
+  for drag as an addition; see the next entry.*
+- **Drag is added to the colour sort beside choose-then-swap, not in place of it.** — Freelief is
+  a mobile web app, and on a phone a person expects to drag a tile. Choose-then-swap stays, so the
+  keyboard, the screen reader and a person with shaky hands keep one method that needs no fine
+  movement. A drop on another tile swaps the two, so both methods do the same thing and the live
+  line says the same words. A movement under `sort.dragThreshold` pixels is a tap, not a drag, and
+  a drop off the tiles changes nothing. — Rejected: drag that inserts and shifts the other tiles (a
+  second rule to learn); drag only (no path without sight). — 2026-10-07 (owner; UNT-029)
 - **About credits the maker: "Made by", the Effigy Media logo (a 200 x 120 copy of the owner's own
   logo from Effigy Arcade, 26 KB) and a link to https://www.effigymedia.com.** — Owner request. The link
   is one the person chooses; the app still sends nothing. — 2026-10-07 (owner)

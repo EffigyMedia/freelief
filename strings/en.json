@@ -95,7 +95,7 @@
   "calm.blackLabel": "Black screen. Tap or press any key to bring the screen back.",
   "calm.soundsOff": "Sounds are off. Turn them on in Settings to hear the music.",
   "sort.title": "Sort colours",
-  "sort.intro": "Put the tiles in order, from lightest on the left to darkest on the right. Choose a tile, then choose the tile to swap it with. Arrow keys move between tiles.",
+  "sort.intro": "Put the tiles in order, from lightest on the left to darkest on the right. Choose a tile, then choose the tile to swap it with, or drag a tile onto another. Arrow keys move between tiles.",
   "sort.tileLabel": "{hue}, {shade}",
   "sort.tilePosition": "{name}, place {position} of {total}",
   "sort.hue.blue": "Blue",

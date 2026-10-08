@@ -478,7 +478,22 @@ main {
   border: 2px solid var(--text);
   border-radius: 1rem;
   cursor: pointer;
+  touch-action: none; /* a drag on a tile moves the tile, not the page */
   transition: transform 0.2s ease-out;
+}
+
+/* The dragged tile follows the pointer at once; the tile under it shows where it lands. */
+.sort-tile.dragging {
+  position: relative;
+  z-index: 1;
+  cursor: grabbing;
+  transition: none;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.3);
+}
+
+.sort-tile.drop-target {
+  outline: 4px dashed var(--focus);
+  outline-offset: 3px;
 }
 
 .sort-tile[aria-pressed="true"] {

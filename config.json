@@ -248,6 +248,7 @@
     ]
   },
   "sort": {
+    "dragThreshold": 8,
     "lightness": [
       88,
       74,
