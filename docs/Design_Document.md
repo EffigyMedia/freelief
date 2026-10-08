@@ -833,6 +833,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   small for shaky hands, though a touch anywhere on the shape already moves it. Its radius is a
   tunable (`trace.markerRadius`, 22 units); the panel has a small padding and the drawing may
   overflow into it, so the marker is never clipped at a shape's edge. — 2026-10-08 (owner; UNT-063)
+- **The breathing screen shows its rhythm under the circle, such as "In 4 · Out 6".** — The design
+  review found that a first-time user sees a count that goes up with no stated end. The line is
+  built from the rhythm's own numbers and the short phase names in the strings file, so it always
+  matches the rhythm that runs. This closes slice 6 at version 0.6.0. — 2026-10-08 (owner; UNT-064)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

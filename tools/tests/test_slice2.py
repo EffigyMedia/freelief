@@ -183,3 +183,14 @@ def test_breathe_stands_out_and_freelief_can_open_on_breathing():
         wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 3000)
         page.evaluate("location.hash = 'nothing-here'")
         wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 3000)
+
+
+def test_the_rhythm_shows_under_the_breathing_circle():
+    # Design review, 2026-10-08: the person sees how long each phase lasts.
+    with open_app() as (page, _, _):
+        go(page, "breathe")
+        assert page.locator(".rhythm-line").inner_text() == "In 4 · Out 6"
+        go(page, "settings")
+        page.locator("input[name=rhythm][value=box]").check()
+        go(page, "breathe")
+        assert page.locator(".rhythm-line").inner_text() == "In 4 · Hold 4 · Out 4 · Rest 4"

@@ -72,6 +72,8 @@
 h1:focus, h1:focus-visible { outline: none; }
 
 .hint { margin: 0; color: var(--muted); }
+/* The rhythm under the breathing circle, so a first-time user knows each phase's length. */
+.rhythm-line { text-align: center; font-size: 0.95rem; letter-spacing: 0.02em; }
 .small-hint { font-size: 0.9rem; }
 
 .exercise-actions {

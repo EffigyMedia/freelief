@@ -26,6 +26,7 @@ export function start(container, ctx) {
         <div class="guide-circle"></div>
         <div class="guide-count" aria-hidden="true"></div>
       </div>
+      <p class="hint rhythm-line">${phases.map((phase) => `${t(`breathe.short.${phase.key}`)} ${phase.seconds}`).join(t("breathe.rhythmSeparator"))}</p>
       <p class="phase" aria-live="polite"></p>
       <button type="button" class="button pause"></button>
     </section>`;

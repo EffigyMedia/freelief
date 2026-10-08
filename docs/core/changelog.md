@@ -10,6 +10,15 @@ audit.
 
 ---
 
+<a id="v0-6-0"></a>
+## [0.6.0] - 2026-10-08
+- **Breathe** shows its rhythm under the circle, for example "In 4 · Out 6".
+  [RLG-031](../fragments/RLG-031.md). 131 tests.
+- **Slice 6 is complete.** Since 0.5.0: owner polish from the phone, three new activities (ripple
+  pond, mandala coloring, the Visualizer), drag in the color sort, vibration, the country list and
+  saved region, sources for every activity, and the safety, bug, records and polish fixes from
+  design audit round UNT-051.
+
 <a id="v0-5-48"></a>
 ## [0.5.48] - 2026-10-08
 - **Trace a shape**: the dot you move is larger and easier to see. [RLG-030](../fragments/RLG-030.md).
