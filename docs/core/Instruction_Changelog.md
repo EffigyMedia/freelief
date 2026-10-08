@@ -29,6 +29,12 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-08
 
+### The Release row runs `build --release`
+- **Instruction:** at a release, run `build --release`. It fails on uncommitted shipped files, on a
+  shipped file changed after the last version bump, and on crisis data checked more than
+  `crisis.maxCheckAgeDays` days ago.
+- **Why:** audit findings AUD-010, AUD-011 and AUD-024 (round UNT-051, fixed in UNT-074).
+
 ### AGENTS.md says Freelief opens on the menu, and names every shipped module
 - **Instruction:** Freelief opens on the menu ("What would help right now?"), with Breathe first and
   one tap away. `#menu` is the default route, and a screen that cannot load falls back to it. The

@@ -187,3 +187,19 @@ def test_shipped_code_names_no_other_address():
             if url not in URL_ALLOWED:
                 hits.append(f"{rel}: {url}")
     assert not hits, "an address in shipped code that is not on the allow-list: " + "; ".join(hits)
+
+
+def test_every_committed_shipped_change_came_with_a_version_bump():
+    # AUD-010: an installed app keeps its cache until the version changes, so a shipped file changed
+    # after the last bump would never reach it. Commit each shipped change with a bump.
+    late = freelief.changed_since_version_bump()
+    assert not late, "shipped files changed after the last version bump: " + ", ".join(late)
+
+
+def test_the_crisis_date_check_finds_an_old_date():
+    import datetime
+    far_future = datetime.date(2100, 1, 1)
+    stale = freelief.stale_crisis_checks(30, today=far_future)
+    assert any(item.startswith("directory") for item in stale), stale
+    assert len(stale) > 1
+    assert freelief.stale_crisis_checks(10**6) == []

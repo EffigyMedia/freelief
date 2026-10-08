@@ -448,7 +448,8 @@
   },
   "crisis": {
     "directoryUrl": "https://findahelpline.com/",
-    "defaultRegion": "auto"
+    "defaultRegion": "auto",
+    "maxCheckAgeDays": 90
   },
   "project": {
     "sourceUrl": "https://github.com/EffigyMedia/freelief",

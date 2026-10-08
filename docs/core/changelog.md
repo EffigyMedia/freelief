@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-6-9"></a>
+## [0.6.9] - 2026-10-08
+- Internal: a release check (`build --release`) for a clean tree, a version bump after every
+  shipped change, and crisis lines checked in the last 90 days. No visible change.
+  [AUD-011](../fragments/AUD-011.md), [AUD-010](../fragments/AUD-010.md), [AUD-024](../fragments/AUD-024.md). 145 tests.
+
 <a id="v0-6-8"></a>
 ## [0.6.8] - 2026-10-08
 - Fixed: a new version of Freelief now reaches an installed app at once; GitHub Pages' caching could

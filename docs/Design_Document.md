@@ -889,6 +889,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   requests (AUD-027); the exact Content Security Policy and every address in shipped code are
   checked (AUD-031); a stored inherited name is checked to be ignored (AUD-030). —
   2026-10-08 (UNT-073)
+- **`build --release` checks what a release needs.** — The audit found that build counted untracked
+  files though Pages deploys a commit (AUD-011), that nothing checked for a version bump after a
+  shipped change, so an installed app could keep an old file (AUD-010), and that nothing checked the
+  crisis dates (AUD-024). `build` now counts tracked files only and warns about uncommitted shipped
+  files; `build --release` fails on them, on a shipped file changed after the last version bump,
+  and on a crisis line or the directory checked more than `crisis.maxCheckAgeDays` (90) days ago.
+  A repo test also fails on a shipped change committed without a bump. The AGENTS.md Release row
+  names `build --release`. — 2026-10-08 (UNT-074)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

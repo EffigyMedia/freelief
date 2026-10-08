@@ -54,12 +54,55 @@ def read_version() -> str | None:
     return match.group(1) if match else None
 
 
+def git(*args: str) -> str:
+    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=True).stdout
+
+
+def is_shipped(path: str) -> bool:
+    return bool(path) and not path.startswith(NOT_SHIPPED)
+
+
 def shipped_files() -> list[Path]:
-    """Every tracked or new file that a visitor's browser can download."""
-    listed = subprocess.run(["git", "ls-files", "--cached", "--others", "--exclude-standard"],
-                            cwd=ROOT, capture_output=True, text=True, check=True).stdout.split("\n")
-    return [ROOT / p for p in listed
-            if p and not p.startswith(NOT_SHIPPED) and (ROOT / p).is_file()]
+    """Every tracked file that a visitor's browser can download: what GitHub Pages deploys from a
+    commit, not what happens to be in the working tree (AUD-011)."""
+    return [ROOT / p for p in git("ls-files", "--cached").split("\n")
+            if is_shipped(p) and (ROOT / p).is_file()]
+
+
+def uncommitted_shipped() -> list[str]:
+    """Shipped paths that are new or changed in the working tree, so not what a commit deploys."""
+    lines = git("status", "--porcelain", "--untracked-files=all").splitlines()
+    return [line[3:] for line in lines if is_shipped(line[3:])]
+
+
+def changed_since_version_bump() -> list[str]:
+    """Shipped files committed after the last commit that changed version.js (AUD-010). An installed
+    app keeps its cache until the version changes, so such a file would never reach it."""
+    bump = git("log", "-1", "--format=%H", "--", "version.js").strip()
+    if not bump:
+        return []
+    return [p for p in git("diff", "--name-only", bump, "HEAD").split("\n") if is_shipped(p)]
+
+
+def stale_crisis_checks(max_age_days: int, today=None) -> list[str]:
+    """Crisis lines and the directory last checked longer ago than the window (AUD-024)."""
+    import datetime
+    import json
+    today = today or datetime.date.today()
+    data = json.loads((ROOT / "data" / "crisis-lines.json").read_text("utf-8"))
+    entries = [("directory", data["directory"].get("checked"))]
+    for code, region in data["regions"].items():
+        entries += [(f"{code}: {line['name']}", line.get("checked")) for line in region["lines"]]
+    stale = []
+    for name, checked in entries:
+        try:
+            age = (today - datetime.date.fromisoformat(checked)).days
+        except (TypeError, ValueError):
+            stale.append(f"{name} (no valid date)")
+            continue
+        if age > max_age_days:
+            stale.append(f"{name} (checked {checked}, {age} days ago)")
+    return stale
 
 
 # --- commands -------------------------------------------------------------------------------
@@ -159,16 +202,35 @@ def cmd_run(_: argparse.Namespace) -> int:
     return subprocess.run([sys.executable, "-m", "http.server", str(PORT)], cwd=ROOT).returncode
 
 
-def cmd_build(_: argparse.Namespace) -> int:
-    """No build step: the repository is the distributable. This checks that it is shippable."""
+def cmd_build(args: argparse.Namespace) -> int:
+    """No build step: the repository is the distributable. This checks that it is shippable.
+    With --release it also checks what a release needs: a clean tree, a version bump after the
+    last shipped change, and crisis lines checked within the window."""
+    import json
     files = shipped_files()
     total = sum(f.stat().st_size for f in files)
-    print(f"No build step: GitHub Pages serves the repository as it is (REQ-019).")
+    print(f"No build step: GitHub Pages serves the committed repository as it is (REQ-019).")
     print(f"Shipped: {len(files)} file(s), {total / 1024:.1f} KB of {SIZE_LIMIT_BYTES / 1024:.0f} KB (REQ-028)")
-    if total > SIZE_LIMIT_BYTES:
+    failed = total > SIZE_LIMIT_BYTES
+    if failed:
         print("[FAIL] over the size limit")
+    dirty = uncommitted_shipped()
+    late = changed_since_version_bump()
+    config = json.loads((ROOT / "config.json").read_text("utf-8"))
+    stale = stale_crisis_checks(config["crisis"]["maxCheckAgeDays"])
+    for problem, items in (("not committed, so not what Pages deploys", dirty),
+                           ("changed after the last version bump", late),
+                           (f"crisis data checked more than {config['crisis']['maxCheckAgeDays']} days ago", stale)):
+        if not items:
+            continue
+        if args.release:
+            failed = True
+            print(f"[FAIL] {problem}: " + "; ".join(items))
+        else:
+            print(f"[WARN] {problem}: " + "; ".join(items))
+    if failed:
         return 1
-    print("[ OK ] shippable")
+    print("[ OK ] shippable" + (" for a release" if args.release else ""))
     return 0
 
 
@@ -193,8 +255,11 @@ def cmd_bench(_: argparse.Namespace) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(prog="freelief", description=__doc__.split("\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
-    for name in ("setup", "doctor", "run", "build", "clean", "bench"):
+    for name in ("setup", "doctor", "run", "clean", "bench"):
         sub.add_parser(name)
+    build = sub.add_parser("build")
+    build.add_argument("--release", action="store_true",
+                       help="also fail on uncommitted shipped files, a missing version bump and stale crisis data")
     test = sub.add_parser("test")
     test.add_argument("pattern", nargs="*", help="run only test files whose name holds one of these")
     args = parser.parse_args()

@@ -172,7 +172,7 @@ Summaries — the canonical procedures live in `<env-root>/Process/Development_P
 | *(normal work)* | Feature loop: implement → `test` → mark the `RLG-` item built → changelog → **patch** bump in `version.js` → commit. One feature = one commit = one patch = one changelog entry = one tracker item to built. A finished slice is a **minor** bump. |
 | **Track this: …** | `python <env-root>/Commands/fragment.py new --kind ruling --type feature --status requested --title "…"`; do not start it. |
 | **Resume** | Run `python <env-root>/Commands/thread.py show`. **Verify the working tree is clean.** Uncommitted work is an interrupted unit: ask, never silently commit or discard. Then run `doctor`. |
-| **Release** | Only when something ships. Run audit rounds until `audit-gate.py` prints `GATE CLEAR`; then move `live` to the tag (`git push origin vX.Y.Z:live`); run the file audit; re-check every crisis line and update its date; purge `output/previews/`; run `bench`; run `build` (the size check); **verify `test` and `doctor` are green**; bump the version; tag; push the commit and the tag. |
+| **Release** | Only when something ships. Run audit rounds until `audit-gate.py` prints `GATE CLEAR`; then move `live` to the tag (`git push origin vX.Y.Z:live`); run the file audit; re-check every crisis line and update its date; purge `output/previews/`; run `bench`; run `build --release` (the size check, a clean tree, a version bump after the last shipped change, and every crisis line and the directory checked within `crisis.maxCheckAgeDays`); **verify `test` and `doctor` are green**; bump the version; tag; push the commit and the tag. |
 | **Perform audit** | Run a round per `Audit_and_Testing.md`: four lenses, one finding to a fragment; change no code. |
 
 ## Commands
