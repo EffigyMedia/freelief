@@ -89,8 +89,11 @@ self.addEventListener("message", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== "GET" || url.origin !== self.location.origin) return;
+  // Answer only from THIS version's cache. caches.match() searches every cache, so while an old
+  // version's cache still exists it can serve old files to a new version, or a mix of both, and
+  // the app may not start (owner, 2026-10-07: "Can't load").
   event.respondWith(
-    caches.match(event.request, { ignoreSearch: true }).then((cached) => {
+    caches.open(CACHE).then((cache) => cache.match(event.request, { ignoreSearch: true })).then((cached) => {
       if (cached) return cached;
       return fetch(event.request).then((response) => {
         // Store what came from the network, so a cache that was deleted fills again with use.

@@ -135,6 +135,12 @@ h1:focus, h1:focus-visible { outline: none; }
 
 .toggle .hint { margin-left: 2.25rem; }
 
+.app-version { margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--accent-soft); }
+
+.version-line { margin: 0 0 0.5rem; font-weight: 700; }
+
+.update-status { margin: 0.5rem 0 0; min-height: 1.5em; }
+
 *, *::before, *::after { box-sizing: border-box; }
 
 /* The hidden attribute must win over any display rule, such as .button's inline-flex. */

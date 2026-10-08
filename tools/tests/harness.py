@@ -120,7 +120,12 @@ def wait_until(page, expression: str, timeout_ms: int = 5000) -> None:
     """
     deadline = time.monotonic() + timeout_ms / 1000
     while time.monotonic() < deadline:
-        if page.evaluate(expression):
-            return
+        try:
+            if page.evaluate(expression):
+                return
+        except Exception as error:
+            # The app reloads itself when a new version takes over; keep waiting across that.
+            if "context was destroyed" not in str(error) and "navigat" not in str(error):
+                raise
         time.sleep(0.05)
     raise AssertionError(f"timed out after {timeout_ms} ms waiting for: {expression}")

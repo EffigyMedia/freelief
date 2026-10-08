@@ -593,6 +593,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **The worker answers only from its own version's cache; a new version that takes over before the
+  person touches anything reloads the page once; Settings shows the version and an `Update now` button
+  that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
+  `caches.match()` searched every cache, so an old version's cache served old files. Reloading only
+  before the first touch never interrupts an exercise. `Update now` deletes only `freelief-` caches,
+  because the origin is shared. — 2026-10-07 (owner reported; implementer fixed)
 - **Freelief opens on the menu ("What would help right now?"), with Breathe first. Every screen has one
   `Back to menu` control. Settings is a gear, always at the top right, and leaves the menu list. The
   brand name stays plain text, so `Need urgent help?` remains the first stop for the Tab key.** — The

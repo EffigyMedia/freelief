@@ -103,9 +103,13 @@ def test_an_update_keeps_other_apps_caches_and_drops_only_old_freelief_ones():
             old = page.evaluate("'freelief-' + self.FREELIEF_VERSION")
             page.evaluate(f"caches.open('{FOREIGN_CACHE}')")
             (app / "version.js").write_text('self.FREELIEF_VERSION = "9.9.9";\n', "utf-8")
-            page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
+            try:
+                page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
+            except Exception:
+                pass  # the takeover reloads the page; that is expected
             wait_until(page, "caches.has('freelief-9.9.9')", 8000)
             wait_until(page, f"caches.has('{old}').then(present => !present)", 8000)
+            wait_until(page, "document.readyState === 'complete'", 5000)
             keys = page.evaluate("caches.keys()")
             assert FOREIGN_CACHE in keys, keys
             assert "freelief-9.9.9" in keys and old not in keys, keys
@@ -116,3 +120,66 @@ def test_precache_bypasses_the_http_cache():
     # AUD-013: a new version must not store an old file from the browser's HTTP cache.
     source = (ROOT / "sw.js").read_text("utf-8")
     assert 'new Request(file, { cache: "reload" })' in source
+
+def test_an_old_cache_never_leaks_into_the_running_version():
+    # Owner, 2026-10-07: "Can't load". The worker answered from every cache, so an old version's
+    # cache could serve old files to a new version. Plant a stale version.js in an older cache.
+    with open_app(service_workers="allow", route=None) as (page, _, _):
+        page.evaluate("navigator.serviceWorker.ready")
+        page.reload()
+        wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
+        current = page.evaluate("self.FREELIEF_VERSION")
+        # Remove version.js from the current cache, so a lookup across every cache can only find the
+        # stale copy. The worker must miss its own cache and fetch the current file instead.
+        page.evaluate("""(async () => {
+            const own = await caches.open('freelief-' + self.FREELIEF_VERSION);
+            for (const key of await own.keys()) if (key.url.endsWith('/version.js')) await own.delete(key);
+            const old = await caches.open('freelief-0.0.0-stale');
+            await old.put(new Request('version.js'), new Response('self.FREELIEF_VERSION = "0.0.0";',
+                { headers: { 'Content-Type': 'text/javascript' } }));
+        })()""")
+        page.reload()
+        page.wait_for_selector("html[data-ready='true']", timeout=5000)
+        assert page.evaluate("self.FREELIEF_VERSION") == current, "a stale cache must not be read"
+
+
+def test_an_update_reloads_the_page_onto_the_new_version_before_any_touch():
+    import shutil
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = Path(temp) / "app"
+        shutil.copytree(ROOT, app, ignore=shutil.ignore_patterns(
+            ".git", ".venv", "output", "input", "docs", "tools", "__pycache__", ".claude", ".github"))
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = context.new_page()
+            page.goto(url)
+            page.evaluate("navigator.serviceWorker.ready")
+            page.reload()
+            wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
+            (app / "version.js").write_text('self.FREELIEF_VERSION = "9.9.8";\n', "utf-8")
+            page.reload()  # the browser checks the worker on navigation, installs it, and it takes over
+            wait_until(page, "self.FREELIEF_VERSION === '9.9.8'", 10000)
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+        finally:
+            context.close()
+
+def test_settings_shows_the_version_and_update_now_refreshes_only_freelief():
+    # Owner, 2026-10-07: "a force update to the settings and a build version shown there".
+    with open_app(service_workers="allow", route="settings") as (page, _, _):
+        version = page.evaluate("self.FREELIEF_VERSION")
+        assert page.locator(".version-line").inner_text() == f"Version {version}"
+        page.evaluate("navigator.serviceWorker.ready")
+        page.evaluate(f"Promise.all([caches.open('{FOREIGN_CACHE}'), caches.open('freelief-0.0.0-old')])")
+        page.context.set_offline(True)
+        page.locator(".update-now").click()
+        assert page.locator(".update-status").inner_text() == "You need an internet connection to update."
+        page.context.set_offline(False)
+        with page.expect_navigation(timeout=8000):
+            page.locator(".update-now").click()
+        wait_until(page, "document.documentElement.dataset.ready === 'true'", 8000)
+        wait_until(page, f"caches.has('freelief-' + self.FREELIEF_VERSION)", 8000)
+        keys = page.evaluate("caches.keys()")
+        assert FOREIGN_CACHE in keys, "another app's cache survives"
+        assert "freelief-0.0.0-old" not in keys, keys

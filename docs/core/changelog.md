@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-5-11"></a>
+## [0.5.11] - 2026-10-07
+- Fix: the owner could not load v0.5.10. The offline worker looked in every cache, so an older
+  version's cache could serve old files. It now reads only its own version's cache, and a new version
+  that arrives at launch reloads the page once, before you touch anything. **Settings** now shows the
+  **version** and an **Update now** button. 78 tests.
+
 <a id="v0-5-10"></a>
 ## [0.5.10] - 2026-10-07
 - As the owner asked: Freelief now **opens on the menu** ("What would help right now?"), with Breathe

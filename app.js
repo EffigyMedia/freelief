@@ -223,6 +223,24 @@ async function healOfflineCache() {
   if (registration.active) registration.active.postMessage("heal");
 }
 
+// When a new version's worker takes over before the person has touched anything, reload once, so
+// they get the new version at once and never a page built from two versions. Once they have
+// touched or typed, never interrupt them: the new version then applies at the next open.
+if ("serviceWorker" in navigator) {
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  let interacted = false;
+  let reloaded = false;
+  const touched = () => { interacted = true; };
+  window.addEventListener("pointerdown", touched, { capture: true, once: true });
+  window.addEventListener("keydown", touched, { capture: true, once: true });
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (hadController && !interacted && !reloaded) {
+      reloaded = true;
+      location.reload();
+    }
+  });
+}
+
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js")
     .then(healOfflineCache)

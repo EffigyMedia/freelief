@@ -35,16 +35,43 @@ export function start(container, ctx) {
         <p id="sounds-hint" class="hint">${t("settings.soundsHint")}</p>
       </div>
       <p class="hint">${t("settings.saved")}</p>
+      <div class="app-version">
+        <p class="version-line">${t("settings.version", { version: self.FREELIEF_VERSION })}</p>
+        <button type="button" class="button update-now" aria-describedby="update-hint">${t("settings.update")}</button>
+        <p id="update-hint" class="hint">${t("settings.updateHint")}</p>
+        <p class="update-status" aria-live="polite"></p>
+      </div>
     </section>`;
 
   container.querySelectorAll("input[name=rhythm]").forEach((input) =>
     input.addEventListener("change", () => setSetting("rhythm", input.value)));
   container.querySelectorAll("input[name=theme]").forEach((input) =>
     input.addEventListener("change", () => setSetting("theme", input.value)));
+  const status = container.querySelector(".update-status");
+  container.querySelector(".update-now").addEventListener("click", () => updateNow(status, t));
   container.querySelector("input[name=sounds]").addEventListener("change", (event) => {
     if (event.target.checked) unlockAudio();
     setSetting("sounds", event.target.checked);
   });
+}
+
+// "Update now" (owner, 2026-10-07): drop Freelief's offline copy and its worker, then reload from
+// the internet, so the newest version loads at once. Settings live in localStorage and are kept.
+// Only Freelief's own caches are deleted; the origin is shared with other apps.
+async function updateNow(status, t) {
+  if (!navigator.onLine) {
+    status.textContent = t("settings.updateOffline");
+    return;
+  }
+  status.textContent = t("settings.updating");
+  try {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter((key) => key.startsWith("freelief-")).map((key) => caches.delete(key)));
+    const registration = await navigator.serviceWorker?.getRegistration();
+    if (registration) await registration.unregister();
+  } finally {
+    location.reload();
+  }
 }
 
 export function stop() {}

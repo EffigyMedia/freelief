@@ -48,7 +48,8 @@ after you check its source in the same session, and set `checked` to that date.
 `sw.js` imports `version.js` and names its cache `freelief-<version>`. Install pre-caches the
 `FILES` list with `cache: "reload"`, past the browser's HTTP cache (AUD-013), and calls
 `skipWaiting`. Activate deletes only caches whose name starts with `freelief-` and is not the
-current one, then claims the clients. Fetch answers same-origin GET requests from the cache first;
+current one, then claims the clients. Fetch answers same-origin GET requests from **this version's cache only** (`caches.open(CACHE)`,
+never `caches.match()`, which searches every cache and let an old version's files reach a new one);
 on a miss it fetches from the network and stores a good response in the cache. It ignores every
 other request.
 
@@ -63,3 +64,10 @@ goes. **Freelief must never delete a cache it does not own.** The arcades were t
 own cleanup code through their inboxes. `test_offline.py` fails when a shipped file is missing from `FILES` or a
 listed file does not exist, so **add every new shipped file to `FILES`** and bump the version so
 the cache is replaced.
+
+## Updates
+The browser checks `sw.js` on navigation; a changed worker installs, calls `skipWaiting`, activates
+and claims the page. `app.js` listens for `controllerchange`: if the page already had a controller and
+the person has not yet touched or typed, it reloads once, so the new version shows at once; after a
+touch it never interrupts. Settings shows `Version X` and `Update now`, which (online only) deletes
+every `freelief-` cache, unregisters the worker and reloads; settings in `localStorage` are kept.
