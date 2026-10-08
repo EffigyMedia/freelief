@@ -80,7 +80,7 @@ def test_the_switch_turns_it_off_and_the_choice_is_saved():
         assert buzz(page) == [], "no vibration once the switch is off"
         go(page, "settings")
         assert not page.locator("input[name=haptics]").is_checked()
-        stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v1')"))
+        stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v2')"))
         assert stored["haptics"] is False
 
 

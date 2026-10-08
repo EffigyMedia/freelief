@@ -259,8 +259,11 @@ link says it needs a network. *(Changed at slice 1, 2026-10-07: the emergency li
 the other-countries list was added. See the Decision Log.)* *(Changed 2026-10-07, UNT-042: the Country list and the
 region in Settings replace the other-countries list.)*
 
-**F7 — Settings.** Rhythm preset, tones on or off, theme override. Saved on the device at once.
-Storage that fails is ignored and the defaults stand.
+**F7 — Settings.** Rhythm preset, theme override, vibration on or off, and the region for urgent
+help; sound on or off is the speaker in the header; the Visualizer's sound choice is kept too.
+Saved on the device at once. Only a setting the person changes is stored, so a setting they never
+touched follows the default of the version they run; "a saved rhythm is kept" means a rhythm the
+person chose. Storage that fails is ignored and the defaults stand.
 
 **F8 — Disclaimer, Standards & research.** The footer links to the disclaimer page and to the
 Standards & research page. The Standards & research page shows each verified standard with its
@@ -757,6 +760,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   the one state without the help control; one tap or key brings the screen and the control back,
   and while it is black no shape is added and the stage does not animate, which saves power. —
   2026-10-08 (owner; UNT-054)
+- **Settings stores only what the person changed, under a new key, `freelief.settings.v2`.** — The
+  audit (AUD-062) found that every save wrote every value, so a default froze as if chosen and the
+  new long out-breath default never reached anyone who had changed any setting. The v1 store is
+  read once and removed: a value carries over only if it differs from today's default, and a
+  stored "box" rhythm is dropped, because box was the default from 2026-10-07 to 2026-10-08 and was
+  most likely never chosen. The implementer chose this rule because the box period was a few
+  hours of a public preview; a person who did choose box chooses it again in Settings. —
+  2026-10-08 (implementer, owner-delegated fix order; UNT-055)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

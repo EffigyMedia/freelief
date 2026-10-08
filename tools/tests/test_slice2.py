@@ -75,8 +75,9 @@ def test_settings_round_trip_through_a_reload():
         assert not page.locator("input[name=haptics]").is_checked()
         assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "false"
         assert page.evaluate("document.documentElement.dataset.theme") == "light"
-        stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v1')"))
-        assert stored == {"rhythm": "slow", "sounds": False, "theme": "light", "calmMode": "music",
+        stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v2')"))
+        # Only the five changed settings are stored; the Visualizer's sound was never touched.
+        assert stored == {"rhythm": "slow", "sounds": False, "theme": "light",
                           "helpRegion": "IE", "haptics": False}
 
 
@@ -137,3 +138,29 @@ def test_dark_override_beats_a_light_device():
         dark = page.evaluate("getComputedStyle(document.body).backgroundColor")
         assert light != dark
         assert dark == "rgb(15, 22, 38)"
+
+
+def test_only_a_changed_setting_is_stored_so_a_new_default_still_arrives():
+    # AUD-062: a setting the person never touched follows the default of the running version.
+    with open_app() as (page, _, _):
+        go(page, "settings")
+        page.locator("input[name=theme][value=light]").check()
+        stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v2')"))
+        assert stored == {"theme": "light"}
+
+
+V1_STORE = """
+localStorage.setItem('freelief.settings.v1', JSON.stringify(
+  { rhythm: 'box', sounds: true, theme: 'dark', calmMode: 'music', helpRegion: 'auto', haptics: false }));
+"""
+
+
+def test_an_old_store_keeps_only_real_choices_and_drops_the_box_era_rhythm():
+    with open_app(init_script="if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1');"
+                  + V1_STORE + "}") as (page, _, _):
+        stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v2')"))
+        assert stored == {"theme": "dark", "haptics": False}, "only values that differ from today's defaults"
+        assert page.evaluate("localStorage.getItem('freelief.settings.v1')") is None, "the old store is removed"
+        go(page, "settings")
+        assert page.locator(f"input[name=rhythm][value={CONFIG['breathing']['defaultRhythm']}]").is_checked()
+        assert page.locator("input[name=theme][value=dark]").is_checked()

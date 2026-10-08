@@ -438,7 +438,8 @@
     ]
   },
   "settings": {
-    "storageKey": "freelief.settings.v1"
+    "storageKey": "freelief.settings.v2",
+    "legacyStorageKey": "freelief.settings.v1"
   },
   "crisis": {
     "directoryUrl": "https://findahelpline.com/",

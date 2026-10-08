@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-40"></a>
+## [0.5.40] - 2026-10-08
+- Fixed: Settings now saves only what you change, so a setting you never touched follows the
+  app's default. If you chose box breathing in the last day, choose it again in Settings.
+  [AUD-062](../fragments/AUD-062.md). 120 tests.
+
 <a id="v0-5-39"></a>
 ## [0.5.39] - 2026-10-08
 - **Need urgent help?** now has a **Call** button for the emergency number, first in the window.
