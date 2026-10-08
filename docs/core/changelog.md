@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-20"></a>
+## [0.5.20] - 2026-10-07
+- The activities no longer show instruction text above them. A screen reader still reads how to
+  use each one. [RLG-011](../fragments/RLG-011.md). 87 tests.
+
 <a id="v0-5-19"></a>
 ## [0.5.19] - 2026-10-07
 - **Ground yourself** and **Calming words** are removed. Their research was weak, and Freelief

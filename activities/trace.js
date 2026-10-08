@@ -57,7 +57,7 @@ export function start(container, ctx) {
   container.innerHTML = `
     <section class="activity trace">
       <h1>${t("trace.title")}</h1>
-      <p class="exercise-intro">${t("trace.intro")}</p>
+      <p class="visually-hidden">${t("trace.intro")}</p>
       <p class="trace-name" aria-live="polite"></p>
       <div class="trace-slider" role="slider" tabindex="0" aria-label="${t("trace.sliderLabel")}"
            aria-valuemin="0" aria-valuemax="100">

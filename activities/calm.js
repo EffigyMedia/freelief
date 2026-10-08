@@ -28,7 +28,7 @@ export function start(container, ctx) {
   container.innerHTML = `
     <section class="activity calm">
       <h1>${t("calm.title")}</h1>
-      <p class="exercise-intro">${t("calm.intro")}</p>
+      <p class="visually-hidden">${t("calm.intro")}</p>
       <fieldset class="calm-mode">
         <legend>${t("calm.mode")}</legend>
         ${config.calm.modes.map((mode) => `<label class="choice"><input type="radio" name="calm-mode" value="${mode}"

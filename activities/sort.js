@@ -26,7 +26,7 @@ export function start(container, ctx) {
   container.innerHTML = `
     <section class="activity sort">
       <h1>${t("sort.title")}</h1>
-      <p class="exercise-intro" id="sort-intro">${t("sort.intro")}</p>
+      <p class="visually-hidden" id="sort-intro">${t("sort.intro")}</p>
       <ul class="sort-tiles" aria-describedby="sort-intro"></ul>
       <p class="sort-status" aria-live="polite"></p>
       <div class="exercise-actions">

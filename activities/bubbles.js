@@ -14,7 +14,7 @@ export function start(container, ctx) {
   container.innerHTML = `
     <section class="activity bubbles">
       <h1>${t("bubbles.title")}</h1>
-      <p class="exercise-intro">${t("bubbles.intro")}</p>
+      <p class="visually-hidden">${t("bubbles.intro")}</p>
       <ul class="bubble-field" aria-label="${t("bubbles.fieldLabel")}"></ul>
       <div class="exercise-actions">
         <button type="button" class="button motion-toggle" aria-pressed="false"

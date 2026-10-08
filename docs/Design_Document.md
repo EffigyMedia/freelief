@@ -631,6 +631,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   centred.** — Owner requests. The way back is always in the same place, so a person in distress
   never has to scroll to find it. The menu has no Back to menu, so the row is hidden there. —
   2026-10-07 (owner; UNT-030)
+- **An activity shows no instruction text above it; the instruction stays for a screen reader.**
+  — The owner found the text extraneous: the activities explain themselves to a person who can
+  see them. A screen-reader user cannot see them, so each intro stays in the page as visually
+  hidden text after the heading, and the colour sort's row still names it with
+  `aria-describedby`. — Rejected: delete the text, which leaves a screen-reader user without the
+  method. — 2026-10-07 (owner; UNT-033)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

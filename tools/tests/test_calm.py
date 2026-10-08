@@ -180,3 +180,16 @@ def test_lines_divide_the_header_and_the_footer_and_the_about_version_is_centred
         assert version.evaluate("e => getComputedStyle(e).textAlign") == "center"
         box, section = version.bounding_box(), page.locator("section.page").bounding_box()
         assert abs((box["x"] + box["width"] / 2) - (section["x"] + section["width"] / 2)) < 2
+
+
+def test_activities_show_no_text_above_them_but_a_screen_reader_still_hears_how_to_use_them():
+    with open_app() as (page, _, _):
+        for route in ["bubbles", "trace", "sort", "calm"]:
+            go(page, route)
+            hidden = page.locator(f"main p.visually-hidden:text-is({json.dumps(STRINGS[route + '.intro'])})")
+            assert hidden.count() == 1, route
+            box = hidden.bounding_box()
+            assert box["width"] <= 1 and box["height"] <= 1, f"{route}: the intro is not shown"
+            assert page.locator("main .exercise-intro").count() == 0, route
+        go(page, "sort")
+        assert page.locator(".sort-tiles").get_attribute("aria-describedby") == "sort-intro"

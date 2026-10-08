@@ -71,7 +71,7 @@
 /* Headings take focus only so a screen reader announces the new screen. They are not controls. */
 h1:focus, h1:focus-visible { outline: none; }
 
-.exercise-intro, .hint { margin: 0; color: var(--muted); }
+.hint { margin: 0; color: var(--muted); }
 
 .exercise-actions {
   display: flex;
