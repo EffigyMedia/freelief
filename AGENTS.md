@@ -182,8 +182,9 @@ and axe, which `setup` builds with the environment's `uv` (`<env-root>/Runtime/b
 the Chrome already on the machine. Run from the repo root:
 
 - `python tools/freelief.py setup` — create `.venv` and install Playwright and axe.
-- `python tools/freelief.py doctor` — verify Python, the venv, the imports, `version.js`, every JSON
-  file and the manifest parse, and the tests are collectable. **Resume runs this.**
+- `python tools/freelief.py doctor` — verify Python, the venv, the imports, that a browser launches for
+  the tests, `version.js`, that every shipped JSON file exists and parses, that `sw.js` imports
+  `version.js` and lists only files that exist, and that every test file compiles. **Resume runs this.**
 - `python tools/freelief.py test [name…]` — run every `test_*` function in `tools/tests/`. It fails
   on a file it cannot load or that holds no test.
 - `python tools/freelief.py run` — serve the folder at `http://localhost:8000`. A desktop browser is

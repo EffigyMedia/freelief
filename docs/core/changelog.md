@@ -10,6 +10,14 @@ audit.
 
 ---
 
+<a id="v0-6-10"></a>
+## [0.6.10] - 2026-10-08
+- Internal: sturdier project tools. `doctor` checks that a browser launches, that every data file
+  exists, the offline file list, and that every test file compiles; `run` serves this machine
+  only; the test packages are pinned. No visible change. [AUD-012](../fragments/AUD-012.md),
+  [AUD-034](../fragments/AUD-034.md), [AUD-035](../fragments/AUD-035.md), [AUD-036](../fragments/AUD-036.md),
+  [AUD-037](../fragments/AUD-037.md), [AUD-029](../fragments/AUD-029.md), [AUD-032](../fragments/AUD-032.md). 145 tests.
+
 <a id="v0-6-9"></a>
 ## [0.6.9] - 2026-10-08
 - Internal: a release check (`build --release`) for a clean tree, a version bump after every

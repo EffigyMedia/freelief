@@ -29,6 +29,12 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-08
 
+### doctor checks more, and says what it checks
+- **Instruction:** AGENTS.md's doctor line now names every check: a browser launches for the tests,
+  every shipped JSON file exists and parses, `sw.js` imports `version.js` and lists only files that
+  exist, and every test file compiles.
+- **Why:** audit findings AUD-012, AUD-034, AUD-035 and AUD-036 (round UNT-051, fixed in UNT-075).
+
 ### The Release row runs `build --release`
 - **Instruction:** at a release, run `build --release`. It fails on uncommitted shipped files, on a
   shipped file changed after the last version bump, and on crisis data checked more than

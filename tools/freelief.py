@@ -32,7 +32,8 @@ SIZE_LIMIT_BYTES = 250 * 1024  # raised from 150 KB by the owner, 2026-10-07 (RE
 NOT_SHIPPED = ("docs/", "tools/", "input/", ".claude/", ".github/", ".gitignore", ".gitattributes",
                "AGENTS.md", "CLAUDE.md", "config.toml", "tools.toml", "LICENSE", ".nojekyll")
 
-PIP_PACKAGES = ("playwright", "axe-playwright-python")
+# Pinned, so a test run means the same thing on every machine (AUD-032). Raise them on purpose.
+PIP_PACKAGES = ("playwright==1.63.0", "axe-playwright-python==0.1.8")
 
 
 def uv() -> str | None:
@@ -134,18 +135,49 @@ def cmd_doctor(_: argparse.Namespace) -> int:
                                capture_output=True, text=True)
         check(probe.returncode == 0, "Playwright and axe import in .venv",
               "run: python tools/freelief.py setup")
+        # The browser the tests, bench and icon tool drive: the installed Chrome, or Playwright's
+        # own Chromium (AUD-012). Launched once, so a missing browser shows here, not mid-suite.
+        launch = subprocess.run([str(VENV_PY), "-c",
+                                 "import sys; sys.path.insert(0, 'tools/tests'); import harness; "
+                                 "b = harness.browser(); print(b.version)"],
+                                cwd=ROOT, capture_output=True, text=True)
+        check(launch.returncode == 0, f"a browser launches for the tests ({launch.stdout.strip() or 'none'})",
+              "install Google Chrome, or run: .venv python -m playwright install chromium")
     check(read_version() is not None, "version.js holds FREELIEF_VERSION = \"X.Y.Z\"")
-    for name in ("manifest.webmanifest", "config.json", "strings/en.json", "data/crisis-lines.json"):
+    import json
+    # Every JSON file that ships; a missing one fails, it is not skipped (AUD-035).
+    for name in ("manifest.webmanifest", "config.json", "strings/en.json", "data/crisis-lines.json",
+                 "data/research.json", "data/standards.json"):
         path = ROOT / name
-        if path.exists():
-            import json
-            try:
-                json.loads(path.read_text("utf-8"))
-                check(True, f"{name} parses")
-            except ValueError as error:
-                check(False, f"{name} parses", str(error))
+        if not path.exists():
+            check(False, f"{name} exists", "the app needs it")
+            continue
+        try:
+            json.loads(path.read_text("utf-8"))
+            check(True, f"{name} parses")
+        except ValueError as error:
+            check(False, f"{name} parses", str(error))
+    # The worker: it imports version.js, and every file it caches exists (AUD-036).
+    worker = ROOT / "sw.js"
+    if worker.is_file():
+        source = worker.read_text("utf-8")
+        listed = re.findall(r'^\s+"([^"]+)",$', source.split("const FILES = [", 1)[-1].split("];", 1)[0], re.M)
+        missing = [f for f in listed if f != "./" and not (ROOT / f).is_file()]
+        check('importScripts("version.js")' in source and listed and not missing,
+              f"sw.js imports version.js and its {len(listed)} cached files exist",
+              "missing: " + ", ".join(missing) if missing else "check sw.js")
+    else:
+        check(False, "sw.js exists", "the offline copy needs it")
+    # Each test file compiles; a file with a syntax error fails here, not only in `test` (AUD-034).
     collected = sorted(TESTS.glob("test_*.py"))
-    check(bool(collected), f"tests collectable ({len(collected)} file(s) in tools/tests)")
+    broken = []
+    for file in collected:
+        try:
+            compile(file.read_text("utf-8"), str(file), "exec")
+        except SyntaxError as error:
+            broken.append(f"{file.name}: {error.msg}")
+    check(bool(collected) and not broken, f"{len(collected)} test file(s) in tools/tests compile",
+          "; ".join(broken) or "no test files")
     print(f"\n{'READY' if not problems else f'NOT READY: {len(problems)} problem(s)'}")
     return 0 if not problems else 1
 
@@ -198,8 +230,10 @@ def cmd_test(args: argparse.Namespace) -> int:
 
 
 def cmd_run(_: argparse.Namespace) -> int:
-    print(f"Serving {ROOT} at http://localhost:{PORT}  (Ctrl+C stops it)")
-    return subprocess.run([sys.executable, "-m", "http.server", str(PORT)], cwd=ROOT).returncode
+    # This machine only: the folder holds more than the app (AUD-029).
+    print(f"Serving {ROOT} at http://localhost:{PORT}  (this machine only; Ctrl+C stops it)")
+    return subprocess.run([sys.executable, "-m", "http.server", str(PORT), "--bind", "127.0.0.1"],
+                          cwd=ROOT).returncode
 
 
 def cmd_build(args: argparse.Namespace) -> int:
@@ -246,6 +280,9 @@ def cmd_clean(_: argparse.Namespace) -> int:
 
 def cmd_bench(_: argparse.Namespace) -> int:
     bench = ROOT / "tools" / "bench.py"
+    if not VENV_PY.is_file():
+        print("[FAIL] no .venv - run: python tools/freelief.py setup")
+        return 1
     if not bench.is_file():
         print("[FAIL] no benchmark yet - it is created with the performance baseline after slice 1")
         return 1
