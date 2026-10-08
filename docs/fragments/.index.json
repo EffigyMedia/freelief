@@ -1,6 +1,6 @@
 {
- "stamp": "6670181e7db4780e",
- "generated": "2026-10-08T09:33:54-04:00",
+ "stamp": "f31f2c0a5f982786",
+ "generated": "2026-10-08T09:34:35-04:00",
  "count": 249,
  "entries": [
   {
@@ -3294,14 +3294,16 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T09:31:03-04:00",
    "precision": "second",
    "age_days": 0,
    "title": "Polish: a prominent Breathe card and a Settings choice to open on breathing",
    "blocks": [],
    "caused_by": [],
-   "see_also": [],
+   "see_also": [
+    "REQ-018"
+   ],
    "supersedes": []
   },
   {
@@ -4613,7 +4615,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "open",
+   "status": "closed",
    "created": "2026-10-08T09:31:04-04:00",
    "precision": "second",
    "age_days": 0,

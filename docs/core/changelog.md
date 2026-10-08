@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-46"></a>
+## [0.5.46] - 2026-10-08
+- On the menu, the **Breathe** card stands out.
+- **Settings** has "When Freelief opens": show the menu, or start breathing at once.
+  [RLG-028](../fragments/RLG-028.md). 128 tests.
+
 <a id="v0-5-45"></a>
 ## [0.5.45] - 2026-10-08
 - Records only. The Delivery Plan names slice 6, which closes at 0.6.0.

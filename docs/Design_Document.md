@@ -211,7 +211,9 @@ flows below are the structure.
 
 **F1 — Launch to the menu** *(changed 2026-10-07; it was launch to breathing)*. Trigger: the
 person opens Freelief. Steps: the shell paints the menu ("What would help right now?") with no
-account, question or notice before it; Breathe is the first item. Choosing Breathe starts the
+account, question or notice before it; Breathe is the first item, and its card is filled and
+larger. A person who set "When Freelief opens: Start breathing at once" in Settings opens straight
+on the breath guide instead (2026-10-08). Choosing Breathe starts the
 breath guide with the saved rhythm (or the default) and one calm line. Outcome: the person
 chooses what helps, and breathing is one tap away. States: *first visit online* — the service
 worker installs and caches the app in the background, and the menu does not wait for it; *offline, installed* — served from
@@ -814,6 +816,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   version, files and all, and the next open gets the new one. A screen that cannot load falls back
   to the menu and the address becomes `#menu`, so the failed screen's link works again. —
   2026-10-08 (UNT-057)
+- **The Breathe card stands out, and Settings can make Freelief open on breathing.** — The design
+  review found that, since the app opens on the menu, a person in panic must read and choose before
+  any help starts. The owner kept the menu as the default and chose two polish items: the Breathe
+  card is filled and larger, and Settings has "When Freelief opens: Show the menu / Start breathing
+  at once" (`openOn`, saved only when changed). Only an open with no address follows it; a link to
+  a screen opens that screen. — Rejected: breathing as the default again (the owner's 2026-10-07
+  decision stands). — 2026-10-08 (owner; UNT-061)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
