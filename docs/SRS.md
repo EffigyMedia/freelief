@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `56be7fc264e7318a` · 31 requirement(s) specified, 0 not yet
+> Store stamp `dba128ea6c1593fe` · 31 requirement(s) specified, 0 not yet
 
 ## 1. Introduction
 
@@ -78,7 +78,7 @@ person's settings, on the device.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
 - **REQ-014** *(should)* — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, with no score and no failure.
-- **REQ-018** *(must)* — When Freelief opens, the paced breathing guide starts at once, with no account, sign-up, menu or question before it.
+- **REQ-018** *(must)* — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-020** *(must)* — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
 - **REQ-023** *(should)* — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
@@ -95,7 +95,7 @@ person's settings, on the device.
 
 ### 3.4 Performance requirements
 
-- **REQ-026** *(must)* — On a mid-range phone, installed and offline, the breathing guide is visible within 1 second of a cold launch.
+- **REQ-026** *(must)* — On a mid-range phone, installed and offline, the first screen (the menu) is visible within 1 second of a cold launch.
 - **REQ-027** *(must)* — Every tap or key press gets a visible response within 100 milliseconds on a mid-range phone.
 - **REQ-028** *(must)* — The whole app, with every file the offline cache stores, is under 150 KB.
 
@@ -184,4 +184,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T19:35:10-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T21:25:54-04:00 by `Commands/srs.py` from 31 requirement record(s).

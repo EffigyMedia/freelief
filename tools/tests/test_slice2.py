@@ -28,17 +28,31 @@ def go(page, route):
     wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 2000)
 
 
-def test_more_ways_reaches_every_screen_by_keyboard():
-    with open_app() as (page, errors, _):
-        page.locator(".nav-more").focus()
-        page.keyboard.press("Enter")
-        wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 2000)
-        assert page.evaluate("document.activeElement.tagName") == "H1", "focus moves to the new screen"
+def test_the_menu_is_home_and_reaches_every_screen_by_keyboard():
+    # REQ-018 as changed 2026-10-07: Freelief opens on the menu, and every screen goes back to it.
+    with open_app(route=None) as (page, errors, _):
+        assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
         hrefs = page.locator(".menu-item").evaluate_all("els => els.map(e => e.getAttribute('href'))")
-        assert hrefs == ["#breathe", "#ground", "#statements", "#bubbles", "#trace", "#sort", "#calm", "#settings"]
-        page.locator(".nav-back").click()
+        assert hrefs == ["#breathe", "#ground", "#statements", "#bubbles", "#trace", "#sort", "#calm"]
+        page.locator(".menu-item").first.focus()
+        page.keyboard.press("Enter")
         wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 2000)
+        assert page.evaluate("document.activeElement.tagName") == "H1", "focus moves to the new screen"
+        page.locator(".nav-back").click()
+        wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 2000)
         assert not errors, errors
+
+
+def test_the_settings_gear_is_at_the_top_right_on_every_screen():
+    with open_app(route=None, viewport={"width": 360, "height": 640}) as (page, _, _):
+        for screen in ("menu", "breathe", "calm", "about"):
+            go(page, screen)
+            gear = page.locator("a.gear")
+            assert gear.get_attribute("aria-label") == "Settings", screen
+            box = gear.bounding_box()
+            assert box["x"] + box["width"] > 360 - 40 and box["y"] < 60, f"{screen}: gear at {box}"
+        page.locator("a.gear").click()
+        wait_until(page, "document.querySelector('main').dataset.shown === 'settings'", 2000)
 
 
 def test_grounding_walks_five_steps_and_back():

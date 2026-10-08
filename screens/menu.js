@@ -1,4 +1,5 @@
-// "More ways to calm": a short list of large links to every exercise and to Settings.
+// The menu, Freelief's first screen (owner, 2026-10-07): large links to every exercise and activity.
+// Settings is the gear at the top right, not on this list.
 
 const ITEMS = [
   { route: "breathe", label: "nav.breathe", hint: "nav.breatheHint" },
@@ -8,7 +9,6 @@ const ITEMS = [
   { route: "trace", label: "nav.trace", hint: "nav.traceHint" },
   { route: "sort", label: "nav.sort", hint: "nav.sortHint" },
   { route: "calm", label: "nav.calm", hint: "nav.calmHint" },
-  { route: "settings", label: "nav.settings", hint: "nav.settingsHint" },
 ];
 
 export function start(container, ctx) {

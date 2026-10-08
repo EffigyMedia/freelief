@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-10"></a>
+## [0.5.10] - 2026-10-07
+- As the owner asked: Freelief now **opens on the menu** ("What would help right now?"), with Breathe
+  first; **every screen has Back to menu**; **Settings is a gear** at the top right of every screen.
+  [REQ-018](../fragments/REQ-018.md) and [REQ-026](../fragments/REQ-026.md) changed. 75 tests.
+
 <a id="v0-5-9"></a>
 ## [0.5.9] - 2026-10-07
 - **Standards and research** now covers what was added since slice 4: the colour sort under

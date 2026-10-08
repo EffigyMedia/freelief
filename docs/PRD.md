@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `56be7fc264e7318a` · 31 requirement(s) recorded
+> Store stamp `dba128ea6c1593fe` · 31 requirement(s) recorded
 
 ## The problem
 
@@ -79,14 +79,14 @@ Not built (decided 2026-10-07):
 - **REQ-015** — Freelief collects no personal data and sends nothing over the network after install. Only the person's settings are stored, and only on the device.
 - **REQ-016** — Freelief meets WCAG 2.2 level AA in full, and level AAA wherever a criterion can be met.
 - **REQ-017** — All user-facing text lives in one strings file per language, so a translation can be added without a code change. English is the only language in the first version.
-- **REQ-018** — When Freelief opens, the paced breathing guide starts at once, with no account, sign-up, menu or question before it.
+- **REQ-018** — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-019** — Freelief is plain HTML, CSS and JavaScript with no framework, no third-party dependency and no build step.
 - **REQ-020** — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-021** — Freelief uses a dark, calm theme by default and follows the device light or dark setting. All text meets WCAG AAA contrast (7:1, or 4.5:1 for large text).
 - **REQ-022** — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
 - **REQ-024** — Every technique in Freelief is one studied in published clinical research, and the Standards & research page cites at least one source for each technique.
 - **REQ-025** — Freelief makes no claim that it is clinically proven, treats, cures or diagnoses anything. It may say only that its techniques are studied in clinical research, and may claim a review or certification only after it is granted.
-- **REQ-026** — On a mid-range phone, installed and offline, the breathing guide is visible within 1 second of a cold launch.
+- **REQ-026** — On a mid-range phone, installed and offline, the first screen (the menu) is visible within 1 second of a cold launch.
 - **REQ-027** — Every tap or key press gets a visible response within 100 milliseconds on a mid-range phone.
 - **REQ-028** — The whole app, with every file the offline cache stores, is under 150 KB.
 - **REQ-029** — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown. The manual check may come from community volunteers.
@@ -121,4 +121,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-07T19:35:12-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-07T21:25:56-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

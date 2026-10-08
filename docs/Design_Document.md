@@ -206,7 +206,8 @@ restarts on the device (REQ-023, REQ-015).
 The requirements are the records `REQ-001` to `REQ-031`. Their priority is the feature list. The
 flows below are the structure.
 
-**F1 — Launch to breathing.** Trigger: the person opens Freelief. Steps: the shell paints; the
+**F1 — Launch to the menu** *(changed 2026-10-07; it was launch to breathing)*. The app opens on
+the menu; choosing Breathe gives the flow below. Trigger: the person opens Freelief. Steps: the shell paints; the
 breath guide starts with the saved rhythm (or the default) and one calm line. Outcome: the person
 breathes with the guide. States: *first visit online* — the service worker installs and caches the
 app in the background, and the guide does not wait for it; *offline, installed* — served from
@@ -512,9 +513,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **Freelief is for anyone, in the moment: no sign-up, no profile, no history.** — Rejected: a daily
   practice with reminders or streaks, which add stored data and pressure; a clinician-shaped tool.
   — 2026-10-07
-- **On launch, the breathing guide starts at once.** — It asks zero decisions of the person in the
-  worst moment. Other exercises are one tap away. — Rejected: a menu first; a question first. —
-  2026-10-07
+- ~~**On launch, the breathing guide starts at once.**~~ — 2026-10-07. *Superseded the same day by the
+  owner: Freelief opens on the menu, see below.*
 - **Plain HTML, CSS and JavaScript as a progressive web app on GitHub Pages, with no framework, no
   dependency and no build step.** — It gives the smallest download, the fastest load and nothing to
   break, as in Effigy Arcade. — Rejected: a small framework such as Preact. — 2026-10-07
@@ -593,6 +593,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **Freelief opens on the menu ("What would help right now?"), with Breathe first. Every screen has one
+  `Back to menu` control. Settings is a gear, always at the top right, and leaves the menu list. The
+  brand name stays plain text, so `Need urgent help?` remains the first stop for the Tab key.** — The
+  owner, testing on the phone, asked for the menu as home and a way back to it from every method, and
+  for Settings as a gear. REQ-018 and REQ-026 are changed with their history. — Rejected: breathing at
+  launch (the first decision). — 2026-10-07 (owner)
 - **All sounds are soft: low notes, slow swells with no click, long fades, low volume. The bubble pop
   is a short burst of filtered noise over a falling thump, not a tone. Calm offers Music (pads) or Rain
   (filtered noise with soft drops), remembered on the device.** — The owner found the grounding chime

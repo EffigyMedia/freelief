@@ -2,6 +2,16 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-07 — Re-baseline (v0.5.10)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to first screen (the menu) | 155 ms | 155 ms | new | RE-BASELINED |
+| Response: Need urgent help? opens | 69 ms | 69 ms | new | RE-BASELINED; 31 ms of headroom |
+| Shipped size | 130.3 KB | 130.3 KB | new | RE-BASELINED; 20 KB of budget left |
+Notes: the owner made the menu the first screen, and the Pause control is no longer on it, so the
+response probe now opens the urgent-help dialog. Opening a modal dialog with every crisis line is
+heavier than toggling a label; it is the control that matters most, so it is the one to measure.
+
 ## 2026-10-07 — RLG-006 fixed (v0.5.7)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|

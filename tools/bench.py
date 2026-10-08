@@ -22,13 +22,16 @@ CPU_SLOWDOWN = 4
 LAUNCH_TARGET_MS = 1000
 RESPONSE_TARGET_MS = 100
 
+# Response: from a click on "Need urgent help?" (on every screen) to the next frame after the dialog
+# opens. It was the breathing screen's Pause button until the menu became the first screen.
 RESPONSE_PROBE = """() => new Promise(resolve => {
-  const button = document.querySelector('.pause');
+  const button = document.querySelector('.help-open');
+  const dialog = document.querySelector('dialog.help');
   const start = performance.now();
   new MutationObserver((_, observer) => {
     observer.disconnect();
     requestAnimationFrame(() => resolve(performance.now() - start));
-  }).observe(button, { attributes: true, childList: true, characterData: true, subtree: true });
+  }).observe(dialog, { attributes: true });
   button.click();
 })"""
 
@@ -70,7 +73,7 @@ def main() -> int:
     out.write_text(json.dumps(result, indent=2) + "\n", "utf-8")
 
     checks = [
-        ("Launch to breathing guide (REQ-026)", result["launch_ms"], LAUNCH_TARGET_MS, "ms"),
+        ("Launch to first screen (REQ-026)", result["launch_ms"], LAUNCH_TARGET_MS, "ms"),
         ("Input to visible response (REQ-027)", result["response_ms"], RESPONSE_TARGET_MS, "ms"),
         ("Shipped size (REQ-028)", result["size_kb"], freelief.SIZE_LIMIT_BYTES / 1024, "KB"),
     ]

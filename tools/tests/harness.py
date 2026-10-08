@@ -79,8 +79,11 @@ def browser():
 
 @contextmanager
 def open_app(locale="en-US", color_scheme="dark", reduced_motion="no-preference",
-             viewport=None, service_workers="block", init_script=None):
-    """Open the app in a fresh context. Yields (page, errors, requests)."""
+             viewport=None, service_workers="block", init_script=None, route="breathe"):
+    """Open the app in a fresh context, on `route`. Yields (page, errors, requests).
+
+    The app opens on the menu; most tests are about one screen, so they start there. Pass
+    route=None to open the app as a person does."""
     context = browser().new_context(
         locale=locale, color_scheme=color_scheme, reduced_motion=reduced_motion,
         viewport=viewport or {"width": 390, "height": 844}, service_workers=service_workers)
@@ -96,7 +99,7 @@ def open_app(locale="en-US", color_scheme="dark", reduced_motion="no-preference"
             if m.type in ("error", "warning") and "blocked by Playwright" not in m.text else None)
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.on("request", lambda r: requests.append(r.url))
-    page.goto(base_url())
+    page.goto(base_url() + (f"#{route}" if route else ""))
     try:
         page.wait_for_selector("html[data-ready='true']", timeout=5000)
     except Exception as error:

@@ -47,8 +47,9 @@ def test_help_opens_and_closes_by_keyboard():
 
 def test_pause_and_resume_by_keyboard():
     with open_app() as (page, _, _):
-        page.keyboard.press("Tab")
-        page.keyboard.press("Tab")
+        # Tab order: urgent help, the Settings gear, then the screen's own controls.
+        for _ in range(3):
+            page.keyboard.press("Tab")
         assert page.evaluate("document.activeElement.classList.contains('pause')")
         page.keyboard.press("Space")
         pause = page.locator(".pause")
@@ -119,13 +120,13 @@ def test_targets_are_at_least_44_pixels():
         assert not small, f"targets under 44px: {small}"
 
 
-def test_an_inherited_name_in_the_hash_falls_back_to_breathing():
+def test_an_inherited_name_in_the_hash_falls_back_to_the_menu():
     # AUD-005: #constructor, #toString and #__proto__ are not screens.
     with open_app() as (page, errors, _):
         for name in ("constructor", "toString", "__proto__", "nothing-here"):
             page.evaluate(f"location.hash = '{name}'")
-            wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 3000)
-            assert page.locator(".guide").is_visible(), name
+            wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 3000)
+            assert page.locator(".menu-item").first.is_visible(), name
         page.evaluate("location.hash = 'ground'")
         wait_until(page, "document.querySelector('main').dataset.shown === 'ground'", 3000)
         assert not [e for e in errors if "could not" in e], errors

@@ -6,32 +6,31 @@ import { loadCrisisLines, deviceRegion, linesFor } from "./crisis.js";
 import { initSettings, getSetting, onSettingChange } from "./settings.js";
 import * as audio from "./audio.js";
 import * as motion from "./motion.js";
-import * as breathe from "./exercises/breathe.js";
+import * as menu from "./screens/menu.js";
 
-// The screens the router knows. Breathing is the default and the first screen (REQ-018), so it
-// loads with the shell. Every other screen loads on its first visit (RLG-006): the browser then
-// parses only what the breathing guide needs before it draws. The service worker caches them all,
-// so a later visit works offline.
+// The screens the router knows. The menu is the default and the first screen (REQ-018, changed by
+// the owner 2026-10-07), so it loads with the shell. Every other screen loads on its first visit
+// (RLG-006): the browser then parses only what the first screen needs before it draws. The service
+// worker caches them all, so a later visit works offline.
 const ROUTES = {
-  breathe: () => Promise.resolve(breathe),
+  menu: () => Promise.resolve(menu),
+  breathe: () => import("./exercises/breathe.js"),
   ground: () => import("./exercises/ground.js"),
   statements: () => import("./exercises/statements.js"),
   bubbles: () => import("./activities/bubbles.js"),
   trace: () => import("./activities/trace.js"),
   sort: () => import("./activities/sort.js"),
   calm: () => import("./activities/calm.js"),
-  menu: () => import("./screens/menu.js"),
   settings: () => import("./screens/settings.js"),
   about: () => import("./screens/about.js"),
   standards: () => import("./screens/standards.js"),
   feedback: () => import("./screens/feedback.js"),
 };
-const DEFAULT_ROUTE = "breathe";
+const DEFAULT_ROUTE = "menu";
 
 let config = null;
 let current = null;
 let main = null;
-let moreLink = null;
 let backLink = null;
 
 async function loadConfig() {
@@ -117,15 +116,19 @@ function buildShell() {
   const helpButton = element("button", {
     type: "button", class: "button help-open", "aria-haspopup": "dialog", text: t("help.open"),
   });
+  // Settings is a gear, always at the top right (owner, 2026-10-07). The icon is inline SVG, so no
+  // file ships, and the link carries the accessible name.
+  const gear = element("a", { class: "gear", href: "#settings", "aria-label": t("nav.settings") });
+  gear.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-2.6-1.5L14 2.5h-4l-.4 2.5A7.4 7.4 0 0 0 7 6.5l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 3l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 2.6 1.5l.4 2.5h4l.4-2.5a7.4 7.4 0 0 0 2.6-1.5l2.4 1 2-3.4-2-1.6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
   const header = element("header", { class: "top" }, [
+    // Plain text, not a link: "Need urgent help?" stays the first stop for the Tab key.
     element("p", { class: "brand", text: t("app.name") }),
-    helpButton,
+    element("div", { class: "top-actions" }, [helpButton, gear]),
   ]);
   main = element("main", { id: "screen" });
-  // Every exercise and activity offers both ways on (owner, 2026-10-07).
-  moreLink = element("a", { class: "button nav-link nav-more", href: "#menu", text: t("nav.more") });
-  backLink = element("a", { class: "button nav-link nav-back", href: "#breathe", text: t("nav.back") });
-  const nav = element("nav", { class: "screen-nav", "aria-label": t("nav.label") }, [moreLink, backLink]);
+  // Every screen goes back to the menu (owner, 2026-10-07).
+  backLink = element("a", { class: "button nav-link nav-back", href: "#menu", text: t("nav.backMenu") });
+  const nav = element("nav", { class: "screen-nav", "aria-label": t("nav.label") }, [backLink]);
   const footerLinks = element("ul", { class: "footer-links" }, [
     ["#about", "footer.about"], ["#standards", "footer.standards"], ["#feedback", "footer.feedback"],
   ].map(([href, key]) => element("li", {}, [element("a", { class: "footer-link", href, text: t(key) })])));
@@ -178,8 +181,7 @@ async function show(name, { moveFocus }) {
   });
   if (request !== showing) return;
   main.dataset.shown = name;
-  moreLink.hidden = name === "menu";
-  backLink.hidden = name === "breathe";
+  backLink.hidden = name === "menu";
   if (moveFocus) {
     // Tell keyboard and screen-reader users where they are: focus the new screen's heading.
     const heading = main.querySelector("h1");

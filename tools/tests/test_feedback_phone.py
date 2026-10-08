@@ -41,13 +41,13 @@ def test_the_phone_back_gesture_closes_urgent_help_and_stays_in_the_app():
         wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 3000)
 
 
-def test_every_exercise_offers_more_ways_and_back_to_breathing():
+def test_every_screen_goes_back_to_the_menu():
+    # Owner, 2026-10-07: "each goes back to menu".
     with open_app() as (page, _, _):
-        for screen in EXERCISES:
+        for screen in ["breathe", *EXERCISES, "settings", "about"]:
             go(page, screen)
-            assert page.locator(".nav-more").is_visible(), screen
-            assert page.locator(".nav-back").is_visible(), screen
-        go(page, "breathe")
-        assert page.locator(".nav-more").is_visible() and page.locator(".nav-back").is_hidden()
+            back = page.locator(".nav-back")
+            assert back.is_visible() and back.inner_text() == "Back to menu", screen
+            assert back.get_attribute("href") == "#menu", screen
         go(page, "menu")
-        assert page.locator(".nav-more").is_hidden() and page.locator(".nav-back").is_visible()
+        assert page.locator(".nav-back").is_hidden()

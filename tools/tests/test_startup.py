@@ -25,7 +25,7 @@ def test_a_failed_crisis_file_keeps_the_guide_and_the_emergency_route():
     try:
         _wait_settled(page)
         assert page.evaluate("document.documentElement.dataset.ready") == "true"
-        assert page.locator(".guide").is_visible()
+        assert page.locator(".menu-item").first.is_visible()
         page.locator(".help-open").click()
         dialog = page.locator("dialog.help")
         assert EMERGENCY in dialog.locator(".emergency").inner_text()
@@ -35,7 +35,7 @@ def test_a_failed_crisis_file_keeps_the_guide_and_the_emergency_route():
 
 
 def test_a_failed_core_file_leaves_the_static_fallback():
-    for path in ("config.json", "strings/en.json", "app.js", "exercises/breathe.js"):
+    for path in ("config.json", "strings/en.json", "app.js", "screens/menu.js"):
         context, page = _open_with_failure(path)
         try:
             fallback = page.locator("#fallback")
@@ -63,6 +63,6 @@ def test_a_normal_start_replaces_the_fallback():
     try:
         _wait_settled(page)
         assert page.locator("#fallback").count() == 0
-        assert page.locator(".guide").is_visible()
+        assert page.locator(".menu-item").first.is_visible(), "the app opens on the menu"
     finally:
         context.close()
