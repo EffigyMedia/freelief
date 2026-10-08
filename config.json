@@ -1,10 +1,10 @@
 {
   "breathing": {
-    "defaultRhythm": "calm",
+    "defaultRhythm": "box",
     "rhythmOrder": [
+      "box",
       "calm",
-      "slow",
-      "box"
+      "slow"
     ],
     "rhythms": {
       "calm": {

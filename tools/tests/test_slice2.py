@@ -4,6 +4,8 @@ import json
 
 from harness import ROOT, open_app, wait_until
 
+CONFIG = json.loads((ROOT / "config.json").read_text("utf-8"))
+
 STRINGS = json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
 
 # Counts AudioContext oscillators, so a test can see that a tone was asked for without hearing it.
@@ -109,7 +111,9 @@ def test_blocked_storage_falls_back_to_defaults():
     with open_app(init_script=BLOCKED_STORAGE) as (page, errors, _):
         assert page.locator(".guide").is_visible()
         go(page, "settings")
-        assert page.locator("input[name=rhythm][value=calm]").is_checked()
+        default = CONFIG["breathing"]["defaultRhythm"]
+        assert default == "box"
+        assert page.locator(f"input[name=rhythm][value={default}]").is_checked()
         page.locator("input[name=rhythm][value=slow]").check()
         go(page, "breathe")
         assert not [e for e in errors if "blocked" not in e], errors

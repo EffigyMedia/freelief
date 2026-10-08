@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-18"></a>
+## [0.5.18] - 2026-10-07
+- **Box breathing** (in 4, hold 4, out 4, rest 4) is now the default rhythm and is listed first in
+  Settings. A rhythm you already chose stays. [RLG-009](../fragments/RLG-009.md). 88 tests.
+
 <a id="v0-5-17"></a>
 ## [0.5.17] - 2026-10-07
 - **Back to menu** is now at the top of every screen, just under the header.

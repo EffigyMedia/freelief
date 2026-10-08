@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `9e0ba1a05408facb` · 31 requirement(s) specified, 0 not yet
+> Store stamp `cf0e72604e42f91f` · 31 requirement(s) specified, 0 not yet
 
 ## 1. Introduction
 
@@ -81,7 +81,7 @@ person's settings, on the device.
 - **REQ-018** *(must)* — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-020** *(must)* — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
-- **REQ-023** *(should)* — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
+- **REQ-023** *(should)* — The person can choose a breathing rhythm from presets (box breathing by default, 4-in 6-out, and a slower rhythm), and the choice is remembered on the device.
 - **REQ-024** *(must)* — Every technique in Freelief is one studied in published clinical research, and the Standards & research page cites at least one source for each technique.
 - **REQ-030** *(must)* — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report) and, as a second choice, a pre-filled email to the public project address. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
 
@@ -184,4 +184,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T22:39:45-04:00 by `Commands/srs.py` from 31 requirement record(s).
+Generated 2026-10-07T22:56:08-04:00 by `Commands/srs.py` from 31 requirement record(s).

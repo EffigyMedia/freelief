@@ -18,7 +18,8 @@ def test_breath_guide_starts_at_launch_with_a_clean_console():
 
 def test_breathing_moves_from_in_to_out():
     with open_app() as (page, _, _):
-        wait_until(page, "document.querySelector('.phase').textContent === 'Breathe out'", 6000)
+        # The default is box breathing: in 4, hold 4, then out, so the out-breath starts at 8 s.
+        wait_until(page, "document.querySelector('.phase').textContent === 'Breathe out'", 10000)
 
 
 def test_no_request_leaves_the_origin():

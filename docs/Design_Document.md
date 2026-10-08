@@ -531,6 +531,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   built-in list, which goes stale. — 2026-10-07
 - **Breathing rhythm: presets, with 4-in 6-out as the default, a slower rhythm and box breathing.**
   — Rejected: one fixed rhythm; full sliders, which are too much to choose in distress. — 2026-10-07
+  *Amended 2026-10-07 (owner, UNT-031): box breathing is the default and is listed first. A device
+  that already saved a rhythm keeps it. Balban 2023 studied box breathing as one of its arms.*
 - **Strict performance targets: the breathing guide is visible within 1 s of a cold, offline launch
   on a mid-range phone; every input responds within 100 ms; the whole app is under 150 KB.** — In a
   panic attack every second of wait is felt. — Rejected: looser targets (3 s, 500 KB). — 2026-10-07
