@@ -142,6 +142,7 @@ PRIVACY_WORDS = {
     "calmMode": "Visualizer",
     "helpRegion": "country",
     "haptics": "vibration",
+    "openOn": "opens",
 }
 
 

@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `7672974917786fdc` · 34 requirement(s) recorded
+> Store stamp `6670181e7db4780e` · 34 requirement(s) recorded
 
 ## The problem
 
@@ -77,7 +77,7 @@ Not built (decided 2026-10-07):
 - **REQ-015** — Freelief collects no personal data and sends nothing over the network after install. Only the person's settings are stored, and only on the device.
 - **REQ-016** — Freelief meets WCAG 2.2 level AA in full, and level AAA wherever a criterion can be met.
 - **REQ-017** — All user-facing text lives in one strings file per language, so a translation can be added without a code change. English is the only language in the first version.
-- **REQ-018** — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it. Breathing is the first item, one tap away, and every screen has a Back to menu control.
+- **REQ-018** — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-019** — Freelief is plain HTML, CSS and JavaScript with no framework, no third-party dependency and no build step.
 - **REQ-020** — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-021** — Freelief uses a dark, calm theme by default and follows the device light or dark setting. All text meets WCAG AAA contrast (7:1, or 4.5:1 for large text).
@@ -128,4 +128,4 @@ Of the 32 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-08T02:19:17-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-08T09:33:56-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

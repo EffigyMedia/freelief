@@ -100,6 +100,11 @@ h1:focus, h1:focus-visible { outline: none; }
 
 .menu-hint { color: var(--muted); }
 
+/* Breathe is the first help, so its card stands out: filled and larger (design review, owner
+   2026-10-08). */
+.menu-item-first { background: var(--accent-soft); padding: 1.25rem 1.25rem; }
+.menu-item-first .menu-label { font-size: 1.45rem; }
+
 .settings fieldset {
   margin: 0;
   padding: 0.75rem 1rem 1rem;

@@ -24,6 +24,10 @@ export function start(container, ctx) {
         ${radios("rhythm", rhythms, getSetting("rhythm"), "settings.rhythm")}
       </fieldset>
       <fieldset>
+        <legend>${t("settings.openOn")}</legend>
+        ${radios("openOn", config.settings.openOnChoices, getSetting("openOn"), "settings.openOn")}
+      </fieldset>
+      <fieldset>
         <legend>${t("settings.theme")}</legend>
         ${radios("theme", themes, getSetting("theme"), "settings.theme")}
       </fieldset>
@@ -54,6 +58,8 @@ export function start(container, ctx) {
 
   container.querySelectorAll("input[name=rhythm]").forEach((input) =>
     input.addEventListener("change", () => setSetting("rhythm", input.value)));
+  container.querySelectorAll("input[name=openOn]").forEach((input) =>
+    input.addEventListener("change", () => setSetting("openOn", input.value)));
   container.querySelectorAll("input[name=theme]").forEach((input) =>
     input.addEventListener("change", () => setSetting("theme", input.value)));
   container.querySelector("input[name=haptics]").addEventListener("change", (event) =>

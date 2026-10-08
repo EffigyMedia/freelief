@@ -19,7 +19,7 @@ export function start(container, ctx) {
       <ul class="menu-list">
         ${ITEMS.map((item) => `
           <li>
-            <a class="menu-item" href="#${item.route}">
+            <a class="menu-item${item.route === "breathe" ? " menu-item-first" : ""}" href="#${item.route}">
               <span class="menu-label">${t(item.label)}</span>
               <span class="menu-hint">${t(item.hint)}</span>
             </a>

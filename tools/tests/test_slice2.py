@@ -164,3 +164,22 @@ def test_an_old_store_keeps_only_real_choices_and_drops_the_box_era_rhythm():
         go(page, "settings")
         assert page.locator(f"input[name=rhythm][value={CONFIG['breathing']['defaultRhythm']}]").is_checked()
         assert page.locator("input[name=theme][value=dark]").is_checked()
+
+
+def test_breathe_stands_out_and_freelief_can_open_on_breathing():
+    # Owner, 2026-10-08 (design review): Breathe is the first help; Settings can make it the start.
+    with open_app(route=None) as (page, _, _):
+        first = page.locator(".menu-item").first
+        assert first.get_attribute("href") == "#breathe" and "menu-item-first" in first.get_attribute("class")
+        size = lambda i: page.locator(".menu-label").nth(i).evaluate("e => parseFloat(getComputedStyle(e).fontSize)")
+        assert size(0) > size(1), "the Breathe card is larger"
+        assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
+        go(page, "settings")
+        assert page.locator("input[name=openOn][value=menu]").is_checked()
+        page.locator("input[name=openOn][value=breathe]").focus()
+        page.keyboard.press("Space")
+        page.goto(page.url.split("#")[0])
+        page.wait_for_selector("html[data-ready='true']")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 3000)
+        page.evaluate("location.hash = 'nothing-here'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 3000)

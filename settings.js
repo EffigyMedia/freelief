@@ -31,6 +31,7 @@ function validators(config) {
     // "auto", or a two-letter region code. crisis.js shows the general route for a region it does
     // not have, so a code that is no longer curated is safe.
     helpRegion: (v) => v === "auto" || /^[A-Z]{2}$/.test(v),
+    openOn: (v) => config.settings.openOnChoices.includes(v),
   };
 }
 
@@ -64,6 +65,7 @@ export function initSettings(config) {
     calmMode: config.calm.defaultMode,
     helpRegion: config.crisis.defaultRegion,
     haptics: config.haptics.enabledByDefault,
+    openOn: config.settings.openOnDefault,
   };
   const valid = validators(config);
   let hasV2 = false;

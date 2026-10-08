@@ -202,6 +202,8 @@ function buildShell() {
 
 function routeName() {
   const name = location.hash.replace(/^#/, "");
+  // With no address, Freelief opens where Settings says: the menu, or breathing (owner, 2026-10-08).
+  if (!name) return getSetting("openOn") === "breathe" ? "breathe" : DEFAULT_ROUTE;
   // Own names only: a hash such as #constructor is not a screen (AUD-005).
   return Object.hasOwn(ROUTES, name) ? name : DEFAULT_ROUTE;
 }
