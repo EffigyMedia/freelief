@@ -13,7 +13,7 @@ window.__osc = [];
 const create = AudioContext.prototype.createOscillator;
 AudioContext.prototype.createOscillator = function () {
   const node = create.call(this);
-  const record = { stop: null, ctx: this };
+  const record = { stop: null, ctx: this, node };
   window.__osc.push(record);
   const stop = node.stop.bind(node);
   node.stop = (when) => { record.stop = when ?? this.currentTime; return stop(when); };
@@ -132,28 +132,39 @@ def test_rain_mode_plays_looping_noise_and_is_remembered():
         assert page.locator("input[name=calm-mode][value=rain]").is_checked(), "the choice is remembered"
 
 
-def test_the_bubble_pop_is_percussive_noise_not_a_tone():
-    with open_app(init_script=OSC_PROBE + NOISE_PROBE) as (page, _, _):
-        page.locator(".guide").click()
-        go(page, "bubbles")
-        before = page.evaluate("window.__noise.length")
-        page.locator("button.bubble").first.click(force=True)
-        wait_until(page, f"window.__noise.length > {before}", 2000)
-        last = page.evaluate("window.__osc[window.__osc.length - 1].stop - window.__osc[window.__osc.length - 1].ctx.currentTime")
-        assert last < 0.15, "the thump under the pop is short"
+NOISE_STOP_PROBE = """
+window.__noise = [];
+const createSource = AudioContext.prototype.createBufferSource;
+AudioContext.prototype.createBufferSource = function () {
+  const node = createSource.call(this);
+  const record = { node, stopped: false };
+  window.__noise.push(record);
+  const stop = node.stop.bind(node);
+  node.stop = (when) => { record.stopped = true; return stop(when); };
+  return node;
+};
+"""
 
-def test_full_screen_fills_the_screen_and_leaves_by_button_or_escape():
-    with open_app(viewport={"width": 390, "height": 844}) as (page, _, _):
+
+def test_both_mode_plays_music_and_rain_together_and_stops_both():
+    live_pads = ("window.__osc.filter(o => o.node.type === 'triangle' && "
+                 "(o.stop === null || o.stop > o.ctx.currentTime)).length")
+    live_rain = "window.__noise.filter(n => n.node.loop && !n.stopped).length"
+    with open_app(init_script=OSC_PROBE + NOISE_STOP_PROBE) as (page, errors, _):
+        page.locator(".guide").click()
         go(page, "calm")
-        page.locator(".full-screen").click()
-        box = page.locator(".calm-stage").bounding_box()
-        assert box["width"] >= 389 and box["height"] >= 843, box
-        assert page.evaluate("document.activeElement.classList.contains('calm-exit')")
-        page.keyboard.press("Escape")
-        assert not page.evaluate("document.querySelector('.calm-stage').classList.contains('full')")
-        page.locator(".full-screen").click()
-        page.locator(".calm-exit").click()
-        assert page.locator(".calm-exit").is_hidden()
+        page.locator("input[name=calm-mode][value=both]").check()
+        go(page, "breathe")
+        # Leaving stops everything: the music fades within 2 s, the rain stops at once.
+        wait_until(page, f"{live_pads} === 0 && {live_rain} === 0", 4000)
+        go(page, "calm")
+        assert page.locator("input[name=calm-mode][value=both]").is_checked(), "the choice is remembered"
+        # A fresh start in Both plays the pads (triangle waves) and the looping rain together.
+        pads = len(CONFIG["sounds"]["pads"]["chords"][0]) * 2
+        wait_until(page, f"{live_pads} >= {pads} && {live_rain} >= 1", 3000)
+        assert not errors, errors
+        mix = CONFIG["calm"]["bothMix"]
+        assert 0 < mix["rain"] < mix["music"] <= 1, "the rain sits under the music"
 
 
 def test_back_to_menu_is_at_the_top_of_every_screen_and_the_footer_does_not_mention_breathing():

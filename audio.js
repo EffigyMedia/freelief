@@ -111,14 +111,15 @@ export function cue(phaseKey, seconds) {
 
 // The Calm screen's music (owner, 2026-10-07): slow, soft pads that move through a few gentle
 // chords. Each chord note is two slightly detuned triangle waves through a low-pass filter, with
-// long swells, and each chord overlaps the next. Returns { stop() }. Silent when sounds are off.
-export function pads() {
+// long swells, and each chord overlaps the next. `level` scales the volume (the Both mix).
+// Returns { stop() }. Silent when sounds are off.
+export function pads(level = 1) {
   if (!canPlay()) return { stop: SILENT };
   const ctx = ensureContext();
   if (!ctx) return { stop: SILENT };
   const settings = sounds.pads;
   const master = ctx.createGain();
-  master.gain.value = settings.volume;
+  master.gain.value = settings.volume * level;
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
   filter.frequency.value = settings.cutoffHz;
@@ -266,15 +267,15 @@ export function pop() {
 
 // The Calm screen's rain (owner: an atonal mode, "noise like rain"): looping noise, shaped by a
 // low-pass and a high-pass filter, whose level breathes slowly, with soft drops now and then.
-// Returns { stop() }. Silent when sounds are off.
-export function rain() {
+// `level` scales the volume (the Both mix). Returns { stop() }. Silent when sounds are off.
+export function rain(level = 1) {
   if (!canPlay()) return { stop: SILENT };
   const ctx = ensureContext();
   if (!ctx) return { stop: SILENT };
   const settings = sounds.rain;
   const master = ctx.createGain();
   master.gain.setValueAtTime(0, ctx.currentTime);
-  master.gain.linearRampToValueAtTime(settings.volume, ctx.currentTime + settings.fadeInSeconds);
+  master.gain.linearRampToValueAtTime(settings.volume * level, ctx.currentTime + settings.fadeInSeconds);
   master.connect(ctx.destination);
 
   const bed = noise(ctx);
@@ -303,13 +304,13 @@ export function rain() {
     const band = ctx.createBiquadFilter();
     band.type = "bandpass";
     band.frequency.value = settings.dropHz * (0.7 + Math.random() * 0.6);
-    band.Q.value = 6;
+    band.Q.value = settings.dropQ;
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(settings.dropVolume * (0.4 + Math.random() * 0.6), now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + settings.dropSeconds);
     tick.connect(band).connect(gain).connect(master);
     tick.start(now, Math.random());
-    tick.stop(now + 0.08);
+    tick.stop(now + settings.dropSeconds + 0.02);
     timer = setTimeout(drop, settings.dropEveryMs * (0.3 + Math.random() * 1.4));
   }
   drop();

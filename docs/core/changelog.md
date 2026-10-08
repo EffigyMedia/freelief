@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-22"></a>
+## [0.5.22] - 2026-10-07
+- **Visualizer**: the rain is softer, with quieter, rounder drops.
+- A new sound choice, **Both**, plays the music with the rain under it.
+  [RLG-015](../fragments/RLG-015.md). 89 tests.
+
 <a id="v0-5-21"></a>
 ## [0.5.21] - 2026-10-07
 - The app now uses American spelling everywhere ("Sort colors", "Colors" in Settings).

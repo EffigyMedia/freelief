@@ -48,8 +48,16 @@ export function start(container, ctx) {
 
   const field = container.querySelector(".calm-field");
   const blackButton = container.querySelector(".black-screen");
-  // Music (tonal pads) or Rain (atonal noise), remembered in Settings (owner, 2026-10-07).
-  const playMode = (mode) => (mode === "rain" ? audio.rain() : audio.pads());
+  // Music (tonal pads), Rain (atonal noise) or Both, remembered in Settings (owner, 2026-10-07).
+  // Both plays the two at once, each at its own level from config.json, so the rain sits under
+  // the music.
+  function playMode(mode) {
+    if (mode === "rain") return audio.rain();
+    if (mode !== "both") return audio.pads();
+    const mix = config.calm.bothMix;
+    const parts = [audio.pads(mix.music), audio.rain(mix.rain)];
+    return { stop() { parts.forEach((part) => part.stop()); } };
+  }
   const current = { timers: [], music: playMode(getSetting("calmMode")), cover: null };
   run = current;
   container.querySelector(".calm-sound-note").hidden = ctx.soundsOn;

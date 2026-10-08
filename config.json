@@ -167,15 +167,17 @@
       "pitchVariation": 0.15
     },
     "rain": {
-      "volume": 0.05,
+      "volume": 0.035,
       "fadeInSeconds": 3,
-      "lowpassHz": 2600,
-      "highpassHz": 350,
+      "lowpassHz": 1800,
+      "highpassHz": 300,
       "swellHz": 0.07,
       "swellDepth": 0.25,
-      "dropHz": 2400,
-      "dropVolume": 0.07,
-      "dropEveryMs": 260
+      "dropHz": 1700,
+      "dropVolume": 0.035,
+      "dropEveryMs": 300,
+      "dropSeconds": 0.09,
+      "dropQ": 4
     }
   },
   "bubbles": {
@@ -306,8 +308,13 @@
     "maxSize": 130,
     "modes": [
       "music",
-      "rain"
+      "rain",
+      "both"
     ],
-    "defaultMode": "music"
+    "defaultMode": "music",
+    "bothMix": {
+      "music": 0.9,
+      "rain": 0.6
+    }
   }
 }

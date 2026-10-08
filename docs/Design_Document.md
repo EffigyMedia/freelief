@@ -644,6 +644,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   keys such as `sort.newColours`) are unchanged, because a person never sees them. This document and
   the code comments keep their existing spelling; `test_repo.py` guards only the text a person
   sees. — 2026-10-07 (owner; UNT-034)
+- **The Visualizer's rain is softer, and a third sound mode, Both, plays the music and the rain
+  together.** — Owner request. The rain is quieter (volume 0.05 to 0.035), duller (low-pass 2600
+  to 1800 Hz) and its drops are fainter, lower and rounder (volume 0.07 to 0.035, 2400 to 1700 Hz,
+  a 90 ms decay and a wider band). Both plays the pads at 0.9 and the rain at 0.6 of their own
+  levels (`config.json` → `calm.bothMix`), so the rain sits under the music. — 2026-10-07 (owner;
+  UNT-035)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
