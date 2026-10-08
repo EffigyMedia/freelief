@@ -297,6 +297,9 @@ main {
 
 .bottom p { margin: 0.25rem 0; }
 
+/* On an exercise or activity, only the calm line shows (QUIET_FOOTER in app.js). */
+.bottom.quiet .self-help, .bottom.quiet nav { display: none; }
+
 .tagline { color: var(--text); }
 
 /* ---- breathing guide ---- */

@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-47"></a>
+## [0.5.47] - 2026-10-08
+- On breathing and the activities, the footer shows only "You are safe right now. Take your time.",
+  so the exercise has more room. The menu keeps the full footer. [RLG-029](../fragments/RLG-029.md).
+  129 tests.
+
 <a id="v0-5-46"></a>
 ## [0.5.46] - 2026-10-08
 - On the menu, the **Breathe** card stands out.

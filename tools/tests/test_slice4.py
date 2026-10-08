@@ -19,10 +19,17 @@ def go(page, route):
 
 def test_footer_links_reach_every_page_from_every_screen():
     with open_app() as (page, errors, _):
-        for screen in ("breathe", "trace", "settings"):
+        # Owner, 2026-10-08: the full footer is on the menu and the info pages; an exercise shows only
+        # the calm line, and the links are one tap away through Back to menu.
+        for screen in ("menu", "settings", "about", "standards", "feedback"):
             go(page, screen)
-            hrefs = page.locator(".footer-link").evaluate_all("els => els.map(e => e.getAttribute('href'))")
-            assert hrefs == ["#about", "#standards", "#feedback"], screen
+            assert page.locator(".footer-link").evaluate_all("els => els.map(e => e.getAttribute('href'))")                 == ["#about", "#standards", "#feedback"], screen
+            assert page.locator(".footer-link").first.is_visible() and page.locator(".self-help").is_visible(), screen
+        for screen in ("breathe", "bubbles", "trace", "sort", "ripple", "mandala", "calm"):
+            go(page, screen)
+            assert page.locator(".tagline").is_visible(), screen
+            assert page.locator(".footer-link").first.is_hidden() and page.locator(".self-help").is_hidden(), screen
+        go(page, "menu")
         page.locator(".footer-link[href='#about']").click()
         wait_until(page, "document.querySelector('main').dataset.shown === 'about'")
         assert not errors, errors

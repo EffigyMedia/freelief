@@ -29,12 +29,16 @@ const ROUTES = {
   feedback: () => import("./screens/feedback.js"),
 };
 const DEFAULT_ROUTE = "menu";
+// On these screens the footer shows only its calm line, so the exercise has the room (design review,
+// owner 2026-10-08). The menu and the info pages keep the full footer and its links.
+const QUIET_FOOTER = new Set(["breathe", "bubbles", "trace", "sort", "ripple", "mandala", "calm"]);
 
 let config = null;
 let current = null;
 let main = null;
 let backLink = null;
 let nav = null;
+let footer = null;
 
 async function loadConfig() {
   const response = await fetch("config.json");
@@ -173,7 +177,7 @@ function buildShell() {
   const footerLinks = element("ul", { class: "footer-links" }, [
     ["#about", "footer.about"], ["#standards", "footer.standards"], ["#feedback", "footer.feedback"],
   ].map(([href, key]) => element("li", {}, [element("a", { class: "footer-link", href, text: t(key) })])));
-  const footer = element("footer", { class: "bottom" }, [
+  footer = element("footer", { class: "bottom" }, [
     element("p", { class: "tagline", text: t("app.tagline") }),
     element("p", { class: "self-help", text: t("footer.selfHelp") }),
     element("nav", { "aria-label": t("footer.label") }, [footerLinks]),
@@ -242,6 +246,7 @@ async function show(name, { moveFocus }) {
   if (request !== showing) return;
   main.dataset.shown = name;
   nav.hidden = name === "menu";
+  footer.classList.toggle("quiet", QUIET_FOOTER.has(name));
   if (moveFocus) {
     // Tell keyboard and screen-reader users where they are: focus the new screen's heading.
     const heading = main.querySelector("h1");

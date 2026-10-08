@@ -12,8 +12,14 @@ def test_breath_guide_starts_at_launch_with_a_clean_console():
         assert page.locator(".guide").is_visible()
         wait_until(page, "document.querySelector('.phase').textContent.trim().length > 0", 1000)
         assert page.locator(".phase").inner_text() == "Breathe in"
-        assert page.locator(".self-help").is_visible(), "the self-help line must show (REQ-006)"
         assert not errors, f"console errors: {errors}"
+
+
+def test_the_main_screen_shows_the_self_help_line():
+    # REQ-006: the main screen (the menu since 2026-10-07) shows the self-help line.
+    with open_app(route=None) as (page, _, _):
+        assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
+        assert page.locator(".self-help").is_visible(), "the self-help line must show (REQ-006)"
 
 
 def test_breathing_moves_from_in_to_out():

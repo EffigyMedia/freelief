@@ -823,6 +823,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   at once" (`openOn`, saved only when changed). Only an open with no address follows it; a link to
   a screen opens that screen. — Rejected: breathing as the default again (the owner's 2026-10-07
   decision stands). — 2026-10-08 (owner; UNT-061)
+- **On an exercise or activity, the footer shows only its calm line.** — The design review found
+  that the full footer (the calm line, the self-help line and three links) took about a quarter of a
+  phone screen under the exercise. On Breathe and the six activities only "You are safe right now.
+  Take your time." shows; the menu and the info pages keep the full footer. The self-help line
+  stays on the main screen, the menu (REQ-006), and the links stay one tap away through Back to
+  menu. — 2026-10-08 (owner; UNT-062)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
