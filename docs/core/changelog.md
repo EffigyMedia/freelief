@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-6-6"></a>
+## [0.6.6] - 2026-10-08
+- **Need urgent help?** no longer guesses your country from your language alone; with no region
+  set, it shows "call your local emergency number" and the directory, and you can pick your country.
+- **Chat online** now says it needs an internet connection.
+  [AUD-026](../fragments/AUD-026.md), [AUD-052](../fragments/AUD-052.md). 138 tests.
+
 <a id="v0-6-5"></a>
 ## [0.6.5] - 2026-10-08
 - Fixed: in the **Ripple pond**, a slow drag no longer adds a stray ripple somewhere else when you

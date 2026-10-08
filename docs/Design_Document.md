@@ -268,9 +268,9 @@ immediate danger, with a Call button for each emergency number; then the crisis 
 link and its last-checked date; then the link to the international directory. The Country list
 shows another curated region, or "Another country", for this visit only. Sound waits while the dialog is
 open and while the app is hidden.
-States: *uncurated region* — the "call your local emergency number" line and the international
-directory; *offline* — the curated lines still show; the directory
-link says it needs a network. *(Changed at slice 1, 2026-10-07: the emergency line moved first, and
+States: *uncurated region, or a device language with no region set* — the "call your local
+emergency number" line and the international directory; *offline* — the curated lines still show; the directory
+link and any web chat say they need a network. *(Changed at slice 1, 2026-10-07: the emergency line moved first, and
 the other-countries list was added. See the Decision Log.)* *(Changed 2026-10-07, UNT-042: the Country list and the
 region in Settings replace the other-countries list.)*
 
@@ -865,6 +865,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   press and added a random ripple. Now a touch sets a flag that its click clears; a key press or a
   cancelled touch clears it too. `ripple.clickAfterPointerMs` is removed. Found when the suite ran on
   a slower machine. — 2026-10-08 (UNT-070)
+- **Urgent help uses only a region the person set, and says that web chat needs the internet.** —
+  The audit (AUD-026) found that a bare language such as "en" was expanded to the US, so the dialog
+  said "call 911" to someone who may not be in the US. Now only an explicit region counts; with
+  none, the dialog shows the general route ("call your local emergency number") and the directory,
+  and the Country list and Settings can still pick a region. A line's "Chat online" button now
+  says it needs an internet connection; calls and texts work offline (AUD-052). — 2026-10-08
+  (UNT-071)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

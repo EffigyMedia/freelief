@@ -16,11 +16,13 @@ export async function loadCrisisLines() {
   }
 }
 
-// The two-letter region of the device, such as "GB" from "en-GB", or null when none is set.
+// The two-letter region of the device, such as "GB" from "en-GB", or null when none is set. Only a
+// region the person set counts: a bare "en" is not guessed to be the US (AUD-026), because a wrong
+// emergency number is worse than the general route.
 export function deviceRegion(languages = navigator.languages || [navigator.language]) {
   for (const tag of languages) {
     try {
-      const region = new Intl.Locale(tag).maximize().region;
+      const region = new Intl.Locale(tag).region;
       if (region) return region.toUpperCase();
     } catch {
       // An unreadable language tag is skipped.

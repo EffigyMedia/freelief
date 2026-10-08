@@ -65,10 +65,13 @@ function lineCard(line) {
   if (line.call) actions.append(element("a", { class: "button", href: `tel:${dial(line.call)}`, text: t("help.call", { number: line.call }) }));
   if (line.text) actions.append(element("a", { class: "button", href: `sms:${dial(line.text)}`, text: t("help.text", { number: line.text }) }));
   if (line.web) actions.append(element("a", { class: "button", href: line.web, rel: "noopener", text: t("help.chat") }));
+  // Calls and texts work offline; a web chat does not, so it says so (AUD-052).
+  const webNote = line.web ? element("p", { class: "line-checked", text: t("help.chatNote") }) : null;
   return element("li", { class: "line" }, [
     element("h3", { text: line.name }),
     element("p", { class: "line-hours", text: line.hours }),
     actions,
+    webNote,
     element("p", { class: "line-checked", text: t("help.checked", { date: line.checked }) }),
   ]);
 }

@@ -3,7 +3,7 @@
 import re
 from urllib.parse import urlparse
 
-from harness import base_url, open_app, wait_until
+from harness import ROOT, base_url, open_app, wait_until
 
 
 def test_breath_guide_starts_at_launch_with_a_clean_console():
@@ -188,3 +188,23 @@ def test_the_country_list_is_reached_and_used_by_keyboard():
         chosen = page.locator("#help-country").input_value()
         assert chosen != "GB", "the arrow key moved to the next country"
         assert page.locator(".region-lines section.region").get_attribute("data-region") == chosen
+
+
+def test_a_language_with_no_region_gets_the_general_route_not_a_guess():
+    # AUD-026: a bare "en" must not become the US and "call 911".
+    own, emergency, directory_links = _help_region("en")
+    assert own is None
+    assert emergency == "If you are in immediate danger, call your local emergency number."
+    assert directory_links == 1
+
+
+def test_a_web_chat_says_it_needs_the_internet():
+    # AUD-052: calls and texts work offline; a chat does not.
+    import json as _json
+    data = _json.loads((ROOT / "data" / "crisis-lines.json").read_text("utf-8"))
+    with_web = [code for code, region in data["regions"].items() if any(line.get("web") for line in region["lines"])]
+    assert with_web, "no region has a web chat to check"
+    with open_app() as (page, _, _):
+        page.locator(".help-open").click()
+        page.locator("#help-country").select_option(with_web[0])
+        assert "needs an internet connection" in page.locator(".region-lines").inner_text()

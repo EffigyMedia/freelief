@@ -138,6 +138,7 @@
   "help.call": "Call {number}",
   "help.text": "Text {number}",
   "help.chat": "Chat online",
+  "help.chatNote": "Chat online needs an internet connection.",
   "help.checked": "Last checked {date}",
   "help.directory": "Find a helpline in your country",
   "help.directoryNote": "{note} This link needs an internet connection.",
