@@ -64,7 +64,7 @@ export function start(container, ctx) {
         <svg class="trace-field" viewBox="0 0 400 240" aria-hidden="true" focusable="false">
           <path class="trace-shape"></path>
           <path class="trace-done"></path>
-          <circle class="trace-marker" r="14"></circle>
+          <circle class="trace-marker"></circle>
         </svg>
       </div>
       <p class="trace-loops" aria-live="polite"></p>
@@ -77,6 +77,8 @@ export function start(container, ctx) {
   const outline = container.querySelector(".trace-shape");
   const done = container.querySelector(".trace-done");
   const marker = container.querySelector(".trace-marker");
+  // A large marker for shaky hands: about 44 px across on a phone (design review, 2026-10-08).
+  marker.setAttribute("r", String(settings.markerRadius));
   const slider = container.querySelector(".trace-slider");
   const name = container.querySelector(".trace-name");
   const loopsText = container.querySelector(".trace-loops");

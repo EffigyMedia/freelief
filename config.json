@@ -228,6 +228,7 @@
     "samples": 400,
     "keyStepPercent": 1,
     "searchWindow": 40,
+    "markerRadius": 22,
     "glassFullSpeedSteps": 6,
     "shapes": [
       {

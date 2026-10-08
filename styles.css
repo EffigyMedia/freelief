@@ -571,10 +571,12 @@ main {
 .trace-slider {
   border-radius: var(--radius);
   background: var(--accent-soft);
+  padding: 0.5rem;
   touch-action: none;
 }
 
-.trace-field { display: block; width: 100%; height: auto; }
+/* The marker may reach past the drawing at a shape's edge; the panel's padding holds it. */
+.trace-field { display: block; width: 100%; height: auto; overflow: visible; }
 
 .trace-shape {
   fill: none;

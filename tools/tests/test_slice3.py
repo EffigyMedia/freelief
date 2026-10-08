@@ -128,3 +128,11 @@ def test_the_trail_runs_from_the_loop_start_and_clears_each_loop():
         for _ in range(50):
             page.keyboard.press("ArrowRight")
         assert dash() < half, "the trail starts again after a full loop"
+
+def test_the_trace_marker_is_large_enough_for_shaky_hands():
+    # Design review, 2026-10-08: the marker was about 25 px across; now about 44 px on a phone.
+    with open_app(viewport={"width": 390, "height": 844}) as (page, _, _):
+        page.evaluate("location.hash = 'trace'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'trace'", 3000)
+        box = page.locator(".trace-marker").bounding_box()
+        assert min(box["width"], box["height"]) >= 40, box

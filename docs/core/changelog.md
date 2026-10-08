@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-48"></a>
+## [0.5.48] - 2026-10-08
+- **Trace a shape**: the dot you move is larger and easier to see. [RLG-030](../fragments/RLG-030.md).
+  130 tests.
+
 <a id="v0-5-47"></a>
 ## [0.5.47] - 2026-10-08
 - On breathing and the activities, the footer shows only "You are safe right now. Take your time.",

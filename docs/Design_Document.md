@@ -829,6 +829,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   Take your time." shows; the menu and the info pages keep the full footer. The self-help line
   stays on the main screen, the menu (REQ-006), and the links stay one tap away through Back to
   menu. — 2026-10-08 (owner; UNT-062)
+- **The trace marker is about 44 px across on a phone.** — The design review found it about 25 px,
+  small for shaky hands, though a touch anywhere on the shape already moves it. Its radius is a
+  tunable (`trace.markerRadius`, 22 units); the panel has a small padding and the drawing may
+  overflow into it, so the marker is never clipped at a shape's edge. — 2026-10-08 (owner; UNT-063)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
