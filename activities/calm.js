@@ -3,7 +3,6 @@
 // screen back, and the music keeps playing. Nothing to do, nothing to win.
 // Under reduced motion the shapes do not move or grow; they only fade.
 
-import { getSetting, setSetting } from "../settings.js";
 
 let run = null;
 
@@ -32,7 +31,7 @@ export function start(container, ctx) {
       <fieldset class="calm-mode">
         <legend>${t("calm.mode")}</legend>
         ${config.calm.modes.map((mode) => `<label class="choice"><input type="radio" name="calm-mode" value="${mode}"
-          ${mode === getSetting("calmMode") ? "checked" : ""}><span>${t(`calm.mode.${mode}`)}</span></label>`).join("")}
+          ${mode === ctx.calmMode ? "checked" : ""}><span>${t(`calm.mode.${mode}`)}</span></label>`).join("")}
       </fieldset>
       <div class="calm-stage">
         <svg class="calm-field" viewBox="0 0 400 300" aria-hidden="true" focusable="false"></svg>
@@ -62,7 +61,7 @@ export function start(container, ctx) {
     const parts = [audio.pads(mix.music), audio.rain(mix.rain)];
     return { stop() { parts.forEach((part) => part.stop()); } };
   }
-  const current = { timers: [], music: playMode(getSetting("calmMode")), cover: null, playMode,
+  const current = { timers: [], music: playMode(ctx.calmMode), cover: null, playMode, mode: ctx.calmMode,
     wake: ctx.keepAwake() };
   run = current;
   current.note = container.querySelector(".calm-sound-note");
@@ -116,7 +115,8 @@ export function start(container, ctx) {
   }
 
   container.querySelectorAll("input[name=calm-mode]").forEach((input) => input.addEventListener("change", () => {
-    setSetting("calmMode", input.value);
+    current.mode = input.value;
+    ctx.saveCalmMode(input.value); // the shell owns Settings (AUD-066)
     current.music.stop();
     current.music = playMode(input.value);
   }));
@@ -156,7 +156,7 @@ export function start(container, ctx) {
 export function soundChanged(on) {
   if (!run) return;
   run.music.stop();
-  run.music = on ? run.playMode(getSetting("calmMode")) : { stop() {} };
+  run.music = on ? run.playMode(run.mode) : { stop() {} };
   run.note.hidden = on;
 }
 

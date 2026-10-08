@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-43"></a>
+## [0.5.43] - 2026-10-08
+- Internal: the Visualizer gets and saves its sound choice through the app shell, so no activity
+  touches Settings or storage. No visible change. [AUD-066](../fragments/AUD-066.md). 124 tests.
+
 <a id="v0-5-42"></a>
 ## [0.5.42] - 2026-10-08
 - Fixed: a new version no longer changes under you once you have started using Freelief. It

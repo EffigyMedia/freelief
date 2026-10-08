@@ -89,3 +89,14 @@ def test_user_facing_text_uses_american_spelling():
     texts += [(freelief.ROOT / name).read_text("utf-8") for name in ("index.html", "manifest.webmanifest")]
     found = sorted({m.group(0) for text in texts for m in BRITISH.finditer(text)})
     assert not found, f"British spelling in user-facing text: {found}"
+
+
+def test_no_exercise_or_activity_touches_settings_or_storage():
+    # AGENTS.md and AUD-066: exercises and activities get settings through ctx from the shell.
+    offenders = []
+    for folder in ("exercises", "activities"):
+        for path in (freelief.ROOT / folder).glob("*.js"):
+            text = path.read_text("utf-8")
+            if "settings.js" in text or "localStorage" in text or "sessionStorage" in text:
+                offenders.append(path.name)
+    assert not offenders, f"touches settings or storage directly: {offenders}"

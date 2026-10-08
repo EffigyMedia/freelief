@@ -233,6 +233,9 @@ async function show(name, { moveFocus }) {
   // A screen may load data first (Standards and research), so wait for it before focusing.
   await current.start(main, {
     t, list, config, motion, audio, haptic, keepAwake, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
+    // Activities never touch Settings themselves (AUD-066): the shell hands over the Visualizer's
+    // sound choice and saves a new one.
+    calmMode: getSetting("calmMode"), saveCalmMode: (mode) => setSetting("calmMode", mode),
   });
   if (request !== showing) return;
   main.dataset.shown = name;
