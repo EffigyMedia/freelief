@@ -127,6 +127,10 @@ def test_about_credits_effigy_media_with_logo_and_website():
         link = page.locator(".maker a")
         assert link.get_attribute("href") == "https://www.effigymedia.com"
         assert "Alexander Steele, Effigy Media" in page.locator(".maker").inner_text()
+        # Owner, 2026-10-07: the name sits on its own line, under "Freelief is made by".
+        assert "Freelief is made by" + chr(10) + "Alexander Steele, Effigy Media." in page.locator(".maker").inner_text()
+        first = page.locator(".maker p").first.evaluate("p => p.firstChild.textContent")
+        assert first == "Freelief is made by"
 
 def test_the_logo_is_soft_white_on_dark_and_soft_black_on_light():
     fills = {}

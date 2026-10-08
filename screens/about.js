@@ -22,7 +22,7 @@ export function start(container, ctx) {
           <rect width="95" height="26"/><rect y="34" width="95" height="26"/><rect y="68" width="95" height="26"/>
           <rect x="103" width="26" height="94"/><rect x="137" width="26" height="94"/><rect x="171" width="26" height="94"/>
         </svg>
-        <p>${t("about.madeBy")}</p>
+        <p>${t("about.madeBy")}<br><span class="maker-name">${t("about.madeByName")}</span></p>
         <p><a class="button" href="${config.project.makerUrl}" rel="noopener">${t("about.website")}</a></p>
       </div>
       <p class="hint about-version">${t("about.version", { version: self.FREELIEF_VERSION })}</p>

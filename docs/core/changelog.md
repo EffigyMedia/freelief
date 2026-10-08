@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-25"></a>
+## [0.5.25] - 2026-10-07
+- **About**: "Alexander Steele, Effigy Media." now sits on its own line under "Freelief is made
+  by". [RLG-017](../fragments/RLG-017.md). 96 tests.
+
 <a id="v0-5-24"></a>
 ## [0.5.24] - 2026-10-07
 - The Effigy Media logo on **About** is now drawn in code: its six bars, soft white on dark and soft
