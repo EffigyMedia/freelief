@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `44269a322d2f3659` · 34 requirement(s) recorded
+> Store stamp `7672974917786fdc` · 34 requirement(s) recorded
 
 ## The problem
 
@@ -26,8 +26,8 @@ that starts at once, works for them as they are, and asks for nothing.
 
 ## How we will know it worked
 
-- From a cold launch, the breathing guide is visible within 1 second on a mid-range phone,
-  installed and offline, with zero taps (REQ-018, REQ-026).
+- From a cold launch, the menu is visible within 1 second on a mid-range phone, installed and
+  offline, with nothing to answer first, and breathing is one tap away (REQ-018, REQ-026).
 - After install, an automated test with the network disabled shows every screen working, and a
   network log shows no request to any origin (REQ-008, REQ-015).
 - The automated accessibility check reports zero WCAG 2.2 A and AA violations on every page, on
@@ -36,7 +36,7 @@ that starts at once, works for them as they are, and asks for nothing.
   volunteer, is recorded for the version on the Standards & research page before it shows WCAG
   2.2 AA as met (REQ-029).
 - Every crisis line in the app has a last-checked date no older than the release that ships it.
-- The whole app is under 150 KB (REQ-028).
+- The whole app is under 250 KB (REQ-028).
 - No text in the app says Freelief is clinically proven, treats, cures or diagnoses (REQ-025).
 
 ## What is deliberately out of scope
@@ -93,7 +93,7 @@ Not built (decided 2026-10-07):
 
 ### Should have
 
-- **REQ-007** — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.
+- **REQ-007** — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; the speaker button in the header turns them all off at once. Nothing plays before the person's first tap or key press.
 - **REQ-014** — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
 - **REQ-023** — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
 - **REQ-032** — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
@@ -128,4 +128,4 @@ Of the 32 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-08T01:31:21-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-08T02:19:17-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

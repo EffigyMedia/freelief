@@ -10,6 +10,15 @@ audit.
 
 ---
 
+<a id="v0-5-44"></a>
+## [0.5.44] - 2026-10-08
+- **About** now names every setting Freelief saves on your device: breathing rhythm, sound,
+  vibration, colors, the Visualizer's sound, and your country for urgent help.
+- The accessibility checklist on **Feedback** now lists every screen by its name.
+- The project records now match the app (opens on the menu, 250 KB, every module named).
+  [AUD-063](../fragments/AUD-063.md), [AUD-064](../fragments/AUD-064.md), [AUD-065](../fragments/AUD-065.md),
+  [AUD-067](../fragments/AUD-067.md), [AUD-069](../fragments/AUD-069.md), [AUD-070](../fragments/AUD-070.md). 127 tests.
+
 <a id="v0-5-43"></a>
 ## [0.5.43] - 2026-10-08
 - Internal: the Visualizer gets and saves its sound choice through the app shell, so no activity

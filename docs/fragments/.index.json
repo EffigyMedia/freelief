@@ -1,7 +1,7 @@
 {
- "stamp": "44269a322d2f3659",
- "generated": "2026-10-08T01:31:18-04:00",
- "count": 237,
+ "stamp": "7672974917786fdc",
+ "generated": "2026-10-08T02:19:15-04:00",
+ "count": 245,
  "entries": [
   {
    "id": "AUD-001",
@@ -1093,7 +1093,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T01:22:24-04:00",
    "precision": "second",
    "age_days": 0,
@@ -1113,7 +1113,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T01:22:24-04:00",
    "precision": "second",
    "age_days": 0,
@@ -1189,7 +1189,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T01:22:24-04:00",
    "precision": "second",
    "age_days": 0,
@@ -1208,7 +1208,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T01:22:24-04:00",
    "precision": "second",
    "age_days": 0,
@@ -1287,7 +1287,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T01:22:24-04:00",
    "precision": "second",
    "age_days": 0,
@@ -1442,7 +1442,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T01:22:24-04:00",
    "precision": "second",
    "age_days": 0,
@@ -1461,7 +1461,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T01:22:24-04:00",
    "precision": "second",
    "age_days": 0,
@@ -2300,7 +2300,7 @@
    "created": "2026-10-07T06:42:31-04:00",
    "precision": "second",
    "age_days": 0,
-   "title": "Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.",
+   "title": "Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; the speaker button in the header turns them all off at once. Nothing plays before the person's first tap or key press.",
    "blocks": [],
    "caused_by": [],
    "see_also": [],
@@ -3245,6 +3245,45 @@
    "caused_by": [],
    "see_also": [
     "REQ-023"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RLG-026",
+   "kind": "ruling",
+   "type": "feature",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "built",
+   "created": "2026-10-08T01:33:07-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Sound switch moves from Settings to a header speaker button, crossed out when off",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "REQ-007"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RLG-027",
+   "kind": "ruling",
+   "type": "feature",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "built",
+   "created": "2026-10-08T01:41:28-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Safety: tappable emergency number, silence during help and in the background, wake lock, help in full screen, nothing drawn under the black screen",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "AUD-074",
+    "AUD-075"
    ],
    "supersedes": []
   },
@@ -4375,7 +4414,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "open",
+   "status": "closed",
    "created": "2026-10-08T01:31:06-04:00",
    "precision": "second",
    "age_days": 0,
@@ -4383,6 +4422,123 @@
    "blocks": [],
    "caused_by": [
     "AUD-061"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-053",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T01:33:08-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Header sound button",
+   "blocks": [],
+   "caused_by": [
+    "RLG-026",
+    "REQ-007"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-054",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T01:41:29-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Safety fixes from the design review and audit",
+   "blocks": [],
+   "caused_by": [
+    "RLG-027",
+    "AUD-074",
+    "AUD-075"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-055",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T01:50:27-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Store only chosen settings (AUD-062)",
+   "blocks": [],
+   "caused_by": [
+    "AUD-062"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-056",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T01:54:39-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Update now checks the network before it removes anything (AUD-056)",
+   "blocks": [],
+   "caused_by": [
+    "AUD-056"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-057",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T02:00:45-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "A new version waits for a fresh open; fallback fixes the address (AUD-057)",
+   "blocks": [],
+   "caused_by": [
+    "AUD-057"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-058",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T02:06:29-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The Visualizer gets its sound choice through the shell (AUD-066)",
+   "blocks": [],
+   "caused_by": [
+    "AUD-066"
    ],
    "see_also": [],
    "supersedes": []

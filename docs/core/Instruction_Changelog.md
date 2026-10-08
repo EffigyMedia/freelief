@@ -27,6 +27,21 @@ this log is only for changes to *how we work* (process/instructions).
 
 -->
 
+## 2026-10-08
+
+### AGENTS.md says Freelief opens on the menu, and names every shipped module
+- **Instruction:** Freelief opens on the menu ("What would help right now?"), with Breathe first and
+  one tap away. `#menu` is the default route, and a screen that cannot load falls back to it. The
+  Architecture section names the Visualizer (`activities/calm.js`), the shared helpers `audio.js`,
+  `haptics.js`, `wakelock.js` and `motion.js`, and `fallback.js`, each with what it must not do.
+- **Why:** audit findings AUD-064 and AUD-069 (round UNT-051). The owner decided on 2026-10-07 to
+  open on the menu (REQ-018, Decision Log), but AGENTS.md still said, as a crisis rule, that the
+  breathing guide starts at launch and that `#breathe` is the default. A later session that followed
+  it could reverse the owner's decision. Three shipped modules had no stated owner or limit.
+- **Encoded in:** `AGENTS.md` (What this is; Architecture); `docs/Design_Document.md` (F1, F2, F5,
+  Stages 2, 4, 6 and 8, the Decision Log notes); `docs/README.md`.
+- Agent, 2026-10-08.
+
 ## 2026-10-07 (later still)
 
 ### Pages serves the `live` branch; main no longer deploys

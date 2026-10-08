@@ -1,5 +1,6 @@
 """Owner feedback from the phone, 2026-10-07: a way out of urgent help at the top, the phone's back
-gesture closes it, and every exercise and activity offers "More ways to calm"."""
+gesture closes it, and every exercise and activity offers a way back to the menu ("Back to menu",
+which replaced "More ways to calm" the same day)."""
 
 from harness import open_app, wait_until
 

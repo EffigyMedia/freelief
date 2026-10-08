@@ -44,7 +44,7 @@ The apps that offer these techniques often ask for an account, show a menu, need
 advertisement or a subscription offer, or collect data about the person's worst moments. Many do
 not work with a screen reader or a keyboard.
 
-Freelief opens straight into a breathing guide, works with no network, asks nothing of the person,
+Freelief opens on a short menu with breathing first and one tap away, works with no network, asks nothing of the person,
 collects nothing, and works for everyone. Success, a year after release, is a tool that people
 recommend to each other in a crisis because it simply works and is free.
 
@@ -66,9 +66,10 @@ that starts at once, works for them as they are, and asks for nothing.
 <!-- BEGIN srs-product-overview - written by the interview, read by the generators -->
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
-a paced breathing guide starts at once. From there, one tap or key press reaches the distraction
-activities (a bubble field, a shape trace, a colour sort, a ripple pond and mandala coloring) and the Visualizer (music or rain
-with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
+it shows the menu at once, with no account, question or notice before it. Breathe, a paced
+breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
+bubble field, a shape trace, a colour sort, a ripple pond and mandala coloring) and the Visualizer
+(music or rain with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
 GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
@@ -99,8 +100,8 @@ Two secondary groups use the project, not the app in a crisis:
 <!-- END prd-users -->
 
 <!-- BEGIN prd-success - written by the interview, read by the generators -->
-- From a cold launch, the breathing guide is visible within 1 second on a mid-range phone,
-  installed and offline, with zero taps (REQ-018, REQ-026).
+- From a cold launch, the menu is visible within 1 second on a mid-range phone, installed and
+  offline, with nothing to answer first, and breathing is one tap away (REQ-018, REQ-026).
 - After install, an automated test with the network disabled shows every screen working, and a
   network log shows no request to any origin (REQ-008, REQ-015).
 - The automated accessibility check reports zero WCAG 2.2 A and AA violations on every page, on
@@ -109,7 +110,7 @@ Two secondary groups use the project, not the app in a crisis:
   volunteer, is recorded for the version on the Standards & research page before it shows WCAG
   2.2 AA as met (REQ-029).
 - Every crisis line in the app has a last-checked date no older than the release that ships it.
-- The whole app is under 150 KB (REQ-028).
+- The whole app is under 250 KB (REQ-028).
 - No text in the app says Freelief is clinically proven, treats, cures or diagnoses (REQ-025).
 <!-- END prd-success -->
 
@@ -169,12 +170,13 @@ Not built (decided 2026-10-07):
 | Term | Meaning |
 |---|---|
 | **Exercise** | A guided self-help technique: paced breathing. |
-| **Activity** | A distraction activity: the bubble field, the shape trace, the colour sort, the ripple pond, or mandala coloring. No score, no failure, no timer. |
+| **Activity** | A distraction activity: the bubble field, the shape trace, the colour sort, the ripple pond, mandala coloring, or the Visualizer. No score, no failure, no timer. |
+| **Visualizer** | The activity with nothing to do: music, rain or both, with soft shapes that fade in and out, a full screen and a black screen. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
 | **Region** | The country taken from the device language and region setting. Never from location. |
-| **Settings** | The only stored data: the chosen rhythm, tones on or off, and the light or dark choice if overridden. On the device only. |
+| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, sound on or off, vibration on or off, the light or dark theme, the Visualizer's sound (music, rain or both), and the region for urgent help. On the device only. |
 | **Standard** | An external standard Freelief claims to meet, such as WCAG 2.2 AA. It has a level, a check date, and the tester of the manual check. |
 | **Source** | A published research citation behind a technique. |
 
@@ -185,13 +187,17 @@ restarts on the device (REQ-023, REQ-015).
 <!-- BEGIN srs-definitions - written by the interview, read by the generators -->
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, the colour sort, the ripple pond, or mandala coloring.
+  the shape trace, the colour sort, the ripple pond, mandala coloring, or the Visualizer.
+- **Visualizer** — the activity with nothing to do: music, rain or both, with soft shapes, a full
+  screen and a black screen.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
 - **Crisis line** — a service for a person in danger, with a region, a way to reach it, and a
   last-checked date.
 - **Region** — the country taken from the device language and region setting, never from location.
-- **Settings** — the only data Freelief stores: rhythm, tones, and theme, on the device only.
+- **Settings** — the only data Freelief stores, and only the values the person changed: the
+  breathing rhythm, sound on or off, vibration on or off, the theme, the Visualizer's sound, and the
+  region for urgent help, on the device only.
 - **Standard** — an external standard Freelief claims, with its level, check date and tester.
 - **Source** — a published research citation behind a technique.
 <!-- END srs-definitions -->
@@ -200,22 +206,25 @@ restarts on the device (REQ-023, REQ-015).
 
 ## 5. Functional Specification
 
-The requirements are the records `REQ-001` to `REQ-031`. Their priority is the feature list. The
+The requirements are the records `REQ-001` to `REQ-034`. Their priority is the feature list. The
 flows below are the structure.
 
-**F1 — Launch to the menu** *(changed 2026-10-07; it was launch to breathing)*. The app opens on
-the menu; choosing Breathe gives the flow below. Trigger: the person opens Freelief. Steps: the shell paints; the
-breath guide starts with the saved rhythm (or the default) and one calm line. Outcome: the person
-breathes with the guide. States: *first visit online* — the service worker installs and caches the
-app in the background, and the guide does not wait for it; *offline, installed* — served from
+**F1 — Launch to the menu** *(changed 2026-10-07; it was launch to breathing)*. Trigger: the
+person opens Freelief. Steps: the shell paints the menu ("What would help right now?") with no
+account, question or notice before it; Breathe is the first item. Choosing Breathe starts the
+breath guide with the saved rhythm (or the default) and one calm line. Outcome: the person
+chooses what helps, and breathing is one tap away. States: *first visit online* — the service
+worker installs and caches the app in the background, and the menu does not wait for it; *offline, installed* — served from
 cache; *offline, never visited* — the browser cannot load it, which is outside the app's control;
+*a screen that cannot load* — the menu shows and the address becomes `#menu`;
 *reduced motion* — the guide shows a still shape with a text count instead of growth; *storage
 blocked* — the default rhythm is used and nothing fails.
 
-**F2 — Change exercise or activity.** Trigger: the person taps or presses "More ways to calm", which every
-screen except the menu shows, beside "Back to breathing".
-Steps: a short list of large items; the person chooses one; it starts. Outcome: the new exercise
-runs. Leaving any exercise returns to the breath guide. No exercise has an end state that asks for
+**F2 — Change exercise or activity** *(changed 2026-10-07, UNT-030 and the menu decision: "More
+ways to calm" and "Back to breathing" are gone)*. Trigger: the person taps or presses "Back to
+menu", which every screen except the menu shows at the top, under the header. Steps: the menu, a
+short list of large items; the person chooses one; it starts. Outcome: the new exercise or activity
+runs. Leaving any screen returns to the menu. No exercise has an end state that asks for
 anything.
 
 **F3 — Grounding.** *Withdrawn 2026-10-07 (owner): removed for weak research; see REQ-002 and the
@@ -229,7 +238,7 @@ and the Decision Log.* Steps: one statement at a time; the person advances when 
 statements come from the strings file. Outcome: the person stops when they choose.
 
 **F5 — Distraction activities.** *Bubble field:* bubbles drift slowly; a tap or a key press pops the
-focused bubble with a soft visual (and a soft tone if tones are on). *Shape trace:* a looping shape;
+focused bubble with a soft visual (and a soft pop if sound is on). *Shape trace:* a looping shape;
 the person follows it with a finger or moves along it with the arrow keys. *Colour sort:* calm
 colour tiles to put in order from lightest to darkest: choose a tile, then the tile to swap it with,
 by touch, mouse or keyboard; or drag a tile onto another tile to swap the two, by touch or mouse.
@@ -243,7 +252,11 @@ a color, then taps or selects a shape to fill it; arrow keys move around a ring 
 each shape is named ("Ring 2, shape 3 of 12, blank"); New mandala starts the next design, blank.
 States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
-and its action.
+and its action. *Visualizer (added 2026-10-07; named 2026-10-07, UNT-034):* nothing to do; the
+person chooses Music, Rain or Both, and soft shapes fade in and out. Full screen fills the screen
+and keeps its own "Need urgent help?" button. Black screen covers everything in black while the
+sound plays; one tap or key brings the screen back. Under reduced motion the shapes only fade. The
+screen stays awake while it runs.
 
 **F6 — Need urgent help.** Trigger: the "Need urgent help?" control, present on every screen
 (the Visualizer's black screen is the one exception: one tap brings it back).
@@ -286,7 +299,8 @@ the email route remains.
 
 ## 6. Experience & Interface
 
-**Interaction principles.** Help first: the breath guide is the first and default screen. One clear
+**Interaction principles.** Help first: the menu is the first and default screen, with nothing to
+answer before it, and Breathe is its first item. One clear
 action per screen. Large targets (at least 44 by 44 CSS pixels, larger for the main actions). No
 timer, no score, no failure, no surprise sound, no sudden motion. Every control works by touch, by
 keyboard and by screen reader, with a visible focus ring. The "Need urgent help?" control is always
@@ -318,7 +332,7 @@ met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), n
 | 4 | Persistence | `localStorage` for Settings only, behind one module, with every access in try/catch. | Settings are small and on-device; nothing else is stored. | IndexedDB (more than needed). |
 | 5 | External services | None at run time. | No network after install, no data sent. | Analytics, a feedback relay. |
 | 6 | Content and assets | Text in `strings/en.json`, owner-approved. Crisis lines in `data/crisis-lines.json`, curated and dated. Research sources in `docs/research/`. Tones generated with Web Audio at run time, so no audio files. The system font stack, so no font files. | Small, licence-free, offline. | Recorded audio; web fonts; image assets. |
-| 7 | Deployment | GitHub Pages serves `main` of the public repository `EffigyMedia/freelief`. A push deploys. Rollback is a revert commit. The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
+| 7 | Deployment | GitHub Pages serves the `live` branch of the public repository `EffigyMedia/freelief`. Pushing `main` deploys nothing; moving `live` is the deploy (before 1.0 with the owner's yes, from 1.0 only at a release that cleared the audit gate). Rollback moves `live` back to an earlier commit. *(Changed 2026-10-07, AUD-003: it first served `main`.)* The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
 | 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, from the `axe-playwright-python` package in the same venv, runs the automated accessibility check; nothing from it ships. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
 | 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright. `run`: `python -m http.server 8000`. `test`: the Playwright harnesses. `doctor`: check Python, the venv, Playwright, the manifest, the service worker and the JSON files. `build`: none — the repository is the distributable; `build` reports that and checks the size limit. `clean`: remove `output/`. `bench`: the launch-time and size benchmark. | Matches the environment's standard commands with the fewest tools. | A bundler. |
 | 10 | Version control | Git. Feature commits stay local; push at a release or for an owner device test. The remote is public. | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
@@ -339,28 +353,35 @@ Each file below is one module with one responsibility.
 | `index.html` + `app.js` (**shell**) | The page frame, the screen router, the footer, and the "Need urgent help?" control. | Contain exercise logic or text. |
 | `exercises/breathe.js` | The breathing exercise. *(`ground.js` and `statements.js` were removed 2026-10-07.)* | Read storage or the network; hold text. |
 | `activities/bubbles.js`, `trace.js`, `sort.js`, `ripple.js`, `mandala.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
+| `activities/calm.js` (**the Visualizer**) | Music, rain or both through `audio`, soft shapes that fade in and out, Full screen with its own "Need urgent help?" button, and the black screen. Its shape loop uses timers inside the module; the person sees none. | Show a countdown, an end or a score; read storage; add shapes or animate while the screen is black. |
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
 | `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
 | `crisis.js` + `data/crisis-lines.json` | The choice of crisis lines from the device region. | Ask for location. |
-| `audio.js` | The soft tones with Web Audio. | Play anything when tones are off. |
+| `audio.js` | Every sound, made with Web Audio: the breathing tones, the activity cues and the Visualizer's music and rain. Nothing plays before the first tap or key press. | Play anything while sound is off, while urgent help is open, or while the app is hidden; load an audio file. |
+| `haptics.js` | One short vibration from `config.json` → `haptics.patterns` for a single triggered event in an activity. A device without the Vibration API gets nothing. | Vibrate for anything continuous (the breath, a drag trail, the trace tone); vibrate while vibration is off. |
+| `wakelock.js` | The screen wake lock while breathing or the Visualizer runs, taken again when the page comes back. | Fail when the browser has no wake lock or refuses it; keep the lock after the last screen releases it. |
 | `motion.js` | Reduced-motion detection; every animation asks it. | — |
+| `fallback.js` | A classic script in `<head>`: it hides the static fallback in `index.html` while the app starts, and shows it if the app has not started in 2 s. The 2 s is a constant in the file. | Depend on `config.json`, a module or the network, because it must work when they fail. |
 | `config.json` | **Every tunable**, with its committed default. | — |
 | `sw.js` | The offline cache, versioned by the app version. | Fetch from any other origin. |
 | `manifest.webmanifest` | Installation: name, icons, colours. | — |
-| `screens/menu.js`, `screens/settings.js` | The "More ways to calm" list, and the Settings screen. The Settings screen changes Settings only through `settings.js`. | Touch `localStorage` directly. |
+| `screens/menu.js`, `screens/settings.js` | The menu ("What would help right now?"), the first screen, and the Settings screen. The Settings screen changes Settings only through `settings.js`. | Touch `localStorage` directly. |
 | `screens/about.js`, `standards.js`, `feedback.js` | The disclaimer (About), Standards & research, and Feedback pages. *(First planned as `pages/`; built as screens at slice 4, with the same contract and router.)* | Send data. |
 
-**Routing (added at slice 2).** Each screen has a URL hash (`#breathe`, `#menu`, `#settings`
-and one per activity); no hash means `#breathe`. The browser Back button therefore works, and
-an unknown hash falls back to breathing. On a change of screen the shell focuses the new screen's
+**Routing (added at slice 2; the default changed to the menu 2026-10-07).** Each screen has a URL
+hash (`#menu`, `#breathe`, `#settings` and one per activity and page); no hash means `#menu`. The
+browser Back button therefore works. An unknown hash shows the menu, and a screen that cannot load
+falls back to the menu and the address becomes `#menu`. On a change of screen the shell focuses the new screen's
 heading, so a screen reader announces where the person is.
 
-**Data and state.** Settings in `localStorage` under one versioned key. Everything else is static
-files cached by the service worker. Nothing is created, changed or deleted by the person except
-their Settings.
+**Data and state.** Settings in `localStorage` under one versioned key (`freelief.settings.v2`),
+holding only the values the person changed: the breathing rhythm, sound, vibration, the theme, the
+Visualizer's sound and the region for urgent help. Everything else is static files cached by the
+service worker. Nothing is created, changed or deleted by the person except those Settings.
 
 **Contracts.** Each exercise and activity exports `start(container, ctx)` and `stop()`. `ctx`
-gives `strings`, `settings` (read-only), `config`, `motion` and `audio`. The shell owns which one
+gives the text functions `t` and `list`, `config`, `motion`, `audio`, `haptic`, `keepAwake`, and the
+read-only setting values the screen needs (such as `rhythm` and `soundsOn`). The shell owns which one
 runs. `crisis.js` exports `linesFor(regionCode)`, which returns the curated lines and the fallback.
 
 **Tunables (`config.json`):** rhythm presets and the default (4-in, 6-out); tone frequencies and
@@ -372,12 +393,13 @@ directory URL; the feedback repository URL and the email address (empty until de
    an update test.
 2. *Accessible activities.* The bubble field and the colour sort use DOM elements, not a canvas,
    so a screen reader and the keyboard reach every item. The colour sort is built last.
-3. *Launch in 1 second.* Inline the critical CSS, defer everything but the breath guide, and
+3. *Launch in 1 second.* Inline the critical CSS, defer everything but the menu (the first screen), and
    benchmark from the first slice.
 
 **Cross-cutting targets.** No request to another origin from the app, ever. No console errors.
 Every storage access in try/catch, so blocked storage never breaks a screen. No personal data in
-any log. Any failure leaves the breath guide and the crisis lines usable.
+any log. Any failure leaves breathing (the static fallback's breathing line, at worst) and the
+crisis lines usable.
 
 ---
 
@@ -396,15 +418,15 @@ any log. Any failure leaves the breath guide and the crisis lines usable.
 - *Update:* a new cache version replaces the old one.
 - *Claims:* a scan of the strings and pages for forbidden claim words (REQ-025).
 
-**Never break:** the breath guide at launch; the "Need urgent help?" control on every screen;
+**Never break:** the menu at launch, with breathing one tap away; the "Need urgent help?" control on every screen;
 offline use; keyboard and screen-reader use.
 
 **Manual:** a dated volunteer check with a screen reader (NVDA, VoiceOver or TalkBack) and with a
 keyboard alone, before a standard is shown (REQ-029). Owner checks on a real phone for look and
 feel, which a test cannot see.
 
-**Performance:** the targets are REQ-026 (1 s to the breath guide), REQ-027 (100 ms response) and
-REQ-028 (150 KB). Workload: a cold launch of the installed app, offline, on a mid-range phone, or
+**Performance:** the targets are REQ-026 (1 s to the first screen, the menu), REQ-027 (100 ms response) and
+REQ-028 (250 KB). Workload: a cold launch of the installed app, offline, on a mid-range phone, or
 a Playwright run with CPU throttled 4x as its stand-in. `bench` records all three per release.
 
 **Security and privacy.** Nothing sensitive is stored or sent. The threats worth defending against
@@ -456,7 +478,7 @@ re-checked; the Standards & research page shows only what is verified.
 | A claim overstates the evidence and breaks health-claim rules. | REQ-025 fixes the wording; each technique cites its research (REQ-024); a test scans for forbidden words. |
 | A standard is promoted that the app does not meet. | REQ-029: a standard is shown only with a dated automated and manual check for that version. |
 | No volunteer comes forward for the manual check. | No standard is shown as met; the app still works; the owner can ask in accessibility communities. |
-| A movement or a sound makes a person feel worse. | Reduced motion is honoured (REQ-010); tones are off by default (REQ-007); nothing is timed or scored. |
+| A movement or a sound makes a person feel worse. | Reduced motion is honoured (REQ-010); sounds are soft and on by default, and the speaker button in the header silences them at once, mid-note (REQ-007; Decision Log, UNT-053); sound waits while urgent help is open; nothing is timed or scored. |
 | The colour sort cannot be made fully accessible. | It is "should", not "must", and built last; it ships only when it passes. |
 | The offline cache serves an old version after an update. | The cache name carries the version; an update test covers it. |
 
@@ -467,8 +489,8 @@ re-checked; the Standards & research page shows only what is verified.
   standard is shown as met (REQ-029), and the product still works.
 - GitHub Pages stays free for a public repository and serves the app over HTTPS, which an
   installable offline web app needs.
-- A mid-range phone can show the breathing guide within 1 second of a cold offline launch with a
-  plain HTML, CSS and JavaScript app under 150 KB.
+- A mid-range phone can show the menu within 1 second of a cold offline launch with a
+  plain HTML, CSS and JavaScript app under 250 KB.
 - The device language and region setting is a good enough guide to the person's country for
   choosing crisis lines.
 <!-- END srs-assumptions -->
@@ -565,6 +587,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **Strict performance targets: the breathing guide is visible within 1 s of a cold, offline launch
   on a mid-range phone; every input responds within 100 ms; the whole app is under 150 KB.** — In a
   panic attack every second of wait is felt. — Rejected: looser targets (3 s, 500 KB). — 2026-10-07
+  *Amended 2026-10-07 (owner): the size limit is 250 KB, and the 1 s target is to the menu (REQ-026);
+  see the entries below. Restated in Stages 2, 9 and 11 on 2026-10-08 (AUD-065).*
 - **The walking skeleton is breathing, help and offline: an installable offline web app on GitHub
   Pages, the breathing guide at launch, the "Need urgent help?" crisis list, the self-help line, and
   a full keyboard and screen-reader path.** — It proves the riskiest parts end to end. — Rejected:
@@ -818,12 +842,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   person moves. Nothing plays before the first tap or key press. No spoken voice.** — The owner asked
   for more, subtle sounds, on by default (REQ-007 changed). Browsers block sound before a gesture,
   and creating audio early would log a warning, so the first gesture unlocks it. — Rejected: tones off
-  by default (the first decision). — 2026-10-07 (owner)
+  by default (the first decision). — 2026-10-07 (owner) *Amended 2026-10-08 (owner, UNT-053): the
+  Sounds switch moved from Settings to the speaker button in the header; sounds stay on by default.*
 - **Urgent help has its way out at the top: a `Back` button in a header that stays visible while the
   content scrolls, and the phone's back gesture closes the window without leaving the app. Every
   exercise and activity shows both `More ways to calm` and `Back to breathing`.** — The owner, testing
   on a phone, could not find the Close button at the bottom of the window and asked for a way to
-  other methods from every method. — 2026-10-07 (owner)
+  other methods from every method. — 2026-10-07 (owner) *Superseded the same day (owner, the menu
+  decision and UNT-030): `More ways to calm` and `Back to breathing` are gone; every screen except the
+  menu has one `Back to menu` control at the top. The `Back` button in urgent help still stands.*
 - **GitHub Pages serves a `live` branch, not `main`. Before 1.0, `live` is a public preview that
   moves only with the owner's yes; from 1.0 on, it moves only at a release that cleared the audit
   gate, to a tag. The README calls the app a preview and does not invite installs before 1.0.** —
@@ -904,7 +931,7 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 
 - [x] The one-line pitch, success criteria, and Non-Goals exist and agree with each other.
 - [x] Every flow in Stage 5 has its edge cases and failure states specified.
-- [x] Every agreed obligation is a requirement record (`REQ-001` to `REQ-031`).
+- [x] Every agreed obligation is a requirement record (`REQ-001` to `REQ-034`).
 - [x] Every requirement carries a category, a verification method and a priority.
 - [x] Every marked region is filled.
 - [x] Both generated documents have been produced and read: `docs/SRS.md` and `docs/PRD.md`,

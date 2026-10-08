@@ -218,8 +218,8 @@ async function show(name, { moveFocus }) {
   try {
     screen = await ROUTES[name]();
   } catch (error) {
-    // A screen that cannot load (offline with a damaged cache) falls back to breathing, which is
-    // always loaded, so the person is never left on a blank or frozen screen.
+    // A screen that cannot load (offline with a damaged cache) falls back to the menu, which loads
+    // with the shell, so the person is never left on a blank or frozen screen.
     console.error(`Freelief could not load the ${name} screen:`, error);
     if (name !== DEFAULT_ROUTE) {
       // The address names the screen shown, so the failed screen's link works again (AUD-057).

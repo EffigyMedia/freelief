@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `44269a322d2f3659` · 32 requirement(s) specified, 2 not yet
+> Store stamp `7672974917786fdc` · 32 requirement(s) specified, 2 not yet
 
 ## 1. Introduction
 
@@ -28,9 +28,10 @@ lines; it does not call them. Its only stored data is the person's settings, on 
 
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
-a paced breathing guide starts at once. From there, one tap or key press reaches the distraction
-activities (a bubble field, a shape trace, a colour sort, a ripple pond and mandala coloring) and the Visualizer (music or rain
-with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
+it shows the menu at once, with no account, question or notice before it. Breathe, a paced
+breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
+bubble field, a shape trace, a colour sort, a ripple pond and mandala coloring) and the Visualizer
+(music or rain with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
 GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
@@ -40,13 +41,17 @@ person's settings, on the device.
 
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, the colour sort, the ripple pond, or mandala coloring.
+  the shape trace, the colour sort, the ripple pond, mandala coloring, or the Visualizer.
+- **Visualizer** — the activity with nothing to do: music, rain or both, with soft shapes, a full
+  screen and a black screen.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
 - **Crisis line** — a service for a person in danger, with a region, a way to reach it, and a
   last-checked date.
 - **Region** — the country taken from the device language and region setting, never from location.
-- **Settings** — the only data Freelief stores: rhythm, tones, and theme, on the device only.
+- **Settings** — the only data Freelief stores, and only the values the person changed: the
+  breathing rhythm, sound on or off, vibration on or off, the theme, the Visualizer's sound, and the
+  region for urgent help, on the device only.
 - **Standard** — an external standard Freelief claims, with its level, check date and tester.
 - **Source** — a published research citation behind a technique.
 
@@ -71,7 +76,7 @@ person's settings, on the device.
 - **REQ-004** *(must)* — Freelief offers interactive calming activities whose purpose is to distract the person from panic.
 - **REQ-005** *(must)* — Every screen shows a 'Need urgent help?' control that opens the crisis lines of one region, chosen from a region saved in Settings or else from the device language and region setting, with a country list to show another region, without a request for location.
 - **REQ-006** *(must)* — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
-- **REQ-007** *(should)* — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.
+- **REQ-007** *(should)* — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; the speaker button in the header turns them all off at once. Nothing plays before the person's first tap or key press.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
 - **REQ-014** *(should)* — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
@@ -165,8 +170,8 @@ How each requirement above is shown to be met. The method is recorded on the req
   standard is shown as met (REQ-029), and the product still works.
 - GitHub Pages stays free for a public repository and serves the app over HTTPS, which an
   installable offline web app needs.
-- A mid-range phone can show the breathing guide within 1 second of a cold offline launch with a
-  plain HTML, CSS and JavaScript app under 150 KB.
+- A mid-range phone can show the menu within 1 second of a cold offline launch with a
+  plain HTML, CSS and JavaScript app under 250 KB.
 - The device language and region setting is a good enough guide to the person's country for
   choosing crisis lines.
 
@@ -185,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-08T01:31:18-04:00 by `Commands/srs.py` from 34 requirement record(s).
+Generated 2026-10-08T02:19:15-04:00 by `Commands/srs.py` from 34 requirement record(s).

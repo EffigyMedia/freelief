@@ -100,3 +100,59 @@ def test_no_exercise_or_activity_touches_settings_or_storage():
             if "settings.js" in text or "localStorage" in text or "sessionStorage" in text:
                 offenders.append(path.name)
     assert not offenders, f"touches settings or storage directly: {offenders}"
+
+
+def test_every_research_source_is_recorded_in_sources_md():
+    # AUD-063: docs/research/sources.md is the written record behind data/research.json. Each source
+    # must appear there under its id and with its DOI link, so the two cannot drift apart again.
+    research = json.loads((freelief.ROOT / "data" / "research.json").read_text("utf-8"))
+    record = (freelief.ROOT / "docs" / "research" / "sources.md").read_text("utf-8")
+    cited = {sid for technique in research["techniques"] for sid in technique["sources"]}
+    assert cited, "data/research.json cites no source"
+    missing = [sid for sid in sorted(cited | set(research["sources"]))
+               if f"[{sid}]" not in record or research["sources"][sid]["url"] not in record]
+    assert not missing, f"sources missing from docs/research/sources.md (id or DOI link): {missing}"
+
+
+def _design_without_history():
+    # The Decision Log and the Change Log keep superseded figures on purpose, as history.
+    text = (freelief.ROOT / "docs" / "Design_Document.md").read_text("utf-8")
+    text = re.sub(r"\n## 12\. Decision Log\n.*?(?=\n## 13\.)", "\n", text, flags=re.S)
+    return re.sub(r"\n## 15\. Change Log\n.*", "\n", text, flags=re.S)
+
+
+def test_the_design_size_limit_equals_req_028():
+    # AUD-065: the design stated 150 KB after REQ-028 was raised to 250 KB.
+    record = (freelief.ROOT / "docs" / "fragments" / "REQ-028.md").read_text("utf-8")
+    heading = re.search(r"^### REQ-028\b.*$", record, re.M)
+    assert heading, "REQ-028.md has no requirement heading"
+    limit = re.search(r"under\s+(\d+(?:\.\d+)?)\s*KB", heading.group(0))
+    assert limit, "the REQ-028 heading states no 'under N KB' figure"
+    figures = re.findall(r"(?:under|REQ-028\s*\()\s*(\d+(?:\.\d+)?)\s*KB", _design_without_history())
+    assert figures, "the design states no size limit outside its history"
+    wrong = sorted({f for f in figures if f != limit.group(1)})
+    assert not wrong, f"design size figures {wrong} differ from REQ-028 ({limit.group(1)} KB)"
+
+
+# AUD-067: the plain word in about.privacy2 for each setting that settings.js stores.
+PRIVACY_WORDS = {
+    "rhythm": "rhythm",
+    "sounds": "sound",
+    "theme": "colors",
+    "calmMode": "Visualizer",
+    "helpRegion": "country",
+    "haptics": "vibration",
+}
+
+
+def test_the_privacy_text_names_everything_settings_stores():
+    source = (freelief.ROOT / "settings.js").read_text("utf-8")
+    block = re.search(r"\bdefaults\s*=\s*\{([^}]+)\};", source)
+    assert block, "settings.js has no defaults object"
+    keys = re.findall(r"^\s*(\w+)\s*:", block.group(1), re.M)
+    assert keys, "the defaults object in settings.js holds no key"
+    unmapped = [k for k in keys if k not in PRIVACY_WORDS]
+    assert not unmapped, f"stored settings with no privacy word; add them to PRIVACY_WORDS and about.privacy2: {unmapped}"
+    privacy = json.loads((freelief.ROOT / "strings" / "en.json").read_text("utf-8"))["about.privacy2"]
+    absent = [f"{k} ({PRIVACY_WORDS[k]!r})" for k in keys if PRIVACY_WORDS[k].lower() not in privacy.lower()]
+    assert not absent, f"about.privacy2 does not name: {absent}"

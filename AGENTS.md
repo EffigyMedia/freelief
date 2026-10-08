@@ -104,13 +104,13 @@ only one changed. A rebuild that changes nothing wastes time and tokens.
 ## What this is
 
 **Freelief** — a free, open-source, offline web app that helps anyone through a panic attack or
-acute anxiety in the moment, with breathing, grounding, calming words and gentle distraction. Built
+acute anxiety in the moment, with paced breathing, gentle distraction activities and a visualizer. Built
 in **plain HTML, CSS and JavaScript** with **no framework, no dependency and no build step**, as a
 **progressive web app served from GitHub Pages**, phone first and fully usable on a desktop.
 
-**It is used in a crisis. Help comes first, and it works for everyone.** The breathing guide starts
-at launch with no question, menu or notice. Every control works by touch, by keyboard and by screen
-reader. Reduced motion is honoured. No exercise is timed or scored. The app collects nothing and
+**It is used in a crisis. Help comes first, and it works for everyone.** Freelief opens on the menu,
+with Breathe first and one tap away, and with no account, question or notice before it (REQ-018).
+Every control works by touch, by keyboard and by screen reader. Reduced motion is honoured. No exercise is timed or scored. The app collects nothing and
 makes no network call after install. Keyboard and screen-reader use are NOT out of scope, unlike
 Effigy Arcade.
 
@@ -207,9 +207,19 @@ the Chrome already on the machine. Run from the repo root:
 - **Exercises** (`exercises/*.js`) and **activities** (`activities/*.js`) — one file each, exporting
   `start(container, ctx)` and `stop()`; **must not** touch storage, the network or literal text.
   Activities use DOM elements, never a canvas, and have no score, timer or failure state.
-- **Screens** (`screens/menu.js`, `screens/settings.js`) — the menu and the Settings screen, same
-  contract. Routing is by URL hash (`#breathe` is the default); a new screen is added to `ROUTES`
-  in `app.js` and to `FILES` in `sw.js`.
+- **Screens** (`screens/*.js`) — the menu, Settings, About, Standards and research, and Feedback,
+  same contract. Routing is by URL hash (`#menu` is the default, and a screen that cannot load falls
+  back to it); a new screen is added to `ROUTES` in `app.js` and to `FILES` in `sw.js`.
+- **The Visualizer** (`activities/calm.js`, route `#calm`) — music or rain with soft shapes, a full
+  screen and a black screen; an activity under the same rules. Its shape loop is not a timer the
+  person sees.
+- **Shared helpers, given to screens through `ctx`:** `audio.js` (every sound, made with Web Audio;
+  plays nothing while sound is off), `haptics.js` (one short vibration per triggered event; nothing
+  continuous), `wakelock.js` (keeps the screen on during breathing and the Visualizer; fails
+  silently), `motion.js` (reduced-motion detection, which every animation asks). They **must not**
+  touch storage except by reading `settings.js`.
+- **`fallback.js`** — a classic script in `<head>` that shows the static fallback in `index.html` if
+  the app has not started in 2 s; it **must not** depend on `config.json` or any module.
 - **`settings.js`** — **the single source of truth for Settings** and the only module that touches
   `localStorage`, with every access in try/catch.
 - **`strings.js` + `strings/en.json`** — **the single source of all user-facing text.**

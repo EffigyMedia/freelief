@@ -2,10 +2,10 @@
 
 **Help through a panic attack or strong anxiety, right now.** Free, offline and private.
 
-Freelief opens straight into a breathing guide. From there, one tap reaches 5-4-3-2-1 grounding,
-calming words, and three gentle distraction activities (popping bubbles, tracing a shape and sorting
-colours). Every
-screen has a **"Need urgent help?"** button with crisis lines for your country.
+Freelief opens on a short menu with nothing to fill in first. Breathe is first: a guide that helps
+you slow your breathing. One tap also reaches gentle activities (pop bubbles, trace a shape, sort
+colors, a ripple pond and a mandala to color) and the Visualizer (soft music or rain with slow
+shapes). Every screen has a **"Need urgent help?"** button with crisis lines for your country.
 
 - **Free and open source** (MIT license). No account, no advertising, no analytics.
 - **Works offline** once installed to your home screen.
@@ -39,7 +39,7 @@ helps more than anything else. Use the **Feedback** page in the app, or open an
 ## For developers
 
 Plain HTML, CSS and JavaScript, with no framework, no dependency and no build step. GitHub Pages
-serves the repository as it is. Tests use Python and Playwright:
+serves the `live` branch of the repository as it is; pushing `main` deploys nothing. Tests use Python and Playwright:
 
 ```
 python tools/freelief.py setup
