@@ -53,7 +53,7 @@ These sources support the *techniques*. No study has tested Freelief itself.
    body sensations. It is the reason Freelief's statements name the sensations as passing and
    not dangerous-sounding. A theory paper, not a trial.
 
-## Distraction activities (bubble field, shape trace)
+## Distraction activities (bubble field, shape trace, colour sort)
 
 7. Webb, T. L., Miles, E., & Sheeran, P. (2012). Dealing with feeling: A meta-analysis of the
    effectiveness of strategies derived from the process model of emotion regulation.
@@ -75,3 +75,23 @@ These sources support the *techniques*. No study has tested Freelief itself.
    **This is why Freelief offers distraction for the moment and never presents it as a way to
    overcome panic.** A person with frequent attacks is better served by treatment, and the
    Standards & research page says so.
+
+## Calm (music and rain)
+
+10. de Witte, M., Spruit, A., van Hooren, S., Moonen, X., & Stams, G.-J. (2020). Effects of music
+    interventions on stress-related outcomes: A systematic review and two meta-analyses. *Health
+    Psychology Review*, 14(2), 294–324. https://doi.org/10.1080/17437199.2019.1627897 — checked
+    2026-10-07.
+    *Evidence:* two meta-analyses of 104 randomized trials (9,617 participants). Music
+    interventions reduced physiological stress (d = 0.38) and psychological stress (d = 0.55). The
+    trials used many kinds of music; Freelief's generated pads were not studied.
+11. Alvarsson, J. J., Wiens, S., & Nilsson, M. E. (2010). Stress recovery during exposure to nature
+    sound and environmental noise. *International Journal of Environmental Research and Public
+    Health*, 7(3), 1036–1046. https://doi.org/10.3390/ijerph7031036 — checked 2026-10-07.
+    *Evidence:* **weak.** One experiment with 40 people after a stressful task. Skin conductance
+    tended to recover faster during nature sound (a fountain and birds) than during road noise;
+    heart-rate variability showed no effect. Freelief's rain is synthesized noise, not a nature
+    recording, so the link is indirect, and the app says so.
+
+The colour sort is a distraction activity: it rests on the same sources as the bubble field and the
+shape trace (7, 8 and 9), and the Standards & research page lists it there.

@@ -1,9 +1,41 @@
 {
   "techniques": [
-    { "id": "breathing", "sources": ["balban2023", "zaccaro2018", "meuret2010"] },
-    { "id": "grounding", "sources": ["scott2025"] },
-    { "id": "statements", "sources": ["saunders1996", "clark1986"] },
-    { "id": "distraction", "sources": ["webb2012", "curry2005", "helbiglang2010"] }
+    {
+      "id": "breathing",
+      "sources": [
+        "balban2023",
+        "zaccaro2018",
+        "meuret2010"
+      ]
+    },
+    {
+      "id": "grounding",
+      "sources": [
+        "scott2025"
+      ]
+    },
+    {
+      "id": "statements",
+      "sources": [
+        "saunders1996",
+        "clark1986"
+      ]
+    },
+    {
+      "id": "distraction",
+      "sources": [
+        "webb2012",
+        "curry2005",
+        "helbiglang2010"
+      ]
+    },
+    {
+      "id": "calm",
+      "sources": [
+        "dewitte2020",
+        "alvarsson2010"
+      ]
+    }
   ],
   "sources": {
     "balban2023": {
@@ -49,6 +81,16 @@
     "helbiglang2010": {
       "citation": "Helbig-Lang, S., & Petermann, F. (2010). Tolerate or eliminate? A systematic review on the effects of safety behavior across anxiety disorders. Clinical Psychology: Science and Practice, 17(3), 218-233.",
       "url": "https://doi.org/10.1111/j.1468-2850.2010.01213.x",
+      "checked": "2026-10-07"
+    },
+    "dewitte2020": {
+      "citation": "de Witte, M., Spruit, A., van Hooren, S., Moonen, X., & Stams, G.-J. (2020). Effects of music interventions on stress-related outcomes: A systematic review and two meta-analyses. Health Psychology Review, 14(2), 294-324.",
+      "url": "https://doi.org/10.1080/17437199.2019.1627897",
+      "checked": "2026-10-07"
+    },
+    "alvarsson2010": {
+      "citation": "Alvarsson, J. J., Wiens, S., & Nilsson, M. E. (2010). Stress recovery during exposure to nature sound and environmental noise. International Journal of Environmental Research and Public Health, 7(3), 1036-1046.",
+      "url": "https://doi.org/10.3390/ijerph7031036",
       "checked": "2026-10-07"
     }
   }

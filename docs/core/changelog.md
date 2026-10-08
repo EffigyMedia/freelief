@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-5-9"></a>
+## [0.5.9] - 2026-10-07
+- **Standards and research** now covers what was added since slice 4: the colour sort under
+  distraction, and a new entry for Calm music and rain with two checked sources (a meta-analysis of
+  104 trials on music and stress; one small study on nature sounds), each with an honest note on the
+  strength of the evidence. 74 tests.
+
 <a id="v0-5-8"></a>
 ## [0.5.8] - 2026-10-07
 - Softer sounds everywhere, as the owner asked: lower notes, slow swells, long fades and lower

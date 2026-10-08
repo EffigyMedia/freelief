@@ -79,7 +79,7 @@ def browser():
 
 @contextmanager
 def open_app(locale="en-US", color_scheme="dark", reduced_motion="no-preference",
-             viewport=None, service_workers="allow", init_script=None):
+             viewport=None, service_workers="block", init_script=None):
     """Open the app in a fresh context. Yields (page, errors, requests)."""
     context = browser().new_context(
         locale=locale, color_scheme=color_scheme, reduced_motion=reduced_motion,
@@ -89,7 +89,11 @@ def open_app(locale="en-US", color_scheme="dark", reduced_motion="no-preference"
     page = context.new_page()
     errors: list[str] = []
     requests: list[str] = []
-    page.on("console", lambda m: errors.append(m.text) if m.type in ("error", "warning") else None)
+    # Tests block the service worker unless they need it: each install fetches every file, and over
+    # a whole suite that exhausts Windows' sockets (ERR_NO_BUFFER_SPACE). Playwright's own notice
+    # about the block is not an app error.
+    page.on("console", lambda m: errors.append(m.text)
+            if m.type in ("error", "warning") and "blocked by Playwright" not in m.text else None)
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.on("request", lambda r: requests.append(r.url))
     page.goto(base_url())
