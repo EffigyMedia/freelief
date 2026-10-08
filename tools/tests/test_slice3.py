@@ -114,3 +114,17 @@ def test_new_shape_moves_through_every_shape_and_each_can_be_traced():
         assert page.locator(".trace-name").inner_text().endswith(STRINGS["trace.shape." + shapes[0]["id"]]), \
             "after the last shape comes the first again"
         assert not errors, errors
+
+def test_the_trail_runs_from_the_loop_start_and_clears_each_loop():
+    with open_app() as (page, _, _):
+        go(page, "trace")
+        page.locator("[role=slider]").focus()
+        dash = lambda: page.locator(".trace-done").evaluate("e => parseFloat(getComputedStyle(e).strokeDasharray)")
+        assert dash() == 0
+        for _ in range(50):
+            page.keyboard.press("ArrowRight")
+        half = dash()
+        assert half > 0
+        for _ in range(50):
+            page.keyboard.press("ArrowRight")
+        assert dash() < half, "the trail starts again after a full loop"

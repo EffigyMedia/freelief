@@ -620,6 +620,43 @@ main {
   text-underline-offset: 3px;
 }
 
+/* Centre every button outside the header (owner, 2026-10-07). */
+.exercise-actions { justify-content: center; }
+.exercise-actions .next { margin-left: 0; }
+.directory, .send-choice, .app-version { text-align: center; align-items: center; }
+.line-actions { justify-content: center; }
+.line, .region > h3 { text-align: center; }
+
+/* Calm: the stage, full screen, and slowly evolving soft colours (owner, 2026-10-07). */
+.calm-stage { position: relative; }
+.calm-field { animation: calm-sky 120s ease-in-out infinite alternate; }
+.calm-stage.full {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  background: #05070d;
+}
+.calm-stage.full .calm-field { width: 100vw; height: 100vh; border-radius: 0; }
+.calm-exit { position: absolute; top: 1rem; right: 1rem; background: var(--surface); }
+.calm-shape > * { animation: calm-pulse 9s ease-in-out infinite alternate; }
+
+@keyframes calm-sky {
+  0%   { background-color: rgba(70, 110, 170, 0.22); }
+  25%  { background-color: rgba(120, 90, 170, 0.22); }
+  50%  { background-color: rgba(60, 140, 140, 0.22); }
+  75%  { background-color: rgba(170, 110, 140, 0.20); }
+  100% { background-color: rgba(80, 120, 180, 0.22); }
+}
+
+@keyframes calm-pulse {
+  0%   { stroke: #8fb8de; }
+  33%  { stroke: #c4a8e6; }
+  66%  { stroke: #9fd8c6; }
+  100% { stroke: #e8b9c9; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *:not(.calm-shape), *::before, *::after {
     transition-duration: 0s !important;

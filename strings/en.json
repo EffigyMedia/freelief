@@ -1,6 +1,6 @@
 {
   "app.name": "Freelief",
-  "app.tagline": "Breathe with the circle. You are safe right now.",
+  "app.tagline": "You are safe right now. Take your time.",
   "nav.label": "Screens",
   "nav.backMenu": "Back to menu",
   "nav.menuTitle": "What would help right now?",
@@ -90,6 +90,8 @@
   "calm.mode.rain": "Rain",
   "calm.blackScreen": "Black screen",
   "calm.blackHint": "The screen turns black and the sound keeps playing. Tap anywhere to bring it back.",
+  "calm.fullScreen": "Full screen",
+  "calm.exitFullScreen": "Leave full screen",
   "calm.blackLabel": "Black screen. Tap or press any key to bring the screen back.",
   "calm.soundsOff": "Sounds are off. Turn them on in Settings to hear the music.",
   "sort.title": "Sort colours",

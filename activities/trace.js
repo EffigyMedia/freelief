@@ -88,7 +88,11 @@ export function start(container, ctx) {
     const p = current.points[current.index];
     marker.setAttribute("cx", p.x);
     marker.setAttribute("cy", p.y);
-    done.style.strokeDasharray = `${current.index} ${current.last}`;
+    // The trail runs from where this loop began up to the finger, and starts again at each loop
+    // (owner, 2026-10-07). The trail path is the shape drawn twice, so a trail can cross the start.
+    const start = (current.index - current.travelled + current.last) % current.last;
+    done.style.strokeDasharray = `${current.travelled} ${current.last * 2}`;
+    done.style.strokeDashoffset = String(-start);
     const percent = Math.round((current.index / current.last) * 100);
     slider.setAttribute("aria-valuenow", String(percent));
     slider.setAttribute("aria-valuetext", t("trace.position", { percent }));
@@ -106,8 +110,8 @@ export function start(container, ctx) {
     current.glass = ctx.audio.glass(shape.note);
     const d = current.points.map((p, i) => `${i ? "L" : "M"}${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(" ");
     outline.setAttribute("d", d);
-    done.setAttribute("d", d);
-    done.setAttribute("pathLength", String(current.last));
+    done.setAttribute("d", d + " " + d.replace(/^M/, "L"));
+    done.setAttribute("pathLength", String(current.last * 2));
     name.textContent = t("trace.shapeName", { name: t(`trace.shape.${shape.id}`) });
     loopsText.textContent = "";
     render();

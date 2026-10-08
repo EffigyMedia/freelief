@@ -593,6 +593,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **Buttons outside the header are centred. The footer line no longer mentions breathing. The glass
+  trace's volume follows speed from a quiet floor, and its trail runs from the loop's start to the
+  finger, clearing each loop. On Settings, Back to menu sits at the top. Calm has Full screen (the
+  browser's full screen where it exists, a full-viewport stage everywhere), a slowly drifting soft
+  background colour, and softly pulsing shape colours.** — Owner requests from the phone. — 2026-10-07
+  (owner)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

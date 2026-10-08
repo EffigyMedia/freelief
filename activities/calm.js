@@ -34,9 +34,13 @@ export function start(container, ctx) {
         ${config.calm.modes.map((mode) => `<label class="choice"><input type="radio" name="calm-mode" value="${mode}"
           ${mode === getSetting("calmMode") ? "checked" : ""}><span>${t(`calm.mode.${mode}`)}</span></label>`).join("")}
       </fieldset>
-      <svg class="calm-field" viewBox="0 0 400 300" aria-hidden="true" focusable="false"></svg>
+      <div class="calm-stage">
+        <svg class="calm-field" viewBox="0 0 400 300" aria-hidden="true" focusable="false"></svg>
+        <button type="button" class="button calm-exit" hidden>${t("calm.exitFullScreen")}</button>
+      </div>
       <p class="hint calm-sound-note" hidden>${t("calm.soundsOff")}</p>
       <div class="exercise-actions">
+        <button type="button" class="button full-screen">${t("calm.fullScreen")}</button>
         <button type="button" class="button black-screen" aria-describedby="black-hint">${t("calm.blackScreen")}</button>
       </div>
       <p id="black-hint" class="hint">${t("calm.blackHint")}</p>
@@ -99,6 +103,27 @@ export function start(container, ctx) {
     current.music = playMode(input.value);
   }));
 
+  // Full screen (owner, 2026-10-07): the stage fills the screen. The browser's own full screen is
+  // used where it exists; the CSS class does the work everywhere, including phones without it.
+  const stage = container.querySelector(".calm-stage");
+  const exit = container.querySelector(".calm-exit");
+  const fullButton = container.querySelector(".full-screen");
+  function leaveFull() {
+    stage.classList.remove("full");
+    exit.hidden = true;
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    fullButton.focus();
+  }
+  fullButton.addEventListener("click", () => {
+    stage.classList.add("full");
+    exit.hidden = false;
+    stage.requestFullscreen?.().catch(() => {});
+    exit.focus();
+  });
+  exit.addEventListener("click", leaveFull);
+  stage.addEventListener("keydown", (event) => { if (event.key === "Escape") leaveFull(); });
+  current.leaveFull = () => { if (stage.classList.contains("full")) leaveFull(); };
+
   blackButton.addEventListener("click", blackOut);
   addShape();
 }
@@ -108,6 +133,7 @@ export function stop() {
     run.timers.forEach(clearTimeout);
     run.music.stop();
     if (run.cover) run.cover.remove();
+    if (run.leaveFull && document.fullscreenElement) document.exitFullscreen().catch(() => {});
   }
   run = null;
 }

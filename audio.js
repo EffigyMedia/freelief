@@ -198,7 +198,8 @@ export function glass(frequency) {
       const ctx = ensureContext();
       if (!ctx) return;
       voice = voice || build(ctx);
-      const level = Math.min(1, Math.max(0.35, speed)) * voice.settings.volume;
+      // Louder with speed (owner, 2026-10-07): from a quiet floor when slow to full volume when fast.
+      const level = (voice.settings.minLevel + (1 - voice.settings.minLevel) * Math.min(1, speed)) * voice.settings.volume;
       voice.master.gain.setTargetAtTime(level, ctx.currentTime, voice.settings.riseSeconds);
       clearTimeout(idle);
       idle = setTimeout(() => {

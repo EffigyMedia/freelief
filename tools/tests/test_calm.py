@@ -141,3 +141,28 @@ def test_the_bubble_pop_is_percussive_noise_not_a_tone():
         wait_until(page, f"window.__noise.length > {before}", 2000)
         last = page.evaluate("window.__osc[window.__osc.length - 1].stop - window.__osc[window.__osc.length - 1].ctx.currentTime")
         assert last < 0.15, "the thump under the pop is short"
+
+def test_full_screen_fills_the_screen_and_leaves_by_button_or_escape():
+    with open_app(viewport={"width": 390, "height": 844}) as (page, _, _):
+        go(page, "calm")
+        page.locator(".full-screen").click()
+        box = page.locator(".calm-stage").bounding_box()
+        assert box["width"] >= 389 and box["height"] >= 843, box
+        assert page.evaluate("document.activeElement.classList.contains('calm-exit')")
+        page.keyboard.press("Escape")
+        assert not page.evaluate("document.querySelector('.calm-stage').classList.contains('full')")
+        page.locator(".full-screen").click()
+        page.locator(".calm-exit").click()
+        assert page.locator(".calm-exit").is_hidden()
+
+
+def test_settings_has_back_to_menu_at_the_top_and_the_footer_does_not_mention_breathing():
+    with open_app(route="settings") as (page, _, _):
+        above = page.evaluate("""(() => { const nav = document.querySelector('.screen-nav');
+            return nav.compareDocumentPosition(document.querySelector('main')) & Node.DOCUMENT_POSITION_FOLLOWING; })()""")
+        assert above, "Back to menu comes before the Settings screen"
+        assert "circle" not in page.locator(".tagline").inner_text().lower()
+        go(page, "ground")
+        after = page.evaluate("""(() => { const nav = document.querySelector('.screen-nav');
+            return nav.compareDocumentPosition(document.querySelector('main')) & Node.DOCUMENT_POSITION_PRECEDING; })()""")
+        assert after, "on other screens Back to menu follows the screen"

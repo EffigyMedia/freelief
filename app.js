@@ -32,6 +32,7 @@ let config = null;
 let current = null;
 let main = null;
 let backLink = null;
+let nav = null;
 
 async function loadConfig() {
   const response = await fetch("config.json");
@@ -128,7 +129,7 @@ function buildShell() {
   main = element("main", { id: "screen" });
   // Every screen goes back to the menu (owner, 2026-10-07).
   backLink = element("a", { class: "button nav-link nav-back", href: "#menu", text: t("nav.backMenu") });
-  const nav = element("nav", { class: "screen-nav", "aria-label": t("nav.label") }, [backLink]);
+  nav = element("nav", { class: "screen-nav", "aria-label": t("nav.label") }, [backLink]);
   const footerLinks = element("ul", { class: "footer-links" }, [
     ["#about", "footer.about"], ["#standards", "footer.standards"], ["#feedback", "footer.feedback"],
   ].map(([href, key]) => element("li", {}, [element("a", { class: "footer-link", href, text: t(key) })])));
@@ -182,6 +183,9 @@ async function show(name, { moveFocus }) {
   if (request !== showing) return;
   main.dataset.shown = name;
   backLink.hidden = name === "menu";
+  // On Settings, Back to menu sits at the top (owner, 2026-10-07); elsewhere it follows the screen.
+  if (name === "settings") main.before(nav);
+  else main.after(nav);
   if (moveFocus) {
     // Tell keyboard and screen-reader users where they are: focus the new screen's heading.
     const heading = main.querySelector("h1");

@@ -10,6 +10,14 @@ audit.
 
 ---
 
+<a id="v0-5-12"></a>
+## [0.5.12] - 2026-10-07
+- As the owner asked: buttons outside the header are centred; the footer reads "You are safe right
+  now. Take your time."; the singing glass grows from quiet to full with your speed, and its trail runs
+  from where the loop began to your finger and clears each loop; Settings has Back to menu at the top;
+  **Calm** has **Full screen**, a slowly drifting soft background colour and softly pulsing shape
+  colours. 81 tests.
+
 <a id="v0-5-11"></a>
 ## [0.5.11] - 2026-10-07
 - Fix: the owner could not load v0.5.10. The offline worker looked in every cache, so an older
