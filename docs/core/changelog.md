@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-24"></a>
+## [0.5.24] - 2026-10-07
+- The Effigy Media logo on **About** is now drawn in code: its six bars, soft white on dark and soft
+  black on light. The app is 25.6 KB smaller (152.5 KB). [RLG-016](../fragments/RLG-016.md). 96 tests.
+
 <a id="v0-5-23"></a>
 ## [0.5.23] - 2026-10-07
 - New activity: the **Ripple pond**. Touch still water, or draw a finger across it, and soft

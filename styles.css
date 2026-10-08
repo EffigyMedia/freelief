@@ -623,7 +623,8 @@ main {
 .page p { margin: 0.25rem 0 0.5rem; }
 
 .maker { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.25rem; }
-.maker-logo { width: 160px; height: auto; margin: 0.5rem 0; }
+/* The Effigy Media bars, drawn in SVG (owner, 2026-10-07): soft white or soft black with the theme. */
+.maker-logo { width: 120px; height: auto; margin: 0.5rem 0; fill: var(--text); }
 
 .text-link { color: var(--text); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 

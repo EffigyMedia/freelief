@@ -18,7 +18,10 @@ export function start(container, ctx) {
       <p><a class="text-link" href="${config.project.sourceUrl}" rel="noopener">${t("about.sourceLink")}</a></p>
       <h2>${t("about.madeByHeading")}</h2>
       <div class="maker">
-        <img class="maker-logo" src="icons/effigy-media.png" width="200" height="120" alt="${t("about.logoAlt")}">
+        <svg class="maker-logo" viewBox="0 0 197 94" role="img" aria-label="${t("about.logoAlt")}">
+          <rect width="95" height="26"/><rect y="34" width="95" height="26"/><rect y="68" width="95" height="26"/>
+          <rect x="103" width="26" height="94"/><rect x="137" width="26" height="94"/><rect x="171" width="26" height="94"/>
+        </svg>
         <p>${t("about.madeBy")}</p>
         <p><a class="button" href="${config.project.makerUrl}" rel="noopener">${t("about.website")}</a></p>
       </div>

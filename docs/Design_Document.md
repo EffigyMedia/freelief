@@ -616,7 +616,16 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   second rule to learn); drag only (no path without sight). — 2026-10-07 (owner; UNT-029)
 - **About credits the maker: "Made by", the Effigy Media logo (a 200 x 120 copy of the owner's own
   logo from Effigy Arcade, 26 KB) and a link to https://www.effigymedia.com.** — Owner request. The link
-  is one the person chooses; the app still sends nothing. — 2026-10-07 (owner)
+  is one the person chooses; the app still sends nothing. — 2026-10-07 (owner) *Amended 2026-10-07
+  (owner, UNT-038): the PNG is replaced by the logo's six bars drawn as inline SVG; see the entry
+  below.*
+- **The Effigy Media logo on About is its six bars, drawn as inline SVG, in the theme's text color,
+  with no lettering.** — The owner asked whether a vector logo would cut the size and chose to draw
+  the bars and omit the "EFFIGYMEDIA" text, because the attribution line already names Effigy
+  Media. The bars are measured from the PNG (each 26 units thick with 8-unit gaps). They take
+  `--text`, so they are soft white in the dark theme and soft black in the light theme, and the
+  metallic gradient goes. The shipped size fell from 178.1 KB to 152.5 KB. — 2026-10-07 (owner;
+  UNT-038)
 - **The shipped size limit is 250 KB, raised from 150 KB.** — The app reached 148.2 KB; the owner chose
   room for more features over trimming. The 1-second launch target stays the guard on speed. —
   2026-10-07 (owner)

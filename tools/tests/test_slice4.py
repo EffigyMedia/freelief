@@ -117,9 +117,21 @@ def test_about_credits_effigy_media_with_logo_and_website():
     # Owner, 2026-10-07: attribution with the Effigy logo and www.effigymedia.com.
     with open_app() as (page, _, _):
         go(page, "about")
-        logo = page.locator("img.maker-logo")
-        assert logo.get_attribute("alt") == "Effigy Media"
-        assert page.evaluate("document.querySelector('img.maker-logo').naturalWidth") > 0, "the logo loads"
+        logo = page.locator("svg.maker-logo")
+        assert logo.get_attribute("role") == "img" and logo.get_attribute("aria-label") == "Effigy Media"
+        assert logo.locator("rect").count() == 6, "three bars across and three down; no lettering"
+        box = logo.bounding_box()
+        assert box["width"] > 100 and box["height"] > 40, "the logo is drawn at a visible size"
+        text = page.evaluate("getComputedStyle(document.body).color")
+        assert logo.evaluate("e => getComputedStyle(e).fill") == text, "the logo takes the theme's text color"
         link = page.locator(".maker a")
         assert link.get_attribute("href") == "https://www.effigymedia.com"
         assert "Alexander Steele, Effigy Media" in page.locator(".maker").inner_text()
+
+def test_the_logo_is_soft_white_on_dark_and_soft_black_on_light():
+    fills = {}
+    for scheme in ("dark", "light"):
+        with open_app(color_scheme=scheme) as (page, _, _):
+            go(page, "about")
+            fills[scheme] = page.locator("svg.maker-logo").evaluate("e => getComputedStyle(e).fill")
+    assert fills == {"dark": "rgb(230, 236, 245)", "light": "rgb(29, 36, 51)"}, fills
