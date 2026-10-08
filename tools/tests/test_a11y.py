@@ -29,7 +29,6 @@ def _check(color_scheme):
             page.wait_for_timeout(150)
             problems += [f"[{screen}] {p}" for p in _violations(page)]
         page.locator(".help-open").click()
-        page.locator("details.others summary").click()
         problems += [f"[help dialog] {p}" for p in _violations(page)]
     assert not problems, f"{color_scheme}: " + "; ".join(problems)
 

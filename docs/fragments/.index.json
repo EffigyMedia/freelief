@@ -1,7 +1,7 @@
 {
- "stamp": "db293dccbabd4816",
- "generated": "2026-10-07T23:53:33-04:00",
- "count": 194,
+ "stamp": "978aff6b7992600e",
+ "generated": "2026-10-08T00:10:25-04:00",
+ "count": 196,
  "entries": [
   {
    "id": "AUD-001",
@@ -1860,7 +1860,7 @@
    "created": "2026-10-07T06:42:30-04:00",
    "precision": "second",
    "age_days": 0,
-   "title": "Every screen shows a 'Need urgent help?' control that opens a list of crisis lines chosen from the device language and region setting, without a request for location.",
+   "title": "Every screen shows a 'Need urgent help?' control that opens the crisis lines of one region, chosen from a region saved in Settings or else from the device language and region setting, with a country list to show another region, without a request for location.",
    "blocks": [],
    "caused_by": [],
    "see_also": [],
@@ -2618,14 +2618,16 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-07T22:56:51-04:00",
    "precision": "second",
    "age_days": 0,
    "title": "Mandala coloring activity: tap a part to fill it with a soft color",
    "blocks": [],
    "caused_by": [],
-   "see_also": [],
+   "see_also": [
+    "REQ-033"
+   ],
    "supersedes": []
   },
   {
@@ -2703,7 +2705,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-07T23:53:29-04:00",
    "precision": "second",
    "age_days": 0,
@@ -3553,7 +3555,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "open",
+   "status": "closed",
    "created": "2026-10-07T23:47:49-04:00",
    "precision": "second",
    "age_days": 0,
@@ -3561,6 +3563,45 @@
    "blocks": [],
    "caused_by": [
     "RLG-014"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-041",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-07T23:55:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Urgent help: lock the page under the open dialog",
+   "blocks": [],
+   "caused_by": [
+    "RLG-019"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-042",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "open",
+   "created": "2026-10-08T00:00:56-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Urgent help: country dropdown and a saved region in Settings",
+   "blocks": [],
+   "caused_by": [
+    "RLG-020",
+    "REQ-005"
    ],
    "see_also": [],
    "supersedes": []

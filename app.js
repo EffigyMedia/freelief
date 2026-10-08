@@ -2,7 +2,7 @@
 // It holds no exercise logic and no literal text (AGENTS.md, Architecture).
 
 import { loadStrings, t, list } from "./strings.js";
-import { loadCrisisLines, deviceRegion, linesFor } from "./crisis.js";
+import { loadCrisisLines, activeRegion, linesFor, regionList } from "./crisis.js";
 import { initSettings, getSetting, onSettingChange } from "./settings.js";
 import * as audio from "./audio.js";
 import * as motion from "./motion.js";
@@ -74,8 +74,9 @@ function regionBlock(region, headingLevel) {
   ]);
 }
 
+// The dialog opens on the region chosen in Settings, or the device's own. A country list replaces
+// the long list of every region (owner, 2026-10-07); a choice in it holds for this visit only.
 function buildHelpDialog() {
-  const { own, others, directory } = linesFor(deviceRegion());
   const dialog = element("dialog", { class: "help", id: "help", "aria-labelledby": "help-title" });
   // The way out sits at the top and stays there while the content scrolls (owner, on the phone:
   // a Close button at the bottom of a long list was not found).
@@ -86,29 +87,46 @@ function buildHelpDialog() {
     back,
   ]);
 
+  const emergency = element("p", { class: "emergency" });
+  const lines = element("div", { class: "region-lines" });
+  const regions = regionList();
+  const select = element("select", { id: "help-country", class: "country-select" }, [
+    ...regions.map((region) => element("option", { value: region.code, text: region.country })),
+    element("option", { value: "", text: t("help.otherCountry") }),
+  ]);
+  const picker = regions.length
+    ? element("p", { class: "country-picker" }, [
+      element("label", { for: "help-country", text: t("help.country") }), select])
+    : null;
+
+  function showRegion(code) {
+    const { own } = linesFor(code);
+    emergency.textContent = own
+      ? t("help.emergency", { number: own.emergency })
+      : t("help.emergencyUnknown");
+    lines.replaceChildren(...(own ? [regionBlock(own, "h3")] : []));
+    select.value = own ? own.code : "";
+  }
+  select.addEventListener("change", () => showRegion(select.value));
+
+  // With no crisis data, the directory link still comes from config.json (AUD-002).
+  const { directory } = linesFor(null);
+  const directoryUrl = directory ? directory.url : config.crisis.directoryUrl;
   const body = [
     element("p", { text: t("help.intro") }),
-    element("p", { class: "emergency", text: own
-      ? t("help.emergency", { number: own.emergency })
-      : t("help.emergencyUnknown") }),
+    picker,
+    emergency,
+    lines,
+    element("p", { class: "directory" }, [
+      element("a", { class: "button", href: directoryUrl, rel: "noopener", text: t("help.directory") }),
+      directory
+        ? element("span", { class: "directory-note", text: t("help.directoryNote", { note: directory.note }) })
+        : null,
+    ]),
   ];
-  if (own) body.push(regionBlock(own, "h3"));
-  // With no crisis data, the directory link still comes from config.json (AUD-002).
-  const directoryUrl = directory ? directory.url : config.crisis.directoryUrl;
-  body.push(element("p", { class: "directory" }, [
-    element("a", { class: "button", href: directoryUrl, rel: "noopener", text: t("help.directory") }),
-    directory
-      ? element("span", { class: "directory-note", text: t("help.directoryNote", { note: directory.note }) })
-      : null,
-  ]));
-  if (others.length) {
-    body.push(element("details", { class: "others" }, [
-      element("summary", { text: t("help.otherCountries") }),
-      ...others.map((region) => regionBlock(region, "h3")),
-    ]));
-  }
   dialog.append(header, element("div", { class: "help-body" }, body));
-  return dialog;
+  showRegion(activeRegion(getSetting("helpRegion")));
+  return { dialog, showRegion };
 }
 
 // ---- frame and router --------------------------------------------------------------------
@@ -138,10 +156,11 @@ function buildShell() {
     element("p", { class: "self-help", text: t("footer.selfHelp") }),
     element("nav", { "aria-label": t("footer.label") }, [footerLinks]),
   ]);
-  const dialog = buildHelpDialog();
+  const { dialog, showRegion } = buildHelpDialog();
   // The phone's back gesture closes the dialog instead of leaving the app: opening it adds a
   // history entry, and going back closes it.
   helpButton.addEventListener("click", () => {
+    showRegion(activeRegion(getSetting("helpRegion")));
     dialog.showModal();
     // A modal dialog blocks taps on the page, but on a phone a swipe on the backdrop still scrolls
     // the page under it (owner report). The page does not scroll while help is open.

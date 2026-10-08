@@ -418,7 +418,8 @@
     "storageKey": "freelief.settings.v1"
   },
   "crisis": {
-    "directoryUrl": "https://findahelpline.com/"
+    "directoryUrl": "https://findahelpline.com/",
+    "defaultRegion": "auto"
   },
   "project": {
     "sourceUrl": "https://github.com/EffigyMedia/freelief",

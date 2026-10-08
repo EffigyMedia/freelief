@@ -1,5 +1,6 @@
-// Crisis lines by region. The region comes from the device language setting, never from
-// location (REQ-005). Lines are curated and dated in data/crisis-lines.json (REQ-022).
+// Crisis lines by region. The region comes from the device language setting, or from a region the
+// person chooses in Settings, and never from location (REQ-005). Lines are curated and dated in
+// data/crisis-lines.json (REQ-022).
 
 let data = null;
 
@@ -28,13 +29,23 @@ export function deviceRegion(languages = navigator.languages || [navigator.langu
   return null;
 }
 
-// The lines for one region, the other curated regions, and the international directory.
+// The region to show first: the one chosen in Settings, or "auto" for the device's own.
+export function activeRegion(setting) {
+  return setting && setting !== "auto" ? setting : deviceRegion();
+}
+
+// Every curated region as { code, country }, in alphabetical order of the country name.
+export function regionList() {
+  if (!data) return [];
+  return Object.entries(data.regions)
+    .map(([code, region]) => ({ code, country: region.country }))
+    .sort((a, b) => a.country.localeCompare(b.country));
+}
+
+// The lines for one region (null when it is not curated) and the international directory.
 export function linesFor(regionCode) {
-  if (!data) return { own: null, others: [], directory: null };
+  if (!data) return { own: null, directory: null };
   const regions = data.regions;
-  const own = regionCode && regions[regionCode] ? { code: regionCode, ...regions[regionCode] } : null;
-  const others = Object.entries(regions)
-    .filter(([code]) => code !== regionCode)
-    .map(([code, region]) => ({ code, ...region }));
-  return { own, others, directory: data.directory };
+  const own = regionCode && Object.hasOwn(regions, regionCode) ? { code: regionCode, ...regions[regionCode] } : null;
+  return { own, directory: data.directory };
 }

@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `db293dccbabd4816` · 33 requirement(s) recorded
+> Store stamp `978aff6b7992600e` · 33 requirement(s) recorded
 
 ## The problem
 
@@ -66,7 +66,7 @@ Not built (decided 2026-10-07):
 
 - **REQ-001** — Freelief offers a paced breathing exercise with a visual breath guide.
 - **REQ-004** — Freelief offers interactive calming activities whose purpose is to distract the person from panic.
-- **REQ-005** — Every screen shows a 'Need urgent help?' control that opens a list of crisis lines chosen from the device language and region setting, without a request for location.
+- **REQ-005** — Every screen shows a 'Need urgent help?' control that opens the crisis lines of one region, chosen from a region saved in Settings or else from the device language and region setting, with a country list to show another region, without a request for location.
 - **REQ-006** — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
 - **REQ-008** — Freelief is a progressive web app served from GitHub Pages that installs to the home screen and works with no network after the first visit.
 - **REQ-009** — Every control is reachable and usable with a keyboard alone and with a screen reader.
@@ -124,4 +124,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-07T23:53:35-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-08T00:10:28-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

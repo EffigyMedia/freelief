@@ -66,7 +66,7 @@ def _help_region(locale):
     with open_app(locale=locale) as (page, _, _):
         page.locator(".help-open").click()
         dialog = page.locator("dialog.help")
-        first = dialog.locator(".help-body > section.region")
+        first = dialog.locator(".region-lines > section.region")
         own = first.get_attribute("data-region") if first.count() else None
         return own, dialog.locator(".emergency").inner_text(), dialog.locator(".directory a").count()
 
@@ -90,13 +90,18 @@ def test_help_falls_back_for_an_uncurated_region():
 def test_every_crisis_line_is_dated_and_dialable():
     with open_app() as (page, _, _):
         page.locator(".help-open").click()
-        page.locator("details.others summary").click()
-        lines = page.locator("li.line")
-        assert lines.count() == 5
-        for i in range(lines.count()):
-            line = lines.nth(i)
-            assert re.search(r"Last checked \d{4}-\d{2}-\d{2}", line.inner_text())
-            assert line.locator("a[href^='tel:']").count() == 1
+        select = page.locator("#help-country")
+        codes = [c for c in select.locator("option").evaluate_all("os => os.map(o => o.value)") if c]
+        assert len(codes) == 5
+        for code in codes:
+            select.select_option(code)
+            assert page.locator(".region-lines section.region").get_attribute("data-region") == code
+            lines = page.locator(".region-lines li.line")
+            assert lines.count() >= 1, code
+            for i in range(lines.count()):
+                line = lines.nth(i)
+                assert re.search(r"Last checked \d{4}-\d{2}-\d{2}", line.inner_text())
+                assert line.locator("a[href^='tel:']").count() == 1
 
 
 def test_reduced_motion_keeps_the_guide_still():
@@ -114,8 +119,7 @@ def test_targets_are_at_least_44_pixels():
     # WCAG 2.2 target size, at the AAA size of 44 by 44 CSS pixels.
     with open_app() as (page, _, _):
         page.locator(".help-open").click()
-        page.locator("details.others summary").click()
-        small = page.evaluate("""() => [...document.querySelectorAll('button, a, summary')]
+        small = page.evaluate("""() => [...document.querySelectorAll('button, a, summary, select')]
             .filter(e => e.offsetParent !== null)
             .map(e => [e.textContent.trim(), e.getBoundingClientRect()])
             .filter(([, r]) => r.width < 44 || r.height < 44)
@@ -133,3 +137,48 @@ def test_an_inherited_name_in_the_hash_falls_back_to_the_menu():
         page.evaluate("location.hash = 'trace'")
         wait_until(page, "document.querySelector('main').dataset.shown === 'trace'", 3000)
         assert not [e for e in errors if "could not" in e], errors
+
+def test_a_region_saved_in_settings_opens_urgent_help_and_the_list_changes_it_for_this_visit():
+    # Owner, 2026-10-07: a default region in Settings, and a country list in place of the long list.
+    with open_app(locale="en-US") as (page, _, _):
+        page.evaluate("location.hash = 'settings'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'settings'", 3000)
+        assert page.locator("#help-region").input_value() == "auto"
+        page.locator("#help-region").select_option("GB")
+        page.reload()
+        page.wait_for_selector("html[data-ready='true']")
+        page.locator(".help-open").click()
+        assert page.locator("#help-country").input_value() == "GB"
+        assert page.locator(".region-lines section.region").get_attribute("data-region") == "GB"
+        assert "999" in page.locator(".emergency").inner_text()
+        page.locator("#help-country").select_option("AU")
+        assert page.locator(".region-lines section.region").get_attribute("data-region") == "AU"
+        page.locator("#help-country").select_option("")
+        assert page.locator(".emergency").inner_text() == "If you are in immediate danger, call your local emergency number."
+        assert page.locator(".region-lines section.region").count() == 0
+        assert page.locator(".directory a").count() == 1
+        page.locator(".help-back").click()
+        page.locator(".help-open").click()
+        assert page.locator("#help-country").input_value() == "GB", "the list changes one visit, not the setting"
+        page.locator(".help-back").click()
+        page.evaluate("location.hash = 'settings'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'settings'", 3000)
+        page.locator("#help-region").select_option("auto")
+        page.locator(".help-open").click()
+        assert page.locator("#help-country").input_value() == "US", "Automatic follows the device"
+
+
+def test_the_country_list_is_reached_and_used_by_keyboard():
+    with open_app(locale="en-GB") as (page, _, _):
+        page.locator(".help-open").click()
+        page.keyboard.press("Tab")
+        for _ in range(5):
+            if page.evaluate("document.activeElement.id") == "help-country":
+                break
+            page.keyboard.press("Tab")
+        assert page.evaluate("document.activeElement.id") == "help-country"
+        assert page.locator("label[for='help-country']").inner_text() == "Country"
+        page.keyboard.press("ArrowDown")
+        chosen = page.locator("#help-country").input_value()
+        assert chosen != "GB", "the arrow key moved to the next country"
+        assert page.locator(".region-lines section.region").get_attribute("data-region") == chosen

@@ -14,6 +14,7 @@ export function initSettings(config) {
     sounds: config.sounds.enabledByDefault,
     theme: config.theme.default,
     calmMode: config.calm.defaultMode,
+    helpRegion: config.crisis.defaultRegion,
   };
   let stored = {};
   try {
@@ -29,6 +30,9 @@ export function initSettings(config) {
   if (typeof stored.sounds === "boolean") values.sounds = stored.sounds;
   if (config.theme.choices.includes(stored.theme)) values.theme = stored.theme;
   if (config.calm.modes.includes(stored.calmMode)) values.calmMode = stored.calmMode;
+  // "auto", or a two-letter region code. crisis.js shows the general route for a region it does
+  // not have, so a code that is no longer curated is safe.
+  if (stored.helpRegion === "auto" || /^[A-Z]{2}$/.test(stored.helpRegion)) values.helpRegion = stored.helpRegion;
 }
 
 export function getSetting(name) {

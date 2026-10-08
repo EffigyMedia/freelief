@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `db293dccbabd4816` · 31 requirement(s) specified, 2 not yet
+> Store stamp `978aff6b7992600e` · 31 requirement(s) specified, 2 not yet
 
 ## 1. Introduction
 
@@ -69,7 +69,7 @@ person's settings, on the device.
 
 - **REQ-001** *(must)* — Freelief offers a paced breathing exercise with a visual breath guide.
 - **REQ-004** *(must)* — Freelief offers interactive calming activities whose purpose is to distract the person from panic.
-- **REQ-005** *(must)* — Every screen shows a 'Need urgent help?' control that opens a list of crisis lines chosen from the device language and region setting, without a request for location.
+- **REQ-005** *(must)* — Every screen shows a 'Need urgent help?' control that opens the crisis lines of one region, chosen from a region saved in Settings or else from the device language and region setting, with a country list to show another region, without a request for location.
 - **REQ-006** *(must)* — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
 - **REQ-007** *(should)* — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a chime on Next, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; one Sounds switch in Settings turns them all off. Nothing plays before the person's first tap or key press.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
@@ -183,4 +183,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-07T23:53:33-04:00 by `Commands/srs.py` from 33 requirement record(s).
+Generated 2026-10-08T00:10:25-04:00 by `Commands/srs.py` from 33 requirement record(s).

@@ -246,14 +246,16 @@ failure, no timer; reduced motion slows or stops the drift; a screen reader anno
 and its action.
 
 **F6 — Need urgent help.** Trigger: the "Need urgent help?" control, present on every screen.
-Steps: the app reads the device language and region; it shows a line to call the region's
-emergency number if in immediate danger; then the crisis lines for that region, each with a
-tap-to-call or tap-to-text link and its last-checked date; then the link to the international
-directory; then a closed "Lines in other countries" list with every other curated region.
-States: *uncurated region* — the "call your local emergency number" line, the international
-directory and the other-countries list; *offline* — the curated lines still show; the directory
+Steps: the app takes the region saved in Settings, or else reads the device language and region;
+it shows a Country list set to that region; a line to call the region's emergency number if in
+immediate danger; then the crisis lines for that region, each with a tap-to-call or tap-to-text
+link and its last-checked date; then the link to the international directory. The Country list
+shows another curated region, or "Another country", for this visit only.
+States: *uncurated region* — the "call your local emergency number" line and the international
+directory; *offline* — the curated lines still show; the directory
 link says it needs a network. *(Changed at slice 1, 2026-10-07: the emergency line moved first, and
-the other-countries list was added. See the Decision Log.)*
+the other-countries list was added. See the Decision Log.)* *(Changed 2026-10-07, UNT-042: the Country list and the
+region in Settings replace the other-countries list.)*
 
 **F7 — Settings.** Rhythm preset, tones on or off, theme override. Saved on the device at once.
 Storage that fails is ignored and the defaults stand.
@@ -688,6 +690,16 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   a swipe on the backdrop scrolled the page under it, and a scroll past the end of the help list
   could move the page too. The shell now sets `overflow: hidden` on the page while the dialog is
   open, and the dialog has `overscroll-behavior: contain`. — 2026-10-07 (owner report; UNT-041)
+- **Urgent help shows one region at a time, chosen from Settings or the device, with a country
+  list to change it.** — The owner found the long list of every country hard to use and asked for
+  a dropdown or a saved default, and chose both. Settings has "Region for urgent help": Automatic
+  (the device language and region, as before) or a curated country, saved only on the device. The
+  dialog opens on that region and has a Country list of the curated regions plus "Another country"
+  (the general emergency line and the directory). A choice in the list holds for one visit and
+  does not change the setting. A saved code that is no longer curated falls back to the general
+  route. Freelief still never asks for location. — Rejected: the long list (owner); saving the
+  dialog's choice (a person helping someone else would change the owner's default). — 2026-10-07
+  (owner; UNT-042)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

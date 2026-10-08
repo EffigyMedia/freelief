@@ -1,8 +1,10 @@
-// Settings: breathing rhythm, sounds and colours (REQ-023, REQ-007, REQ-021). Every change is
-// saved at once through settings.js, the only module that touches storage.
+// Settings: breathing rhythm, colors, sounds and the region for urgent help (REQ-023, REQ-007,
+// REQ-021, REQ-005). Every change is saved at once through settings.js, the only module that
+// touches storage.
 
 import { getSetting, setSetting } from "../settings.js";
 import { unlockAudio } from "../audio.js";
+import { regionList } from "../crisis.js";
 
 export function start(container, ctx) {
   const { t, config } = ctx;
@@ -34,6 +36,14 @@ export function start(container, ctx) {
         </label>
         <p id="sounds-hint" class="hint">${t("settings.soundsHint")}</p>
       </div>
+      <div class="region-setting">
+        <label class="field-label" for="help-region">${t("settings.region")}</label>
+        <select id="help-region" class="country-select" aria-describedby="region-hint">
+          <option value="auto">${t("settings.region.auto")}</option>
+          ${regionList().map((region) => `<option value="${region.code}">${region.country}</option>`).join("")}
+        </select>
+        <p id="region-hint" class="hint">${t("settings.regionHint")}</p>
+      </div>
       <p class="hint">${t("settings.saved")}</p>
       <div class="app-version">
         <p class="version-line">${t("settings.version", { version: self.FREELIEF_VERSION })}</p>
@@ -47,6 +57,10 @@ export function start(container, ctx) {
     input.addEventListener("change", () => setSetting("rhythm", input.value)));
   container.querySelectorAll("input[name=theme]").forEach((input) =>
     input.addEventListener("change", () => setSetting("theme", input.value)));
+  const region = container.querySelector("#help-region");
+  // A saved region that is no longer curated shows as Automatic, which is what the dialog does.
+  region.value = [...region.options].some((o) => o.value === getSetting("helpRegion")) ? getSetting("helpRegion") : "auto";
+  region.addEventListener("change", () => setSetting("helpRegion", region.value));
   const status = container.querySelector(".update-status");
   container.querySelector(".update-now").addEventListener("click", () => updateNow(status, t));
   container.querySelector("input[name=sounds]").addEventListener("change", (event) => {

@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-5-28"></a>
+## [0.5.28] - 2026-10-07
+- **Need urgent help?** now shows one country at a time, with a **Country** list to see another,
+  in place of the long list of every country.
+- **Settings** has a **Region for urgent help**: Automatic, or a country you choose. It is saved
+  only on this device. [RLG-020](../fragments/RLG-020.md). 107 tests.
+
 <a id="v0-5-27"></a>
 ## [0.5.27] - 2026-10-07
 - Fixed: with **Need urgent help?** open, a swipe could scroll the app behind it. The app behind
