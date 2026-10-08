@@ -14,6 +14,7 @@ def never_break(browser):
     with open_app(route=None, on=browser) as (page, errors, _):
         assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
         page.locator(".menu-item[href='#breathe']").click()
+        wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 5000)
         wait_until(page, "document.querySelector('.phase').textContent.trim().length > 0", 3000)
         page.locator(".help-open").click()
         assert page.locator("dialog.help").evaluate("d => d.open")

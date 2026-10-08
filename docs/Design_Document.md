@@ -934,6 +934,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   engine. Firefox's engine cannot start on the development machine until the Microsoft Visual C++
   runtime is installed, which is the owner's step (RLG-033); `doctor` warns until then. —
   2026-10-08 (owner; UNT-081)
+- **The header is frozen at the top; the page scrolls under it.** — Owner request. The header
+  (Freelief, "Need urgent help?", the sound button and the gear) is sticky with its own background,
+  so the way to help is always one tap away on a long page. `body` now grows with its content, which
+  a sticky header needs. The Visualizer's full screen and black screen still sit above it. —
+  2026-10-08 (owner; UNT-083)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

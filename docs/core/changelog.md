@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-6-16"></a>
+## [0.6.16] - 2026-10-08
+- The header now stays at the top while the page scrolls under it, so **Need urgent help?** is
+  always in reach. [RLG-035](../fragments/RLG-035.md). 150 tests.
+
 <a id="v0-6-15"></a>
 ## [0.6.15] - 2026-10-08
 - Internal: the supported browsers are Chrome, Safari and Firefox, and the core paths are now also

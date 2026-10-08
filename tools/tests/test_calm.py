@@ -228,3 +228,17 @@ def test_activities_show_no_text_above_them_but_a_screen_reader_still_hears_how_
             assert page.locator("main .exercise-intro").count() == 0, route
         go(page, "sort")
         assert page.locator(".sort-tiles").get_attribute("aria-describedby") == "sort-intro"
+
+
+def test_the_header_stays_at_the_top_while_the_page_scrolls():
+    # Owner, 2026-10-08: the header is frozen; the rest scrolls under it.
+    with open_app(viewport={"width": 390, "height": 700}) as (page, _, _):
+        go(page, "about")
+        page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
+        page.wait_for_timeout(200)
+        assert page.evaluate("scrollY") > 300, "the About page is long enough to scroll"
+        header = page.locator("header.top").bounding_box()
+        assert abs(header["y"]) < 1, header
+        assert page.locator(".help-open").is_visible()
+        page.locator(".help-open").click()
+        assert page.locator("dialog.help").evaluate("d => d.open"), "help is one tap away mid-page"
