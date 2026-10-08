@@ -15,6 +15,7 @@ audit.
 - Internal: the benchmark flags a figure that drifts past its tolerance, and the performance
   baseline is renewed at the end of slice 6 (178 ms launch, 74 ms response, 188.7 KB).
   [AUD-058](../fragments/AUD-058.md). 133 tests.
+- The live preview moved to 0.6.3 on 2026-10-08, with the owner's yes in chat ("Yes, move live").
 
 <a id="v0-6-2"></a>
 ## [0.6.2] - 2026-10-08
