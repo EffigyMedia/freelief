@@ -617,7 +617,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   finger, clearing each loop. On Settings, Back to menu sits at the top. Calm has Full screen (the
   browser's full screen where it exists, a full-viewport stage everywhere), a slowly drifting soft
   background colour, and softly pulsing shape colours.** — Owner requests from the phone. — 2026-10-07
-  (owner)
+  (owner) *Amended 2026-10-07: Back to menu now sits at the top of every screen; see the next entry.*
+- **Back to menu sits at the top of every screen that has it, under the header. A line divides the
+  header from the screen, and another divides the footer from it. The version line on About is
+  centred.** — Owner requests. The way back is always in the same place, so a person in distress
+  never has to scroll to find it. The menu has no Back to menu, so the row is hidden there. —
+  2026-10-07 (owner; UNT-030)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

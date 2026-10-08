@@ -156,13 +156,27 @@ def test_full_screen_fills_the_screen_and_leaves_by_button_or_escape():
         assert page.locator(".calm-exit").is_hidden()
 
 
-def test_settings_has_back_to_menu_at_the_top_and_the_footer_does_not_mention_breathing():
+def test_back_to_menu_is_at_the_top_of_every_screen_and_the_footer_does_not_mention_breathing():
     with open_app(route="settings") as (page, _, _):
         above = page.evaluate("""(() => { const nav = document.querySelector('.screen-nav');
             return nav.compareDocumentPosition(document.querySelector('main')) & Node.DOCUMENT_POSITION_FOLLOWING; })()""")
         assert above, "Back to menu comes before the Settings screen"
         assert "circle" not in page.locator(".tagline").inner_text().lower()
-        go(page, "ground")
-        after = page.evaluate("""(() => { const nav = document.querySelector('.screen-nav');
-            return nav.compareDocumentPosition(document.querySelector('main')) & Node.DOCUMENT_POSITION_PRECEDING; })()""")
-        assert after, "on other screens Back to menu follows the screen"
+        for route in ["ground", "sort", "about", "feedback"]:
+            go(page, route)
+            nav = page.locator(".screen-nav").bounding_box()
+            screen = page.locator("main").bounding_box()
+            header = page.locator("header.top").bounding_box()
+            assert header["y"] + header["height"] <= nav["y"] < screen["y"], f"Back to menu is at the top of {route}"
+        go(page, "menu")
+        assert page.locator(".screen-nav").is_hidden()
+
+def test_lines_divide_the_header_and_the_footer_and_the_about_version_is_centred():
+    with open_app(route="about") as (page, _, _):
+        top = page.locator("header.top").evaluate("e => getComputedStyle(e).borderBottomWidth")
+        bottom = page.locator("footer.bottom").evaluate("e => getComputedStyle(e).borderTopWidth")
+        assert top == "2px" and bottom == "2px"
+        version = page.locator(".about-version")
+        assert version.evaluate("e => getComputedStyle(e).textAlign") == "center"
+        box, section = version.bounding_box(), page.locator("section.page").bounding_box()
+        assert abs((box["x"] + box["width"] / 2) - (section["x"] + section["width"] / 2)) < 2

@@ -22,7 +22,7 @@ export function start(container, ctx) {
         <p>${t("about.madeBy")}</p>
         <p><a class="button" href="${config.project.makerUrl}" rel="noopener">${t("about.website")}</a></p>
       </div>
-      <p class="hint">${t("about.version", { version: self.FREELIEF_VERSION })}</p>
+      <p class="hint about-version">${t("about.version", { version: self.FREELIEF_VERSION })}</p>
     </section>`;
 }
 

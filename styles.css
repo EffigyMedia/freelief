@@ -47,7 +47,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.75rem;
-  padding: 0 1.25rem 0.5rem;
+  padding: 1rem 1.25rem 0;
 }
 
 .button.primary {
@@ -216,6 +216,7 @@ body {
   justify-content: space-between;
   gap: 1rem;
   padding: max(1rem, env(safe-area-inset-top)) 1.25rem 0.5rem;
+  border-bottom: 2px solid var(--accent-soft); /* the line under the header (owner, 2026-10-07) */
 }
 
 .brand {
@@ -261,6 +262,7 @@ main {
 
 .bottom {
   padding: 0.5rem 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+  border-top: 2px solid var(--accent-soft); /* the line over the footer (owner, 2026-10-07) */
   text-align: center;
   color: var(--muted);
 }
@@ -641,7 +643,7 @@ main {
 /* Centre every button outside the header (owner, 2026-10-07). */
 .exercise-actions { justify-content: center; }
 .exercise-actions .next { margin-left: 0; }
-.directory, .send-choice, .app-version { text-align: center; align-items: center; }
+.directory, .send-choice, .app-version, .about-version { text-align: center; align-items: center; }
 .line-actions { justify-content: center; }
 .line, .region > h3 { text-align: center; }
 

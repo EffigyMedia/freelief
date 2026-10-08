@@ -127,7 +127,7 @@ function buildShell() {
     element("div", { class: "top-actions" }, [helpButton, gear]),
   ]);
   main = element("main", { id: "screen" });
-  // Every screen goes back to the menu (owner, 2026-10-07).
+  // Every screen goes back to the menu, from the top of the screen (owner, 2026-10-07).
   backLink = element("a", { class: "button nav-link nav-back", href: "#menu", text: t("nav.backMenu") });
   nav = element("nav", { class: "screen-nav", "aria-label": t("nav.label") }, [backLink]);
   const footerLinks = element("ul", { class: "footer-links" }, [
@@ -147,7 +147,7 @@ function buildShell() {
   });
   window.addEventListener("popstate", () => { if (dialog.open) dialog.close(); });
   dialog.addEventListener("close", () => { if (history.state?.freeliefHelp) history.back(); });
-  document.body.replaceChildren(header, main, nav, footer, dialog);
+  document.body.replaceChildren(header, nav, main, footer, dialog);
 }
 
 function routeName() {
@@ -182,10 +182,7 @@ async function show(name, { moveFocus }) {
   });
   if (request !== showing) return;
   main.dataset.shown = name;
-  backLink.hidden = name === "menu";
-  // On Settings, Back to menu sits at the top (owner, 2026-10-07); elsewhere it follows the screen.
-  if (name === "settings") main.before(nav);
-  else main.after(nav);
+  nav.hidden = name === "menu";
   if (moveFocus) {
     // Tell keyboard and screen-reader users where they are: focus the new screen's heading.
     const heading = main.querySelector("h1");

@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-17"></a>
+## [0.5.17] - 2026-10-07
+- **Back to menu** is now at the top of every screen, just under the header.
+- A thin line now divides the header and the footer from the rest of the app.
+- The version line on **About** is centred. [RLG-008](../fragments/RLG-008.md). 88 tests.
+
 <a id="v0-5-16"></a>
 ## [0.5.16] - 2026-10-07
 - **Sort colours**: drag a tile onto another tile to swap the two, by touch or mouse. Choosing a
