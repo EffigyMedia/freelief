@@ -85,7 +85,7 @@ def test_blocked_storage_falls_back_to_defaults():
         assert page.locator(".guide").is_visible()
         go(page, "settings")
         default = CONFIG["breathing"]["defaultRhythm"]
-        assert default == "box"
+        assert default == "calm", "owner, 2026-10-08: the long breath out the research favors"
         assert page.locator(f"input[name=rhythm][value={default}]").is_checked()
         page.locator("input[name=rhythm][value=slow]").check()
         go(page, "breathe")

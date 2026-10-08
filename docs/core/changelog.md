@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-36"></a>
+## [0.5.36] - 2026-10-08
+- The default rhythm is **4 in, 6 out** again: in a trial, a longer breath out did better than box
+  breathing. Standards and research says so. A rhythm you chose stays.
+  [RLG-025](../fragments/RLG-025.md). 111 tests.
+
 <a id="v0-5-35"></a>
 ## [0.5.35] - 2026-10-08
 - **Standards and research** now has a section for every activity, each with its own sources and

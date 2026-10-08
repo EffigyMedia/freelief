@@ -1,7 +1,7 @@
 {
- "stamp": "edf50a8c976b0490",
- "generated": "2026-10-08T00:24:26-04:00",
- "count": 205,
+ "stamp": "8e998420848bd2f5",
+ "generated": "2026-10-08T01:03:09-04:00",
+ "count": 210,
  "entries": [
   {
    "id": "AUD-001",
@@ -2166,7 +2166,7 @@
    "created": "2026-10-07T06:47:46-04:00",
    "precision": "second",
    "age_days": 0,
-   "title": "The person can choose a breathing rhythm from presets (box breathing by default, 4-in 6-out, and a slower rhythm), and the choice is remembered on the device.",
+   "title": "The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.",
    "blocks": [],
    "caused_by": [],
    "see_also": [],
@@ -2705,14 +2705,16 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-07T23:48:01-04:00",
    "precision": "second",
    "age_days": 0,
    "title": "Standards and research: sources for every activity, each in its own section, checked in the session",
    "blocks": [],
    "caused_by": [],
-   "see_also": [],
+   "see_also": [
+    "REQ-024"
+   ],
    "supersedes": []
   },
   {
@@ -2809,11 +2811,30 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T00:16:37-04:00",
    "precision": "second",
    "age_days": 0,
    "title": "Haptic feedback on triggered events, a Settings toggle on by default",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "REQ-034"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RLG-025",
+   "kind": "ruling",
+   "type": "feature",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:00:56-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Default rhythm back to 4-in 6-out, the long breath out the research favors",
    "blocks": [],
    "caused_by": [],
    "see_also": [],
@@ -3757,7 +3778,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "open",
+   "status": "closed",
    "created": "2026-10-08T00:16:40-04:00",
    "precision": "second",
    "age_days": 0,
@@ -3765,6 +3786,83 @@
    "blocks": [],
    "caused_by": [
     "RLG-024"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-047",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T00:26:51-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Exact vibration support in the Settings hint",
+   "blocks": [],
+   "caused_by": [
+    "RLG-024"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-048",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T00:28:28-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Shorter, smaller vibration hint",
+   "blocks": [],
+   "caused_by": [
+    "RLG-024"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-049",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T00:56:03-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Sources for every activity on Standards and research",
+   "blocks": [],
+   "caused_by": [
+    "RLG-018",
+    "REQ-024"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-050",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "open",
+   "created": "2026-10-08T01:00:58-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Long out-breath as the default rhythm",
+   "blocks": [],
+   "caused_by": [
+    "REQ-023"
    ],
    "see_also": [],
    "supersedes": []

@@ -549,6 +549,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   — Rejected: one fixed rhythm; full sliders, which are too much to choose in distress. — 2026-10-07
   *Amended 2026-10-07 (owner, UNT-031): box breathing is the default and is listed first. A device
   that already saved a rhythm keeps it. Balban 2023 studied box breathing as one of its arms.*
+  *Amended 2026-10-08 (owner, UNT-050): back to 4-in 6-out as the default. The source check found
+  that in Balban 2023 an exhale-focused method gave a larger mood gain than box breathing, and the
+  owner asked for the longer breath out if it does better. Of the three presets, 4-in 6-out is the
+  closest to that method. A saved rhythm is kept.*
 - **Strict performance targets: the breathing guide is visible within 1 s of a cold, offline launch
   on a mid-range phone; every input responds within 100 ms; the whole app is under 150 KB.** — In a
   panic attack every second of wait is felt. — Rejected: looser targets (3 s, 500 KB). — 2026-10-07
