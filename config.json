@@ -32,7 +32,7 @@
   "sounds": {
     "enabledByDefault": true,
     "breath": {
-      "volume": 0.05,
+      "volume": 0.04,
       "attackSeconds": 1.0,
       "releaseSeconds": 1.2,
       "frequencies": {
@@ -44,62 +44,54 @@
       "octaveLevel": 0.18
     },
     "cues": {
-      "pop": {
-        "notes": [
-          523.25
-        ],
-        "gapSeconds": 0,
-        "attackSeconds": 0.01,
-        "releaseSeconds": 0.3,
-        "volume": 0.05
-      },
       "step": {
         "notes": [
+          392.0,
           587.33
         ],
-        "gapSeconds": 0,
-        "attackSeconds": 0.02,
-        "releaseSeconds": 0.9,
-        "volume": 0.035
+        "gapSeconds": 0.0,
+        "attackSeconds": 0.12,
+        "releaseSeconds": 1.4,
+        "volume": 0.018
       },
       "loop": {
         "notes": [
-          523.25,
-          783.99
+          392.0,
+          523.25
         ],
-        "gapSeconds": 0.16,
-        "attackSeconds": 0.02,
-        "releaseSeconds": 1.0,
-        "volume": 0.035
+        "gapSeconds": 0.22,
+        "attackSeconds": 0.12,
+        "releaseSeconds": 1.6,
+        "volume": 0.02
       },
       "choose": {
         "notes": [
-          440.0
+          329.63
         ],
         "gapSeconds": 0,
-        "attackSeconds": 0.01,
-        "releaseSeconds": 0.2,
-        "volume": 0.03
+        "attackSeconds": 0.06,
+        "releaseSeconds": 0.5,
+        "volume": 0.018
       },
       "swap": {
         "notes": [
-          392.0
+          293.66
         ],
         "gapSeconds": 0,
-        "attackSeconds": 0.01,
-        "releaseSeconds": 0.25,
-        "volume": 0.035
+        "attackSeconds": 0.06,
+        "releaseSeconds": 0.6,
+        "volume": 0.02
       },
       "done": {
         "notes": [
-          523.25,
-          659.25,
-          783.99
+          261.63,
+          329.63,
+          392.0
         ],
-        "gapSeconds": 0.14,
-        "attackSeconds": 0.02,
-        "releaseSeconds": 1.1,
-        "volume": 0.035
+        "gapSeconds": 0.2,
+        "attackSeconds": 0.15,
+        "releaseSeconds": 1.8,
+        "volume": 0.02
       }
     },
     "glass": {
@@ -119,13 +111,13 @@
         ]
       ],
       "beatHz": 1.4,
-      "volume": 0.05,
+      "volume": 0.035,
       "riseSeconds": 0.12,
       "fallSeconds": 0.45,
       "idleMs": 180
     },
     "pads": {
-      "volume": 0.05,
+      "volume": 0.04,
       "cutoffHz": 900,
       "detuneCents": 7,
       "chordSeconds": 10,
@@ -161,6 +153,28 @@
           293.66
         ]
       ]
+    },
+    "pop": {
+      "noiseHz": 1400,
+      "noiseQ": 1.2,
+      "noiseVolume": 0.03,
+      "noiseSeconds": 0.035,
+      "thumpStartHz": 320,
+      "thumpEndHz": 110,
+      "thumpVolume": 0.06,
+      "thumpSeconds": 0.07,
+      "pitchVariation": 0.15
+    },
+    "rain": {
+      "volume": 0.05,
+      "fadeInSeconds": 3,
+      "lowpassHz": 2600,
+      "highpassHz": 350,
+      "swellHz": 0.07,
+      "swellDepth": 0.25,
+      "dropHz": 2400,
+      "dropVolume": 0.07,
+      "dropEveryMs": 260
     }
   },
   "bubbles": {
@@ -286,6 +300,11 @@
     "shapeLifeSeconds": 13,
     "maxShapes": 6,
     "minSize": 50,
-    "maxSize": 130
+    "maxSize": 130,
+    "modes": [
+      "music",
+      "rain"
+    ],
+    "defaultMode": "music"
   }
 }

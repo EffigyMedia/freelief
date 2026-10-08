@@ -104,3 +104,40 @@ def test_leaving_calm_removes_the_black_screen():
         page.evaluate("location.hash = 'breathe'")
         wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 3000)
         assert page.locator(".black-cover").count() == 0
+
+
+NOISE_PROBE = """
+window.__noise = [];
+const createSource = AudioContext.prototype.createBufferSource;
+AudioContext.prototype.createBufferSource = function () {
+  const node = createSource.call(this);
+  window.__noise.push(node);
+  return node;
+};
+"""
+
+
+def test_rain_mode_plays_looping_noise_and_is_remembered():
+    with open_app(init_script=OSC_PROBE + NOISE_PROBE) as (page, _, _):
+        page.locator(".guide").click()
+        go(page, "calm")
+        assert page.locator("input[name=calm-mode][value=music]").is_checked()
+        wait_until(page, "window.__osc.length > 0", 3000)
+        music = page.evaluate("window.__osc.length")
+        page.locator("input[name=calm-mode][value=rain]").check()
+        wait_until(page, "window.__noise.some(n => n.loop)", 3000)
+        assert page.evaluate(f"window.__osc.slice(0, {music}).every(o => o.stop !== null)"), "the music stops for the rain"
+        go(page, "breathe")
+        go(page, "calm")
+        assert page.locator("input[name=calm-mode][value=rain]").is_checked(), "the choice is remembered"
+
+
+def test_the_bubble_pop_is_percussive_noise_not_a_tone():
+    with open_app(init_script=OSC_PROBE + NOISE_PROBE) as (page, _, _):
+        page.locator(".guide").click()
+        go(page, "bubbles")
+        before = page.evaluate("window.__noise.length")
+        page.locator("button.bubble").first.click(force=True)
+        wait_until(page, f"window.__noise.length > {before}", 2000)
+        last = page.evaluate("window.__osc[window.__osc.length - 1].stop - window.__osc[window.__osc.length - 1].ctx.currentTime")
+        assert last < 0.15, "the thump under the pop is short"

@@ -462,6 +462,21 @@ main {
 
 /* ---- Calm ---- */
 
+.calm-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin: 0;
+  padding: 0.25rem 1rem 0.5rem;
+  border: 2px solid var(--accent-soft);
+  border-radius: var(--radius);
+}
+
+.calm-mode legend { font-weight: 700; padding: 0 0.25rem; }
+
+/* An activity's own controls sit centred under it (owner, 2026-10-07). */
+.activity .exercise-actions { justify-content: center; }
+
 .calm-field {
   display: block;
   width: 100%;

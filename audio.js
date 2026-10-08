@@ -216,7 +216,111 @@ export function glass(frequency) {
   };
 }
 
-// A short, soft tone when a bubble pops.
+// A buffer of white noise, made once and reused by the pop and the rain.
+let noiseBuffer = null;
+function noise(ctx) {
+  if (!noiseBuffer) {
+    noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  }
+  const source = ctx.createBufferSource();
+  source.buffer = noiseBuffer;
+  return source;
+}
+
+// A soft, percussive pop when a bubble bursts (owner: "more soft percussive than a tone"): a very
+// short burst of band-passed noise over a quick, falling thump.
 export function pop() {
-  play("pop");
+  if (!canPlay()) return;
+  const ctx = ensureContext();
+  if (!ctx) return;
+  const settings = sounds.pop;
+  const now = ctx.currentTime;
+  const pitch = settings.pitchVariation * (Math.random() * 2 - 1);
+
+  const burst = noise(ctx);
+  const band = ctx.createBiquadFilter();
+  band.type = "bandpass";
+  band.frequency.value = settings.noiseHz * (1 + pitch);
+  band.Q.value = settings.noiseQ;
+  const burstGain = ctx.createGain();
+  burstGain.gain.setValueAtTime(settings.noiseVolume, now);
+  burstGain.gain.exponentialRampToValueAtTime(0.0001, now + settings.noiseSeconds);
+  burst.connect(band).connect(burstGain).connect(ctx.destination);
+  burst.start(now, Math.random());
+  burst.stop(now + settings.noiseSeconds + 0.02);
+
+  const thump = ctx.createOscillator();
+  const thumpGain = ctx.createGain();
+  thump.type = "sine";
+  thump.frequency.setValueAtTime(settings.thumpStartHz * (1 + pitch), now);
+  thump.frequency.exponentialRampToValueAtTime(settings.thumpEndHz, now + settings.thumpSeconds);
+  thumpGain.gain.setValueAtTime(settings.thumpVolume, now);
+  thumpGain.gain.exponentialRampToValueAtTime(0.0001, now + settings.thumpSeconds);
+  thump.connect(thumpGain).connect(ctx.destination);
+  thump.start(now);
+  thump.stop(now + settings.thumpSeconds + 0.02);
+}
+
+// The Calm screen's rain (owner: an atonal mode, "noise like rain"): looping noise, shaped by a
+// low-pass and a high-pass filter, whose level breathes slowly, with soft drops now and then.
+// Returns { stop() }. Silent when sounds are off.
+export function rain() {
+  if (!canPlay()) return { stop: SILENT };
+  const ctx = ensureContext();
+  if (!ctx) return { stop: SILENT };
+  const settings = sounds.rain;
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(0, ctx.currentTime);
+  master.gain.linearRampToValueAtTime(settings.volume, ctx.currentTime + settings.fadeInSeconds);
+  master.connect(ctx.destination);
+
+  const bed = noise(ctx);
+  bed.loop = true;
+  const low = ctx.createBiquadFilter();
+  low.type = "lowpass";
+  low.frequency.value = settings.lowpassHz;
+  const high = ctx.createBiquadFilter();
+  high.type = "highpass";
+  high.frequency.value = settings.highpassHz;
+  const swell = ctx.createGain();
+  swell.gain.value = 1 - settings.swellDepth;
+  const lfo = ctx.createOscillator();
+  const lfoDepth = ctx.createGain();
+  lfo.frequency.value = settings.swellHz;
+  lfoDepth.gain.value = settings.swellDepth;
+  lfo.connect(lfoDepth).connect(swell.gain);
+  bed.connect(low).connect(high).connect(swell).connect(master);
+  bed.start();
+  lfo.start();
+
+  let timer = 0;
+  function drop() {
+    const now = ctx.currentTime;
+    const tick = noise(ctx);
+    const band = ctx.createBiquadFilter();
+    band.type = "bandpass";
+    band.frequency.value = settings.dropHz * (0.7 + Math.random() * 0.6);
+    band.Q.value = 6;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(settings.dropVolume * (0.4 + Math.random() * 0.6), now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+    tick.connect(band).connect(gain).connect(master);
+    tick.start(now, Math.random());
+    tick.stop(now + 0.08);
+    timer = setTimeout(drop, settings.dropEveryMs * (0.3 + Math.random() * 1.4));
+  }
+  drop();
+
+  return {
+    stop() {
+      clearTimeout(timer);
+      const now = ctx.currentTime;
+      master.gain.cancelScheduledValues(now);
+      master.gain.setTargetAtTime(0, now, 0.4);
+      bed.stop(now + 2);
+      lfo.stop(now + 2);
+    },
+  };
 }

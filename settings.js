@@ -13,6 +13,7 @@ export function initSettings(config) {
     rhythm: config.breathing.defaultRhythm,
     sounds: config.sounds.enabledByDefault,
     theme: config.theme.default,
+    calmMode: config.calm.defaultMode,
   };
   let stored = {};
   try {
@@ -27,6 +28,7 @@ export function initSettings(config) {
   // tones were off by default, so it does not carry over.
   if (typeof stored.sounds === "boolean") values.sounds = stored.sounds;
   if (config.theme.choices.includes(stored.theme)) values.theme = stored.theme;
+  if (config.calm.modes.includes(stored.calmMode)) values.calmMode = stored.calmMode;
 }
 
 export function getSetting(name) {

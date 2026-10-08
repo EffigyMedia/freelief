@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-8"></a>
+## [0.5.8] - 2026-10-07
+- Softer sounds everywhere, as the owner asked: lower notes, slow swells, long fades and lower
+  volume (the grounding chime was abrasive). The bubble pop is now a soft percussive pop. **Calm** has
+  a **Music** or **Rain** choice, remembered on the device. Activity buttons are centred. 74 tests.
+
 <a id="v0-5-7"></a>
 ## [0.5.7] - 2026-10-07
 - Faster start again ([RLG-006](../fragments/RLG-006.md)): the breathing guide is ready in about 132 ms

@@ -88,7 +88,7 @@ def test_settings_round_trip_through_a_reload():
         assert not page.locator("input[name=sounds]").is_checked()
         assert page.evaluate("document.documentElement.dataset.theme") == "light"
         stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v1')"))
-        assert stored == {"rhythm": "box", "sounds": False, "theme": "light"}
+        assert stored == {"rhythm": "box", "sounds": False, "theme": "light", "calmMode": "music"}
 
 
 def test_blocked_storage_falls_back_to_defaults():

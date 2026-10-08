@@ -3,6 +3,8 @@
 // screen back, and the music keeps playing. Nothing to do, nothing to win.
 // Under reduced motion the shapes do not move or grow; they only fade.
 
+import { getSetting, setSetting } from "../settings.js";
+
 let run = null;
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -27,6 +29,11 @@ export function start(container, ctx) {
     <section class="activity calm">
       <h1>${t("calm.title")}</h1>
       <p class="exercise-intro">${t("calm.intro")}</p>
+      <fieldset class="calm-mode">
+        <legend>${t("calm.mode")}</legend>
+        ${config.calm.modes.map((mode) => `<label class="choice"><input type="radio" name="calm-mode" value="${mode}"
+          ${mode === getSetting("calmMode") ? "checked" : ""}><span>${t(`calm.mode.${mode}`)}</span></label>`).join("")}
+      </fieldset>
       <svg class="calm-field" viewBox="0 0 400 300" aria-hidden="true" focusable="false"></svg>
       <p class="hint calm-sound-note" hidden>${t("calm.soundsOff")}</p>
       <div class="exercise-actions">
@@ -37,7 +44,9 @@ export function start(container, ctx) {
 
   const field = container.querySelector(".calm-field");
   const blackButton = container.querySelector(".black-screen");
-  const current = { timers: [], music: audio.pads(), cover: null };
+  // Music (tonal pads) or Rain (atonal noise), remembered in Settings (owner, 2026-10-07).
+  const playMode = (mode) => (mode === "rain" ? audio.rain() : audio.pads());
+  const current = { timers: [], music: playMode(getSetting("calmMode")), cover: null };
   run = current;
   container.querySelector(".calm-sound-note").hidden = ctx.soundsOn;
 
@@ -83,6 +92,12 @@ export function start(container, ctx) {
     current.cover = cover;
     cover.focus();
   }
+
+  container.querySelectorAll("input[name=calm-mode]").forEach((input) => input.addEventListener("change", () => {
+    setSetting("calmMode", input.value);
+    current.music.stop();
+    current.music = playMode(input.value);
+  }));
 
   blackButton.addEventListener("click", blackOut);
   addShape();

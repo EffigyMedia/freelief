@@ -593,6 +593,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **All sounds are soft: low notes, slow swells with no click, long fades, low volume. The bubble pop
+  is a short burst of filtered noise over a falling thump, not a tone. Calm offers Music (pads) or Rain
+  (filtered noise with soft drops), remembered on the device.** — The owner found the grounding chime
+  abrasive and asked for every sound to be soft and pleasant, a percussive pop, and an atonal rain mode.
+  — 2026-10-07 (owner)
 - **Only breathing, the shell and urgent help load at start; every other screen loads on its first
   visit. `fallback.js` hides the static fallback while the app starts and shows it if the start fails or
   takes over 2 s.** — The launch had doubled (RLG-006); profiling showed the painted fallback was the
