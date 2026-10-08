@@ -90,9 +90,15 @@ def test_feedback_prefills_an_editable_github_issue():
         assert f"Version: {VERSION}" in message.input_value()
         query = _link_query(page)
         assert query["template"] == ["accessibility-check.md"]
-        assert query["body"] == [message.input_value()]
+        # AUD-055 (owner, 2026-10-08): the person's words never go into the web address.
         message.fill("The breathing screen works well with NVDA.")
-        assert _link_query(page)["body"] == ["The breathing screen works well with NVDA."]
+        query = _link_query(page)
+        assert "body" not in query and "NVDA" not in page.locator("a.github").get_attribute("href")
+        assert query["title"][0].startswith("Accessibility check: Freelief")
+        page.context.grant_permissions(["clipboard-read", "clipboard-write"])
+        page.locator("button.copy-message").click()
+        wait_until(page, "document.querySelector('.copy-status').textContent.startsWith('Copied')", 2000)
+        assert page.evaluate("navigator.clipboard.readText()") == "The breathing screen works well with NVDA."
         origin = urlparse(base_url()).netloc
         assert all(urlparse(u).netloc == origin for u in requests), "the app itself sent nothing"
 
@@ -166,3 +172,15 @@ def test_every_activity_has_its_own_research_section():
         for technique in techniques:
             section = page.locator(f"section.technique[data-technique='{technique}']")
             assert section.locator("h3").inner_text().strip(), technique
+
+
+def test_when_copying_is_refused_the_message_is_selected_to_copy_by_hand():
+    refuse = "navigator.clipboard.writeText = () => Promise.reject(new Error('no'));"
+    with open_app(init_script=refuse) as (page, errors, _):
+        go(page, "feedback")
+        page.locator("button.copy-message").click()
+        wait_until(page, "document.querySelector('.copy-status').textContent.startsWith('Could not')", 2000)
+        selected = page.evaluate("(() => { const m = document.querySelector('textarea.message'); "
+                                 "return [document.activeElement === m, m.selectionEnd - m.selectionStart, m.value.length]; })()")
+        assert selected[0] and selected[1] == selected[2] > 0, selected
+        assert not errors, errors

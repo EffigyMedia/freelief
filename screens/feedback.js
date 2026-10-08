@@ -45,7 +45,9 @@ export function start(container, ctx) {
       <label class="field-label" for="feedback-message">${t("feedback.messageLabel")}</label>
       <textarea id="feedback-message" class="message" rows="14"></textarea>
       <div class="send-choice">
-        <a class="button primary github" rel="noopener" aria-describedby="github-note">${t("feedback.github")}</a>
+        <button type="button" class="button primary copy-message">${t("feedback.copy")}</button>
+        <p class="copy-status hint" aria-live="polite"></p>
+        <a class="button github" rel="noopener" aria-describedby="github-note">${t("feedback.github")}</a>
         <p id="github-note" class="hint">${t("feedback.githubNote")}</p>
       </div>
       <div class="send-choice email-choice" ${project.feedbackEmail ? "" : "hidden"}>
@@ -60,13 +62,15 @@ export function start(container, ctx) {
   let kind = "accessibility";
   let lastTemplate = "";
 
-  // The links always carry exactly what the text box shows, so what is sent is what was read.
+  // The GitHub link carries only the kind's template and a title, never the person's words: a
+  // web address is kept in browser history and reaches GitHub as soon as it opens (AUD-055). The
+  // person copies the message and pastes it into the issue. The email link opens the person's own
+  // mail app, so it carries the message as the text box shows it.
   function updateLinks() {
     const title = t(`feedback.title.${kind}`, { version: facts.version });
     const issue = new URL(project.newIssueUrl);
     issue.searchParams.set("template", project.issueTemplates[kind]);
     issue.searchParams.set("title", title);
-    issue.searchParams.set("body", message.value);
     github.href = issue.toString();
     if (project.feedbackEmail) {
       email.href = `mailto:${project.feedbackEmail}?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(message.value)}`;
@@ -87,6 +91,19 @@ export function start(container, ctx) {
     fillTemplate();
   }));
   message.addEventListener("input", updateLinks);
+
+  // Copy the message. Where the browser refuses, select it, so the person can copy it themselves.
+  const copyStatus = container.querySelector(".copy-status");
+  container.querySelector(".copy-message").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(message.value);
+      copyStatus.textContent = t("feedback.copied");
+    } catch {
+      message.focus();
+      message.select();
+      copyStatus.textContent = t("feedback.copyFailed");
+    }
+  });
   fillTemplate();
 }
 

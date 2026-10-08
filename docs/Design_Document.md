@@ -286,9 +286,10 @@ level, check date and tester, the sources for each technique, and a link to the 
 
 **F9 — Feedback.** Trigger: the feedback page. Steps: the person chooses "Accessibility check" or
 "Report a problem"; the page shows the pre-filled text (app version, browser, device type, and a
-checklist for an accessibility check); the person edits it; they choose "Open on GitHub" (a new
-issue URL with the template, title and body in its query) or "Send by email" (a `mailto:` link with
-subject and body). Outcome: the person's own browser or mail app takes over; the app sends nothing.
+checklist for an accessibility check); the person edits it; they choose "Copy message" and then
+"Open on GitHub" (a new issue URL with only the template and the title in its query; the person
+pastes the message) or "Send by email" (a `mailto:` link with subject and body, opened by their own
+mail app). *(Changed 2026-10-08, AUD-055: the message no longer goes into the GitHub URL.)* Outcome: the person's own browser or mail app takes over; the app sends nothing.
 Edge: until the public email address is decided, the email button is hidden.
 
 **Integrations.** None at run time. The only outbound links are ones the person chooses: phone,
@@ -837,6 +838,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   review found that a first-time user sees a count that goes up with no stated end. The line is
   built from the rhythm's own numbers and the short phase names in the strings file, so it always
   matches the rhythm that runs. This closes slice 6 at version 0.6.0. — 2026-10-08 (owner; UNT-064)
+- **Feedback keeps the person's words out of the GitHub web address; a Copy button carries them.**
+  — The audit (AUD-055) found that "Open on GitHub" put the whole message in the URL, so it reached
+  browser history and GitHub when the link opened, before the person pressed Submit. The owner
+  chose the Copy button: the link carries only the template and the title, and "Copy message"
+  copies the text for the person to paste; where the browser refuses, the text is selected for a
+  manual copy. The email link is unchanged, because it opens the person's own mail app. — Rejected:
+  keep the body in the URL with a warning. — 2026-10-08 (owner; UNT-065)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

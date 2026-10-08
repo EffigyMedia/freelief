@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-6-1"></a>
+## [0.6.1] - 2026-10-08
+- **Feedback**: a **Copy message** button. Open on GitHub no longer puts your message in the web
+  address; you paste it into the issue yourself. [AUD-055](../fragments/AUD-055.md). 132 tests.
+
 <a id="v0-6-0"></a>
 ## [0.6.0] - 2026-10-08
 - **Breathe** shows its rhythm under the circle, for example "In 4 · Out 6".
