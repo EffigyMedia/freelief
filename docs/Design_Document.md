@@ -872,6 +872,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   and the Country list and Settings can still pick a region. A line's "Chat online" button now
   says it needs an internet connection; calls and texts work offline (AUD-052). — 2026-10-08
   (UNT-071)
+- **Feedback says that a GitHub issue is public, and points a person in danger to urgent help.** —
+  The audit (AUD-006, AUD-053) found no warning that an issue is public and no word for someone in
+  danger who writes feedback. The page now says, above the buttons, that feedback is not watched
+  around the clock and that a person in danger should use "Need urgent help?" or call their local
+  emergency number; the GitHub hint says issues are public. Both issue templates carry the same two
+  lines as comments, seen while editing. The in-app message text stays free of them, because the
+  person copies it into the public issue. The owner's response rule for an issue from a person in
+  danger is still to be stated. — 2026-10-08 (UNT-072)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-6-7"></a>
+## [0.6.7] - 2026-10-08
+- **Feedback** now says that GitHub issues are public, and that feedback is not watched around the
+  clock: if you are in danger, use **Need urgent help?** or call your local emergency number.
+  [AUD-006](../fragments/AUD-006.md), [AUD-053](../fragments/AUD-053.md). 139 tests.
+
 <a id="v0-6-6"></a>
 ## [0.6.6] - 2026-10-08
 - **Need urgent help?** no longer guesses your country from your language alone; with no region

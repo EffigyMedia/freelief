@@ -765,6 +765,7 @@ main {
   line-height: 1.45;
 }
 
+.feedback-safety { margin: 0.75rem 0 0; font-weight: 600; }
 .send-choice { margin-top: 0.75rem; }
 .send-choice .hint { margin-top: 0.4rem; }
 

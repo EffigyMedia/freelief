@@ -184,3 +184,15 @@ def test_when_copying_is_refused_the_message_is_selected_to_copy_by_hand():
                                  "return [document.activeElement === m, m.selectionEnd - m.selectionStart, m.value.length]; })()")
         assert selected[0] and selected[1] == selected[2] > 0, selected
         assert not errors, errors
+
+
+def test_feedback_says_issues_are_public_and_points_a_person_in_danger_to_help():
+    # AUD-006 and AUD-053: the page and both GitHub templates say it, before anything is posted.
+    with open_app() as (page, _, _):
+        go(page, "feedback")
+        assert "public" in page.locator("#github-note").inner_text()
+        assert "Need urgent help?" in page.locator(".feedback-safety").inner_text()
+        assert page.locator(".feedback-safety").is_visible()
+    for name in CONFIG["project"]["issueTemplates"].values():
+        text = (ROOT / ".github" / "ISSUE_TEMPLATE" / name).read_text("utf-8")
+        assert "issues are public" in text and "Need urgent help?" in text, name

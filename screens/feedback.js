@@ -44,6 +44,7 @@ export function start(container, ctx) {
       </fieldset>
       <label class="field-label" for="feedback-message">${t("feedback.messageLabel")}</label>
       <textarea id="feedback-message" class="message" rows="14"></textarea>
+      <p class="feedback-safety">${t("feedback.danger")}</p>
       <div class="send-choice">
         <button type="button" class="button primary copy-message">${t("feedback.copy")}</button>
         <p class="copy-status hint" aria-live="polite"></p>
