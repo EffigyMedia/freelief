@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-35"></a>
+## [0.5.35] - 2026-10-08
+- **Standards and research** now has a section for every activity, each with its own sources and
+  a plain note on how strong the evidence is. Eight new sources; every source checked 2026-10-08.
+  [RLG-018](../fragments/RLG-018.md). 111 tests.
+
 <a id="v0-5-34"></a>
 ## [0.5.34] - 2026-10-08
 - The **Vibration** hint is shorter and smaller: "A short buzz on taps. Android only (Chrome,

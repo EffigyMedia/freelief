@@ -718,6 +718,16 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   names where it works and where it does not.* —
   Rejected: vibration on the breath (continuous, by the owner's rule). — 2026-10-07 (owner;
   UNT-046)
+- **Standards and research cites sources for every activity, each in its own section, and states
+  how strong its evidence is.** — Owner request. A research agent checked every source in the
+  session (Crossref, Europe PMC, PMC or the paper itself) and the session spot-checked three on
+  Crossref. Where no study tested the activity, the section names the closest research and says
+  "No study has tested this activity itself": bubbles (distraction; video games and stress),
+  trace (working-memory tasks and upsetting images), sort (Tetris and intrusive memories), ripple
+  (water scenes; nature sounds). Mandala coloring and music have direct, small or mixed evidence.
+  The breathing text now says that box breathing gave a smaller gain than an exhale-focused
+  method in Balban 2023. A last section keeps the caveat on distraction, reworded to "the
+  evidence for that is mixed" as Helbig-Lang 2010 says. — 2026-10-08 (owner; UNT-049)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

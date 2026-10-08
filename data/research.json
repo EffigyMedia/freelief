@@ -9,11 +9,39 @@
       ]
     },
     {
-      "id": "distraction",
+      "id": "bubbles",
       "sources": [
         "webb2012",
+        "pallavicini2021"
+      ]
+    },
+    {
+      "id": "trace",
+      "sources": [
+        "engelhard2010",
+        "lee2013"
+      ]
+    },
+    {
+      "id": "sort",
+      "sources": [
+        "holmes2009",
+        "james2015"
+      ]
+    },
+    {
+      "id": "ripple",
+      "sources": [
+        "white2010",
+        "alvarsson2010"
+      ]
+    },
+    {
+      "id": "mandala",
+      "sources": [
         "curry2005",
-        "helbiglang2010"
+        "vandervennet2012",
+        "koo2020"
       ]
     },
     {
@@ -22,48 +50,95 @@
         "dewitte2020",
         "alvarsson2010"
       ]
+    },
+    {
+      "id": "distraction",
+      "sources": [
+        "webb2012",
+        "helbiglang2010"
+      ]
     }
   ],
   "sources": {
     "balban2023": {
       "citation": "Balban, M. Y., Neri, E., Kogon, M. M., et al. (2023). Brief structured respiration practices enhance mood and reduce physiological arousal. Cell Reports Medicine, 4(1), 100895.",
       "url": "https://doi.org/10.1016/j.xcrm.2022.100895",
-      "checked": "2026-10-07"
+      "checked": "2026-10-08"
     },
     "zaccaro2018": {
       "citation": "Zaccaro, A., Piarulli, A., Laurino, M., et al. (2018). How breath-control can change your life: A systematic review on psycho-physiological correlates of slow breathing. Frontiers in Human Neuroscience, 12, 353.",
       "url": "https://doi.org/10.3389/fnhum.2018.00353",
-      "checked": "2026-10-07"
+      "checked": "2026-10-08"
     },
     "meuret2010": {
       "citation": "Meuret, A. E., Rosenfield, D., Seidel, A., Bhaskara, L., & Hofmann, S. G. (2010). Respiratory and cognitive mediators of treatment change in panic disorder: Evidence for intervention specificity. Journal of Consulting and Clinical Psychology, 78(5), 691-704.",
       "url": "https://doi.org/10.1037/a0019552",
-      "checked": "2026-10-07"
+      "checked": "2026-10-08"
     },
     "webb2012": {
       "citation": "Webb, T. L., Miles, E., & Sheeran, P. (2012). Dealing with feeling: A meta-analysis of the effectiveness of strategies derived from the process model of emotion regulation. Psychological Bulletin, 138(4), 775-808.",
       "url": "https://doi.org/10.1037/a0027600",
-      "checked": "2026-10-07"
+      "checked": "2026-10-08"
     },
     "curry2005": {
       "citation": "Curry, N. A., & Kasser, T. (2005). Can coloring mandalas reduce anxiety? Art Therapy, 22(2), 81-85.",
       "url": "https://doi.org/10.1080/07421656.2005.10129441",
-      "checked": "2026-10-07"
+      "checked": "2026-10-08"
     },
     "helbiglang2010": {
       "citation": "Helbig-Lang, S., & Petermann, F. (2010). Tolerate or eliminate? A systematic review on the effects of safety behavior across anxiety disorders. Clinical Psychology: Science and Practice, 17(3), 218-233.",
       "url": "https://doi.org/10.1111/j.1468-2850.2010.01213.x",
-      "checked": "2026-10-07"
+      "checked": "2026-10-08"
     },
     "dewitte2020": {
       "citation": "de Witte, M., Spruit, A., van Hooren, S., Moonen, X., & Stams, G.-J. (2020). Effects of music interventions on stress-related outcomes: A systematic review and two meta-analyses. Health Psychology Review, 14(2), 294-324.",
       "url": "https://doi.org/10.1080/17437199.2019.1627897",
-      "checked": "2026-10-07"
+      "checked": "2026-10-08"
     },
     "alvarsson2010": {
       "citation": "Alvarsson, J. J., Wiens, S., & Nilsson, M. E. (2010). Stress recovery during exposure to nature sound and environmental noise. International Journal of Environmental Research and Public Health, 7(3), 1036-1046.",
       "url": "https://doi.org/10.3390/ijerph7031036",
-      "checked": "2026-10-07"
+      "checked": "2026-10-08"
+    },
+    "pallavicini2021": {
+      "citation": "Pallavicini, F., Pepe, A., & Mantovani, F. (2021). Commercial off-the-shelf video games for reducing stress and anxiety: Systematic review. JMIR Mental Health, 8(8), e28150.",
+      "url": "https://doi.org/10.2196/28150",
+      "checked": "2026-10-08"
+    },
+    "engelhard2010": {
+      "citation": "Engelhard, I. M., van den Hout, M. A., Janssen, W. C., & van der Beek, J. (2010). Eye movements reduce vividness and emotionality of \"flashforwards\". Behaviour Research and Therapy, 48(5), 442-447.",
+      "url": "https://doi.org/10.1016/j.brat.2010.01.003",
+      "checked": "2026-10-08"
+    },
+    "lee2013": {
+      "citation": "Lee, C. W., & Cuijpers, P. (2013). A meta-analysis of the contribution of eye movements in processing emotional memories. Journal of Behavior Therapy and Experimental Psychiatry, 44(2), 231-239.",
+      "url": "https://doi.org/10.1016/j.jbtep.2012.11.001",
+      "checked": "2026-10-08"
+    },
+    "holmes2009": {
+      "citation": "Holmes, E. A., James, E. L., Coode-Bate, T., & Deeprose, C. (2009). Can playing the computer game \"Tetris\" reduce the build-up of flashbacks for trauma? A proposal from cognitive science. PLoS ONE, 4(1), e4153.",
+      "url": "https://doi.org/10.1371/journal.pone.0004153",
+      "checked": "2026-10-08"
+    },
+    "james2015": {
+      "citation": "James, E. L., Bonsall, M. B., Hoppitt, L., et al. (2015). Computer game play reduces intrusive memories of experimental trauma via reconsolidation-update mechanisms. Psychological Science, 26(8), 1201-1215.",
+      "url": "https://doi.org/10.1177/0956797615583071",
+      "checked": "2026-10-08"
+    },
+    "white2010": {
+      "citation": "White, M., Smith, A., Humphryes, K., Pahl, S., Snelling, D., & Depledge, M. (2010). Blue space: The importance of water for preference, affect, and restorativeness ratings of natural and built scenes. Journal of Environmental Psychology, 30(4), 482-493.",
+      "url": "https://doi.org/10.1016/j.jenvp.2010.04.004",
+      "checked": "2026-10-08"
+    },
+    "vandervennet2012": {
+      "citation": "van der Vennet, R., & Serice, S. (2012). Can coloring mandalas reduce anxiety? A replication study. Art Therapy, 29(2), 87-92.",
+      "url": "https://doi.org/10.1080/07421656.2012.680047",
+      "checked": "2026-10-08"
+    },
+    "koo2020": {
+      "citation": "Koo, M., Chen, H.-P., & Yeh, Y.-C. (2020). Coloring activities for anxiety reduction and mood improvement in Taiwanese community-dwelling older adults: A randomized controlled study. Evidence-Based Complementary and Alternative Medicine, 2020, 6964737.",
+      "url": "https://doi.org/10.1155/2020/6964737",
+      "checked": "2026-10-08"
     }
   }
 }

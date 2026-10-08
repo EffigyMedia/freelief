@@ -1,6 +1,7 @@
 """Slice 4 in a real browser: About and disclaimer, Standards and research, Feedback."""
 
 import json
+import re
 from urllib.parse import parse_qs, urlparse
 
 from harness import ROOT, base_url, open_app, wait_until
@@ -139,3 +140,22 @@ def test_the_logo_is_soft_white_on_dark_and_soft_black_on_light():
             go(page, "about")
             fills[scheme] = page.locator("svg.maker-logo").evaluate("e => getComputedStyle(e).fill")
     assert fills == {"dark": "rgb(230, 236, 245)", "light": "rgb(29, 36, 51)"}, fills
+
+
+def test_every_activity_has_its_own_research_section():
+    # Owner, 2026-10-08: sources for every activity, each in its own section.
+    menu = (ROOT / "screens" / "menu.js").read_text("utf-8")
+    routes = set(re.findall(r'route: "(\w+)"', menu))
+    techniques = [t["id"] for t in RESEARCH["techniques"]]
+    expected = (routes - {"breathe"}) | {"breathing"}
+    assert expected <= set(techniques), f"no research section for: {sorted(expected - set(techniques))}"
+    for technique in RESEARCH["techniques"]:
+        for source_id in technique["sources"]:
+            source = RESEARCH["sources"][source_id]
+            assert source["url"].startswith("https://doi.org/"), source_id
+            assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", source["checked"]), source_id
+    with open_app() as (page, _, _):
+        go(page, "standards")
+        for technique in techniques:
+            section = page.locator(f"section.technique[data-technique='{technique}']")
+            assert section.locator("h3").inner_text().strip(), technique
