@@ -472,6 +472,13 @@ UNT-051. Done when: the round's safety, bug, records and polish fixes the owner 
 tested, and the version is bumped to 0.6.0. Round UNT-051 is this slice's audit. Later work is
 planned as named slices, each closed by an audit round and a minor bump.
 
+**Slice 7 — clear the audit backlog (v0.6.4 to v0.7.0).** *Added 2026-10-08 by the owner's choice.*
+The open findings from rounds before UNT-051 (2 High, 20 Medium and 25 Low on 2026-10-08) are
+checked against the code: a stale finding is closed with the quote that shows the fix, a real one is
+fixed as its own unit, High first, and an owner decision is put to the owner. Done when: every open
+finding is built, declined by the owner, or waiting on the environment, and a design audit round
+closes the slice; then 0.7.0.
+
 **Definition of done per slice:** it works, `test` is green, `bench` is spot-checked, the design
 document and records agree with the code, and it is committed.
 
