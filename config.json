@@ -189,6 +189,28 @@
       "lowpassHz": 700
     }
   },
+  "haptics": {
+    "enabledByDefault": true,
+    "patterns": {
+      "pop": 12,
+      "choose": 10,
+      "swap": [
+        10,
+        40,
+        10
+      ],
+      "done": [
+        20,
+        60,
+        20,
+        60,
+        30
+      ],
+      "loop": 15,
+      "ripple": 8,
+      "fill": 10
+    }
+  },
   "bubbles": {
     "count": 6,
     "columns": 3,

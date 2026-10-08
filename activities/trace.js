@@ -127,6 +127,7 @@ export function start(container, ctx) {
       current.travelled -= last;
       current.loops += 1;
       ctx.audio.play("loop");
+      ctx.haptic("loop");
       loopsText.textContent = t(current.loops === 1 ? "trace.oneLoop" : "trace.loops", { count: current.loops });
     } else if (current.travelled < 0) {
       current.travelled = 0;

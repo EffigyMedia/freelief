@@ -705,6 +705,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   orientation (the Screen Orientation API locks only in full screen), and a desktop ignores the
   setting, so in a tab and on a desktop the app still works in any shape. — Rejected: a "turn your
   phone" screen in landscape, which would block help in a crisis. — 2026-10-07 (owner; UNT-045)
+- **A short vibration marks each single event in an activity; nothing continuous vibrates.** — The
+  owner asked for haptic feedback, on by default with a Settings switch, for triggered events
+  only. `haptics.js` sends one short pattern from `config.json` → `haptics.patterns` for a pop, a
+  choice, a swap, a finished sort, a finished loop, a ripple from a touch or a key, and a fill. The
+  breathing guide, a drag trail in the pond and the glass tone of the trace never vibrate. The
+  Vibration API is missing in Safari, including every browser on iPhone, so the Settings hint says
+  plainly that it does not work there; on such a device nothing happens and nothing fails. —
+  Rejected: vibration on the breath (continuous, by the owner's rule). — 2026-10-07 (owner;
+  UNT-046)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

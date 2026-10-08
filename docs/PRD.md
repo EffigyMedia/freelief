@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `978aff6b7992600e` · 33 requirement(s) recorded
+> Store stamp `edf50a8c976b0490` · 34 requirement(s) recorded
 
 ## The problem
 
@@ -99,17 +99,21 @@ Not built (decided 2026-10-07):
 - **REQ-032** — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
 
+### Could have
+
+- **REQ-034** — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a finished sort, a finished loop, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
+
 
 ## Where it stands
 
 | | Count |
 |---|---|
 | Verified — shown to be met | 0 |
-| Agreed — specified, not yet shown | 31 |
+| Agreed — specified, not yet shown | 32 |
 | Proposed — waiting on a decision | 0 |
 | Withdrawn — no longer required | 2 |
 
-Of the 31 requirement(s) in the specification, 0 (0%) have had their verification carried out.
+Of the 32 requirement(s) in the specification, 0 (0%) have had their verification carried out.
 
 ## What has to land before what
 
@@ -124,4 +128,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-08T00:10:28-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-08T00:24:28-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

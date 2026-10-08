@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `978aff6b7992600e` · 31 requirement(s) specified, 2 not yet
+> Store stamp `edf50a8c976b0490` · 32 requirement(s) specified, 2 not yet
 
 ## 1. Introduction
 
@@ -83,6 +83,7 @@ person's settings, on the device.
 - **REQ-030** *(must)* — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report) and, as a second choice, a pre-filled email to the public project address. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
 - **REQ-032** *(should)* — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** *(should)* — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
+- **REQ-034** *(could)* — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a finished sort, a finished loop, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
 
 ### 3.3 Usability requirements
 
@@ -137,6 +138,7 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-030 | 3.2 | test | agreed |
 | REQ-032 | 3.2 | test | agreed |
 | REQ-033 | 3.2 | test | agreed |
+| REQ-034 | 3.2 | test | agreed |
 | REQ-009 | 3.3 | test | agreed |
 | REQ-010 | 3.3 | test | agreed |
 | REQ-011 | 3.3 | inspection | agreed |
@@ -183,4 +185,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-08T00:10:25-04:00 by `Commands/srs.py` from 33 requirement record(s).
+Generated 2026-10-08T00:24:26-04:00 by `Commands/srs.py` from 34 requirement record(s).

@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-5-32"></a>
+## [0.5.32] - 2026-10-07
+- **Vibration**: a short buzz when you pop a bubble, choose or swap a tile, finish a sort or a loop,
+  make a ripple or fill a shape. Never for breathing or anything continuous. On by default; turn
+  it off in **Settings**. It does not work on iPhone or in Safari.
+  [RLG-024](../fragments/RLG-024.md), [REQ-034](../fragments/REQ-034.md). 110 tests.
+
 <a id="v0-5-31"></a>
 ## [0.5.31] - 2026-10-07
 - Installed on a phone, Freelief now stays in portrait. [RLG-022](../fragments/RLG-022.md). 106 tests.

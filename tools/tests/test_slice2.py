@@ -65,17 +65,19 @@ def test_settings_round_trip_through_a_reload():
         page.locator("input[name=theme][value=light]").check()
         page.locator("input[name=sounds]").uncheck()
         page.locator("#help-region").select_option("IE")
+        page.locator("input[name=haptics]").uncheck()
         page.reload()
         wait_until(page, "document.documentElement.dataset.ready === 'true'")
         go(page, "settings")
         assert page.locator("input[name=rhythm][value=slow]").is_checked()
         assert page.locator("input[name=theme][value=light]").is_checked()
         assert page.locator("#help-region").input_value() == "IE"
+        assert not page.locator("input[name=haptics]").is_checked()
         assert not page.locator("input[name=sounds]").is_checked()
         assert page.evaluate("document.documentElement.dataset.theme") == "light"
         stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v1')"))
         assert stored == {"rhythm": "slow", "sounds": False, "theme": "light", "calmMode": "music",
-                          "helpRegion": "IE"}
+                          "helpRegion": "IE", "haptics": False}
 
 
 def test_blocked_storage_falls_back_to_defaults():

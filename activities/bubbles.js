@@ -74,6 +74,7 @@ export function start(container, ctx) {
   function pop(item, bubble) {
     if (bubble.classList.contains("popping")) return;
     audio.pop();
+    ctx.haptic("pop");
     // Keep keyboard focus in the field: hand it to the next bubble before this one leaves.
     const hadFocus = document.activeElement === bubble;
     const items = [...field.children];

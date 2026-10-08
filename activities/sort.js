@@ -111,6 +111,7 @@ export function start(container, ctx) {
       list.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", "false"));
       drag.tile.classList.add("dragging");
       ctx.audio.play("choose");
+      ctx.haptic("choose");
     }
     drag.tile.style.transform = `translate(${dx}px, ${dy}px)`;
     const target = tileAt(event.clientX, event.clientY);
@@ -152,6 +153,7 @@ export function start(container, ctx) {
   function swap(from, position) {
     [current.order[from], current.order[position]] = [current.order[position], current.order[from]];
     ctx.audio.play(isSorted() ? "done" : "swap");
+    ctx.haptic(isSorted() ? "done" : "swap");
     status.textContent = isSorted()
       ? t("sort.done")
       : t("sort.swapped", { name: shadeName(current.order[position]), position: position + 1 });
@@ -162,6 +164,7 @@ export function start(container, ctx) {
     if (current.chosen === null) {
       current.chosen = position;
       ctx.audio.play("choose");
+      ctx.haptic("choose");
       status.textContent = t("sort.chosen", { name: shadeName(current.order[position]) });
       render(position);
       return;

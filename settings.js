@@ -15,6 +15,7 @@ export function initSettings(config) {
     theme: config.theme.default,
     calmMode: config.calm.defaultMode,
     helpRegion: config.crisis.defaultRegion,
+    haptics: config.haptics.enabledByDefault,
   };
   let stored = {};
   try {
@@ -28,6 +29,7 @@ export function initSettings(config) {
   // Sounds are a new key (2026-10-07): an old stored `tones: false` was never a choice, because
   // tones were off by default, so it does not carry over.
   if (typeof stored.sounds === "boolean") values.sounds = stored.sounds;
+  if (typeof stored.haptics === "boolean") values.haptics = stored.haptics;
   if (config.theme.choices.includes(stored.theme)) values.theme = stored.theme;
   if (config.calm.modes.includes(stored.calmMode)) values.calmMode = stored.calmMode;
   // "auto", or a two-letter region code. crisis.js shows the general route for a region it does

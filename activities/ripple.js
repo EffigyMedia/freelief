@@ -55,6 +55,7 @@ export function start(container, ctx) {
     current.pointerAt = performance.now();
     current.last = local(event);
     ripple(current.last.x, current.last.y);
+    ctx.haptic("ripple"); // the touch only: the trail of a drag is continuous, so it stays still
   });
 
   // A finger drawn across the water leaves a ripple every trailSpacing pixels.
@@ -77,6 +78,7 @@ export function start(container, ctx) {
     const width = Math.max(pond.clientWidth - 2 * margin, 1);
     const height = Math.max(pond.clientHeight - 2 * margin, 1);
     ripple(margin + Math.random() * width, margin + Math.random() * height);
+    ctx.haptic("ripple");
   });
 }
 

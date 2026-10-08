@@ -131,6 +131,7 @@ export function start(container, ctx) {
     current.fills[r][i] = current.color;
     current.focus = [r, i];
     audio.play("step");
+    ctx.haptic("fill");
     const part = partAt(r, i);
     part.style.fill = colorOf(current.color).color;
     part.setAttribute("aria-label", partName(r, i));

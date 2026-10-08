@@ -4,6 +4,7 @@
 import { loadStrings, t, list } from "./strings.js";
 import { loadCrisisLines, activeRegion, linesFor, regionList } from "./crisis.js";
 import { initSettings, getSetting, onSettingChange } from "./settings.js";
+import { initHaptics, pulse as haptic } from "./haptics.js";
 import * as audio from "./audio.js";
 import * as motion from "./motion.js";
 import * as menu from "./screens/menu.js";
@@ -203,7 +204,7 @@ async function show(name, { moveFocus }) {
   current = screen;
   // A screen may load data first (Standards and research), so wait for it before focusing.
   await current.start(main, {
-    t, list, config, motion, audio, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
+    t, list, config, motion, audio, haptic, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
   });
   if (request !== showing) return;
   main.dataset.shown = name;
@@ -231,6 +232,7 @@ async function boot() {
   config = loaded;
   initSettings(config);
   audio.initAudio(config);
+  initHaptics(config);
   applyTheme(getSetting("theme"));
   onSettingChange((name, value) => { if (name === "theme") applyTheme(value); });
   document.title = t("app.name");
