@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-33"></a>
+## [0.5.33] - 2026-10-08
+- The **Vibration** hint in Settings now says exactly where it works: Chrome and Samsung Internet
+  on Android. It does not work on iPhone, in Safari or in Firefox.
+  [RLG-024](../fragments/RLG-024.md). 110 tests.
+
 <a id="v0-5-32"></a>
 ## [0.5.32] - 2026-10-07
 - **Vibration**: a short buzz when you pop a bubble, choose or swap a tile, finish a sort or a loop,

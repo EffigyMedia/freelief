@@ -109,7 +109,7 @@
   "settings.sounds": "Sounds",
   "settings.soundsHint": "Soft sounds for breathing in and out, popping bubbles and the other activities. Turn this off for silence.",
   "settings.haptics": "Vibration",
-  "settings.hapticsHint": "A short buzz when you pop, choose, swap, finish a loop, make a ripple or fill a shape. It does not work on iPhone or in Safari.",
+  "settings.hapticsHint": "A short buzz when you pop, choose, swap, finish a loop, make a ripple or fill a shape. It works in Chrome and Samsung Internet on Android. It does not work on iPhone, in Safari or in Firefox.",
   "settings.region": "Region for urgent help",
   "settings.region.auto": "Automatic (from this device)",
   "settings.regionHint": "Need urgent help? opens on this region. It is saved only on this device. Freelief never asks for your location.",

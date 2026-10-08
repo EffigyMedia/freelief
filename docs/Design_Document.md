@@ -712,6 +712,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   breathing guide, a drag trail in the pond and the glass tone of the trace never vibrate. The
   Vibration API is missing in Safari, including every browser on iPhone, so the Settings hint says
   plainly that it does not work there; on such a device nothing happens and nothing fails. —
+  *Amended 2026-10-08 (UNT-047): checked on caniuse.com (Vibration API) in this session. Safari on
+  macOS and iOS has no support, so no browser on iPhone does; Firefox dropped it at 129 and
+  Firefox for Android has none; Chrome and Samsung Internet on Android support it. The hint now
+  names where it works and where it does not.* —
   Rejected: vibration on the breath (continuous, by the owner's rule). — 2026-10-07 (owner;
   UNT-046)
 - **The worker answers only from its own version's cache; a new version that takes over before the
