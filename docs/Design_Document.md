@@ -880,6 +880,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   lines as comments, seen while editing. The in-app message text stays free of them, because the
   person copies it into the public issue. The owner's response rule for an issue from a person in
   danger is still to be stated. — 2026-10-08 (UNT-072)
+- **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
+  test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
+  test serves the app that way, and it found that the update check took `version.js` from the HTTP
+  cache, so a new version could take up to ten minutes to reach a device. The worker is now
+  registered with `updateViaCache: "none"`, and the test checks that the new version takes over
+  and its changed files run offline (AUD-009). Every screen is now checked offline and for outside
+  requests (AUD-027); the exact Content Security Policy and every address in shipped code are
+  checked (AUD-031); a stored inherited name is checked to be ignored (AUD-030). —
+  2026-10-08 (UNT-073)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

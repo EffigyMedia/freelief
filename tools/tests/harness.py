@@ -40,15 +40,19 @@ class _QuietHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *args):
         pass
 
+    # Never let the test server's own caching hide a stale file, unless a test asks for the
+    # caching GitHub Pages uses (max-age=600), to check that an update gets past it (AUD-013).
+    cache_control = "no-store"
+
     def end_headers(self):
-        # Never let the test server's own caching hide a stale file.
-        self.send_header("Cache-Control", "no-store")
+        self.send_header("Cache-Control", self.cache_control)
         super().end_headers()
 
 
-def serve(directory: Path) -> str:
+def serve(directory: Path, cache_control: str = "no-store") -> str:
     """Serve a directory on a new free localhost port; return its URL."""
-    handler = functools.partial(_QuietHandler, directory=str(directory))
+    handler_class = type("_Handler", (_QuietHandler,), {"cache_control": cache_control})
+    handler = functools.partial(handler_class, directory=str(directory))
     server = _Server(("127.0.0.1", 0), handler)
     # A browser that closes a page mid-download aborts the socket; that is not a test failure.
     server.handle_error = lambda request, address: None

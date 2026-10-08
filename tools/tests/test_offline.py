@@ -46,7 +46,8 @@ def test_the_app_works_offline_after_one_visit():
         wait_until(page, "!(history.state && history.state.freeliefHelp)", 2000)
         page.wait_for_timeout(200)
         # Screens other than breathing load on first visit (RLG-006); offline they come from the cache.
-        for route in ("trace", "calm", "standards"):
+        # Every screen is checked (AUD-027); ROUTES in app.js is the list.
+        for route in ("menu", "breathe", "bubbles", "trace", "sort", "ripple", "mandala", "calm", "settings", "about", "standards", "feedback"):
             page.evaluate(f"location.hash = '{route}'")
             wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 5000)
 
@@ -296,3 +297,36 @@ def test_a_cache_fault_falls_back_to_the_network_and_a_repair_reply_is_heard():
         wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
         page.wait_for_selector("html[data-ready='true']", timeout=5000)
         assert not [e for e in errors if "repair" in e], "a working repair reports nothing"
+
+
+def test_an_update_gets_past_the_http_cache_and_works_offline():
+    # AUD-013 and AUD-009: under GitHub Pages' caching (max-age=600) a new version must reach the
+    # device, replace the changed files, and then run offline.
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        url = serve(app, cache_control="max-age=600")
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = context.new_page()
+            page.goto(url + "#menu")
+            page.evaluate("navigator.serviceWorker.ready")
+            page.reload()
+            wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
+            page.evaluate("location.hash = 'about'")
+            wait_until(page, "document.querySelector('main').dataset.shown === 'about'", 5000)
+            (app / "version.js").write_text('self.FREELIEF_VERSION = "9.9.5";\n', "utf-8")
+            strings = app / "strings" / "en.json"
+            strings.write_text(strings.read_text("utf-8").replace('"About Freelief"', '"About Freelief 9.9.5"'), "utf-8")
+            page.reload()  # before any touch, the new version takes over and the page reloads once
+            wait_until(page, "self.FREELIEF_VERSION === '9.9.5'", 15000)
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            context.set_offline(True)
+            page.reload()
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            assert page.evaluate("self.FREELIEF_VERSION") == "9.9.5"
+            page.evaluate("location.hash = 'about'")
+            wait_until(page, "document.querySelector('main').dataset.shown === 'about'", 5000)
+            assert "About Freelief 9.9.5" in page.locator("main h1").inner_text(), "the changed file, not the HTTP-cached one"
+        finally:
+            context.close()

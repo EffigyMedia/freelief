@@ -30,8 +30,15 @@ def test_breathing_moves_from_in_to_out():
 
 def test_no_request_leaves_the_origin():
     # REQ-015: nothing is sent anywhere.
+    # Every screen is visited, not only the help dialog (AUD-027).
     with open_app() as (page, _, requests):
         page.locator(".help-open").click()
+        page.wait_for_timeout(300)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(200)
+        for route in ("menu", "breathe", "bubbles", "trace", "sort", "ripple", "mandala", "calm", "settings", "about", "standards", "feedback"):
+            page.evaluate(f"location.hash = '{route}'")
+            wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 5000)
         page.wait_for_timeout(300)
         origin = urlparse(base_url()).netloc
         foreign = [url for url in requests if urlparse(url).netloc not in (origin, "")]

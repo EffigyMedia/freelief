@@ -157,3 +157,33 @@ def test_the_privacy_text_names_everything_settings_stores():
     privacy = json.loads((freelief.ROOT / "strings" / "en.json").read_text("utf-8"))["about.privacy2"]
     absent = [f"{k} ({PRIVACY_WORDS[k]!r})" for k in keys if PRIVACY_WORDS[k].lower() not in privacy.lower()]
     assert not absent, f"about.privacy2 does not name: {absent}"
+
+
+CSP = ("default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; "
+       "connect-src 'self'; worker-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'none'")
+
+
+def test_the_content_security_policy_is_exactly_the_reviewed_one():
+    # AUD-031: a weakened policy fails here, not silently.
+    html = (freelief.ROOT / "index.html").read_text("utf-8")
+    found = re.findall(r'http-equiv="Content-Security-Policy" content="([^"]+)"', html)
+    assert found == [CSP], found
+
+
+# Every address written in shipped code, except the ones listed here with their reason (AUD-031).
+URL_ALLOWED = {
+    "http://www.w3.org/2000/svg",   # the SVG namespace, not a request
+    "https://findahelpline.com/",   # the static fallback's directory link, which the person chooses
+}
+
+
+def test_shipped_code_names_no_other_address():
+    hits = []
+    for path in freelief.ROOT.rglob("*"):
+        rel = path.relative_to(freelief.ROOT).as_posix()
+        if path.suffix not in {".js", ".html", ".css"} or rel.split("/")[0] in {"tools", "docs", ".venv", "output", "input", ".github"}:
+            continue
+        for url in re.findall(r"https?://[^\"' )<>`]+", path.read_text("utf-8")):
+            if url not in URL_ALLOWED:
+                hits.append(f"{rel}: {url}")
+    assert not hits, "an address in shipped code that is not on the allow-list: " + "; ".join(hits)

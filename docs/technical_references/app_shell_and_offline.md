@@ -67,7 +67,9 @@ listed file does not exist, so **add every new shipped file to `FILES`** and bum
 the cache is replaced.
 
 ## Updates
-The browser checks `sw.js` on navigation; a changed worker installs into its own cache and waits.
+The browser checks `sw.js` on navigation; the worker is registered with `updateViaCache: "none"`,
+so the check fetches `sw.js` and `version.js` past the HTTP cache (GitHub Pages sends `max-age=600`;
+AUD-013). A changed worker installs into its own cache and waits.
 `app.js` posts `"skip"` to a waiting or newly installed worker only if the page already had a
 controller and the person has not yet touched or typed; the worker then activates and claims the
 page, and `controllerchange` reloads it once. After a touch the new worker keeps waiting, the page

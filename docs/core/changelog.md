@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-6-8"></a>
+## [0.6.8] - 2026-10-08
+- Fixed: a new version of Freelief now reaches an installed app at once; GitHub Pages' caching could
+  delay it by up to ten minutes. Stronger tests: every screen offline, the security policy, and
+  the update under real caching. [AUD-013](../fragments/AUD-013.md), [AUD-009](../fragments/AUD-009.md),
+  [AUD-027](../fragments/AUD-027.md), [AUD-031](../fragments/AUD-031.md), [AUD-030](../fragments/AUD-030.md). 143 tests.
+
 <a id="v0-6-7"></a>
 ## [0.6.7] - 2026-10-08
 - **Feedback** now says that GitHub issues are public, and that feedback is not watched around the

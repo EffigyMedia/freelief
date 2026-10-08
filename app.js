@@ -338,7 +338,9 @@ if ("serviceWorker" in navigator) {
       location.reload();
     }
   });
-  navigator.serviceWorker.register("sw.js")
+  // The update check fetches sw.js and the version.js it imports past the HTTP cache, so a new version
+  // is seen at once under GitHub Pages' ten-minute caching (AUD-013).
+  navigator.serviceWorker.register("sw.js", { updateViaCache: "none" })
     .then((registration) => {
       offerTakeover(registration.waiting);
       registration.addEventListener("updatefound", () => {

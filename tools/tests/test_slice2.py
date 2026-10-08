@@ -194,3 +194,15 @@ def test_the_rhythm_shows_under_the_breathing_circle():
         page.locator("input[name=rhythm][value=box]").check()
         go(page, "breathe")
         assert page.locator(".rhythm-line").inner_text() == "In 4 · Hold 4 · Out 4 · Rest 4"
+
+
+def test_an_inherited_name_in_storage_is_ignored():
+    # AUD-030: a stored "constructor" rhythm once broke the guide.
+    seed = ("localStorage.setItem('freelief.settings.v2', JSON.stringify("
+            "{ rhythm: 'constructor', theme: '__proto__', calmMode: 'toString', openOn: 'hasOwnProperty' }));")
+    with open_app(init_script=seed, route=None) as (page, errors, _):
+        assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
+        go(page, "breathe")
+        wait_until(page, "document.querySelector('.phase').textContent.trim().length > 0", 3000)
+        assert page.locator(".rhythm-line").inner_text() == "In 4 · Out 6", "the default rhythm runs"
+        assert not errors, errors
