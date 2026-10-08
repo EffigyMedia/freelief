@@ -203,3 +203,24 @@ def test_the_crisis_date_check_finds_an_old_date():
     assert any(item.startswith("directory") for item in stale), stale
     assert len(stale) > 1
     assert freelief.stale_crisis_checks(10**6) == []
+
+
+# AUD-007 (owner, 2026-10-08): every crisis number is pinned here as well as in the data file, so a
+# change to a number needs two edits, and a wrong or tampered number fails the suite. Change a pin
+# only together with data/crisis-lines.json and a source checked in that session (AGENTS.md).
+CRISIS_PINS = {
+    "US": {"emergency": "911", "lines": {"988 Suicide & Crisis Lifeline": ("988", "988", "https://chat.988lifeline.org/")}},
+    "CA": {"emergency": "911", "lines": {"9-8-8 Suicide Crisis Helpline": ("988", "988", None)}},
+    "GB": {"emergency": "999", "lines": {"Samaritans": ("116 123", None, None)}},
+    "IE": {"emergency": "112 or 999", "lines": {"Samaritans": ("116 123", None, None)}},
+    "AU": {"emergency": "000", "lines": {"Lifeline": ("13 11 14", "0477 13 11 14", None)}},
+}
+
+
+def test_every_crisis_number_is_pinned():
+    data = json.loads((freelief.ROOT / "data" / "crisis-lines.json").read_text("utf-8"))
+    found = {code: {"emergency": region["emergency"],
+                    "lines": {line["name"]: (line.get("call"), line.get("text"), line.get("web"))
+                              for line in region["lines"]}}
+             for code, region in data["regions"].items()}
+    assert found == CRISIS_PINS, "a crisis number differs from its pin; check the source, then change both"
