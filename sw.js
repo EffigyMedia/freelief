@@ -46,6 +46,7 @@ const FILES = [
   "icons/icon.svg",
   "icons/icon-192.png",
   "icons/icon-512.png",
+  "icons/effigy-media.png",
 ];
 
 // Fill the cache from the network, past the browser's HTTP cache, so a new version never stores

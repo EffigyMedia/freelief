@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-14"></a>
+## [0.5.14] - 2026-10-07
+- **About** now credits the maker: "Made by" with the Effigy Media logo and a link to
+  effigymedia.com. 82 tests.
+
 <a id="v0-5-13"></a>
 ## [0.5.13] - 2026-10-07
 - New app icon, as the owner chose: a brushed **ensō** around a soft breath glow, for the browser

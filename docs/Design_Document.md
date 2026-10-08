@@ -593,6 +593,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **About credits the maker: "Made by", the Effigy Media logo (a 200 x 120 copy of the owner's own
+  logo from Effigy Arcade, 26 KB) and a link to https://www.effigymedia.com.** — Owner request. The link
+  is one the person chooses; the app still sends nothing. — 2026-10-07 (owner)
 - **The shipped size limit is 250 KB, raised from 150 KB.** — The app reached 148.2 KB; the owner chose
   room for more features over trimming. The 1-second launch target stays the guard on speed. —
   2026-10-07 (owner)

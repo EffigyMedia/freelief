@@ -112,3 +112,15 @@ def test_email_is_hidden_until_an_address_is_set():
 def test_issue_templates_exist_for_every_kind():
     for name in CONFIG["project"]["issueTemplates"].values():
         assert (ROOT / ".github" / "ISSUE_TEMPLATE" / name).is_file(), name
+
+
+def test_about_credits_effigy_media_with_logo_and_website():
+    # Owner, 2026-10-07: attribution with the Effigy logo and www.effigymedia.com.
+    with open_app() as (page, _, _):
+        go(page, "about")
+        logo = page.locator("img.maker-logo")
+        assert logo.get_attribute("alt") == "Effigy Media"
+        assert page.evaluate("document.querySelector('img.maker-logo').naturalWidth") > 0, "the logo loads"
+        link = page.locator(".maker a")
+        assert link.get_attribute("href") == "https://www.effigymedia.com"
+        assert "Effigy Media" in page.locator(".maker").inner_text()

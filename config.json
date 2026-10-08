@@ -294,7 +294,8 @@
       "accessibility": "accessibility-check.md",
       "problem": "problem-report.md"
     },
-    "feedbackEmail": ""
+    "feedbackEmail": "",
+    "makerUrl": "https://www.effigymedia.com"
   },
   "calm": {
     "shapeEveryMs": 2600,
