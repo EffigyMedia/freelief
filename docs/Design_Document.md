@@ -315,7 +315,8 @@ in the same place.
 **Visual direction.** Soft and dim. A deep night-blue or slate background with one soft accent and
 large rounded type. Dark by default, and it follows the device light or dark setting, with an
 override in Settings. AAA contrast for text. No images in v1: shapes are drawn with CSS or SVG.
-The implementer shows the owner variants before the look is fixed.
+The implementer shows the owner variants before the look is fixed. *(The owner confirmed the current
+look on 2026-10-08, after changes from the phone: see the Decision Log.)*
 
 **Tone of voice.** Warm, steady, short and plain. Second person, present tense: "Breathe in." "You
 are safe right now." Never clinical, never cheerful, never blaming. Errors are calm and say what
@@ -916,6 +917,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   lines as comments, seen while editing. The in-app message text stays free of them, because the
   person copies it into the public issue. The owner's response rule for an issue from a person in
   danger is still to be stated. — 2026-10-08 (UNT-072)
+- **No response rule beyond the warning for an issue from a person in danger.** — The owner ruled
+  (AUD-053) that the Feedback page's line, that feedback is not watched around the clock and that
+  a person in danger should use "Need urgent help?" or call their local emergency number, is the
+  handling. GitHub issues are answered when the owner sees them, with no promise of time. —
+  Rejected: a reply-with-help-routes rule and a safety label. — 2026-10-08 (owner)
+- **The current look is confirmed.** — The owner confirmed the soft dark and light themes, the
+  rounded buttons and the calm blue accent, as they stand after the changes made from the phone on
+  2026-10-07 and 2026-10-08 (AUD-048). No separate variants were shown; the owner chose by using the
+  app. — 2026-10-08 (owner)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
