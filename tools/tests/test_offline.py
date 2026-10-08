@@ -184,3 +184,37 @@ def test_settings_shows_the_version_and_update_now_refreshes_only_freelief():
         keys = page.evaluate("caches.keys()")
         assert FOREIGN_CACHE in keys, "another app's cache survives"
         assert "freelief-0.0.0-old" not in keys, keys
+
+
+def test_update_now_on_a_captive_connection_keeps_the_offline_copy():
+    # AUD-056: the device reports that it is online, but the network does not give Freelief back:
+    # a captive portal answers every address with its own page. A route cannot stand in for this,
+    # because the browser fetches the worker script outside the page, so the served copy changes.
+    import shutil
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = Path(temp) / "app"
+        shutil.copytree(ROOT, app, ignore=shutil.ignore_patterns(
+            ".git", ".venv", "output", "input", "docs", "tools", "__pycache__", ".claude", ".github"))
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = context.new_page()
+            page.goto(url + "#settings")
+            page.evaluate("navigator.serviceWorker.ready")
+            page.reload()
+            wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            own = page.evaluate("'freelief-' + self.FREELIEF_VERSION")
+            (app / "sw.js").write_text("<html><body>Sign in to the Wi-Fi</body></html>", "utf-8")
+            page.locator(".update-now").click()
+            wait_until(page, "document.querySelector('.update-status')?.textContent.startsWith('Could not')", 8000)
+            assert page.locator(".update-status").inner_text() == "Could not update. This version still works offline."
+            assert page.evaluate(f"caches.has('{own}')"), "the offline copy is kept"
+            assert page.evaluate("navigator.serviceWorker.getRegistration().then(r => Boolean(r))")
+            context.set_offline(True)
+            page.reload()
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            assert page.locator(".help-open").is_visible(), "it still works offline"
+        finally:
+            context.close()

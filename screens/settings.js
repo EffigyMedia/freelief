@@ -66,20 +66,45 @@ export function start(container, ctx) {
   container.querySelector(".update-now").addEventListener("click", () => updateNow(status, t));
 }
 
-// "Update now" (owner, 2026-10-07): drop Freelief's offline copy and its worker, then reload from
-// the internet, so the newest version loads at once. Settings live in localStorage and are kept.
-// Only Freelief's own caches are deleted; the origin is shared with other apps.
+// "Update now" (owner, 2026-10-07): get the newest version and restart. Nothing is removed until
+// the network is shown to work (AUD-056): registration.update() fetches the worker from the
+// network and fails on a dead link or a captive portal, and then the current copy stays. A new
+// version installs in its own cache and takes over; the same version is refreshed in full. Only
+// Freelief's own caches are deleted; the origin is shared with other apps. Settings are kept.
 async function updateNow(status, t) {
   if (!navigator.onLine) {
     status.textContent = t("settings.updateOffline");
     return;
   }
   status.textContent = t("settings.updating");
+  const registration = await navigator.serviceWorker?.getRegistration().catch(() => null);
+  if (!registration) {
+    location.reload();
+    return;
+  }
+  try {
+    await registration.update();
+  } catch {
+    status.textContent = t("settings.updateFailed");
+    return;
+  }
+  const incoming = registration.installing || registration.waiting;
+  if (incoming) {
+    const settled = await new Promise((resolve) => {
+      if (incoming.state === "activated") resolve(true);
+      incoming.addEventListener("statechange", () => {
+        if (incoming.state === "activated") resolve(true);
+        if (incoming.state === "redundant") resolve(false);
+      });
+    });
+    if (settled) location.reload();
+    else status.textContent = t("settings.updateFailed");
+    return;
+  }
   try {
     const keys = await caches.keys();
     await Promise.all(keys.filter((key) => key.startsWith("freelief-")).map((key) => caches.delete(key)));
-    const registration = await navigator.serviceWorker?.getRegistration();
-    if (registration) await registration.unregister();
+    await registration.unregister();
   } finally {
     location.reload();
   }

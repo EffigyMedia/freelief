@@ -768,6 +768,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   most likely never chosen. The implementer chose this rule because the box period was a few
   hours of a public preview; a person who did choose box chooses it again in Settings. —
   2026-10-08 (implementer, owner-delegated fix order; UNT-055)
+- **"Update now" removes nothing until the network is shown to work.** — The audit (AUD-056) found
+  that it deleted the offline copy and the worker first, so on a dead or captive connection the app
+  was gone until the device was online. Now `registration.update()` fetches the worker from the
+  network first; if that fails, everything stays and the screen says "Could not update. This
+  version still works offline." A new version installs in its own cache and takes over; only when
+  the version is already current is the copy refreshed in full. — 2026-10-08 (UNT-056)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

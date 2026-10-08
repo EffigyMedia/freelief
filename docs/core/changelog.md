@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-41"></a>
+## [0.5.41] - 2026-10-08
+- Fixed: **Update now** checks the connection before it removes anything. On a broken or sign-in
+  Wi-Fi it says so, and Freelief keeps working offline. [AUD-056](../fragments/AUD-056.md). 121 tests.
+
 <a id="v0-5-40"></a>
 ## [0.5.40] - 2026-10-08
 - Fixed: Settings now saves only what you change, so a setting you never touched follows the
