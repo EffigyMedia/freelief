@@ -39,3 +39,7 @@ gate_sweep = 2
 # member of the class by a distance, and it earns its keep against a store large enough to hold two
 # decisions that disagree. Add it when this project's store is big enough for that to be likely, and
 # give it a long count.
+
+[routing]
+# The quality posture the owner chose (AGENTS.md, Decision Log). routing.py reads it here (AUD-022).
+bias = 2

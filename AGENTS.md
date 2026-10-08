@@ -160,7 +160,8 @@ stubs. If it turns out to belong to a set, `Project_Sets.md` says how one is joi
   Playwright gotchas before stack-specific work, and **append** new lessons there.
 - **Model routing** — `<env-root>/Process/Model_Routing.md`.
 - **Routing posture** — `ROUTING_BIAS: 2` (quality). People use Freelief in a crisis; a wrong word
-  or a broken screen costs more than rework. A per-session choice overrides it.
+  or a broken screen costs more than rework. A per-session choice overrides it. `routing.py` reads
+  it from `config.toml` → `[routing] bias` in this project (AUD-022).
 
 ## Trigger phrases
 
@@ -244,6 +245,8 @@ the Chrome already on the machine. Run from the repo root:
   claim. `test_repo.py` enforces both; keep it passing.
 - **Changes the tests cannot observe need the owner to check on a phone** — look, feel, motion,
   sound, and how calm it is. A green test run does not verify them. Say so plainly.
+- **Pending owner checks live in `RLG-033`.** Add each new check the owner owes to it with
+  `fragment.py append`, and record each result there; it closes only when the owner reports them all.
 - **A screen reader and a keyboard are first-class input.** Every new control gets a test that
   reaches and uses it by keyboard, and an axe check of its page.
 - **Crisis-line data is safety-critical.** Every line carries a last-checked date. Never add or

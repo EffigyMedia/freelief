@@ -15,8 +15,11 @@ parallel, builds the shell, starts the breathing exercise, sets `html[data-ready
 `freelief-ready` performance mark. Tests and `bench` wait on those two signals.
 
 ## Content Security Policy
-A meta tag allows only the app's own origin for every resource type, and no inline script or
-style. It is the back-up for REQ-015. Two consequences:
+A meta tag allows only `'self'` for every resource type, and no inline script or style. It limits
+what Freelief's page loads and connects to, and it is the back-up for REQ-015. `'self'` is the
+shared origin `effigymedia.github.io` (see Offline), so it does not keep out a script on a sibling
+path, and it does not protect Cache Storage or `localStorage` from a sibling site (AUD-004). Two
+consequences:
 - JavaScript may set `element.style.x` (CSSOM is allowed), but never a `style` attribute string.
 - Playwright's `wait_for_function` evaluates a string and is refused (no `unsafe-eval`). Tests use
   `harness.wait_until`, which polls with `page.evaluate`.
@@ -67,6 +70,11 @@ listed file does not exist, so **add every new shipped file to `FILES`** and bum
 the cache is replaced.
 
 ## Updates
+**The update check is the one request after install** (REQ-015, AUD-025). When an online person
+opens the app, the browser requests `sw.js` and its import `version.js` from GitHub Pages. The
+request carries nothing about the person, but GitHub can see the IP address and the time. The About
+privacy text says so. Offline, no request is made.
+
 The browser checks `sw.js` on navigation; the worker is registered with `updateViaCache: "none"`,
 so the check fetches `sw.js` and `version.js` past the HTTP cache (GitHub Pages sends `max-age=600`;
 AUD-013). A changed worker installs into its own cache and waits.

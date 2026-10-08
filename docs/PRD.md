@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `915f80c1cc7e6eb8` · 34 requirement(s) recorded
+> Store stamp `5463dc63da29b5a8` · 34 requirement(s) recorded
 
 ## The problem
 
@@ -74,7 +74,7 @@ Not built (decided 2026-10-07):
 - **REQ-011** — No exercise or activity requires the person to act within a time limit.
 - **REQ-012** — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
-- **REQ-015** — Freelief collects no personal data and sends nothing over the network after install. Only the person's settings are stored, and only on the device.
+- **REQ-015** — Freelief collects no personal data and sends nothing about the person. After install, the only network request is the browser's check for a newer version of Freelief, from GitHub Pages, which carries nothing about the person. Only the person's settings are stored, and only on the device.
 - **REQ-016** — Freelief meets WCAG 2.2 level AA in full, and level AAA wherever a criterion can be met.
 - **REQ-017** — All user-facing text lives in one strings file per language, so a translation can be added without a code change. English is the only language in the first version.
 - **REQ-018** — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
@@ -88,7 +88,7 @@ Not built (decided 2026-10-07):
 - **REQ-027** — Every tap or key press gets a visible response within 100 milliseconds on a mid-range phone.
 - **REQ-028** — The whole app, with every file the offline cache stores, is under 250 KB.
 - **REQ-029** — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown. The manual check may come from community volunteers.
-- **REQ-030** — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report) and, as a second choice, a pre-filled email to the public project address. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
+- **REQ-030** — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report). Once the owner chooses a public project email address, the page also offers, as a second choice, a pre-filled email to that address; until then GitHub is the only route. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
 - **REQ-031** — Freelief's source code is published under the MIT license.
 
 ### Should have
@@ -128,4 +128,4 @@ Of the 32 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-08T13:13:38-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-08T13:21:49-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `915f80c1cc7e6eb8` · 32 requirement(s) specified, 2 not yet
+> Store stamp `5463dc63da29b5a8` · 32 requirement(s) specified, 2 not yet
 
 ## 1. Introduction
 
@@ -85,7 +85,7 @@ person's settings, on the device.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
 - **REQ-023** *(should)* — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
 - **REQ-024** *(must)* — Every technique in Freelief is one studied in published clinical research, and the Standards & research page cites at least one source for each technique.
-- **REQ-030** *(must)* — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report) and, as a second choice, a pre-filled email to the public project address. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
+- **REQ-030** *(must)* — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report). Once the owner chooses a public project email address, the page also offers, as a second choice, a pre-filled email to that address; until then GitHub is the only route. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
 - **REQ-032** *(should)* — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** *(should)* — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
 - **REQ-034** *(could)* — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a finished sort, a finished loop, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
@@ -118,7 +118,7 @@ person's settings, on the device.
 
 ### 3.7 Software system attributes
 
-- **REQ-015** *(must)* — Freelief collects no personal data and sends nothing over the network after install. Only the person's settings are stored, and only on the device.
+- **REQ-015** *(must)* — Freelief collects no personal data and sends nothing about the person. After install, the only network request is the browser's check for a newer version of Freelief, from GitHub Pages, which carries nothing about the person. Only the person's settings are stored, and only on the device.
 - **REQ-029** *(must)* — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown. The manual check may come from community volunteers.
 
 ## 4. Verification
@@ -190,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-08T13:13:36-04:00 by `Commands/srs.py` from 34 requirement record(s).
+Generated 2026-10-08T13:21:47-04:00 by `Commands/srs.py` from 34 requirement record(s).

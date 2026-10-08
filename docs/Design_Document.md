@@ -8,9 +8,11 @@ narrative and the decisions. Code, records and this document must never disagree
 
 ## 0. Document Control
 
-- **Version:** 1.0, 2026-10-07.
+- **Version:** 1.2, 2026-10-08. It matches app v0.6.12, in slice 7. See the Change Log (section 15).
 - **Owner:** EffigyMedia.
-- **Status:** signed off by the owner 2026-10-07; ready for Initialize.
+- **Status:** living. The owner signed off v1.0 on 2026-10-07, and Initialize was done the same
+  day. Since then each slice and each owner decision has changed this document in the same unit of
+  work, with a dated Decision Log entry.
 - **One-line pitch:** Freelief is a free, open-source, offline web app that helps anyone through a
   panic attack or acute anxiety in the moment, with breathing and gentle distraction.
 - **Tier:** Standard.
@@ -290,7 +292,8 @@ checklist for an accessibility check); the person edits it; they choose "Copy me
 "Open on GitHub" (a new issue URL with only the template and the title in its query; the person
 pastes the message) or "Send by email" (a `mailto:` link with subject and body, opened by their own
 mail app). *(Changed 2026-10-08, AUD-055: the message no longer goes into the GitHub URL.)* Outcome: the person's own browser or mail app takes over; the app sends nothing.
-Edge: until the public email address is decided, the email button is hidden.
+Edge: until the owner chooses a public email address, the email button is hidden and GitHub is the
+only route; REQ-030 makes the email route optional (changed 2026-10-08, AUD-020).
 
 **Integrations.** None at run time. The only outbound links are ones the person chooses: phone,
 text, the crisis directory, GitHub and email. If GitHub is down, the issue page does not load and
@@ -338,7 +341,7 @@ met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), n
 | 7 | Deployment | GitHub Pages serves the `live` branch of the public repository `EffigyMedia/freelief`. Pushing `main` deploys nothing; moving `live` is the deploy (before 1.0 with the owner's yes, from 1.0 only at a release that cleared the audit gate). Rollback moves `live` back to an earlier commit. *(Changed 2026-10-07, AUD-003: it first served `main`.)* The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
 | 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, from the `axe-playwright-python` package in the same venv, runs the automated accessibility check; nothing from it ships. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
 | 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright. `run`: `python -m http.server 8000`. `test`: the Playwright harnesses. `doctor`: check Python, the venv, Playwright, the manifest, the service worker and the JSON files. `build`: none — the repository is the distributable; `build` reports that and checks the size limit. `clean`: remove `output/`. `bench`: the launch-time and size benchmark. | Matches the environment's standard commands with the fewest tools. | A bundler. |
-| 10 | Version control | Git. Feature commits stay local; push at a release or for an owner device test. The remote is public. | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
+| 10 | Version control | Git. The remote is public. Push `main` freely: it deploys nothing. Moving `live` is the deploy. Before 1.0, `live` moves only with the owner's yes, recorded in the changelog entry of the version it serves; from 1.0 on, it moves only at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tag. *(Changed 2026-10-08, AUD-003: it first said "feature commits stay local; push at a release or for an owner device test".)* | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
 | 11 | CI/CD | None in v1. The project commands are enough at this size. | Fewer moving parts. | GitHub Actions (reconsider if volunteers send pull requests). |
 
 **Never commit:** any token, key or password; `.venv/`; `output/`; the content of feedback emails
@@ -396,8 +399,10 @@ directory URL; the feedback repository URL and the email address (empty until de
    an update test.
 2. *Accessible activities.* The bubble field and the colour sort use DOM elements, not a canvas,
    so a screen reader and the keyboard reach every item. The colour sort is built last.
-3. *Launch in 1 second.* Inline the critical CSS, defer everything but the menu (the first screen), and
-   benchmark from the first slice.
+3. *Launch in 1 second.* Keep all CSS in one small file, `styles.css`, linked from `index.html`
+   (the CSP is `style-src 'self'`, so no style is inline), load only the shell, breathing and urgent
+   help at start and every other screen on its first visit, and benchmark from the first slice.
+   *(Changed 2026-10-08, AUD-041: it first said "inline the critical CSS"; see the Decision Log.)*
 
 **Cross-cutting targets.** No request to another origin from the app, ever. No console errors.
 Every storage access in try/catch, so blocked storage never breaks a screen. No personal data in
@@ -433,9 +438,26 @@ REQ-028 (250 KB). Workload: a cold launch of the installed app, offline, on a mi
 a Playwright run with CPU throttled 4x as its stand-in. `bench` records all three per release.
 
 **Security and privacy.** Nothing sensitive is stored or sent. The threats worth defending against
-are a supply-chain change (none: no third-party code ships), a tampered crisis line (every change
-goes through a reviewed commit), and a misleading claim (REQ-025). A Content Security Policy that
-allows only the app's own origin backs up the no-network rule.
+are a supply-chain change (none: no third-party code ships), a tampered crisis line, and a
+misleading claim (REQ-025). The control against a tampered crisis line is this: the owner is the
+only person who commits; a crisis line is added or changed only with a source checked in the same
+session (AGENTS.md); and a repository test pins each crisis number to its record, so a changed
+number fails the tests unless its record changes too (`test_every_crisis_number_is_pinned`). No
+enforced review of a commit exists. *(Changed 2026-10-08, AUD-007: it first said "every change goes
+through a reviewed commit", a control that did not exist.)*
+
+The Content Security Policy (`'self'` for every resource type, no inline script or style) limits
+what Freelief's own page loads and connects to: no script, style, image or request from another
+origin. It backs up the no-network rule. It does not protect Freelief's storage. **Known trust
+dependency:** Freelief shares the origin `https://effigymedia.github.io` with the owner's other
+GitHub Pages sites (Effigy Arcade, Tiny Arcade and Drinax Ref Console on 2026-10-07). Cache Storage
+and `localStorage` belong to the origin, not to the path, so a page on any of those sites can read
+and write Freelief's offline cache and its settings. A defect or a compromise in a sibling site can
+therefore replace a cached file, such as `index.html` or `data/crisis-lines.json`, until the next
+version replaces the cache. For the CSP, `'self'` is that shared origin, so it also allows a script
+from a sibling path. The owner chose to stay on the shared origin (Decision Log, 2026-10-07 and
+2026-10-08); an origin of its own (a custom domain or a dedicated account) removes this dependency.
+*(Corrected 2026-10-08, AUD-004: it first said the CSP "allows only the app's own origin".)*
 
 ---
 
@@ -480,7 +502,9 @@ finding is built, declined by the owner, or waiting on the environment, and a de
 closes the slice; then 0.7.0.
 
 **Definition of done per slice:** it works, `test` is green, `bench` is spot-checked, the design
-document and records agree with the code, and it is committed.
+document and records agree with the code, `docs/README.md` describes what a person sees (when the
+slice adds or changes a feature that users see), and it is committed. *(README added 2026-10-08,
+AUD-040.)*
 
 **Release criteria for 1.0:** every "must" requirement is met; every success criterion in Stage 2
 holds; an audit round clears the gate (`audit-gate.py` prints `GATE CLEAR`); every crisis line is
@@ -515,8 +539,9 @@ re-checked; the Standards & research page shows only what is verified.
 <!-- END srs-assumptions -->
 
 **Open questions.**
-- **The public feedback email address.** The owner decides, before the first release that shows
-  the email button. Until then the button is hidden.
+- **The public feedback email address.** The owner chooses it when they want the email route. It
+  does not block a release: REQ-030 makes email optional, so until then the button is hidden and
+  GitHub is the route (changed 2026-10-08, AUD-020).
 
 ---
 
@@ -566,7 +591,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - ~~**Soft tones mark the breath, off by default. No spoken voice.**~~ — 2026-10-07. *Superseded the
   same day by the owner: sounds on by default, see below. No spoken voice still stands.*
 - **Freelief collects no personal data and makes no network call after install.** — A person's
-  worst moments are not telemetry. — Rejected: anonymous usage counts. — 2026-10-07
+  worst moments are not telemetry. — Rejected: anonymous usage counts. — 2026-10-07 *Amended
+  2026-10-08 (owner, AUD-025): the browser's check for a new version still reaches GitHub Pages when
+  the person is online. It carries nothing about the person. The privacy text and REQ-015 now say
+  so; see "The privacy text names the update check".*
 - **Accessibility target: WCAG 2.2 AA in full, and AAA wherever a criterion can be met.** — The
   users are in distress, so the stricter bar fits. — Rejected: AA only; no named standard. —
   2026-10-07
@@ -634,7 +662,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   region gets the international directory. — Rejected: US only; a wider list, which has more lines
   to keep checked. — 2026-10-07
 - **The feedback email address is decided later; the email button stays hidden until then.** —
-  Owner's choice. — 2026-10-07
+  Owner's choice. — 2026-10-07 *Amended 2026-10-08 (owner, AUD-020): REQ-030 now makes the email
+  route optional. GitHub is the route; the pre-filled email is offered once the owner chooses an
+  address. A release with the email button hidden meets REQ-030.*
 - ~~**Testing: Python and Playwright from a project-local venv, with axe-core vendored for tests
   only.**~~ — 2026-10-07. *Superseded the same day at Initialize by the entry below.*
 - **Testing: Python and Playwright from a project-local venv, with axe-core from the
@@ -660,7 +690,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   on the phone)
 - **The international directory is Find A Helpline (findahelpline.com)** — free, run by
   ThroughLine, more than 175 countries, checked 2026-10-07. — Rejected: Befrienders Worldwide
-  (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; **confirmed by the owner\n  2026-10-07**)
+  (narrower: befriending centres only). — 2026-10-07 (slice 1, implementer; **confirmed by the owner
+  2026-10-07**)
 - **The colour sort is choose-then-swap, not drag; every tile names its hue and shade; the tiles
   stay in one row.** — One method serves touch, mouse, keyboard and screen reader, and the shade
   names make the task possible without sight. A row that wrapped would break the left-to-right
@@ -668,7 +699,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**). *Amended 2026-10-07: the owner asked
-  for drag as an addition; see the next entry.*
+  for drag as an addition; see the next entry.* *Corrected 2026-10-08 (owner, AUD-015): "under
+  REQ-014's rule it ships" was wrong. REQ-014 has no such rule. The colour sort shipped under
+  RLG-005's rule, which requires the automated checks and a manual accessibility check. The
+  automated checks passed, and the keyboard-only solve is an automated test; no person has done a
+  manual screen-reader check. The owner kept Sort colors in the menu. The manual screen-reader and
+  keyboard check is owed before 1.0 and is listed in RLG-033.*
 - **Drag is added to the colour sort beside choose-then-swap, not in place of it.** — Freelief is
   a mobile web app, and on a phone a person expects to drag a tile. Choose-then-swap stays, so the
   keyboard, the screen reader and a person with shaky hands keep one method that needs no fine
@@ -904,6 +940,34 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   `version` and `issue`, the page shows an entry only while its version is the running one, and the
   trust pages reference states the four steps from an axe pass and a manual check to an entry. —
   2026-10-08 (UNT-076)
+- **The shared origin is a known trust dependency, and the design says what the CSP protects.** —
+  The audit (AUD-004) showed that a page on a sibling site of `effigymedia.github.io` can write
+  Freelief's Cache Storage and `localStorage`, and that the design claimed a CSP that "allows only
+  the app's own origin". The owner chose on 2026-10-07 to stay on the shared origin (the entry
+  "Freelief stays on the shared origin" below). Section 9 now records the dependency and says that
+  the CSP limits what Freelief's page loads and connects to, and does not stop a sibling site from
+  writing its storage. — Rejected for now: a custom domain or a dedicated account (the owner's
+  2026-10-07 choice). — 2026-10-08 (AUD-004)
+- **All CSS is in one linked file, `styles.css`; no CSS is inline.** — Stage 8 first planned to
+  inline the critical CSS for the 1 s launch. The CSP is `style-src 'self'` with no
+  `'unsafe-inline'`, so an inline style would be refused, and `index.html` has always linked
+  `styles.css`. The launch target is met by loading only the shell, breathing and urgent help at
+  start (RLG-006). This reverses the Stage 8 plan. — Rejected: `'unsafe-inline'` or a hash in the
+  CSP for an inline block (a weaker policy for a small gain). — 2026-10-08 (AUD-041)
+- **The control against a tampered crisis line is the real one: a single committer, a checked
+  source, and a test that pins each number.** — The audit (AUD-007) found that the design claimed
+  "every change goes through a reviewed commit", but `main` has no protection and no review. The
+  owner is the only committer; AGENTS.md lets a crisis line change only with a source checked in
+  the same session; and `test_every_crisis_number_is_pinned` in `tools/tests/test_repo.py` fails
+  when a number changes without its record. Section 9 now says this. A branch ruleset that needs a
+  pull request is not set. — 2026-10-08 (AUD-007)
+- **The privacy text names the update check.** — The audit (AUD-025) found that "sends nothing over
+  the internet after it is installed" omits the browser's check for a new version: when an online
+  person opens the app, the browser asks GitHub Pages for `sw.js` and `version.js`. That request
+  carries nothing about the person, but GitHub can see the address and the time. The owner chose the
+  wording: "Freelief sends nothing about you. The only thing that reaches the internet is your
+  browser's check for a newer version of Freelief, from GitHub Pages." REQ-015 is changed with its
+  history. — 2026-10-08 (owner; AUD-025)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
@@ -1070,3 +1134,16 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   `PREMISE.md` superseded. Waiting for the owner's sign-off.
 - **v1.0 — 2026-10-07** — The owner signed off. All 31 requirements moved to `agreed`; the SRS and
   PRD generated; the first crisis-line regions decided.
+- **v1.1 — 2026-10-07** — Slices 1 to 5 built (app v0.1.0 to v0.5.0), and slice 6 started (app
+  v0.5.1 to v0.5.32) with the owner's changes from the phone: the menu became the first screen;
+  grounding and calming words were removed; drag was added to the colour sort; the ripple pond,
+  mandala coloring, the Visualizer, vibration, the country list and the saved region were added;
+  GitHub Pages moved to the `live` branch; the shared origin was accepted with self-repair of the
+  cache.
+- **v1.2 — 2026-10-08** — Slice 6 finished (app v0.5.33 to v0.6.0): the header sound button, the
+  emergency Call buttons, the wake lock, sources for every activity, the "When Freelief opens"
+  setting, the quiet footer and the rhythm line. Slice 7 (from app v0.6.4, at v0.6.12 on this date):
+  fixes from the audit backlog, among them the feedback Copy button, safe updates, `build
+  --release`, versioned standards entries, and corrections to sections 7, 8 and 9 (the deploy
+  model, the CSS plan, the shared-origin trust dependency, the crisis-line control and the update
+  check in the privacy text).

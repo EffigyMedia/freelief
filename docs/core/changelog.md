@@ -10,6 +10,21 @@ audit.
 
 ---
 
+<a id="v0-6-14"></a>
+## [0.6.14] - 2026-10-08
+- **About** says exactly what reaches the internet: "Freelief sends nothing about you. The only
+  thing that reaches the internet is your browser's check for a newer version of Freelief, from
+  GitHub Pages."
+- Feedback by email is now optional until an address is chosen; GitHub is the route.
+- Records: the design matches the deploy model, the shared-origin trust, the stylesheet and the
+  crisis-line control; pending owner checks are listed in RLG-033; the quality routing posture is
+  in force. [AUD-025](../fragments/AUD-025.md), [AUD-020](../fragments/AUD-020.md),
+  [AUD-007](../fragments/AUD-007.md), [AUD-015](../fragments/AUD-015.md), [AUD-003](../fragments/AUD-003.md),
+  [AUD-004](../fragments/AUD-004.md), [AUD-040](../fragments/AUD-040.md), [AUD-041](../fragments/AUD-041.md),
+  [AUD-042](../fragments/AUD-042.md), [AUD-045](../fragments/AUD-045.md), [AUD-017](../fragments/AUD-017.md),
+  [AUD-022](../fragments/AUD-022.md). 148 tests.
+- Correction to 0.6.13: that version had 148 tests, not 147.
+
 <a id="v0-6-13"></a>
 ## [0.6.13] - 2026-10-08
 - The **sound button** now fades the sound out and back in, in place of a hard cut. Urgent help
