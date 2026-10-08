@@ -593,6 +593,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **The app icon is a brushed ensō (the Zen circle) around a soft breath glow, on the night-blue
+  background; its opening sits at the upper right so it never reads as a power button.** — The owner
+  asked for "something zen" and chose this one of three drafts (`tools/icon_drafts.py`). — 2026-10-07
+  (owner)
 - **Buttons outside the header are centred. The footer line no longer mentions breathing. The glass
   trace's volume follows speed from a quiet floor, and its trail runs from the loop's start to the
   finger, clearing each loop. On Settings, Back to menu sits at the top. Calm has Full screen (the

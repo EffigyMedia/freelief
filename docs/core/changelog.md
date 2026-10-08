@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-13"></a>
+## [0.5.13] - 2026-10-07
+- New app icon, as the owner chose: a brushed **ensō** around a soft breath glow, for the browser
+  tab and the home screen.
+
 <a id="v0-5-12"></a>
 ## [0.5.12] - 2026-10-07
 - As the owner asked: buttons outside the header are centred; the footer reads "You are safe right

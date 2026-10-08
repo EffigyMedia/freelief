@@ -20,7 +20,7 @@ MIST = "#dfe8f4"
 ACCENT = "#8fb8de"
 
 
-def enso_path(cx=256, cy=256, r=150, start_deg=-18, sweep_deg=316, max_width=46, steps=240):
+def enso_path(cx=256, cy=256, r=150, start_deg=-18, sweep_deg=316, max_width=46, steps=72):
     """A filled brush-stroke circle: thick at the start, a long taper to a dry, thin end.
 
     The opening sits at the upper right (about half past one), as in brushed ensō. An opening
@@ -37,7 +37,8 @@ def enso_path(cx=256, cy=256, r=150, start_deg=-18, sweep_deg=316, max_width=46,
         outer.append((cx + (radius + width / 2) * cos, cy + (radius + width / 2) * sin))
         inner.append((cx + (radius - width / 2) * cos, cy + (radius - width / 2) * sin))
     points = outer + inner[::-1]
-    return "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in points) + " Z"
+    # Whole numbers and 72 steps keep the shipped SVG small (REQ-028) and look the same at icon size.
+    return "M" + " L".join(f"{x:.0f} {y:.0f}" for x, y in points) + " Z"
 
 
 def svg(body, background=NIGHT):
