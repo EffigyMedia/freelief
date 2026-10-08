@@ -552,7 +552,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   *Amended 2026-10-08 (owner, UNT-050): back to 4-in 6-out as the default. The source check found
   that in Balban 2023 an exhale-focused method gave a larger mood gain than box breathing, and the
   owner asked for the longer breath out if it does better. Of the three presets, 4-in 6-out is the
-  closest to that method. A saved rhythm is kept.*
+  closest to that method. A saved rhythm is kept.* *Corrected 2026-10-08 (AUD-061, UNT-052): that
+  reading was wrong. Balban 2023 compared each breathing method only with mindfulness; only cyclic
+  sighing beat it significantly, the methods were not compared with each other, and no arm used a
+  plain long out-breath. The owner kept 4-in 6-out on other grounds: every preset is slow breathing
+  under 10 breaths a minute, which Zaccaro 2018 supports, and it was the original design choice.*
 - **Strict performance targets: the breathing guide is visible within 1 s of a cold, offline launch
   on a mid-range phone; every input responds within 100 ms; the whole app is under 150 KB.** — In a
   panic attack every second of wait is felt. — Rejected: looser targets (3 s, 500 KB). — 2026-10-07

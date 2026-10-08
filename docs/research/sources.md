@@ -10,11 +10,13 @@ These sources support the *techniques*. No study has tested Freelief itself.
 
 1. Balban, M. Y., Neri, E., Kogon, M. M., et al. (2023). Brief structured respiration practices
    enhance mood and reduce physiological arousal. *Cell Reports Medicine*, 4(1), 100895.
-   https://doi.org/10.1016/j.xcrm.2022.100895 — checked 2026-10-07.
+   https://doi.org/10.1016/j.xcrm.2022.100895 — checked 2026-10-08 (PMC9873947).
    *Evidence:* a remote randomized controlled trial of daily 5-minute practices for a month. The
-   exhale-focused practice (cyclic sighing) improved mood and lowered respiratory rate more than
-   mindfulness meditation. Box breathing was one of the arms. Healthy adults, not people with
-   panic disorder.
+   exhale-focused practice (cyclic sighing: a double breath in, then a long breath out) improved
+   mood and lowered respiratory rate significantly more than mindfulness meditation. Box breathing
+   was one of the arms; it and cyclic hyperventilation were also higher than mindfulness, but not
+   significantly. The breathing methods were not compared with each other, and no arm used a plain
+   long out-breath such as 4 in, 6 out. Healthy adults, not people with panic disorder.
 2. Zaccaro, A., Piarulli, A., Laurino, M., et al. (2018). How breath-control can change your life:
    A systematic review on psycho-physiological correlates of slow breathing. *Frontiers in Human
    Neuroscience*, 12, 353. https://doi.org/10.3389/fnhum.2018.00353 — checked 2026-10-07.

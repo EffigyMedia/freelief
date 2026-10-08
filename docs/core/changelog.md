@@ -10,6 +10,14 @@ audit.
 
 ---
 
+<a id="v0-5-37"></a>
+## [0.5.37] - 2026-10-08
+- Corrected: **Standards and research** no longer says that a longer breath out did better than box
+  breathing. The trial compared each method only with mindfulness. 4 in, 6 out stays the default,
+  because all of Freelief's rhythms are slow breathing, which a review supports.
+  Correction to 0.5.36: its entry states that comparison too. [AUD-061](../fragments/AUD-061.md).
+  111 tests.
+
 <a id="v0-5-36"></a>
 ## [0.5.36] - 2026-10-08
 - The default rhythm is **4 in, 6 out** again: in a trial, a longer breath out did better than box

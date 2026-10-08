@@ -1,7 +1,7 @@
 {
- "stamp": "8e998420848bd2f5",
- "generated": "2026-10-08T01:03:09-04:00",
- "count": 210,
+ "stamp": "44269a322d2f3659",
+ "generated": "2026-10-08T01:31:18-04:00",
+ "count": 237,
  "entries": [
   {
    "id": "AUD-001",
@@ -10,7 +10,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "built",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -31,7 +31,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "requested",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -53,7 +53,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "requested",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -94,7 +94,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "built",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -253,7 +253,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "requested",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -275,7 +275,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "built",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -355,7 +355,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "built",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -586,7 +586,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "requested",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -781,7 +781,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "requested",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -841,7 +841,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "built",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -862,7 +862,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "in-flight",
+   "status": "built",
    "created": "2026-10-07T14:24:38-04:00",
    "precision": "second",
    "age_days": 0,
@@ -1064,6 +1064,412 @@
    "caused_by": [],
    "see_also": [
     "RVW-001"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-055",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The Feedback page puts the person's whole message into the GitHub link's URL, so the text reaches browser history and GitHub when the link opens, before the person submits anything",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-007"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-056",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "'Update now' deletes the offline copy and the worker before it knows the network works, so on a dead or captive connection the app is gone until the device is online again",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-006",
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-057",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "After a touch, a mid-session update serves the new version's lazy screens to the old shell, and a screen that cannot load bounces to the menu and leaves its own link dead",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-006"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-058",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "bench enforces only the hard targets, not the recorded tolerance, and launch and size are each 34% over baseline with no log entry since v0.5.10",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-006"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-059",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The worker's fetch handler has no catch, so a Cache Storage error answers every request with a network error, even online",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-006"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-060",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The worker reports whether the cache repair worked, but nothing listens, so a failed repair is invisible",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-006"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-061",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The trust page and the default-rhythm decision say that a longer out-breath did better than box breathing in Balban 2023, but the trial did not test that comparison, and 4-in 6-out was not one of its arms",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-062",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Settings saves every default as if the person chose it, so the new long out-breath default never reaches anyone who changed any setting while box breathing was the default",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-063",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "docs/research/sources.md, the written research record, is out of step with data/research.json: it lacks eight cited sources and their evidence notes, keeps removed techniques, and now makes a false statement about the colour sort",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008",
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-064",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The owner's decision to open on the menu was never carried into AGENTS.md, Design F1, Stages 2, 6 and 8, or the README, which still say that the breathing guide starts at launch",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008",
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-065",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The design keeps superseded figures and rules after the owner's changes, so the 1.0 release criteria require a 150 KB size that REQ-028 replaced, and F2, the risk table, Settings, deploy and requirement-range clauses are stale",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008",
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-066",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The Visualizer activity reads and writes Settings itself, which breaks the boundary that activities stay free of storage",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-067",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "About's privacy text and the design's definition of Settings list three stored items, but Freelief stores six, including the chosen region",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008",
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-068",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The Delivery Plan ends at slice 5, so 31 versions of new features belong to no slice, and the slice-end audit pace and the minor bump never fire",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-069",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The Visualizer, the vibration module and the start-up fallback have no place in the design's vocabulary, flows or module table, or in AGENTS.md Architecture",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-070",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The accessibility-check checklist names a 'More ways to calm' screen that no longer exists and lists none of the activities, and nav.settingsHint outlived the menu change unused",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008",
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-071",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The thread's next action points at work that is already built",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-072",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Each commit carries a store index that lags its own fragments: at HEAD it shows UNT-050 open and RLG-025 requested, and it omits UNT-051",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-008",
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-073",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "The live preview was moved about nine times after v0.5.2 with no record of the owner's yes or of which version is live",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-074",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Nothing stops or quiets sound when urgent help opens or when the person leaves the app to call a line",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-005"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "AUD-075",
+   "kind": "audit",
+   "type": "defect",
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "requested",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Visualizer full screen and black screen hide 'Need urgent help?', and the design states no exception to 'every screen'",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "RVW-005"
    ],
    "supersedes": []
   },
@@ -2830,14 +3236,16 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "requested",
+   "status": "built",
    "created": "2026-10-08T01:00:56-04:00",
    "precision": "second",
    "age_days": 0,
    "title": "Default rhythm back to 4-in 6-out, the long breath out the research favors",
    "blocks": [],
    "caused_by": [],
-   "see_also": [],
+   "see_also": [
+    "REQ-023"
+   ],
    "supersedes": []
   },
   {
@@ -2913,6 +3321,82 @@
    "caused_by": [],
    "see_also": [
     "UNT-010"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RVW-005",
+   "kind": "review",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "the omission lens of round [[UNT-051]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "UNT-051"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RVW-006",
+   "kind": "review",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "the operations lens of round [[UNT-051]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "UNT-051"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RVW-007",
+   "kind": "review",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "the security lens of round [[UNT-051]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "UNT-051"
+   ],
+   "supersedes": []
+  },
+  {
+   "id": "RVW-008",
+   "kind": "review",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "recorded",
+   "created": "2026-10-08T01:22:24-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "the whole-design lens of round [[UNT-051]]",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [
+    "UNT-051"
    ],
    "supersedes": []
   },
@@ -3855,7 +4339,7 @@
    "category": null,
    "verification": null,
    "priority": null,
-   "status": "open",
+   "status": "closed",
    "created": "2026-10-08T01:00:58-04:00",
    "precision": "second",
    "age_days": 0,
@@ -3863,6 +4347,42 @@
    "blocks": [],
    "caused_by": [
     "REQ-023"
+   ],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-051",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "closed",
+   "created": "2026-10-08T01:03:54-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Design audit round after slice-6 owner work (v0.5.36)",
+   "blocks": [],
+   "caused_by": [],
+   "see_also": [],
+   "supersedes": []
+  },
+  {
+   "id": "UNT-052",
+   "kind": "unit",
+   "type": null,
+   "category": null,
+   "verification": null,
+   "priority": null,
+   "status": "open",
+   "created": "2026-10-08T01:31:06-04:00",
+   "precision": "second",
+   "age_days": 0,
+   "title": "Correct the Balban 2023 claim; keep 4-in 6-out",
+   "blocks": [],
+   "caused_by": [
+    "AUD-061"
    ],
    "see_also": [],
    "supersedes": []
