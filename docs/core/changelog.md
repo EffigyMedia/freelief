@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-6-11"></a>
+## [0.6.11] - 2026-10-08
+- **Standards and research** shows a checked standard only for the version that was checked, so a
+  claim never outlives its check. (None is claimed yet.) [AUD-023](../fragments/AUD-023.md),
+  [AUD-054](../fragments/AUD-054.md). 145 tests.
+
 <a id="v0-6-10"></a>
 ## [0.6.10] - 2026-10-08
 - Internal: sturdier project tools. `doctor` checks that a browser launches, that every data file

@@ -897,6 +897,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   and on a crisis line or the directory checked more than `crisis.maxCheckAgeDays` (90) days ago.
   A repo test also fails on a shipped change committed without a bump. The AGENTS.md Release row
   names `build --release`. — 2026-10-08 (UNT-074)
+- **A recorded standard is shown only for the version that was checked, and the way a check
+  becomes a record is written down.** — The audit found that a recorded standard had no version,
+  so a claim would outlive the version it was checked on (AUD-023), and that no procedure turned a
+  volunteer's check into a record (AUD-054). Each entry in `data/standards.json` now carries
+  `version` and `issue`, the page shows an entry only while its version is the running one, and the
+  trust pages reference states the four steps from an axe pass and a manual check to an entry. —
+  2026-10-08 (UNT-076)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

@@ -15,11 +15,22 @@ The source link is `config.json` → `project.sourceUrl`; it resolves once the p
 exists.
 
 ## Standards and research
-- **Standards.** `data/standards.json` → `verified` is a list of `{name, level, checked, tester}`.
-  **Add an entry only under REQ-029**: an automated axe pass of every screen and a recorded manual
-  check with a screen reader and with a keyboard alone, for the version that ships, with its date
-  and tester. Empty means the page shows `standards.none`, which says what Freelief is built to and
-  that no standard is claimed yet.
+- **Standards.** `data/standards.json` → `verified` is a list of
+  `{name, level, version, checked, tester, issue}`. The page shows an entry only while `version`
+  equals the running `FREELIEF_VERSION` (AUD-023), so an update clears a claim until the new version
+  is checked. Empty, or no entry for this version, means the page shows `standards.none`, which says
+  what Freelief is built to and that no standard is claimed yet.
+- **How a check becomes a recorded standard (AUD-054).** Add an entry only under REQ-029:
+  1. The automated axe test (`tools/tests/test_a11y.py`) passes on every screen in both themes for
+     the exact version, in a `test` run on a clean tree.
+  2. A person checks every screen of that version with a screen reader and with a keyboard alone,
+     using the accessibility checklist, and posts it as a GitHub issue from the Feedback page. The
+     issue names the version, the browser, the device, the screen reader and its version, and the
+     input used, and ticks every screen.
+  3. The owner reads the issue. If every screen passed, the entry is added with `version` (the
+     checked version), `checked` (the issue's date), `tester` (as the tester asks to be named),
+     and `issue` (the issue URL), in its own unit with the version bump, citing the test run.
+  4. A failed screen is a finding, not an entry.
 - **Research.** `data/research.json` lists techniques and their source ids, and each source's
   citation, URL and checked date. The evidence summaries are translatable text in
   `strings/en.json` (`standards.evidence.*`). The full notes, with the strength of each source, are

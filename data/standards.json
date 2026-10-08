@@ -1,4 +1,4 @@
 {
-  "_rule": "REQ-029: list a standard here only when an automated check of every page passes AND a manual check with a screen reader and with a keyboard alone is recorded for this version, with its date and tester. Empty means no standard is claimed.",
+  "_rule": "REQ-029: list a standard here only when an automated check of every page passes AND a manual check with a screen reader and with a keyboard alone is recorded for this version, with its date and tester. Each entry: {name, level, version, checked, tester, issue}. The page shows an entry only while version equals the running version. The procedure is in docs/technical_references/trust_pages.md. Empty means no standard is claimed.",
   "verified": []
 }

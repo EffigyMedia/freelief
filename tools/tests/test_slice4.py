@@ -54,14 +54,24 @@ def test_standards_claims_nothing_until_verified():
 
 
 def test_a_verified_standard_is_listed_with_date_and_tester():
-    fake = {"verified": [{"name": "WCAG 2.2", "level": "AA", "checked": "2027-01-15",
-                          "tester": "a volunteer using NVDA"}]}
+    fake = {"verified": [
+        {"name": "WCAG 2.2", "level": "AA", "version": VERSION, "checked": "2027-01-15",
+         "tester": "a volunteer using NVDA", "issue": "https://github.com/EffigyMedia/freelief/issues/1"},
+        {"name": "WCAG 2.2", "level": "AAA", "version": "0.0.1", "checked": "2026-01-01",
+         "tester": "an older check", "issue": "https://github.com/EffigyMedia/freelief/issues/0"}]}
     with open_app(service_workers="block") as (page, _, _):
         page.route("**/data/standards.json", lambda route: route.fulfill(json=fake))
         go(page, "standards")
-        item = page.locator(".standards-list li").inner_text()
-        assert item == "WCAG 2.2, level AA, checked 2027-01-15 by a volunteer using NVDA"
+        items = page.locator(".standards-list li").all_inner_texts()
+        # AUD-023: only the entry for the running version is claimed.
+        assert items == ["WCAG 2.2, level AA, checked 2027-01-15 by a volunteer using NVDA"]
         assert page.locator(".standards-none").count() == 0
+    stale = {"verified": [fake["verified"][1]]}
+    with open_app(service_workers="block") as (page, _, _):
+        page.route("**/data/standards.json", lambda route: route.fulfill(json=stale))
+        go(page, "standards")
+        assert page.locator(".standards-list li").count() == 0
+        assert page.locator(".standards-none").is_visible(), "a check of another version claims nothing"
 
 
 def test_every_technique_cites_dated_sources():

@@ -20,9 +20,12 @@ export async function start(container, ctx) {
   const [standards, research] = await Promise.all([load("data/standards.json"), load("data/research.json")]);
   if (run !== current) return;
 
-  const verified = standards.verified.length
+  // A standard is claimed only for the version it was checked on (AUD-023): an update clears the
+  // claim until the new version is checked again.
+  const forThisVersion = standards.verified.filter((s) => s.version === self.FREELIEF_VERSION);
+  const verified = forThisVersion.length
     ? `<p>${t("standards.verifiedIntro")}</p>
-       <ul class="standards-list">${standards.verified.map((s) => `<li>${escape(t("standards.verifiedItem", {
+       <ul class="standards-list">${forThisVersion.map((s) => `<li>${escape(t("standards.verifiedItem", {
          name: s.name, level: s.level, date: s.checked, tester: s.tester }))}</li>`).join("")}</ul>`
     : `<p class="standards-none">${t("standards.none")}</p>`;
 
