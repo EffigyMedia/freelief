@@ -412,6 +412,51 @@ main {
 .bubble.held { animation-play-state: paused; }
 .bubble.popping { transform: scale(1.35); opacity: 0; animation: none; }
 
+/* Mandala coloring (REQ-033): soft swatches, then the shapes. */
+.mandala-palette {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.mandala-palette legend { width: 100%; margin-bottom: 0.4rem; text-align: center; font-weight: 700; }
+
+.swatch input {
+  appearance: none;
+  display: block;
+  width: var(--target);
+  height: var(--target);
+  margin: 0;
+  border: 2px solid var(--text);
+  border-radius: 50%;
+  background: var(--swatch);
+  cursor: pointer;
+}
+
+/* The chosen color: a ring around the swatch, apart from the focus outline. */
+.swatch input:checked { box-shadow: 0 0 0 3px var(--bg), 0 0 0 6px var(--text); }
+.swatch input:focus-visible { outline-offset: 8px; }
+
+.mandala-art { display: block; width: 100%; max-width: 26rem; margin: 0 auto; }
+
+.mandala-part {
+  fill: transparent;
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  pointer-events: all;
+  cursor: pointer;
+  transition: fill 0.4s ease-out;
+}
+
+.mandala-part:focus { outline: none; }
+.mandala-part:focus-visible { stroke: var(--focus); stroke-width: 3; }
+
+.mandala-status { margin: 0; min-height: 1.5em; text-align: center; }
+
 /* The ripple pond (REQ-032): still water; rings spread from where it is touched. */
 .pond {
   position: relative;

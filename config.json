@@ -293,6 +293,119 @@
     "keyboardMargin": 48,
     "clickAfterPointerMs": 600
   },
+  "mandala": {
+    "palette": [
+      {
+        "name": "sky",
+        "color": "hsl(205 60% 70%)"
+      },
+      {
+        "name": "sea",
+        "color": "hsl(165 40% 62%)"
+      },
+      {
+        "name": "lavender",
+        "color": "hsl(265 45% 74%)"
+      },
+      {
+        "name": "peach",
+        "color": "hsl(25 75% 75%)"
+      },
+      {
+        "name": "rose",
+        "color": "hsl(345 55% 76%)"
+      },
+      {
+        "name": "sand",
+        "color": "hsl(45 55% 72%)"
+      }
+    ],
+    "designs": [
+      [
+        {
+          "center": true,
+          "count": 1,
+          "outer": 16
+        },
+        {
+          "shape": "petal",
+          "count": 6,
+          "inner": 16,
+          "outer": 46,
+          "width": 0.75
+        },
+        {
+          "shape": "band",
+          "count": 12,
+          "inner": 46,
+          "outer": 72
+        },
+        {
+          "shape": "petal",
+          "count": 12,
+          "inner": 72,
+          "outer": 100,
+          "offset": 0.5,
+          "width": 0.5
+        }
+      ],
+      [
+        {
+          "center": true,
+          "count": 1,
+          "outer": 15
+        },
+        {
+          "shape": "band",
+          "count": 8,
+          "inner": 15,
+          "outer": 42
+        },
+        {
+          "shape": "petal",
+          "count": 8,
+          "inner": 42,
+          "outer": 70,
+          "offset": 0.5,
+          "width": 0.5
+        },
+        {
+          "shape": "band",
+          "count": 16,
+          "inner": 70,
+          "outer": 100
+        }
+      ],
+      [
+        {
+          "center": true,
+          "count": 1,
+          "outer": 18
+        },
+        {
+          "shape": "petal",
+          "count": 8,
+          "inner": 18,
+          "outer": 52,
+          "width": 0.8
+        },
+        {
+          "shape": "dot",
+          "count": 10,
+          "inner": 52,
+          "outer": 76
+        },
+        {
+          "shape": "petal",
+          "count": 10,
+          "inner": 76,
+          "outer": 100,
+          "offset": 0.5,
+          "width": 0.5
+        }
+      ]
+    ]
+  },
   "theme": {
     "default": "system",
     "choices": [

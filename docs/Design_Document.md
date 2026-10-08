@@ -67,7 +67,7 @@ that starts at once, works for them as they are, and asks for nothing.
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 a paced breathing guide starts at once. From there, one tap or key press reaches the distraction
-activities (a bubble field, a shape trace, a colour sort and a ripple pond) and the Visualizer (music or rain
+activities (a bubble field, a shape trace, a colour sort, a ripple pond and mandala coloring) and the Visualizer (music or rain
 with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
@@ -169,7 +169,7 @@ Not built (decided 2026-10-07):
 | Term | Meaning |
 |---|---|
 | **Exercise** | A guided self-help technique: paced breathing. |
-| **Activity** | A distraction activity: the bubble field, the shape trace, the colour sort, or the ripple pond. No score, no failure, no timer. |
+| **Activity** | A distraction activity: the bubble field, the shape trace, the colour sort, the ripple pond, or mandala coloring. No score, no failure, no timer. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
@@ -185,7 +185,7 @@ restarts on the device (REQ-023, REQ-015).
 <!-- BEGIN srs-definitions - written by the interview, read by the generators -->
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, the colour sort, or the ripple pond.
+  the shape trace, the colour sort, the ripple pond, or mandala coloring.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
 - **Crisis line** — a service for a person in danger, with a region, a way to reach it, and a
@@ -237,7 +237,11 @@ Each tile names its shade for a screen reader *(changed from "drag, or keyboard"
 added back beside choose-then-swap by the owner's decision, 2026-10-07, see REQ-014)*. *Ripple
 pond (REQ-032, added 2026-10-07):* still water; a touch makes soft rings spread from that point,
 and a finger drawn across it leaves a trail of ripples; a key press or a screen reader's activation
-makes a ripple at a random place; each ripple plays a soft water drop. States for all: no score, no
+makes a ripple at a random place; each ripple plays a soft water drop. *Mandala coloring (REQ-033,
+added 2026-10-07):* six soft colors and a mandala of shapes drawn from formulas; the person chooses
+a color, then taps or selects a shape to fill it; arrow keys move around a ring and between rings;
+each shape is named ("Ring 2, shape 3 of 12, blank"); New mandala starts the next design, blank.
+States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
 and its action.
 
@@ -327,7 +331,7 @@ Each file below is one module with one responsibility.
 |---|---|---|
 | `index.html` + `app.js` (**shell**) | The page frame, the screen router, the footer, and the "Need urgent help?" control. | Contain exercise logic or text. |
 | `exercises/breathe.js` | The breathing exercise. *(`ground.js` and `statements.js` were removed 2026-10-07.)* | Read storage or the network; hold text. |
-| `activities/bubbles.js`, `trace.js`, `sort.js`, `ripple.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
+| `activities/bubbles.js`, `trace.js`, `sort.js`, `ripple.js`, `mandala.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
 | `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
 | `crisis.js` + `data/crisis-lines.json` | The choice of crisis lines from the device region. | Ask for location. |
@@ -670,6 +674,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   does not spread. Its research is the same as for the other distraction activities; it has none
   of its own, and the Standards page does not claim any. — Rejected: a canvas (the architecture
   rule). — 2026-10-07 (owner; UNT-037)
+- **Mandala coloring is added as a distraction activity.** — The owner chose it for the other
+  removed screen. It has the closest research of the options offered: coloring a mandala lowered
+  anxiety more than free drawing in Curry and Kasser (2005), already cited. The mandala is SVG
+  drawn from ring formulas in `config.json` (petal, band, dot), so no image ships. Each shape is a
+  focusable button with a name, with one tab stop for the whole mandala and arrow keys inside it,
+  as in the colour sort. Every shape in every design is at least 24 px at a 360 px width (WCAG
+  2.5.8); the swatches are 48 px. A tap replaces a fill; there is no eraser and no end. — Rejected:
+  a canvas (the architecture rule); a fixed image (size, and no names). — 2026-10-07 (owner;
+  UNT-040)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

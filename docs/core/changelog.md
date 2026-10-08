@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-5-26"></a>
+## [0.5.26] - 2026-10-07
+- New activity: **Color a mandala**. Choose a soft color, then tap a shape to fill it. Three
+  designs; the arrow keys and Enter work too, and every shape has a name for a screen reader.
+  [RLG-014](../fragments/RLG-014.md), [REQ-033](../fragments/REQ-033.md). 102 tests.
+
 <a id="v0-5-25"></a>
 ## [0.5.25] - 2026-10-07
 - **About**: "Alexander Steele, Effigy Media." now sits on its own line under "Freelief is made
