@@ -69,8 +69,9 @@ def test_sound_waits_while_urgent_help_is_open_and_while_the_app_is_hidden():
         page.locator("button.sound-toggle").click()
         page.locator(".help-open").click()
         page.locator("dialog.help .help-back").click()
+        wait_until(page, "window.__ctx[0].state === 'suspended'", 2000)
         page.wait_for_timeout(300)
-        assert page.evaluate("window.__ctx[0].state") == "suspended"
+        assert page.evaluate("window.__ctx[0].state") == "suspended", "closing help does not bring sound back"
         assert not errors, errors
 
 

@@ -32,6 +32,7 @@
   },
   "sounds": {
     "enabledByDefault": true,
+    "muteFadeSeconds": 0.6,
     "breath": {
       "volume": 0.04,
       "attackSeconds": 1.0,

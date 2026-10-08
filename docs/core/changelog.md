@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-6-13"></a>
+## [0.6.13] - 2026-10-08
+- The **sound button** now fades the sound out and back in, in place of a hard cut. Urgent help
+  fades it too. [RLG-034](../fragments/RLG-034.md). 147 tests.
+
 <a id="v0-6-12"></a>
 ## [0.6.12] - 2026-10-08
 - In Windows High Contrast and other forced-color modes, **Sort colors** and **Color a mandala**

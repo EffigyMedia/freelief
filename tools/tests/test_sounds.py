@@ -114,3 +114,17 @@ def test_the_sound_button_is_reached_by_keyboard_and_settings_has_no_sound_switc
         assert help_height < 60, "Need urgent help? stays on one line at 360 px"
         go(page, "settings")
         assert page.locator("input[name=sounds]").count() == 0
+
+
+def test_the_sound_button_fades_out_and_in_rather_than_cutting():
+    # Owner, 2026-10-08: a hard on/off was jarring. Off keeps playing while it fades, then pauses.
+    fade = CONFIG["sounds"]["muteFadeSeconds"]
+    with open_app(init_script=PROBE) as (page, _, _):
+        page.locator(".guide").click()
+        go(page, "calm")
+        wait_until(page, "window.__osc.length > 0 && window.__osc.at(-1).ctx.state === 'running'", 3000)
+        page.locator("button.sound-toggle").click()
+        assert page.evaluate("window.__osc.at(-1).ctx.state") == "running", "no hard cut: it fades first"
+        wait_until(page, "window.__osc.at(-1).ctx.state === 'suspended'", int(fade * 1000) + 2000)
+        page.locator("button.sound-toggle").click()
+        wait_until(page, "window.__osc.at(-1).ctx.state === 'running'", 2000)

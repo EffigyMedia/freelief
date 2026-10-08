@@ -24,11 +24,17 @@ export function initAudio(config) {
   window.addEventListener("keydown", unlock, true);
 }
 
+// Every sound goes through one master volume, so the sound button can fade it (owner, 2026-10-08).
+let output = null;
+let fadeTimer = 0;
+
 function ensureContext() {
   if (!context) {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return null;
     context = new AudioContextClass();
+    output = context.createGain();
+    output.connect(context.destination);
   }
   if (context.state === "suspended") context.resume();
   return context;
@@ -42,9 +48,28 @@ export function unlockAudio() {
 
 // The header's sound button (owner, 2026-10-08). Off silences every sound at once, mid-note;
 // on allows the next sound, and is a gesture, so the browser lets it start.
+// Off fades every sound out and then pauses the audio; on resumes it and fades back in. A hard cut
+// was jarring (owner, 2026-10-08). The fade length is sounds.muteFadeSeconds.
 export function applySound(on) {
-  if (on) unlockAudio();
-  else if (context && context.state === "running") context.suspend();
+  const fade = sounds?.muteFadeSeconds ?? 0.6;
+  clearTimeout(fadeTimer);
+  if (on) {
+    unlockAudio();
+    if (!output) return;
+    const now = context.currentTime;
+    output.gain.cancelScheduledValues(now);
+    output.gain.setValueAtTime(output.gain.value, now);
+    output.gain.linearRampToValueAtTime(1, now + fade);
+    return;
+  }
+  if (!context || context.state !== "running") return;
+  const now = context.currentTime;
+  output.gain.cancelScheduledValues(now);
+  output.gain.setValueAtTime(output.gain.value, now);
+  output.gain.linearRampToValueAtTime(0, now + fade);
+  fadeTimer = setTimeout(() => {
+    if (context.state === "running") context.suspend();
+  }, fade * 1000 + 50);
 }
 
 // One sine note that swells and fades, starting `delay` seconds from now.
@@ -57,7 +82,7 @@ function note(ctx, frequency, delay, attack, release, volume) {
   gain.gain.setValueAtTime(0, start);
   gain.gain.linearRampToValueAtTime(volume, start + attack);
   gain.gain.linearRampToValueAtTime(0, start + attack + release);
-  oscillator.connect(gain).connect(ctx.destination);
+  oscillator.connect(gain).connect(output);
   oscillator.start(start);
   oscillator.stop(start + attack + release + 0.05);
 }
@@ -96,7 +121,7 @@ export function cue(phaseKey, seconds) {
   gain.gain.linearRampToValueAtTime(breath.volume, start + attack);
   gain.gain.setValueAtTime(breath.volume, end - release);
   gain.gain.linearRampToValueAtTime(0, end);
-  gain.connect(ctx.destination);
+  gain.connect(output);
   const voices = [[frequency, 1], [frequency * 2, breath.octaveLevel]].map(([hz, level]) => {
     const oscillator = ctx.createOscillator();
     const voice = ctx.createGain();
@@ -130,7 +155,7 @@ export function pads(level = 1) {
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
   filter.frequency.value = settings.cutoffHz;
-  filter.connect(master).connect(ctx.destination);
+  filter.connect(master).connect(output);
   const live = new Set();
   let chord = 0;
   let timer = 0;
@@ -183,7 +208,7 @@ export function glass(frequency) {
     const settings = sounds.glass;
     const master = ctx.createGain();
     master.gain.value = 0;
-    master.connect(ctx.destination);
+    master.connect(output);
     const oscillators = [];
     for (const [ratio, level] of settings.partials) {
       for (const detune of [0, settings.beatHz]) {
@@ -256,7 +281,7 @@ export function pop() {
   const burstGain = ctx.createGain();
   burstGain.gain.setValueAtTime(settings.noiseVolume, now);
   burstGain.gain.exponentialRampToValueAtTime(0.0001, now + settings.noiseSeconds);
-  burst.connect(band).connect(burstGain).connect(ctx.destination);
+  burst.connect(band).connect(burstGain).connect(output);
   burst.start(now, Math.random());
   burst.stop(now + settings.noiseSeconds + 0.02);
 
@@ -267,7 +292,7 @@ export function pop() {
   thump.frequency.exponentialRampToValueAtTime(settings.thumpEndHz, now + settings.thumpSeconds);
   thumpGain.gain.setValueAtTime(settings.thumpVolume, now);
   thumpGain.gain.exponentialRampToValueAtTime(0.0001, now + settings.thumpSeconds);
-  thump.connect(thumpGain).connect(ctx.destination);
+  thump.connect(thumpGain).connect(output);
   thump.start(now);
   thump.stop(now + settings.thumpSeconds + 0.02);
 }
@@ -292,7 +317,7 @@ export function drop() {
   const muffle = ctx.createBiquadFilter();
   muffle.type = "lowpass";
   muffle.frequency.value = settings.lowpassHz;
-  oscillator.connect(gain).connect(muffle).connect(ctx.destination);
+  oscillator.connect(gain).connect(muffle).connect(output);
   oscillator.start(now);
   oscillator.stop(now + settings.seconds + 0.02);
 }
@@ -308,7 +333,7 @@ export function rain(level = 1) {
   const master = ctx.createGain();
   master.gain.setValueAtTime(0, ctx.currentTime);
   master.gain.linearRampToValueAtTime(settings.volume * level, ctx.currentTime + settings.fadeInSeconds);
-  master.connect(ctx.destination);
+  master.connect(output);
 
   const bed = noise(ctx);
   bed.loop = true;
