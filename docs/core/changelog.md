@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-7-0"></a>
+## [0.7.0] - 2026-10-08
+- **Slice 7 is complete.** The audit backlog from rounds before UNT-051 is cleared: every finding is
+  built, ruled on by the owner, or waiting on the environment (AUD-072). Design audit round UNT-082
+  closed the slice; its 37 new findings (AUD-076 to AUD-112) are the work queue for slice 8.
+  150 tests.
+
 <a id="v0-6-16"></a>
 ## [0.6.16] - 2026-10-08
 - The header now stays at the top while the page scrolls under it, so **Need urgent help?** is

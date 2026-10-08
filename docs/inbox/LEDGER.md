@@ -77,3 +77,29 @@ default. A person in a panic attack may use a screen reader or a keyboard. Decid
 
 **cost:** About 6,400 tokens for the standup unit.
 ~~~~
+
+### ENVIRONMENT — received 2026-10-08, closed 2026-10-08
+
+- **File:** `NOTE_FROM_ENVIRONMENT.md`
+- **Communicated:** Told the owner on 2026-10-08 that the environment ships the web-interface-review skill (commit 81d8d91b), that it answers their question about a design skill, and that installing it into ~/.claude/skills needs their yes.
+- **Done:** Read and relayed; installing the skill and running it on Freelief's screens wait on the owner's yes (asked 2026-10-08).
+- **Open:** nothing
+- **Status:** closed 2026-10-08, message deleted
+
+The message, word for word:
+
+~~~~markdown
+# Note from ENVIRONMENT
+
+> Read README.md in this folder for how this message is handled.
+
+## 2026-10-08T01:09:14-04:00
+
+## 2026-10-08
+
+**what:** The environment now ships a skill, `web-interface-review`, in `Process/Skills/`. It reviews HTML, CSS and JavaScript against about 100 interface rules (Vercel Labs' list, vendored and pinned) and reports findings as `file:line`. It also carries six added checks for products used under stress: no time limits, 44 pixel touch targets, one main action with no sign-in, calm motion, contrast and zoom, and nothing leaving the device unasked.
+
+**for_you:** Use it on Freelief's screens as they appear, and read the added checks into the design interview as candidate rules. It cannot see rendering, screen-reader speech or feel, so it does not replace testing by a person. Environment commit 81d8d91b. It installs to `~/.claude/skills/` with the environment's skill installer.
+
+**blocked_on:** Nothing.
+~~~~
