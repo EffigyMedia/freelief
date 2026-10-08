@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-6-4"></a>
+## [0.6.4] - 2026-10-08
+- Fixed: if a screen fails to open, Freelief shows the menu and every link keeps working. If even
+  the menu fails, the plain breathing and emergency page comes back.
+  [AUD-008](../fragments/AUD-008.md), [AUD-002](../fragments/AUD-002.md). 134 tests.
+
 <a id="v0-6-3"></a>
 ## [0.6.3] - 2026-10-08
 - Internal: the benchmark flags a figure that drifts past its tolerance, and the performance

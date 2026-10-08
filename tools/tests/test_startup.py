@@ -66,3 +66,40 @@ def test_a_normal_start_replaces_the_fallback():
         assert page.locator(".menu-item").first.is_visible(), "the app opens on the menu"
     finally:
         context.close()
+
+
+def test_a_failed_screen_start_falls_back_to_the_menu_and_links_still_work():
+    # AUD-008: a deep link to Standards whose data cannot load must not stop the router or leave a
+    # frozen screen; the person lands on the menu, and every link works.
+    context = browser().new_context(viewport={"width": 390, "height": 844}, service_workers="block")
+    try:
+        context.route("**/data/standards.json", lambda route: route.abort())
+        page = context.new_page()
+        page.goto(base_url() + "#standards")
+        page.wait_for_selector("html[data-ready='true']", timeout=5000)
+        wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 5000)
+        assert page.evaluate("location.hash") == "#menu"
+        assert page.locator("main .page.standards").count() == 0, "no half-drawn Standards screen"
+        page.locator(".menu-item[href='#bubbles']").click()
+        wait_until(page, "document.querySelector('main').dataset.shown === 'bubbles'", 3000)
+        page.locator(".nav-back").click()
+        wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 3000)
+    finally:
+        context.close()
+
+
+def test_a_menu_that_cannot_start_brings_back_the_static_fallback():
+    # AUD-002: a failure after the shell is built still leaves the breathing line and the emergency
+    # route on screen.
+    context = browser().new_context(viewport={"width": 390, "height": 844}, service_workers="block")
+    try:
+        context.route("**/screens/menu.js", lambda route: route.fulfill(
+            status=200, content_type="text/javascript",
+            body="export function start() { throw new Error('broken'); } export function stop() {}"))
+        page = context.new_page()
+        page.goto(base_url())
+        wait_until(page, "document.documentElement.dataset.ready === 'fallback'", 6000)
+        assert page.locator("#fallback").is_visible()
+        assert "emergency" in page.locator("#fallback").inner_text().lower()
+    finally:
+        context.close()

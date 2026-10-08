@@ -236,13 +236,27 @@ async function show(name, { moveFocus }) {
   }
   if (request !== showing) return;
   current = screen;
+  // The old screen goes first, so a slow or failed start never leaves a frozen copy of it (AUD-008).
+  main.replaceChildren();
   // A screen may load data first (Standards and research), so wait for it before focusing.
-  await current.start(main, {
-    t, list, config, motion, audio, haptic, keepAwake, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
-    // Activities never touch Settings themselves (AUD-066): the shell hands over the Visualizer's
-    // sound choice and saves a new one.
-    calmMode: getSetting("calmMode"), saveCalmMode: (mode) => setSetting("calmMode", mode),
-  });
+  try {
+    await current.start(main, {
+      t, list, config, motion, audio, haptic, keepAwake, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
+      // Activities never touch Settings themselves (AUD-066): the shell hands over the Visualizer's
+      // sound choice and saves a new one.
+      calmMode: getSetting("calmMode"), saveCalmMode: (mode) => setSetting("calmMode", mode),
+    });
+  } catch (error) {
+    // A screen that fails as it starts falls back to the menu, as a screen that cannot load does.
+    console.error(`Freelief could not start the ${name} screen:`, error);
+    if (request !== showing) return;
+    current = null;
+    if (name !== DEFAULT_ROUTE) {
+      history.replaceState(history.state, "", `#${DEFAULT_ROUTE}`);
+      return show(DEFAULT_ROUTE, { moveFocus });
+    }
+    throw error;
+  }
   if (request !== showing) return;
   main.dataset.shown = name;
   nav.hidden = name === "menu";
@@ -275,8 +289,9 @@ async function boot() {
   onSettingChange((name, value) => { if (name === "theme") applyTheme(value); });
   document.title = t("app.name");
   buildShell();
-  await show(routeName(), { moveFocus: false });
+  // Listen before the first screen, so a first screen that fails still leaves working links (AUD-008).
   window.addEventListener("hashchange", () => show(routeName(), { moveFocus: true }));
+  await show(routeName(), { moveFocus: false });
   // Silence while Freelief is out of sight, for example during a call to a line (AUD-074).
   document.addEventListener("visibilitychange", () => {
     const helpOpen = document.querySelector("dialog.help")?.open;
@@ -336,9 +351,14 @@ if ("serviceWorker" in navigator) {
     });
 }
 
+// The static fallback in index.html, kept before the shell replaces the page, so a failure after
+// the shell is built can still put it back (AUD-002).
+const staticFallback = document.getElementById("fallback");
+
 boot().catch((error) => {
-  // Keep the reason, so a field report can be debugged; the fallback stays on screen.
+  // Keep the reason, so a field report can be debugged; the fallback is shown.
   console.error("Freelief could not start:", error);
+  if (staticFallback && !staticFallback.isConnected) document.body.replaceChildren(staticFallback);
   document.documentElement.dataset.ready = "fallback";
   document.documentElement.classList.remove("hide-fallback");
 });

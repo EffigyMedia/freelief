@@ -852,6 +852,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   copies the text for the person to paste; where the browser refuses, the text is selected for a
   manual copy. The email link is unchanged, because it opens the person's own mail app. — Rejected:
   keep the body in the URL with a warning. — 2026-10-08 (owner; UNT-065)
+- **A screen that fails as it starts falls back to the menu, and a late start-up failure brings back
+  the static fallback.** — The audit (AUD-008, AUD-002) found that a failed data load on a deep link
+  to Standards stopped the router, because the address listener was added after the first screen,
+  and could leave a frozen copy of the last screen. The shell now listens before the first screen,
+  clears the old screen before a new one starts, and falls back to the menu (with the address
+  `#menu`) when a screen's start fails, as it already did when a screen could not load. Standards
+  checks both of its data loads. If the menu itself cannot start after the shell is built, the
+  static fallback from `index.html` is put back. — 2026-10-08 (UNT-069)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

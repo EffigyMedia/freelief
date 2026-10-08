@@ -12,10 +12,12 @@ export async function start(container, ctx) {
   const { t } = ctx;
   const current = {};
   run = current;
-  const [standards, research] = await Promise.all([
-    fetch("data/standards.json").then((r) => r.json()),
-    fetch("data/research.json").then((r) => r.json()),
-  ]);
+  // A failed load rejects, and the shell falls back to the menu (AUD-008).
+  const load = (url) => fetch(url).then((r) => {
+    if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
+    return r.json();
+  });
+  const [standards, research] = await Promise.all([load("data/standards.json"), load("data/research.json")]);
   if (run !== current) return;
 
   const verified = standards.verified.length
