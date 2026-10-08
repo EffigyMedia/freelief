@@ -844,3 +844,12 @@ main {
     animation-duration: 0s !important;
   }
 }
+
+/* Windows High Contrast and other forced-color modes (AUD-050): the colour sort's shades, the
+   mandala's fills and its swatches ARE the content, so they keep their own colors; the outlines
+   still follow the system colors. */
+@media (forced-colors: active) {
+  .sort-tile, .mandala-part, .swatch input { forced-color-adjust: none; }
+  .sort-tile, .swatch input { border-color: CanvasText; }
+  .mandala-part { stroke: CanvasText; }
+}

@@ -211,5 +211,6 @@
   "feedback.title.accessibility": "Accessibility check: Freelief {version}",
   "feedback.title.problem": "Problem or idea: Freelief {version}",
   "feedback.unknown": "unknown",
+  "feedback.mobileDevice": "{platform} (phone or tablet)",
   "footer.selfHelp": "Freelief is a self-help tool. It is not medical care."
 }

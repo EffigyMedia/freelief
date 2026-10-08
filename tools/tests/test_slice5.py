@@ -176,3 +176,14 @@ def test_a_touch_drag_swaps_without_scrolling_the_page():
         assert page.evaluate("scrollY") == scroll
         assert page.locator(".sort-tile").first.evaluate("e => getComputedStyle(e).touchAction") == "none"
         assert not errors, errors
+
+
+def test_in_forced_colors_the_shades_keep_their_colors():
+    # AUD-050: in Windows High Contrast the shades are the task, so they must not be replaced.
+    with open_app() as (page, _, _):
+        page.emulate_media(forced_colors="active")
+        go(page, "sort")
+        tiles = page.locator(".sort-tile")
+        colors = tiles.evaluate_all("els => els.map(e => getComputedStyle(e).backgroundColor)")
+        assert len(set(colors)) == COUNT, f"each shade keeps its own color: {colors}"
+        assert tiles.first.evaluate("e => getComputedStyle(e).forcedColorAdjust") == "none"

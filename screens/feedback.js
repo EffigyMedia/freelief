@@ -12,13 +12,13 @@ function browserName() {
   return `${name} ${match[2]}`;
 }
 
-function deviceName() {
+function deviceName(t) {
   const ua = navigator.userAgent;
   const platform = navigator.userAgentData?.platform
     || (/iPhone|iPad/.test(ua) ? "iOS" : /Android/.test(ua) ? "Android"
       : /Windows/.test(ua) ? "Windows" : /Mac/.test(ua) ? "macOS" : /Linux/.test(ua) ? "Linux" : null);
   const mobile = navigator.userAgentData?.mobile ?? /Mobi|iPhone|Android/.test(ua);
-  return platform ? `${platform}${mobile ? " (phone or tablet)" : ""}` : null;
+  return platform ? (mobile ? t("feedback.mobileDevice", { platform }) : platform) : null;
 }
 
 export function start(container, ctx) {
@@ -28,7 +28,7 @@ export function start(container, ctx) {
   const facts = {
     version: self.FREELIEF_VERSION,
     browser: browserName() || unknown,
-    device: deviceName() || unknown,
+    device: deviceName(t) || unknown,
   };
 
   container.innerHTML = `

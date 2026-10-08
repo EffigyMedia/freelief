@@ -27,7 +27,8 @@
       }
     },
     "guideMinScale": 0.55,
-    "guideMaxScale": 1.0
+    "guideMaxScale": 1.0,
+    "guideStillScale": 0.8
   },
   "sounds": {
     "enabledByDefault": true,

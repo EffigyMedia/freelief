@@ -10,6 +10,15 @@ audit.
 
 ---
 
+<a id="v0-6-12"></a>
+## [0.6.12] - 2026-10-08
+- In Windows High Contrast and other forced-color modes, **Sort colors** and **Color a mandala**
+  keep their colors, because the colors are the task.
+- Internal clean-ups: escaped values, timers that no longer pile up, one more text moved into the
+  strings file, a tunable, and dead code removed. [AUD-050](../fragments/AUD-050.md),
+  [AUD-033](../fragments/AUD-033.md), [AUD-038](../fragments/AUD-038.md), [AUD-039](../fragments/AUD-039.md),
+  [AUD-046](../fragments/AUD-046.md), [AUD-047](../fragments/AUD-047.md). 146 tests.
+
 <a id="v0-6-11"></a>
 ## [0.6.11] - 2026-10-08
 - **Standards and research** shows a checked standard only for the version that was checked, so a

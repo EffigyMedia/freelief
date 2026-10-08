@@ -30,7 +30,7 @@ export async function start(container, ctx) {
     : `<p class="standards-none">${t("standards.none")}</p>`;
 
   const techniques = research.techniques.map((technique) => `
-    <section class="technique" data-technique="${technique.id}">
+    <section class="technique" data-technique="${escape(technique.id)}">
       <h3>${t(`standards.technique.${technique.id}`)}</h3>
       <p>${t(`standards.evidence.${technique.id}`)}</p>
       <p class="sources-label">${t("standards.sourcesLabel")}</p>
@@ -38,7 +38,7 @@ export async function start(container, ctx) {
         ${technique.sources.map((id) => {
           const source = research.sources[id];
           return `<li><a class="text-link" href="${escape(source.url)}" rel="noopener">${escape(source.citation)}</a>
-                  <span class="hint">(${t("standards.checked", { date: source.checked })})</span></li>`;
+                  <span class="hint">(${escape(t("standards.checked", { date: source.checked }))})</span></li>`;
         }).join("")}
       </ul>
     </section>`).join("");

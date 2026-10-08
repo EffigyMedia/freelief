@@ -50,12 +50,13 @@ export function start(container, ctx) {
   function runPhase() {
     if (state !== run || run.paused) return;
     const phase = phases[run.index];
+    run.timers = []; // the last phase's timers have all fired; drop their ids (AUD-038)
     phaseLabel.textContent = t(`breathe.${phase.key}`);
     run.stopTone();
     run.stopTone = ctx.audio.cue(phase.key, phase.seconds);
     if (motion.reducedMotion()) {
       circle.style.transition = "none";
-      circle.style.transform = "scale(0.8)";
+      circle.style.transform = `scale(${breathing.guideStillScale})`;
     } else {
       circle.style.transition = `transform ${phase.seconds}s ease-in-out`;
       circle.style.transform = `scale(${scaleFor(phase.scale)})`;

@@ -28,6 +28,14 @@ export function start(container, ctx) {
   run = current;
 
   const random = (min, max) => min + Math.random() * (max - min);
+  // A timer drops its own id when it fires, so the list holds only pending timers (AUD-038).
+  function later(callback, ms) {
+    const id = setTimeout(() => {
+      current.timers = current.timers.filter((pending) => pending !== id);
+      callback();
+    }, ms);
+    current.timers.push(id);
+  }
 
   // The field is a grid of slots, one bubble per slot, so no bubble ever covers another one's
   // touch target. A bubble sits at a random place inside its slot, with room left to drift.
@@ -86,8 +94,8 @@ export function start(container, ctx) {
       if (hadFocus && neighbour && neighbour.isConnected) neighbour.querySelector("button").focus();
     };
     if (still) remove();
-    else current.timers.push(setTimeout(remove, settings.popMs));
-    current.timers.push(setTimeout(addBubble, settings.respawnMs));
+    else later(remove, settings.popMs);
+    later(addBubble, settings.respawnMs);
     if (hadFocus && still && neighbour) neighbour.querySelector("button").focus();
   }
 
