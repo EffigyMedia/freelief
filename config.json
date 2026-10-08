@@ -167,7 +167,7 @@
       "pitchVariation": 0.15
     },
     "rain": {
-      "volume": 0.035,
+      "volume": 0.02625,
       "fadeInSeconds": 3,
       "lowpassHz": 1800,
       "highpassHz": 300,
