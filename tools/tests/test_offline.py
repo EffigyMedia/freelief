@@ -41,6 +41,11 @@ def test_the_app_works_offline_after_one_visit():
         assert page.locator(".guide").is_visible()
         page.locator(".help-open").click()
         assert page.locator("dialog.help li.line").count() >= 1
+        page.keyboard.press("Escape")
+        # Screens other than breathing load on first visit (RLG-006); offline they come from the cache.
+        for route in ("ground", "calm", "standards"):
+            page.evaluate(f"location.hash = '{route}'")
+            wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 5000)
 
 
 def test_the_manifest_makes_the_app_installable():

@@ -593,6 +593,11 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   under REQ-014's rule it ships. — Rejected: drag with a separate keyboard mode (two methods to
   learn; drag is hard with shaky hands). — 2026-10-07 (slice 5, implementer; **REQ-014 was edited,
   and the owner confirms or asks for drag as an addition**)
+- **Only breathing, the shell and urgent help load at start; every other screen loads on its first
+  visit. `fallback.js` hides the static fallback while the app starts and shows it if the start fails or
+  takes over 2 s.** — The launch had doubled (RLG-006); profiling showed the painted fallback was the
+  main cost. The 2 s wait is a constant in `fallback.js`, not in `config.json`, because that script must
+  work when `config.json` fails. — 2026-10-07 (implementer, for RLG-006)
 - **A Calm screen plays slow musical pads (four gentle chords of detuned triangle waves through a
   low-pass filter) while simple geometric shapes fade in and out. A `Black screen` button covers
   everything in black; one tap or key brings the screen back, and the music keeps playing. Under reduced

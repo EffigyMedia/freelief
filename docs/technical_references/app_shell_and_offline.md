@@ -5,7 +5,11 @@ The owning document for the shell (`app.js`), the urgent-help dialog (`crisis.js
 (`sw.js`, `manifest.webmanifest`, `version.js`). Design: `docs/Design_Document.md` Stages 5 and 8.
 
 ## Boot
-`index.html` loads `version.js` (a classic script) and `app.js` (a module). `app.js` registers the
+`index.html` loads `fallback.js` and `version.js` (classic scripts) and `app.js` (a module). `fallback.js`
+adds `html.hide-fallback` before the body is drawn, so the static fallback is not painted on a normal start;
+it removes the class after 2 s if the app is not ready, and `app.js` removes it at once on a failed boot.
+`app.js` imports only breathing; `ROUTES` maps every other screen to a dynamic `import()`, loaded on its
+first visit, and accepts only its own names (`Object.hasOwn`). `app.js` registers the
 service worker, then loads `config.json`, `strings/en.json` and `data/crisis-lines.json` in
 parallel, builds the shell, starts the breathing exercise, sets `html[data-ready="true"]` and the
 `freelief-ready` performance mark. Tests and `bench` wait on those two signals.

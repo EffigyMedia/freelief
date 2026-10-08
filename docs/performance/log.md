@@ -2,6 +2,17 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-07 — RLG-006 fixed (v0.5.7)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to breathing guide | 110 ms | 132–146 ms | +20% to +33% | BORDERLINE: two runs, one over the +25% tolerance; far inside the 1 s target (was 224 ms) |
+| Input to visible response | 10 ms | 10 ms | 0% | OK |
+| Shipped size | 41.3 KB | 122.0 KB | +195% | OK; 28 KB of budget left |
+Notes: the cause was the static fallback (AUD-002), painted before the app ran; `fallback.js` now
+hides it until a start fails. Lazy loading of the non-breathing screens gave about 10 ms more.
+The two runs differ by 14 ms on the same build, so machine load moves this figure; watch it at the
+next checkpoint before more work on it.
+
 ## 2026-10-07 — Checkpoint (v0.5.6, after sounds, shapes and Calm)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|

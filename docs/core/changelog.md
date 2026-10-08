@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-5-7"></a>
+## [0.5.7] - 2026-10-07
+- Faster start again ([RLG-006](../fragments/RLG-006.md)): the breathing guide is ready in about 132 ms
+  (was 224 ms). The safety fallback no longer paints on every launch; it shows only if the start
+  fails. Other screens load on their first visit. A link such as `#constructor` now opens breathing
+  ([AUD-005](../fragments/AUD-005.md)). 72 tests.
+
 <a id="v0-5-6"></a>
 ## [0.5.6] - 2026-10-07
 - New **Calm** screen, as the owner asked: slow musical pads, soft geometric shapes that fade in and

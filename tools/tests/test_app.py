@@ -117,3 +117,15 @@ def test_targets_are_at_least_44_pixels():
             .filter(([, r]) => r.width < 44 || r.height < 44)
             .map(([t, r]) => `${t} ${Math.round(r.width)}x${Math.round(r.height)}`)""")
         assert not small, f"targets under 44px: {small}"
+
+
+def test_an_inherited_name_in_the_hash_falls_back_to_breathing():
+    # AUD-005: #constructor, #toString and #__proto__ are not screens.
+    with open_app() as (page, errors, _):
+        for name in ("constructor", "toString", "__proto__", "nothing-here"):
+            page.evaluate(f"location.hash = '{name}'")
+            wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 3000)
+            assert page.locator(".guide").is_visible(), name
+        page.evaluate("location.hash = 'ground'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'ground'", 3000)
+        assert not [e for e in errors if "could not" in e], errors

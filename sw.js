@@ -17,6 +17,7 @@ const FILES = [
   "./",
   "index.html",
   "styles.css",
+  "fallback.js",
   "version.js",
   "app.js",
   "strings.js",

@@ -38,8 +38,9 @@ def test_a_failed_core_file_leaves_the_static_fallback():
     for path in ("config.json", "strings/en.json", "app.js", "exercises/breathe.js"):
         context, page = _open_with_failure(path)
         try:
-            page.wait_for_timeout(800)
             fallback = page.locator("#fallback")
+            # A failed boot shows it at once; a module that never loads shows it after fallback.js's wait.
+            fallback.wait_for(state="visible", timeout=4000)
             assert fallback.is_visible(), f"{path}: the fallback must stay on screen"
             assert EMERGENCY in fallback.inner_text(), path
             assert fallback.locator("a[href='https://findahelpline.com/']").count() == 1, path

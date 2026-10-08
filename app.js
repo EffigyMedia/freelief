@@ -7,21 +7,24 @@ import { initSettings, getSetting, onSettingChange } from "./settings.js";
 import * as audio from "./audio.js";
 import * as motion from "./motion.js";
 import * as breathe from "./exercises/breathe.js";
-import * as ground from "./exercises/ground.js";
-import * as statements from "./exercises/statements.js";
-import * as bubbles from "./activities/bubbles.js";
-import * as trace from "./activities/trace.js";
-import * as sort from "./activities/sort.js";
-import * as calm from "./activities/calm.js";
-import * as menu from "./screens/menu.js";
-import * as settingsScreen from "./screens/settings.js";
-import * as about from "./screens/about.js";
-import * as standards from "./screens/standards.js";
-import * as feedback from "./screens/feedback.js";
 
-// The screens the router knows. Breathing is the default and the first screen (REQ-018).
+// The screens the router knows. Breathing is the default and the first screen (REQ-018), so it
+// loads with the shell. Every other screen loads on its first visit (RLG-006): the browser then
+// parses only what the breathing guide needs before it draws. The service worker caches them all,
+// so a later visit works offline.
 const ROUTES = {
-  breathe, ground, statements, bubbles, trace, sort, calm, menu, settings: settingsScreen, about, standards, feedback,
+  breathe: () => Promise.resolve(breathe),
+  ground: () => import("./exercises/ground.js"),
+  statements: () => import("./exercises/statements.js"),
+  bubbles: () => import("./activities/bubbles.js"),
+  trace: () => import("./activities/trace.js"),
+  sort: () => import("./activities/sort.js"),
+  calm: () => import("./activities/calm.js"),
+  menu: () => import("./screens/menu.js"),
+  settings: () => import("./screens/settings.js"),
+  about: () => import("./screens/about.js"),
+  standards: () => import("./screens/standards.js"),
+  feedback: () => import("./screens/feedback.js"),
 };
 const DEFAULT_ROUTE = "breathe";
 
@@ -145,17 +148,30 @@ function buildShell() {
 
 function routeName() {
   const name = location.hash.replace(/^#/, "");
-  return name in ROUTES ? name : DEFAULT_ROUTE;
+  // Own names only: a hash such as #constructor is not a screen (AUD-005).
+  return Object.hasOwn(ROUTES, name) ? name : DEFAULT_ROUTE;
 }
 
 let showing = 0;
 
 async function show(name, { moveFocus }) {
   if (current) current.stop();
-  current = ROUTES[name];
+  current = null;
   const request = ++showing;
   main.dataset.screen = name;
   delete main.dataset.shown;
+  let screen;
+  try {
+    screen = await ROUTES[name]();
+  } catch (error) {
+    // A screen that cannot load (offline with a damaged cache) falls back to breathing, which is
+    // always loaded, so the person is never left on a blank or frozen screen.
+    console.error(`Freelief could not load the ${name} screen:`, error);
+    if (name !== DEFAULT_ROUTE) return show(DEFAULT_ROUTE, { moveFocus });
+    throw error;
+  }
+  if (request !== showing) return;
+  current = screen;
   // A screen may load data first (Standards and research), so wait for it before focusing.
   await current.start(main, {
     t, list, config, motion, audio, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
@@ -217,4 +233,5 @@ boot().catch((error) => {
   // Keep the reason, so a field report can be debugged; the fallback stays on screen.
   console.error("Freelief could not start:", error);
   document.documentElement.dataset.ready = "fallback";
+  document.documentElement.classList.remove("hide-fallback");
 });

@@ -199,6 +199,9 @@ body {
 
 .fallback h1 { margin: 0.5rem 0; font-size: 1.75rem; }
 
+/* fallback.js hides the fallback while the app starts, and shows it again if the start fails. */
+.hide-fallback .fallback { display: none; }
+
 /* ---- frame ---- */
 
 .top {
