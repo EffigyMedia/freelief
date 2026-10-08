@@ -48,10 +48,10 @@ def test_help_opens_and_closes_by_keyboard():
 
 def test_pause_and_resume_by_keyboard():
     with open_app() as (page, _, _):
-        # Tab order: urgent help, the Settings gear, Back to menu, then the screen's own controls.
+        # Tab order: urgent help, sound, the Settings gear, Back to menu, then the screen's controls.
         assert page.evaluate("document.querySelector('.nav-back').compareDocumentPosition("
                              "document.querySelector('.pause')) & Node.DOCUMENT_POSITION_FOLLOWING")
-        for _ in range(4):
+        for _ in range(5):
             page.keyboard.press("Tab")
         assert page.evaluate("document.activeElement.classList.contains('pause')")
         page.keyboard.press("Space")

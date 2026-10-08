@@ -40,6 +40,13 @@ export function unlockAudio() {
   ensureContext();
 }
 
+// The header's sound button (owner, 2026-10-08). Off silences every sound at once, mid-note;
+// on allows the next sound, and is a gesture, so the browser lets it start.
+export function applySound(on) {
+  if (on) unlockAudio();
+  else if (context && context.state === "running") context.suspend();
+}
+
 // One sine note that swells and fades, starting `delay` seconds from now.
 function note(ctx, frequency, delay, attack, release, volume) {
   const start = ctx.currentTime + delay;

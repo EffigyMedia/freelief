@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-5-38"></a>
+## [0.5.38] - 2026-10-08
+- **Sound** is now a speaker button at the top of every screen, crossed out when off. Off is
+  silent at once. The switch is no longer in Settings. [RLG-026](../fragments/RLG-026.md). 113 tests.
+
 <a id="v0-5-37"></a>
 ## [0.5.37] - 2026-10-08
 - Corrected: **Standards and research** no longer says that a longer breath out did better than box

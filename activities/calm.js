@@ -58,9 +58,10 @@ export function start(container, ctx) {
     const parts = [audio.pads(mix.music), audio.rain(mix.rain)];
     return { stop() { parts.forEach((part) => part.stop()); } };
   }
-  const current = { timers: [], music: playMode(getSetting("calmMode")), cover: null };
+  const current = { timers: [], music: playMode(getSetting("calmMode")), cover: null, playMode };
   run = current;
-  container.querySelector(".calm-sound-note").hidden = ctx.soundsOn;
+  current.note = container.querySelector(".calm-sound-note");
+  current.note.hidden = ctx.soundsOn;
 
   const random = (min, max) => min + Math.random() * (max - min);
 
@@ -134,6 +135,14 @@ export function start(container, ctx) {
 
   blackButton.addEventListener("click", blackOut);
   addShape();
+}
+
+// The header's sound button changed: start the chosen sound, or stop it, without leaving.
+export function soundChanged(on) {
+  if (!run) return;
+  run.music.stop();
+  run.music = on ? run.playMode(getSetting("calmMode")) : { stop() {} };
+  run.note.hidden = on;
 }
 
 export function stop() {

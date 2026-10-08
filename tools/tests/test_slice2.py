@@ -63,7 +63,7 @@ def test_settings_round_trip_through_a_reload():
         go(page, "settings")
         page.locator("input[name=rhythm][value=slow]").check()  # not the default, so the save shows
         page.locator("input[name=theme][value=light]").check()
-        page.locator("input[name=sounds]").uncheck()
+        page.locator("button.sound-toggle").click()
         page.locator("#help-region").select_option("IE")
         page.locator("input[name=haptics]").uncheck()
         page.reload()
@@ -73,7 +73,7 @@ def test_settings_round_trip_through_a_reload():
         assert page.locator("input[name=theme][value=light]").is_checked()
         assert page.locator("#help-region").input_value() == "IE"
         assert not page.locator("input[name=haptics]").is_checked()
-        assert not page.locator("input[name=sounds]").is_checked()
+        assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "false"
         assert page.evaluate("document.documentElement.dataset.theme") == "light"
         stored = json.loads(page.evaluate("localStorage.getItem('freelief.settings.v1')"))
         assert stored == {"rhythm": "slow", "sounds": False, "theme": "light", "calmMode": "music",
@@ -108,9 +108,9 @@ def test_sounds_are_on_by_default_after_a_tap_and_silent_when_off():
         assert page.evaluate("window.__tones") == 0, "nothing plays before the first tap"
         page.locator(".guide").click()
         wait_until(page, "window.__tones >= 1", 7000)
-        go(page, "settings")
-        assert page.locator("input[name=sounds]").is_checked()
-        page.locator("input[name=sounds]").uncheck()
+        sound = page.locator("button.sound-toggle")
+        assert sound.get_attribute("aria-pressed") == "true"
+        sound.click()
         go(page, "bubbles")
         before = page.evaluate("window.__tones")
         page.locator("button.bubble").first.click(force=True)

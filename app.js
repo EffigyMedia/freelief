@@ -3,7 +3,7 @@
 
 import { loadStrings, t, list } from "./strings.js";
 import { loadCrisisLines, activeRegion, linesFor, regionList } from "./crisis.js";
-import { initSettings, getSetting, onSettingChange } from "./settings.js";
+import { initSettings, getSetting, setSetting, onSettingChange } from "./settings.js";
 import { initHaptics, pulse as haptic } from "./haptics.js";
 import * as audio from "./audio.js";
 import * as motion from "./motion.js";
@@ -140,10 +140,24 @@ function buildShell() {
   // file ships, and the link carries the accessible name.
   const gear = element("a", { class: "gear", href: "#settings", "aria-label": t("nav.settings") });
   gear.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l2-1.6-2-3.4-2.4 1a7.4 7.4 0 0 0-2.6-1.5L14 2.5h-4l-.4 2.5A7.4 7.4 0 0 0 7 6.5l-2.4-1-2 3.4 2 1.6a7.6 7.6 0 0 0 0 3l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 0 0 2.6 1.5l.4 2.5h4l.4-2.5a7.4 7.4 0 0 0 2.6-1.5l2.4 1 2-3.4-2-1.6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+  // Sound on or off, one tap from every screen (owner, 2026-10-08): a speaker, crossed out when
+  // off. It is a toggle button with a fixed name, so a screen reader says "Sound, pressed".
+  const soundButton = element("button", {
+    type: "button", class: "sound-toggle", "aria-label": t("nav.sound"),
+    "aria-pressed": String(getSetting("sounds")),
+  });
+  soundButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><g class="sound-waves" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="sound-cross" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15.5 9.5l5 5"/><path d="M20.5 9.5l-5 5"/></g></svg>';
+  soundButton.addEventListener("click", () => setSetting("sounds", !getSetting("sounds")));
+  onSettingChange((name, value) => {
+    if (name !== "sounds") return;
+    soundButton.setAttribute("aria-pressed", String(value));
+    audio.applySound(value);
+    current?.soundChanged?.(value);
+  });
   const header = element("header", { class: "top" }, [
     // Plain text, not a link: "Need urgent help?" stays the first stop for the Tab key.
     element("p", { class: "brand", text: t("app.name") }),
-    element("div", { class: "top-actions" }, [helpButton, gear]),
+    element("div", { class: "top-actions" }, [helpButton, soundButton, gear]),
   ]);
   main = element("main", { id: "screen" });
   // Every screen goes back to the menu, from the top of the screen (owner, 2026-10-07).

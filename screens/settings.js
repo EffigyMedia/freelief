@@ -1,9 +1,8 @@
-// Settings: breathing rhythm, colors, sounds and the region for urgent help (REQ-023, REQ-007,
+// Settings: breathing rhythm, colors, vibration and the region for urgent help (REQ-023, REQ-007,
 // REQ-021, REQ-005). Every change is saved at once through settings.js, the only module that
 // touches storage.
 
 import { getSetting, setSetting } from "../settings.js";
-import { unlockAudio } from "../audio.js";
 import { regionList } from "../crisis.js";
 
 export function start(container, ctx) {
@@ -28,14 +27,6 @@ export function start(container, ctx) {
         <legend>${t("settings.theme")}</legend>
         ${radios("theme", themes, getSetting("theme"), "settings.theme")}
       </fieldset>
-      <div class="toggle">
-        <label class="choice">
-          <input type="checkbox" name="sounds" ${getSetting("sounds") ? "checked" : ""}
-                 aria-describedby="sounds-hint">
-          <span>${t("settings.sounds")}</span>
-        </label>
-        <p id="sounds-hint" class="hint">${t("settings.soundsHint")}</p>
-      </div>
       <div class="toggle">
         <label class="choice">
           <input type="checkbox" name="haptics" ${getSetting("haptics") ? "checked" : ""}
@@ -73,10 +64,6 @@ export function start(container, ctx) {
   region.addEventListener("change", () => setSetting("helpRegion", region.value));
   const status = container.querySelector(".update-status");
   container.querySelector(".update-now").addEventListener("click", () => updateNow(status, t));
-  container.querySelector("input[name=sounds]").addEventListener("change", (event) => {
-    if (event.target.checked) unlockAudio();
-    setSetting("sounds", event.target.checked);
-  });
 }
 
 // "Update now" (owner, 2026-10-07): drop Freelief's offline copy and its worker, then reload from

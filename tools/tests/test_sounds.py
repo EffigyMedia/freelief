@@ -69,11 +69,48 @@ def test_the_glass_sings_while_tracing_and_stops_on_leaving():
 
 def test_sounds_off_means_no_glass():
     with open_app(init_script=PROBE) as (page, _, _):
-        go(page, "settings")
-        page.locator("input[name=sounds]").uncheck()
+        page.locator("button.sound-toggle").click()  # the header's sound button, off
         go(page, "trace")
         page.locator("[role=slider]").focus()
         for _ in range(5):
             page.keyboard.press("ArrowRight")
         page.wait_for_timeout(300)
         assert page.evaluate("window.__osc.length") == 0
+
+
+def test_the_header_sound_button_silences_at_once_and_brings_the_visualizer_back():
+    # Owner, 2026-10-08: the sound switch is a speaker in the header, crossed out when off.
+    with open_app(init_script=PROBE) as (page, errors, _):
+        sound = page.locator("header button.sound-toggle")
+        assert sound.get_attribute("aria-label") == "Sound"
+        assert sound.get_attribute("aria-pressed") == "true"
+        assert sound.locator(".sound-waves").is_visible() and sound.locator(".sound-cross").is_hidden()
+        page.locator(".guide").click()  # the first gesture unlocks sound
+        go(page, "calm")
+        wait_until(page, "window.__osc.length > 0", 3000)
+        sound.click()
+        assert sound.get_attribute("aria-pressed") == "false"
+        assert sound.locator(".sound-cross").is_visible() and sound.locator(".sound-waves").is_hidden()
+        wait_until(page, "window.__osc.at(-1).ctx.state === 'suspended'", 2000)
+        assert page.locator(".calm-sound-note").is_visible()
+        before = page.evaluate("window.__osc.length")
+        sound.click()
+        wait_until(page, f"window.__osc.length > {before}", 3000)  # the music starts again
+        wait_until(page, "window.__osc.at(-1).ctx.state === 'running'", 2000)
+        assert page.locator(".calm-sound-note").is_hidden()
+        assert not errors, errors
+
+
+def test_the_sound_button_is_reached_by_keyboard_and_settings_has_no_sound_switch():
+    with open_app(viewport={"width": 360, "height": 700}) as (page, _, _):
+        page.keyboard.press("Tab")
+        page.keyboard.press("Tab")
+        assert page.evaluate("document.activeElement.classList.contains('sound-toggle')")
+        page.keyboard.press("Enter")
+        assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "false"
+        page.keyboard.press("Space")
+        assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "true"
+        help_height = page.locator(".help-open").bounding_box()["height"]
+        assert help_height < 60, "Need urgent help? stays on one line at 360 px"
+        go(page, "settings")
+        assert page.locator("input[name=sounds]").count() == 0

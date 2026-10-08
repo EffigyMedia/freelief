@@ -736,6 +736,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   The breathing text now says that box breathing gave a smaller gain than an exhale-focused
   method in Balban 2023. A last section keeps the caveat on distraction, reworded to "the
   evidence for that is mixed" as Helbig-Lang 2010 says. — 2026-10-08 (owner; UNT-049)
+- **Sound is switched on and off from a speaker button in the header, not in Settings.** — The
+  owner asked for it after the design review found that sound starts on its own on Breathe and the
+  Visualizer, which can startle a person in public. The speaker sits between "Need urgent help?"
+  and the gear on every screen; it is crossed out when off, and it is a toggle button named
+  "Sound". Off suspends the audio at once, mid-note; on allows the next sound and restarts the
+  Visualizer's music. Sounds stay on by default. On a phone narrower than 430 px the header is
+  tighter (16 px help label, 44 px round buttons), so "Need urgent help?" stays on one line from
+  360 px. — Rejected: off by default; a switch only in Settings. — 2026-10-08 (owner; UNT-053)
 - **The worker answers only from its own version's cache; a new version that takes over before the
   person touches anything reloads the page once; Settings shows the version and an `Update now` button
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:

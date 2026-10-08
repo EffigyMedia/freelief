@@ -240,6 +240,37 @@ body {
 
 .gear svg { width: 1.6rem; height: 1.6rem; }
 
+/* The sound button: the same round control as the gear; waves when on, a cross when off. */
+.sound-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--target);
+  height: var(--target);
+  padding: 0;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.sound-toggle:hover { background: var(--accent-soft); }
+.sound-toggle svg { width: 1.6rem; height: 1.6rem; }
+/* The round header buttons keep their full 48 px on a narrow phone. */
+.gear, .sound-toggle { flex: none; }
+
+/* On a narrow phone the header is tighter, so "Need urgent help?" stays on one line next to the
+   sound and Settings buttons (owner, 2026-10-08). Every target stays at least 44 px. */
+@media (max-width: 430px) {
+  .top { gap: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+  .top-actions { gap: 0.25rem; }
+  .help-open { padding: 0.5rem 0.75rem; font-size: 1rem; }
+  .brand { font-size: 1rem; }
+  .gear, .sound-toggle { width: 2.75rem; height: 2.75rem; }
+}
+.sound-toggle[aria-pressed="true"] .sound-cross,
+.sound-toggle[aria-pressed="false"] .sound-waves { display: none; }
+
 .help-open {
   border-color: var(--text);
 }

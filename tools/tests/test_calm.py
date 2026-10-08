@@ -40,8 +40,7 @@ def test_calm_plays_pads_and_stops_them_on_leaving():
 
 def test_calm_is_silent_with_sounds_off_and_says_so():
     with open_app(init_script=OSC_PROBE) as (page, _, _):
-        go(page, "settings")
-        page.locator("input[name=sounds]").uncheck()
+        page.locator("button.sound-toggle").click()  # the header's sound button, off
         go(page, "calm")
         page.wait_for_timeout(500)
         assert page.evaluate("window.__osc.length") == 0
