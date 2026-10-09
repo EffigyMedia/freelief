@@ -58,20 +58,22 @@ def test_a_verified_standard_is_listed_with_date_and_tester():
         {"name": "WCAG 2.2", "level": "AA", "version": VERSION, "checked": "2027-01-15",
          "tester": "a volunteer using NVDA", "issue": "https://github.com/EffigyMedia/freelief/issues/1"},
         {"name": "WCAG 2.2", "level": "AAA", "version": "0.0.1", "checked": "2026-01-01",
-         "tester": "an older check", "issue": "https://github.com/EffigyMedia/freelief/issues/0"}]}
+         "tester": "an earlier check", "issue": "https://github.com/EffigyMedia/freelief/issues/0"}]}
     with open_app(service_workers="block") as (page, _, _):
         page.route("**/data/standards.json", lambda route: route.fulfill(json=fake))
         go(page, "standards")
         items = page.locator(".standards-list li").all_inner_texts()
-        # AUD-023: only the entry for the running version is claimed.
-        assert items == ["WCAG 2.2, level AA, checked 2027-01-15 by a volunteer using NVDA"]
+        # AUD-102: a check covers its version and later ones; the build refuses one the interface
+        # has outdated, so the page shows both.
+        assert items == ["WCAG 2.2, level AA, checked 2027-01-15 by a volunteer using NVDA",
+                         "WCAG 2.2, level AAA, checked 2026-01-01 by an earlier check"]
         assert page.locator(".standards-none").count() == 0
-    stale = {"verified": [fake["verified"][1]]}
+    newer = {"verified": [dict(fake["verified"][0], version="99.0.0")]}
     with open_app(service_workers="block") as (page, _, _):
-        page.route("**/data/standards.json", lambda route: route.fulfill(json=stale))
+        page.route("**/data/standards.json", lambda route: route.fulfill(json=newer))
         go(page, "standards")
         assert page.locator(".standards-list li").count() == 0
-        assert page.locator(".standards-none").is_visible(), "a check of another version claims nothing"
+        assert page.locator(".standards-none").is_visible(), "a check of a newer version claims nothing here"
 
 
 def test_every_technique_cites_dated_sources():

@@ -10,6 +10,18 @@ audit.
 
 ---
 
+<a id="v0-7-11"></a>
+## [0.7.11] - 2026-10-09
+- **Settings**: a **Reset settings** button, and a line that says whether this version is saved for
+  use with no internet. Choosing a default again no longer pins it.
+  [AUD-110](../fragments/AUD-110.md), [AUD-112](../fragments/AUD-112.md).
+- **Standards and research**: a verified standard now stays shown in later versions until a
+  release changes the interface (REQ-029 changed). [AUD-102](../fragments/AUD-102.md).
+- The Effigy Media name and logo are reserved; the code stays MIT.
+  [AUD-077](../fragments/AUD-077.md).
+- Tools: doctor warns about stale crisis lines and outdated claims, and setup installs WebKit.
+  [AUD-104](../fragments/AUD-104.md), [AUD-086](../fragments/AUD-086.md). 173 tests.
+
 <a id="v0-7-10"></a>
 ## [0.7.10] - 2026-10-09
 - **Keep the screen on**: a new setting. During breathing and the Visualizer, the screen may turn

@@ -239,5 +239,10 @@
   "settings.awakeHint": "During breathing and the Visualizer, the screen stays on. After this long with no touch, it may turn off, and the exercise goes on.",
   "settings.awake.10": "For 10 minutes",
   "settings.awake.30": "For 30 minutes",
-  "settings.awake.60": "For 60 minutes"
+  "settings.awake.60": "For 60 minutes",
+  "settings.reset": "Reset settings",
+  "settings.resetHint": "Puts every setting back to how Freelief comes.",
+  "settings.resetDone": "Settings are back to how Freelief comes.",
+  "settings.offlineReady": "This version is saved on this device and works with no internet.",
+  "settings.offlineNotReady": "This version is not saved for use with no internet yet. Open Freelief once while online."
 }

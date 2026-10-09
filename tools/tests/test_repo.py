@@ -231,3 +231,16 @@ def test_every_crisis_number_is_pinned():
     assert found == CRISIS_PINS, "a crisis number differs from its pin; check the source, then change both"
     # The directory is the one curated route for everyone outside the pinned regions (AUD-076).
     assert data["directory"]["url"] == DIRECTORY_PIN, "the directory link differs from its pin"
+
+
+def test_a_verified_standard_holds_until_the_interface_changes():
+    # AUD-102 (owner, 2026-10-09): a check of version X covers later versions until a release
+    # changes a screen, the styles, the text or the shell. The release build refuses an outdated one.
+    assert freelief.claim_outdated("0.7.9"), "screens changed after 0.7.9, so its check would be outdated"
+    assert freelief.claim_outdated("0.0.0-never"), "a version that never shipped covers nothing"
+    current = freelief.read_version()
+    introduced = freelief.git("log", "--format=%H", "-S", f'FREELIEF_VERSION = "{current}"', "--", "version.js").split()
+    if introduced:
+        changed = freelief.git("diff", "--name-only", introduced[-1], "HEAD", "--", *freelief.INTERFACE).strip()
+        assert freelief.claim_outdated(current) == bool(changed)
+    assert freelief.outdated_claims() == [], "remove each outdated entry from data/standards.json"

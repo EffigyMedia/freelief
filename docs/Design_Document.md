@@ -1059,6 +1059,27 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   paused audio behind urgent help. While sound is off, help is open or the app is hidden, no sound
   is made and the audio is not resumed. A failed crisis-lines load and a failed offline install
   are now logged with their reason (AUD-084, AUD-085). — 2026-10-09 (UNT-098)
+- **A verified standard holds until the interface changes.** — AUD-102: the record of a check
+  ships in the version after the one checked, and the page showed only entries for the running
+  version, so no check could ever show. The owner chose this rule: an entry names the version
+  checked and shows in that version and later ones, until a release changes a screen, the styles,
+  the text or the shell (`INTERFACE` in `tools/freelief.py`). `claim_outdated()` finds the commit
+  that introduced the version and compares the interface since; the tests and `build --release`
+  fail on an outdated entry, and doctor warns. REQ-029 is changed with its history. — Rejected:
+  record the entry in the same commit as the checked version. — 2026-10-09 (owner; UNT-099)
+  *This supersedes the AUD-023 rule that a claim holds only for the exact running version.*
+- **Settings can be reset, and a default choice is not stored.** — AUD-110: a stored value had no
+  end. Reset settings puts every setting back to its default, and choosing the default value again
+  removes the stored value, so it follows a later default. Settings also says whether this version
+  is saved for use with no internet (AUD-112): the offline copy is written all at once, so its cache
+  exists only when it is complete. — 2026-10-09 (UNT-099)
+- **Doctor warns about stale crisis lines and outdated claims.** — AUD-104: freshness was checked
+  only at a release. Doctor, which every Resume runs, now warns when a crisis line or the directory
+  is older than `crisis.maxCheckAgeDays`, and when a verified standard is outdated. — 2026-10-09
+  (UNT-099)
+- **The Effigy Media name and logo are reserved.** — AUD-077: they shipped under the MIT license.
+  The owner chose to reserve them: `LICENSE` and the README say the code is MIT and the name and
+  logo are not licensed for reuse. — 2026-10-09 (owner; UNT-099)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
@@ -1082,7 +1103,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   volunteer's check into a record (AUD-054). Each entry in `data/standards.json` now carries
   `version` and `issue`, the page shows an entry only while its version is the running one, and the
   trust pages reference states the four steps from an axe pass and a manual check to an entry. —
-  2026-10-08 (UNT-076)
+  2026-10-08 (UNT-076) *Superseded in part 2026-10-09 (owner, AUD-102; UNT-099): an entry now shows
+  in its version and later ones until the interface changes; see that entry.*
 - **The shared origin is a known trust dependency, and the design says what the CSP protects.** —
   The audit (AUD-004) showed that a page on a sibling site of `effigymedia.github.io` can write
   Freelief's Cache Storage and `localStorage`, and that the design claimed a CSP that "allows only

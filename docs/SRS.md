@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `75d371b105bc6a83` · 32 requirement(s) specified, 3 not yet
+> Store stamp `e018fb395f2b8155` · 32 requirement(s) specified, 3 not yet
 
 ## 1. Introduction
 
@@ -121,7 +121,7 @@ person's settings, on the device.
 ### 3.7 Software system attributes
 
 - **REQ-015** *(must)* — Freelief collects no personal data and sends nothing about the person. After install, the only network request is the browser's check for a newer version of Freelief, from GitHub Pages, which carries nothing about the person. Only the person's settings are stored, and only on the device.
-- **REQ-029** *(must)* — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown. The manual check may come from community volunteers.
+- **REQ-029** *(must)* — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown or for an earlier version whose interface (its screens, styles, text and shell) is unchanged since. The manual check may come from community volunteers.
 
 ## 4. Verification
 
@@ -192,4 +192,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-09T08:28:42-04:00 by `Commands/srs.py` from 35 requirement record(s).
+Generated 2026-10-09T09:02:54-04:00 by `Commands/srs.py` from 35 requirement record(s).

@@ -3,11 +3,12 @@
 **Help through a panic attack or strong anxiety, right now.** Free, offline and private.
 
 Freelief opens on a short menu with nothing to fill in first. Breathe is first: a guide that helps
-you slow your breathing. One tap also reaches gentle activities (pop bubbles, trace a shape, sort
-colors, a ripple pond and a mandala to color) and the Visualizer (soft music or rain with slow
-shapes). Every screen has a **"Need urgent help?"** button with crisis lines for your country.
+you slow your breathing. One tap also reaches gentle activities (pop bubbles, trace a shape, the
+Unblock puzzle, a ripple pond and a mandala to color) and the Visualizer (soft music, rain or waves
+with slow shapes, which can keep playing while you use the rest of the app). Every screen has a **"Need urgent help?"** button with crisis lines for your country.
 
 - **Free and open source** (MIT license). No account, no advertising, no analytics.
+  The Effigy Media name and logo are not part of the MIT license; see `LICENSE`.
 - **Works offline** once installed to your home screen.
 - **Private.** Nothing about you is collected or sent. Your settings stay on your device.
 - **Built for everyone.** Touch, keyboard and screen reader all work, reduced motion is honoured,

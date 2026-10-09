@@ -2,7 +2,7 @@
 // REQ-021, REQ-005). Every change is saved at once through settings.js, the only module that
 // touches storage.
 
-import { getSetting, setSetting } from "../settings.js";
+import { getSetting, setSetting, resetSettings } from "../settings.js";
 import { regionList } from "../crisis.js";
 
 export function start(container, ctx) {
@@ -62,8 +62,14 @@ export function start(container, ctx) {
         <p id="region-hint" class="hint">${t("settings.regionHint")}</p>
       </div>
       <p class="hint">${t("settings.saved")}</p>
+      <div class="reset">
+        <button type="button" class="button reset-settings" aria-describedby="reset-hint">${t("settings.reset")}</button>
+        <p id="reset-hint" class="hint">${t("settings.resetHint")}</p>
+        <p class="reset-status" aria-live="polite"></p>
+      </div>
       <div class="app-version">
         <p class="version-line">${t("settings.version", { version: self.FREELIEF_VERSION })}</p>
+        <p class="offline-state"></p>
         <button type="button" class="button update-now" aria-describedby="update-hint">${t("settings.update")}</button>
         <p id="update-hint" class="hint">${t("settings.updateHint")}</p>
         <p class="update-status" aria-live="polite"></p>
@@ -86,6 +92,19 @@ export function start(container, ctx) {
   // A saved region that is no longer curated shows as Automatic, which is what the dialog does.
   region.value = [...region.options].some((o) => o.value === getSetting("helpRegion")) ? getSetting("helpRegion") : "auto";
   region.addEventListener("change", () => setSetting("helpRegion", region.value));
+  container.querySelector(".reset-settings").addEventListener("click", () => {
+    resetSettings();
+    // Draw the screen again with the defaults, then say what happened.
+    start(container, ctx);
+    container.querySelector(".reset-status").textContent = t("settings.resetDone");
+    container.querySelector(".reset-settings").focus();
+  });
+  // Whether this version is saved for use with no network (AUD-112). The offline copy is written
+  // all at once, so its cache exists only when every file is in it.
+  const offline = container.querySelector(".offline-state");
+  Promise.resolve(self.caches?.has(`freelief-${self.FREELIEF_VERSION}`))
+    .catch(() => false)
+    .then((ready) => { offline.textContent = t(ready ? "settings.offlineReady" : "settings.offlineNotReady"); });
   const status = container.querySelector(".update-status");
   container.querySelector(".update-now").addEventListener("click", () => updateNow(status, t));
 }

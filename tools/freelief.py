@@ -106,6 +106,30 @@ def stale_crisis_checks(max_age_days: int, today=None) -> list[str]:
     return stale
 
 
+# The files a person sees and uses: the screens, the styles, the text and the shell. A verified
+# standard holds for later versions until one of these changes (AUD-102, owner 2026-10-09).
+INTERFACE = ["index.html", "styles.css", "app.js", "fallback.js", "strings", "screens", "exercises",
+             "activities"]
+
+
+def claim_outdated(version: str) -> bool:
+    """True when the interface changed after the commit that introduced `version` in version.js,
+    or when no such commit exists. Then a check of that version no longer covers what ships."""
+    found = git("log", "--format=%H", "-S", f'FREELIEF_VERSION = "{version}"', "--", "version.js").split()
+    if not found:
+        return True
+    introduced = found[-1]  # -S also finds the later commit that replaced it; the oldest added it
+    return bool(git("diff", "--name-only", introduced, "HEAD", "--", *INTERFACE).strip())
+
+
+def outdated_claims() -> list[str]:
+    """Verified standards in data/standards.json that a later interface change has outdated."""
+    import json
+    data = json.loads((ROOT / "data" / "standards.json").read_text("utf-8"))
+    return [f"{s['name']} {s['level']} (checked on {s['version']})"
+            for s in data["verified"] if claim_outdated(s["version"])]
+
+
 # --- commands -------------------------------------------------------------------------------
 
 def cmd_setup(_: argparse.Namespace) -> int:
@@ -116,6 +140,9 @@ def cmd_setup(_: argparse.Namespace) -> int:
     if not VENV_PY.is_file():
         subprocess.run([tool, "venv", str(VENV)], cwd=ROOT, check=True)
     subprocess.run([tool, "pip", "install", "--python", str(VENV), *PIP_PACKAGES], cwd=ROOT, check=True)
+    # WebKit runs the never-break paths, and doctor requires it (AUD-086). Chrome is the one on the
+    # machine; Firefox needs a Windows runtime first (RLG-033), so it is not installed here.
+    subprocess.run([str(VENV_PY), "-m", "playwright", "install", "webkit"], cwd=ROOT, check=True)
     print("[ OK ] setup complete")
     return 0
 
@@ -192,6 +219,14 @@ def cmd_doctor(_: argparse.Namespace) -> int:
             broken.append(f"{file.name}: {error.msg}")
     check(bool(collected) and not broken, f"{len(collected)} test file(s) in tools/tests compile",
           "; ".join(broken) or "no test files")
+    # Things a release would refuse, seen at every Resume and not only at a release (AUD-104,
+    # AUD-102). They warn: the tree works, but the owner has a duty to do.
+    config = json.loads((ROOT / "config.json").read_text("utf-8"))
+    window = config["crisis"]["maxCheckAgeDays"]
+    for line in stale_crisis_checks(window):
+        print(f"[WARN] crisis data checked more than {window} days ago, re-check it: {line}")
+    for claim in outdated_claims():
+        print(f"[WARN] a verified standard no longer covers the interface, remove it: {claim}")
     print(f"\n{'READY' if not problems else f'NOT READY: {len(problems)} problem(s)'}")
     return 0 if not problems else 1
 
@@ -268,7 +303,8 @@ def cmd_build(args: argparse.Namespace) -> int:
     stale = stale_crisis_checks(config["crisis"]["maxCheckAgeDays"])
     for problem, items in (("not committed, so not what Pages deploys", dirty),
                            ("changed after the last version bump", late),
-                           (f"crisis data checked more than {config['crisis']['maxCheckAgeDays']} days ago", stale)):
+                           (f"crisis data checked more than {config['crisis']['maxCheckAgeDays']} days ago", stale),
+                           ("verified standards that the interface has outdated", outdated_claims())):
         if not items:
             continue
         if args.release:

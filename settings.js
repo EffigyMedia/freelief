@@ -93,15 +93,30 @@ export function getSetting(name) {
   return values[name];
 }
 
-export function setSetting(name, value) {
-  values[name] = value;
-  chosen[name] = value;
+function save() {
   try {
     localStorage.setItem(key, JSON.stringify(chosen));
   } catch {
     // Storage is blocked or full: the choice holds for this visit only.
   }
+}
+
+// A choice of the default value is not stored, so it follows a new default later (AUD-110).
+export function setSetting(name, value) {
+  values[name] = value;
+  if (value === defaults[name]) delete chosen[name];
+  else chosen[name] = value;
+  save();
   listeners.forEach((listener) => listener(name, value));
+}
+
+// Every setting back to its default (AUD-110). Each listener hears each setting that changed.
+export function resetSettings() {
+  const changed = Object.keys(chosen).filter((name) => chosen[name] !== defaults[name]);
+  chosen = {};
+  values = { ...defaults };
+  save();
+  changed.forEach((name) => listeners.forEach((listener) => listener(name, values[name])));
 }
 
 export function onSettingChange(listener) {

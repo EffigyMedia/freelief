@@ -4,6 +4,13 @@
 
 let run = null;
 
+// Compare two "X.Y.Z" versions: negative when a is older, zero when equal, positive when newer.
+function compareVersions(a, b) {
+  const [x, y] = [a, b].map((v) => String(v).split(".").map(Number));
+  for (let i = 0; i < 3; i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) - (y[i] || 0);
+  return 0;
+}
+
 function escape(text) {
   return String(text).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 }
@@ -20,9 +27,10 @@ export async function start(container, ctx) {
   const [standards, research] = await Promise.all([load("data/standards.json"), load("data/research.json")]);
   if (run !== current) return;
 
-  // A standard is claimed only for the version it was checked on (AUD-023): an update clears the
-  // claim until the new version is checked again.
-  const forThisVersion = standards.verified.filter((s) => s.version === self.FREELIEF_VERSION);
+  // A check covers the version it was made on and later versions, until a release changes the
+  // interface (AUD-102, owner 2026-10-09). The build and the tests refuse an entry that an interface
+  // change has outdated, so the page shows every entry not newer than the running version.
+  const forThisVersion = standards.verified.filter((s) => compareVersions(s.version, self.FREELIEF_VERSION) <= 0);
   const verified = forThisVersion.length
     ? `<p>${t("standards.verifiedIntro")}</p>
        <ul class="standards-list">${forThisVersion.map((s) => `<li>${escape(t("standards.verifiedItem", {

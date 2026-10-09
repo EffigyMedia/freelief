@@ -1,4 +1,4 @@
 {
-  "_rule": "REQ-029: list a standard here only when an automated check of every page passes AND a manual check with a screen reader and with a keyboard alone is recorded for this version, with its date and tester. Each entry: {name, level, version, checked, tester, issue}. The page shows an entry only while version equals the running version. The procedure is in docs/technical_references/trust_pages.md. Empty means no standard is claimed.",
+  "_rule": "REQ-029: list a standard here only when an automated check of every page passes AND a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester. Each entry: {name, level, version, checked, tester, issue}, where version is the version checked. The page shows an entry in that version and later ones. A release that changes the interface (screens, styles, text, shell) outdates it: tools/freelief.py claim_outdated() finds that, the tests and build --release fail, and the entry must be removed until people check again (AUD-102). The procedure is in docs/technical_references/trust_pages.md. Empty means no standard is claimed.",
   "verified": []
 }

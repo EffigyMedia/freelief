@@ -206,3 +206,33 @@ def test_an_inherited_name_in_storage_is_ignored():
         wait_until(page, "document.querySelector('.phase').textContent.trim().length > 0", 3000)
         assert page.locator(".rhythm-line").inner_text() == "In 4 · Out 6", "the default rhythm runs"
         assert not errors, errors
+
+
+def test_reset_settings_brings_back_every_default_and_a_default_choice_is_not_stored():
+    # AUD-110: the person can reset Settings, and choosing a default again does not pin it.
+    with open_app(route="settings") as (page, _, _):
+        page.locator("input[name=rhythm][value=slow]").check()
+        page.locator("input[name=theme][value=light]").check()
+        stored = page.evaluate("JSON.parse(localStorage.getItem('freelief.settings.v2'))")
+        assert stored == {"rhythm": "slow", "theme": "light"}
+        page.locator("input[name=theme][value=system]").check()
+        stored = page.evaluate("JSON.parse(localStorage.getItem('freelief.settings.v2'))")
+        assert stored == {"rhythm": "slow"}, "choosing the default again stores nothing"
+        page.locator(".reset-settings").click()
+        assert page.locator(".reset-status").inner_text() == STRINGS["settings.resetDone"]
+        assert page.evaluate("localStorage.getItem('freelief.settings.v2')") == "{}"
+        page.reload()
+        wait_until(page, "document.documentElement.dataset.ready === 'true'", 5000)
+        assert page.locator("input[name=rhythm][value=calm]").is_checked(), "saved, reloaded, read"
+
+
+def test_settings_says_whether_this_version_is_ready_offline():
+    # AUD-112: a person who installs Freelief for a future crisis can see that it works offline.
+    with open_app(route="settings", service_workers="allow") as (page, _, _):
+        page.evaluate("navigator.serviceWorker.ready")
+        wait_until(page, "caches.has('freelief-' + self.FREELIEF_VERSION)", 8000)
+        page.reload()
+        wait_until(page, "document.documentElement.dataset.ready === 'true'", 5000)
+        wait_until(page, f"document.querySelector('.offline-state').textContent === {STRINGS['settings.offlineReady']!r}", 3000)
+    with open_app(route="settings") as (page, _, _):
+        wait_until(page, f"document.querySelector('.offline-state').textContent === {STRINGS['settings.offlineNotReady']!r}", 3000)

@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `75d371b105bc6a83` · 35 requirement(s) recorded
+> Store stamp `e018fb395f2b8155` · 35 requirement(s) recorded
 
 ## The problem
 
@@ -87,7 +87,7 @@ Not built (decided 2026-10-07):
 - **REQ-026** — On a mid-range phone, installed and offline, the first screen (the menu) is visible within 1 second of a cold launch.
 - **REQ-027** — Every tap or key press gets a visible response within 100 milliseconds on a mid-range phone.
 - **REQ-028** — The whole app, with every file the offline cache stores, is under 250 KB.
-- **REQ-029** — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown. The manual check may come from community volunteers.
+- **REQ-029** — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown or for an earlier version whose interface (its screens, styles, text and shell) is unchanged since. The manual check may come from community volunteers.
 - **REQ-030** — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report). Once the owner chooses a public project email address, the page also offers, as a second choice, a pre-filled email to that address; until then GitHub is the only route. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
 - **REQ-031** — Freelief's source code is published under the MIT license.
 
@@ -129,4 +129,4 @@ Of the 32 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-09T08:28:44-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-09T09:02:57-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
