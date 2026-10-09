@@ -165,7 +165,13 @@
       "highpassHz": 300,
       "swellHz": 0.07,
       "swellDepth": 0.25,
-      "dropHz": 1700,
+      "dropNotes": [
+        1174.66,
+        1318.51,
+        1567.98,
+        1760.0,
+        2093.0
+      ],
       "dropVolume": 0.035,
       "dropEveryMs": 300,
       "dropSeconds": 0.09,

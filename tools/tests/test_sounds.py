@@ -154,3 +154,67 @@ AudioContext.prototype.createGain = function () {
         go(page, "bubbles")
         stops = page.evaluate("window.__osc.filter(o => o.stop !== null).map(o => o.stop - o.ctx.currentTime)")
         assert stops and max(stops) <= 0.01, f"no stop left scheduled for later: {max(stops)}"
+
+
+
+# RLG-046 (owner, 2026-10-09): every sound is diatonic to the music's key, C major (C D E F G A B).
+C_MAJOR = {0, 2, 4, 5, 7, 9, 11}  # semitones above C
+# Filter corners, a swell rate and a beat rate shape a sound; they are not notes.
+UNPITCHED = {"noiseHz", "cutoffHz", "lowpassHz", "highpassHz", "swellHz", "beatHz"}
+# The bubble pop and the ripple's water drop are natural sounds, so their pitch stays random
+# (owner, 2026-10-09).
+NATURAL = {"sounds.pop", "sounds.drop"}
+
+
+def in_c_major(hz, cents=5):
+    import math
+    semitones = 12 * math.log2(hz / 261.63)
+    nearest = round(semitones)
+    return nearest % 12 in C_MAJOR and abs(semitones - nearest) * 100 <= cents
+
+
+def pitches(node, path=""):
+    # Every number under a key that names a pitch: *Hz, *note*, *Notes, frequenc*, chords.
+    if any(path == n or path.startswith(n + ".") for n in NATURAL):
+        return
+    if isinstance(node, dict):
+        for key, value in node.items():
+            yield from pitches(value, f"{path}.{key}" if path else key)
+    elif isinstance(node, list):
+        for i, value in enumerate(node):
+            yield from pitches(value, f"{path}[{i}]")
+    elif isinstance(node, (int, float)) and not isinstance(node, bool):
+        keys = [part.split("[")[0] for part in path.split(".")]
+        if keys[-1] in UNPITCHED:
+            return
+        if any(k.endswith("Hz") or "note" in k.lower() or k.startswith("frequenc") or k == "chords" for k in keys):
+            yield path, node
+
+
+def test_every_configured_pitch_is_in_c_major():
+    found = list(pitches(CONFIG))
+    assert len(found) > 40, "the walk found the sound and mandala notes"
+    assert any(path.startswith("sounds.rain.dropNotes") for path, _ in found)
+    wrong = [(path, hz) for path, hz in found if not in_c_major(hz)]
+    assert not wrong, f"not in C major: {wrong}"
+
+
+def test_the_rain_drops_under_the_music_stay_in_c_major():
+    # A test cannot listen, so it records the center of every band-pass filter: the rain's drops.
+    probe = """
+window.__bands = [];
+const create = AudioContext.prototype.createBiquadFilter;
+AudioContext.prototype.createBiquadFilter = function () {
+  const node = create.call(this);
+  setTimeout(() => { if (node.type === "bandpass") window.__bands.push(node.frequency.value); }, 0);
+  return node;
+};"""
+    with open_app(init_script=probe) as (page, errors, _):
+        page.locator(".guide").click()
+        go(page, "calm")
+        page.locator("input[name=calm-mode][value=both]").check()
+        wait_until(page, "window.__bands.length >= 8", 8000)
+        heard = page.evaluate("window.__bands")
+        wrong = [hz for hz in heard if not in_c_major(hz)]
+        assert not wrong, f"rain drops out of key: {sorted(set(wrong))}"
+        assert not errors, errors

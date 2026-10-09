@@ -976,6 +976,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   design stays at least 24 px at a 360 px width, and a test keeps two diamonds side by side from
   overlapping, because a shared edge is hard to tap. — Rejected: designs from image files (size,
   and no names for the shapes). — 2026-10-09 (owner; UNT-091)
+- **Every pitched sound that plays with the music is in its key, C major.** — Owner request
+  (RLG-046). The pads play C, Am, F and G, so the key is C major (C D E F G A B). Every fixed note
+  was already in the key. The rain's drops had a random pitch (a narrow noise band at 1190 to
+  2210 Hz); each drop now takes one of five C-major notes (D6, E6, G6, A6, C7,
+  `sounds.rain.dropNotes`). A test checks every pitch in `config.json` to within 5 cents of a
+  C-major note, and another records the rain's drops as they play. The bubble pop and the ripple's
+  water drop keep their random pitch, because they are natural sounds, and the test excludes them
+  by name. Filter corners, the rain's swell and the glass's beat are not notes. — Rejected: C-major
+  notes for the pop and the water drop (owner). — 2026-10-09 (owner; UNT-093)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

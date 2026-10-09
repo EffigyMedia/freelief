@@ -304,6 +304,11 @@ function noise(ctx) {
   return source;
 }
 
+// One note chosen at random from a list of C-major notes, so a pitched sound that plays with the
+// music stays in its key (RLG-046). The pop and the water drop are natural sounds and stay free
+// (owner, 2026-10-09).
+const anyOf = (notes) => notes[Math.floor(Math.random() * notes.length)];
+
 // A soft, percussive pop when a bubble bursts (owner: "more soft percussive than a tone"): a very
 // short burst of band-passed noise over a quick, falling thump.
 export function pop() {
@@ -428,7 +433,7 @@ export function rain(level = 1) {
     const tick = noise(ctx);
     const band = ctx.createBiquadFilter();
     band.type = "bandpass";
-    band.frequency.value = settings.dropHz * (0.7 + Math.random() * 0.6);
+    band.frequency.value = anyOf(settings.dropNotes); // a narrow band has a faint pitch, so it stays in key
     band.Q.value = settings.dropQ;
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(settings.dropVolume * (0.4 + Math.random() * 0.6), now);

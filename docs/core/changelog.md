@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-7-5"></a>
+## [0.7.5] - 2026-10-09
+- **Visualizer**: the rain's drops are tuned to the notes of the music's key, C major. The bubble
+  pop and the ripple's water drop keep their natural, random pitch.
+  [RLG-046](../fragments/RLG-046.md). 156 tests.
+
 <a id="v0-7-4"></a>
 ## [0.7.4] - 2026-10-09
 - **Color a mandala**: five new designs, eight in all, with two new shapes: a scallop with a rounded
