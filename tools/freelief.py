@@ -318,6 +318,35 @@ def cmd_build(args: argparse.Namespace) -> int:
     return 0
 
 
+def cached_files() -> set[str]:
+    """The files sw.js caches for offline use (its FILES list), without the start URL."""
+    source = (ROOT / "sw.js").read_text("utf-8")
+    block = re.search(r"const FILES = \[(.*?)\];", source, re.DOTALL).group(1)
+    return {f for f in re.findall(r'"([^"]+)"', block) if f != "./"}
+
+
+def cmd_files(_: argparse.Namespace) -> int:
+    """The file audit (AUD-108): every shipped file, its size and whether the offline copy holds it.
+    It fails when a shipped file is not cached, or a cached file does not ship. sw.js is the one
+    shipped file that is not cached: the browser fetches the worker script itself."""
+    shipped = {p.relative_to(ROOT).as_posix(): p.stat().st_size for p in shipped_files()}
+    cached = cached_files()
+    for path, size in sorted(shipped.items()):
+        mark = "cached" if path in cached else ("worker" if path == "sw.js" else "NOT CACHED")
+        print(f"{size / 1024:7.1f} KB  {mark:10}  {path}")
+    missing = sorted(set(shipped) - cached - {"sw.js"})
+    extra = sorted(cached - set(shipped))
+    print(f"{len(shipped)} shipped file(s), {sum(shipped.values()) / 1024:.1f} KB; {len(cached)} cached.")
+    if missing:
+        print("[FAIL] shipped but not cached: " + ", ".join(missing))
+    if extra:
+        print("[FAIL] cached but not shipped: " + ", ".join(extra))
+    if missing or extra:
+        return 1
+    print("[ OK ] the offline copy holds every shipped file")
+    return 0
+
+
 def cmd_clean(_: argparse.Namespace) -> int:
     """Remove output/ and Python caches. Never touches input/."""
     if OUTPUT.exists():
@@ -342,7 +371,7 @@ def cmd_bench(_: argparse.Namespace) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(prog="freelief", description=__doc__.split("\n")[0])
     sub = parser.add_subparsers(dest="command", required=True)
-    for name in ("setup", "doctor", "run", "clean", "bench"):
+    for name in ("setup", "doctor", "run", "clean", "bench", "files"):
         sub.add_parser(name)
     build = sub.add_parser("build")
     build.add_argument("--release", action="store_true",

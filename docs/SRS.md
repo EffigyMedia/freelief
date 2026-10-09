@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `e018fb395f2b8155` · 32 requirement(s) specified, 3 not yet
+> Store stamp `11065cf93f6815a8` · 34 requirement(s) specified, 3 not yet
 
 ## 1. Introduction
 
@@ -52,8 +52,9 @@ person's settings, on the device.
   last-checked date.
 - **Region** — the country taken from the device language and region setting, never from location.
 - **Settings** — the only data Freelief stores, and only the values the person changed: the
-  breathing rhythm, sound on or off, vibration on or off, the theme, the Visualizer's sound, and the
-  region for urgent help, on the device only.
+  breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, vibration
+  on or off, the theme, the Visualizer's sound, the nature sound, and the region for urgent help,
+  on the device only.
 - **Standard** — an external standard Freelief claims, with its level, check date and tester.
 - **Source** — a published research citation behind a technique.
 
@@ -78,7 +79,7 @@ person's settings, on the device.
 - **REQ-004** *(must)* — Freelief offers interactive calming activities whose purpose is to distract the person from panic.
 - **REQ-005** *(must)* — Every screen shows a 'Need urgent help?' control that opens the crisis lines of one region, chosen from a region saved in Settings or else from the device language and region setting, with a country list to show another region, without a request for location.
 - **REQ-006** *(must)* — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
-- **REQ-007** *(should)* — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; the speaker button in the header turns them all off at once. Nothing plays before the person's first tap or key press.
+- **REQ-007** *(should)* — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a soft tick and a rising phrase in Unblock, a water drop in the pond, a chime for each mandala color, and the background music, rain and waves). Every pitched sound that plays with the music is in its key, C major. Sounds are on by default; the speaker button in the header fades them all out over a fraction of a second and stops them. Nothing plays before the person's first tap or key press.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
 - **REQ-018** *(must)* — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
@@ -91,6 +92,8 @@ person's settings, on the device.
 - **REQ-033** *(should)* — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
 - **REQ-034** *(could)* — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a finished sort, a finished loop, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
 - **REQ-035** *(should)* — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
+- **REQ-036** *(should)* — Freelief offers the Visualizer, an activity with nothing to do: the person chooses Off, Music, Nature (rain or waves, chosen in Settings) or Both, soft shapes fade in and out, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Its sound is the background sound: it keeps playing on every screen until the person chooses Off or presses Stop in the sound bar under the header, breathing lowers it, and it waits while urgent help is open.
+- **REQ-037** *(should)* — Freelief keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
 
 ### 3.3 Usability requirements
 
@@ -120,7 +123,7 @@ person's settings, on the device.
 
 ### 3.7 Software system attributes
 
-- **REQ-015** *(must)* — Freelief collects no personal data and sends nothing about the person. After install, the only network request is the browser's check for a newer version of Freelief, from GitHub Pages, which carries nothing about the person. Only the person's settings are stored, and only on the device.
+- **REQ-015** *(must)* — Freelief collects no personal data and sends nothing about the person. After install, the only network requests are the browser's check for a newer version of Freelief and the download of Freelief's own files to update or repair its offline copy, all from GitHub Pages, and they carry nothing about the person. Only the person's settings are stored, and only on the device.
 - **REQ-029** *(must)* — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown or for an earlier version whose interface (its screens, styles, text and shell) is unchanged since. The manual check may come from community volunteers.
 
 ## 4. Verification
@@ -146,6 +149,8 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-033 | 3.2 | test | agreed |
 | REQ-034 | 3.2 | test | agreed |
 | REQ-035 | 3.2 | test | agreed |
+| REQ-036 | 3.2 | test | agreed |
+| REQ-037 | 3.2 | test | agreed |
 | REQ-009 | 3.3 | test | agreed |
 | REQ-010 | 3.3 | test | agreed |
 | REQ-011 | 3.3 | inspection | agreed |
@@ -192,4 +197,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-09T09:02:54-04:00 by `Commands/srs.py` from 35 requirement record(s).
+Generated 2026-10-09T17:33:52-04:00 by `Commands/srs.py` from 37 requirement record(s).

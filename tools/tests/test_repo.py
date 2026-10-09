@@ -244,3 +244,43 @@ def test_a_verified_standard_holds_until_the_interface_changes():
         changed = freelief.git("diff", "--name-only", introduced[-1], "HEAD", "--", *freelief.INTERFACE).strip()
         assert freelief.claim_outdated(current) == bool(changed)
     assert freelief.outdated_claims() == [], "remove each outdated entry from data/standards.json"
+
+
+def test_the_copies_of_the_directory_link_and_the_fallback_rhythm_match_their_source():
+    # AUD-099: the static fallback and config.json hold copies; they must not drift from the source.
+    data = json.loads((freelief.ROOT / "data" / "crisis-lines.json").read_text("utf-8"))
+    config = json.loads((freelief.ROOT / "config.json").read_text("utf-8"))
+    url = data["directory"]["url"]
+    assert config["crisis"]["directoryUrl"] == url, "config.json's directory link differs from the crisis data"
+    page = (freelief.ROOT / "index.html").read_text("utf-8")
+    fallback = page[page.index('id="fallback"'):]
+    assert f'href="{url}"' in fallback, "the static fallback's directory link differs from the crisis data"
+    rhythm = config["breathing"]["rhythms"][config["breathing"]["defaultRhythm"]]
+    words = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight"}
+    assert f"count to {words[rhythm['in']]}" in fallback and f"count to {words[rhythm['out']]}" in fallback, \
+        "the fallback's breathing counts differ from the default rhythm"
+
+
+def test_every_activity_is_on_the_menu_and_has_the_quiet_footer():
+    # AUD-100: a new screen goes into four lists. The router and the worker are tested elsewhere.
+    app = (freelief.ROOT / "app.js").read_text("utf-8")
+    menu = (freelief.ROOT / "screens" / "menu.js").read_text("utf-8")
+    routes = re.findall(r'^  (\w+): \(\) => import\("\./(?:exercises|activities)/', app, re.M)
+    assert routes, "app.js ROUTES lists no exercise or activity"
+    quiet = re.search(r"QUIET_FOOTER = new Set\(\[([^\]]*)\]\)", app).group(1)
+    items = re.findall(r'route: "(\w+)"', menu)
+    for route in routes:
+        assert route in items, f"{route} is not on the menu (screens/menu.js ITEMS)"
+        assert f'"{route}"' in quiet, f"{route} does not have the quiet footer (app.js QUIET_FOOTER)"
+
+
+def test_the_design_names_every_setting_that_is_stored():
+    # AUD-092: the design's definition of Settings must list what settings.js stores.
+    source = (freelief.ROOT / "settings.js").read_text("utf-8")
+    keys = re.findall(r"^\s*(\w+)\s*:", re.search(r"\bdefaults\s*=\s*\{([^}]+)\};", source).group(1), re.M)
+    design = (freelief.ROOT / "docs" / "Design_Document.md").read_text("utf-8")
+    row = re.search(r"^\| \*\*Settings\*\* \|(.*)$", design, re.M).group(1)
+    words = dict(PRIVACY_WORDS, sounds="sound", theme="theme", helpRegion="region", openOn="opens",
+                 awakeMinutes="screen stays on", calmMode="Visualizer's sound")
+    absent = [k for k in keys if words[k].lower() not in row.lower()]
+    assert not absent, f"the design's Settings definition does not name: {absent}"

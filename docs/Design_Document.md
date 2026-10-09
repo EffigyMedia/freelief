@@ -8,7 +8,8 @@ narrative and the decisions. Code, records and this document must never disagree
 
 ## 0. Document Control
 
-- **Version:** 1.2, 2026-10-08. It matches app v0.6.12, in slice 7. See the Change Log (section 15).
+- **Version:** 1.3, 2026-10-09. The Change Log (section 15) says what each version changed. This line
+  does not name an app version, because the design changes in many units (AUD-095).
 - **Owner:** EffigyMedia.
 - **Status:** living. The owner signed off v1.0 on 2026-10-07, and Initialize was done the same
   day. Since then each slice and each owner decision has changed this document in the same unit of
@@ -42,8 +43,9 @@ the person has little attention, shaky hands, and often no one to help. The self
 that help — slow breathing and gentle distraction — are simple, but they are
 hard to remember and do alone while panic takes over.
 
-The apps that offer these techniques often ask for an account, show a menu, need a network, play an
-advertisement or a subscription offer, or collect data about the person's worst moments. Many do
+The apps that offer these techniques often ask for an account, ask questions before they help,
+need a network, play an advertisement or a subscription offer, or collect data about the person's
+worst moments. Many do
 not work with a screen reader or a keyboard.
 
 Freelief opens on a short menu with breathing first and one tap away, works with no network, asks nothing of the person,
@@ -59,8 +61,8 @@ may be in danger. It is for anyone, at no cost, with no account, no network and 
 
 <!-- BEGIN prd-problem - written by the interview, read by the generators -->
 During a panic attack a person cannot easily recall or perform the techniques that would calm them.
-The tools that exist put obstacles in the way at the worst moment: a sign-up, a menu, a loading
-screen, a network that is not there, an advertisement, or a screen that a screen reader or a
+The tools that exist put obstacles in the way at the worst moment: a sign-up, questions to
+answer first, a loading screen, a network that is not there, an advertisement, or a screen that a screen reader or a
 keyboard cannot use. Many also record the person's crises as data. A person in distress needs help
 that starts at once, works for them as they are, and asks for nothing.
 <!-- END prd-problem -->
@@ -124,7 +126,10 @@ absent from the release; the release criteria in Stage 10 hold.
 ## 3. Scope, Principles & Constraints
 
 **Principles (tie-breakers, in order):**
-1. **Help first.** Nothing stands between the person and help: no question, menu, notice or wait.
+1. **Help first.** Nothing stands between the person and help: no account, question, notice or
+   wait. Freelief opens on a short menu with Breathe first and one tap away, and Settings can make it
+   open on breathing with no tap (REQ-018; owner, 2026-10-07 and 2026-10-08). The menu asks for
+   nothing; it is not an obstacle in the sense of this principle (AUD-088).
 2. **Works for everyone.** A screen reader, a keyboard, reduced motion and shaky hands are normal
    use, not edge cases.
 3. **Ask nothing, keep nothing.** No account, no data, no network.
@@ -178,7 +183,7 @@ Not built (decided 2026-10-07):
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
 | **Region** | The country taken from the device language and region setting. Never from location. |
-| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, sound on or off, vibration on or off, the light or dark theme, the Visualizer's sound (off, music, nature or both), the nature sound (rain or waves), and the region for urgent help. On the device only. |
+| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, where Freelief opens (the menu or breathing), how long the screen stays on, sound on or off, vibration on or off, the light or dark theme, the Visualizer's sound (off, music, nature or both), the nature sound (rain or waves), and the region for urgent help. On the device only. |
 | **Standard** | An external standard Freelief claims to meet, such as WCAG 2.2 AA. It has a level, a check date, and the tester of the manual check. |
 | **Source** | A published research citation behind a technique. |
 
@@ -200,8 +205,9 @@ restarts on the device (REQ-023, REQ-015).
   last-checked date.
 - **Region** — the country taken from the device language and region setting, never from location.
 - **Settings** — the only data Freelief stores, and only the values the person changed: the
-  breathing rhythm, sound on or off, vibration on or off, the theme, the Visualizer's sound, and the
-  region for urgent help, on the device only.
+  breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, vibration
+  on or off, the theme, the Visualizer's sound, the nature sound, and the region for urgent help,
+  on the device only.
 - **Standard** — an external standard Freelief claims, with its level, check date and tester.
 - **Source** — a published research citation behind a technique.
 <!-- END srs-definitions -->
@@ -286,8 +292,12 @@ link and any web chat say they need a network. *(Changed at slice 1, 2026-10-07:
 the other-countries list was added. See the Decision Log.)* *(Changed 2026-10-07, UNT-042: the Country list and the
 region in Settings replace the other-countries list.)*
 
-**F7 — Settings.** Rhythm preset, theme override, vibration on or off, and the region for urgent
-help; sound on or off is the speaker in the header; the Visualizer's sound choice is kept too.
+**F7 — Settings.** Rhythm preset, where Freelief opens (the menu or breathing), how long the
+screen stays on (10, 30 or 60 minutes with no touch), the nature sound (rain or waves), theme
+override, vibration on or off, and the region for urgent help; sound on or off is the speaker in
+the header; the Visualizer's sound choice is kept too. Reset settings puts every value back to its
+default. The screen also shows the version, whether it is saved for use with no internet, and
+Update now.
 Saved on the device at once. Only a setting the person changes is stored, so a setting they never
 touched follows the default of the version they run; "a saved rhythm is kept" means a rhythm the
 person chose. Storage that fails is ignored and the defaults stand.
@@ -349,7 +359,7 @@ met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), n
 | 4 | Persistence | `localStorage` for Settings only, behind one module, with every access in try/catch. | Settings are small and on-device; nothing else is stored. | IndexedDB (more than needed). |
 | 5 | External services | None at run time. | No network after install, no data sent. | Analytics, a feedback relay. |
 | 6 | Content and assets | Text in `strings/en.json`, owner-approved. Crisis lines in `data/crisis-lines.json`, curated and dated. Research sources in `docs/research/`. Tones generated with Web Audio at run time, so no audio files. The system font stack, so no font files. | Small, licence-free, offline. | Recorded audio; web fonts; image assets. |
-| 7 | Deployment | GitHub Pages serves the `live` branch of the public repository `EffigyMedia/freelief`. Pushing `main` deploys nothing; moving `live` is the deploy (before 1.0 with the owner's yes, from 1.0 only at a release that cleared the audit gate). Rollback moves `live` back to an earlier commit. *(Changed 2026-10-07, AUD-003: it first served `main`.)* The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
+| 7 | Deployment | GitHub Pages serves the `live` branch of the public repository `EffigyMedia/freelief`. Pushing `main` deploys nothing; moving `live` is the deploy (before 1.0 with the owner's yes, from 1.0 only at a release that cleared the audit gate). Rollback moves `live` back to the previous release tag; see the incident rule in section 9. *(Changed 2026-10-07, AUD-003: it first served `main`.)* The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
 | 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, from the `axe-playwright-python` package in the same venv, runs the automated accessibility check; nothing from it ships. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
 | 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright. `run`: `python -m http.server 8000`. `test`: the Playwright harnesses. `doctor`: check Python, the venv, Playwright, the manifest, the service worker and the JSON files. `build`: none — the repository is the distributable; `build` reports that and checks the size limit. `clean`: remove `output/`. `bench`: the launch-time and size benchmark. | Matches the environment's standard commands with the fewest tools. | A bundler. |
 | 10 | Version control | Git. The remote is public. Push `main` freely: it deploys nothing. Moving `live` is the deploy. Before 1.0, `live` moves only with the owner's yes, recorded in the changelog entry of the version it serves; from 1.0 on, it moves only at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tag. *(Changed 2026-10-08, AUD-003: it first said "feature commits stay local; push at a release or for an owner device test".)* | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
@@ -393,18 +403,25 @@ falls back to the menu and the address becomes `#menu`. On a change of screen th
 heading, so a screen reader announces where the person is.
 
 **Data and state.** Settings in `localStorage` under one versioned key (`freelief.settings.v2`),
-holding only the values the person changed: the breathing rhythm, sound, vibration, the theme, the
-Visualizer's sound and the region for urgent help. Everything else is static files cached by the
+holding only the values the person changed: the breathing rhythm, where it opens, how long the
+screen stays on, sound, vibration, the theme, the Visualizer's sound, the nature sound and the
+region for urgent help. A choice of the default value is not stored. Everything else is static files cached by the
 service worker. Nothing is created, changed or deleted by the person except those Settings.
 
 **Contracts.** Each exercise and activity exports `start(container, ctx)` and `stop()`. `ctx`
 gives the text functions `t` and `list`, `config`, `motion`, `audio`, `haptic`, `keepAwake`, and the
-read-only setting values the screen needs (such as `rhythm` and `soundsOn`). The shell owns which one
-runs. `crisis.js` exports `linesFor(regionCode)`, which returns the curated lines and the fallback.
+read-only setting values the screen needs (such as `rhythm`, `soundsOn` and `calmMode`). It also
+gives the Visualizer its two write paths, both owned by the shell: `saveCalmMode` saves the sound
+choice (AUD-066), and `startBackground` starts the background sound (RLG-045). No other screen
+writes a setting except Settings itself. The shell owns which screen runs. `crisis.js` exports `linesFor(regionCode)`, which returns the curated lines and the fallback.
 
-**Tunables (`config.json`):** rhythm presets and the default (4-in, 6-out); tone frequencies and
-volume; bubble count and drift speed; shape-trace speed; colour-sort tile count; the international
-directory URL; the feedback repository URL and the email address (empty until decided).
+**Tunables (`config.json`):** every tunable has its committed default there. The groups are:
+`breathing` (rhythms and the default, 4 in and 6 out); `sounds` (every note, level and fade, the
+background volume and ducking, the rain and the waves); `haptics`; `wakeLock` (the screen-on
+choices); `bubbles`, `trace`, `unblock` (the boards), `ripple` (with its `wave`), `mandala` and
+`calm` (the Visualizer and the background sound); `theme`; `settings`; `crisis` (the directory URL
+and the freshness window); and `project` (the feedback links, the email address, empty until
+decided).
 
 **Hard problems and de-risking.**
 1. *Offline install and update.* Proven first, in the walking skeleton, with an offline test and
@@ -412,7 +429,7 @@ directory URL; the feedback repository URL and the email address (empty until de
 2. *Accessible activities.* Every activity uses DOM elements, not a canvas, so a screen reader
    and the keyboard reach every item.
 3. *Launch in 1 second.* Keep all CSS in one small file, `styles.css`, linked from `index.html`
-   (the CSP is `style-src 'self'`, so no style is inline), load only the shell, breathing and urgent
+   (the CSP is `style-src 'self'`, so no style is inline), load only the shell, the menu and urgent
    help at start and every other screen on its first visit, and benchmark from the first slice.
    *(Changed 2026-10-08, AUD-041: it first said "inline the critical CSS"; see the Decision Log.)*
 
@@ -470,6 +487,21 @@ therefore replace a cached file, such as `index.html` or `data/crisis-lines.json
 version replaces the cache. For the CSP, `'self'` is that shared origin, so it also allows a script
 from a sibling path. The owner chose to stay on the shared origin (Decision Log, 2026-10-07 and
 2026-10-08); an origin of its own (a custom domain or a dedicated account) removes this dependency.
+
+**Incidents (AUD-105, owner 2026-10-09).** A defect in the live release, such as a wrong crisis
+number or a broken start-up, is an incident. The owner may move `live` back to the previous release
+tag at once, with no audit round, and records the move and its reason the same day. Installed copies
+get the rollback at their next open, because the older `version.js` names another cache. A fix
+forward is a release whose round covers only the lenses the fix touches.
+
+**Moving or retiring the site (AUD-111).** Installed copies answer from their cache, so they never
+learn of a change by themselves. To move Freelief to a new address: publish it there first; then
+publish one last version at the old address whose start screen says where Freelief now lives, with a
+link, and keep that version there for at least a year. To retire Freelief: publish one last version
+that keeps the breathing guide and the urgent-help dialog, says plainly that the crisis lines are no
+longer checked and that the international directory is the route, and then leave it in place. Do not
+delete the site while installed copies can still open: a deleted site cannot tell them anything. The
+environment's `Process/Teardown_Policy.md` governs the repository itself.
 *(Corrected 2026-10-08, AUD-004: it first said the CSP "allows only the app's own origin".)*
 
 ---
@@ -546,7 +578,7 @@ re-checked; the Standards & research page shows only what is verified.
 | A claim overstates the evidence and breaks health-claim rules. | REQ-025 fixes the wording; each technique cites its research (REQ-024); a test scans for forbidden words. |
 | A standard is promoted that the app does not meet. | REQ-029: a standard is shown only with a dated automated and manual check for that version. |
 | No volunteer comes forward for the manual check. | No standard is shown as met; the app still works; the owner can ask in accessibility communities. |
-| A movement or a sound makes a person feel worse. | Reduced motion is honoured (REQ-010); sounds are soft and on by default, and the speaker button in the header silences them at once, mid-note (REQ-007; Decision Log, UNT-053); sound waits while urgent help is open; nothing is timed or scored. |
+| A movement or a sound makes a person feel worse. | Reduced motion is honoured (REQ-010); sounds are soft and on by default, and the speaker button in the header fades them out over 0.6 s and then stops them (REQ-007; Decision Log, UNT-053 and UNT-078); sound waits while urgent help is open; nothing is timed or scored. |
 | The colour sort cannot be made fully accessible. | It is "should", not "must", and built last; it ships only when it passes. |
 | The offline cache serves an old version after an update. | The cache name carries the version; an update test covers it. |
 
@@ -853,6 +885,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   Visualizer's music. Sounds stay on by default. On a phone narrower than 430 px the header is
   tighter (16 px help label, 44 px round buttons), so "Need urgent help?" stays on one line from
   360 px. — Rejected: off by default; a switch only in Settings. — 2026-10-08 (owner; UNT-053)
+  *Amended 2026-10-08 (owner, UNT-078): Off now fades over 0.6 s and then suspends; see the next
+  entry on the fade.*
+- **The speaker button fades sound out over 0.6 s, not at once.** — The owner found the hard cut
+  jarring (RLG-034). Off ramps the master volume to zero over `sounds.muteFadeSeconds` (0.6 s) and
+  then suspends the audio; On resumes it and fades in. A sound stopped while the audio is paused is
+  cut off, so no frozen tail plays later. 0.6 s still meets the risk "a sound makes a person feel
+  worse": the sound starts to drop at once and is gone in well under a second. — 2026-10-08 (owner;
+  UNT-078) *Recorded 2026-10-09 (AUD-090): this entry was missing.*
 - **Safety fixes from the design review and round UNT-051.** — The owner chose to fix safety first.
   (1) The emergency number is a Call button, the first tap target in urgent help; the numbers come
   from the region's own emergency text, so "112 or 999" gives two buttons, and no number is guessed
@@ -1080,6 +1120,26 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **The Effigy Media name and logo are reserved.** — AUD-077: they shipped under the MIT license.
   The owner chose to reserve them: `LICENSE` and the README say the code is MIT and the name and
   logo are not licensed for reuse. — 2026-10-09 (owner; UNT-099)
+- **An incident rolls back at once; a fix forward runs a scoped round.** — AUD-105: after 1.0 a wrong
+  crisis number or a broken start-up had no fast path, because `live` moves only after a full round.
+  The owner chose: the owner may move `live` back to the previous release tag at once, with no
+  round (`git push --force origin vPREVIOUS:live`). The move is recorded the same day in the
+  changelog and a fragment, with the reason. A rollback reaches installed copies: the older
+  `version.js` names another cache, so its worker installs and takes over at the next open, as any
+  update does. A fix forward is a release with a scoped round: only the lenses the fix touches. —
+  2026-10-09 (owner; UNT-101)
+- **The crisis data keeps its own names and hours.** — AUD-101: REQ-017 gained a second exception
+  in UNT-077 (AUD-039) without the owner's acceptance. The owner accepted it: the crisis-line names,
+  the country names and the hours stay in `data/crisis-lines.json`, beside each line's dated source.
+  — 2026-10-09 (owner; UNT-101)
+- **The network wording names the update and the repair.** — AUD-098: the app also downloads its
+  own missing files to repair the offline copy. The owner chose to name both: the only things that
+  reach the internet are the browser's check for a newer version and the download of Freelief's own
+  files to update or repair it, and nothing about the person is sent. REQ-015, About and AGENTS.md
+  say this. — 2026-10-09 (owner; UNT-101)
+- **The Visualizer and the wake lock have their own requirements.** — AUD-109: REQ-036 (the
+  Visualizer and the background sound) and REQ-037 (the screen wake lock and its idle setting),
+  agreed by the owner from the earlier requests. — 2026-10-09 (owner; UNT-101)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
@@ -1116,8 +1176,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **All CSS is in one linked file, `styles.css`; no CSS is inline.** — Stage 8 first planned to
   inline the critical CSS for the 1 s launch. The CSP is `style-src 'self'` with no
   `'unsafe-inline'`, so an inline style would be refused, and `index.html` has always linked
-  `styles.css`. The launch target is met by loading only the shell, breathing and urgent help at
-  start (RLG-006). This reverses the Stage 8 plan. — Rejected: `'unsafe-inline'` or a hash in the
+  `styles.css`. The launch target is met by loading only the shell, the menu and urgent help at
+  start (RLG-006; the menu replaced breathing as the first screen, AUD-091). This reverses the Stage 8 plan. — Rejected: `'unsafe-inline'` or a hash in the
   CSP for an inline block (a weaker policy for a small gain). — 2026-10-08 (AUD-041)
 - **The control against a tampered crisis line is the real one: a single committer, a checked
   source, and a test that pins each number.** — The audit (AUD-007) found that the design claimed
@@ -1138,7 +1198,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   that drops Freelief's offline copy and reloads from the internet.** — The owner could not load v0.5.10:
   `caches.match()` searched every cache, so an old version's cache served old files. Reloading only
   before the first touch never interrupts an exercise. `Update now` deletes only `freelief-` caches,
-  because the origin is shared. — 2026-10-07 (owner reported; implementer fixed)
+  because the origin is shared. — 2026-10-07 (owner reported; implementer fixed) *Amended
+  2026-10-08 (AUD-056, UNT-056): Update now removes nothing until the network is shown to work; see
+  that entry. Superseded in part (AUD-057): a new version waits until it is safe to take over.*
 - **Freelief opens on the menu ("What would help right now?"), with Breathe first. Every screen has one
   `Back to menu` control. Settings is a gear, always at the top right, and leaves the menu list. The
   brand name stays plain text, so `Need urgent help?` remains the first stop for the Tab key.** — The
@@ -1149,12 +1211,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   is a short burst of filtered noise over a falling thump, not a tone. Calm offers Music (pads) or Rain
   (filtered noise with soft drops), remembered on the device.** — The owner found the grounding chime
   abrasive and asked for every sound to be soft and pleasant, a percussive pop, and an atonal rain mode.
-  — 2026-10-07 (owner)
+  — 2026-10-07 (owner) *Amended: Calm became the Visualizer with a Both mode (UNT-034), and on
+  2026-10-09 Rain became Nature with rain or waves, and Off was added (RLG-043, RLG-045).*
 - **Only breathing, the shell and urgent help load at start; every other screen loads on its first
   visit. `fallback.js` hides the static fallback while the app starts and shows it if the start fails or
   takes over 2 s.** — The launch had doubled (RLG-006); profiling showed the painted fallback was the
   main cost. The 2 s wait is a constant in `fallback.js`, not in `config.json`, because that script must
-  work when `config.json` fails. — 2026-10-07 (implementer, for RLG-006)
+  work when `config.json` fails. — 2026-10-07 (implementer, for RLG-006) *Superseded in part
+  2026-10-07 (owner): the menu replaced breathing as the first screen, so the shell, the menu and
+  urgent help load at start; see "Freelief opens on the menu".*
 - **A Calm screen plays slow musical pads (four gentle chords of detuned triangle waves through a
   low-pass filter) while simple geometric shapes fade in and out. A `Black screen` button covers
   everything in black; one tap or key brings the screen back, and the music keeps playing. Under reduced
@@ -1191,7 +1256,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   cannot start; the app replaces it once it can draw everything. A failed crisis-lines file is not
   fatal: the help dialog keeps the emergency line and the directory from `config.json`.** — Design
   section 8 says any failure leaves the guide and the crisis route usable (AUD-002). The fallback text
-  is the one exception to REQ-017. — 2026-10-07 (implementer, for AUD-002; the owner accepted the REQ-017
+  is the first of two exceptions to REQ-017; the second is the crisis data (AUD-039, accepted by the
+  owner 2026-10-09). — 2026-10-07 (implementer, for AUD-002; the owner accepted the REQ-017
   exception the same day)
 - **Freelief stays on the shared origin `effigymedia.github.io` and repairs its own offline cache.**
   — Other apps on that origin may delete its cache (AUD-001). On each online launch the page asks the
@@ -1228,7 +1294,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **The shape trace is a figure eight, and its marker is a `role="slider"` with a percent value.**
   — A slider is the pattern a screen reader already knows for "a position along a track", and the
   arrow keys move it. A pointer is matched to the shape only near the marker, so the crossing in
-  the middle cannot make it jump. — 2026-10-07 (slice 3, implementer)
+  the middle cannot make it jump. — 2026-10-07 (slice 3, implementer) *Superseded in part:
+  the figure eight became one of twelve shapes, chosen in turn; see the shape-trace entries below.*
 - **Distraction is offered for the moment, never as a way to overcome panic.** — Research on safety
   behaviours (Helbig-Lang & Petermann 2010) says escape behaviours, which can include distraction,
   may keep an anxiety disorder going. Freelief's activity text says "there is nothing to win" and
@@ -1259,11 +1326,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 
 - [x] The one-line pitch, success criteria, and Non-Goals exist and agree with each other.
 - [x] Every flow in Stage 5 has its edge cases and failure states specified.
-- [x] Every agreed obligation is a requirement record (`REQ-001` to `REQ-034`).
+- [x] Every agreed obligation is a requirement record (`REQ-001` to `REQ-031` at sign-off).
 - [x] Every requirement carries a category, a verification method and a priority.
 - [x] Every marked region is filled.
 - [x] Both generated documents have been produced and read: `docs/SRS.md` and `docs/PRD.md`,
-      31 of 31 requirements, no clause *Not supplied*.
+      31 of 31 requirements, no clause *Not supplied*. *(This checklist is the sign-off snapshot of
+      2026-10-07. The records now run to REQ-037; the generators report the current count.)*
 - [x] Every technology appears in Stage 7 with rationale.
 - [x] The never-commit list exists.
 - [x] Module boundaries exist and no two modules own the same concern.

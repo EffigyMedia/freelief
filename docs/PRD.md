@@ -4,13 +4,13 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `e018fb395f2b8155` · 35 requirement(s) recorded
+> Store stamp `11065cf93f6815a8` · 37 requirement(s) recorded
 
 ## The problem
 
 During a panic attack a person cannot easily recall or perform the techniques that would calm them.
-The tools that exist put obstacles in the way at the worst moment: a sign-up, a menu, a loading
-screen, a network that is not there, an advertisement, or a screen that a screen reader or a
+The tools that exist put obstacles in the way at the worst moment: a sign-up, questions to
+answer first, a loading screen, a network that is not there, an advertisement, or a screen that a screen reader or a
 keyboard cannot use. Many also record the person's crises as data. A person in distress needs help
 that starts at once, works for them as they are, and asks for nothing.
 
@@ -74,7 +74,7 @@ Not built (decided 2026-10-07):
 - **REQ-011** — No exercise or activity requires the person to act within a time limit.
 - **REQ-012** — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
-- **REQ-015** — Freelief collects no personal data and sends nothing about the person. After install, the only network request is the browser's check for a newer version of Freelief, from GitHub Pages, which carries nothing about the person. Only the person's settings are stored, and only on the device.
+- **REQ-015** — Freelief collects no personal data and sends nothing about the person. After install, the only network requests are the browser's check for a newer version of Freelief and the download of Freelief's own files to update or repair its offline copy, all from GitHub Pages, and they carry nothing about the person. Only the person's settings are stored, and only on the device.
 - **REQ-016** — Freelief meets WCAG 2.2 level AA in full, and level AAA wherever a criterion can be met.
 - **REQ-017** — All user-facing text lives in one strings file per language, so a translation can be added without a code change. English is the only language in the first version.
 - **REQ-018** — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
@@ -93,11 +93,13 @@ Not built (decided 2026-10-07):
 
 ### Should have
 
-- **REQ-007** — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; the speaker button in the header turns them all off at once. Nothing plays before the person's first tap or key press.
+- **REQ-007** — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a soft tick and a rising phrase in Unblock, a water drop in the pond, a chime for each mandala color, and the background music, rain and waves). Every pitched sound that plays with the music is in its key, C major. Sounds are on by default; the speaker button in the header fades them all out over a fraction of a second and stops them. Nothing plays before the person's first tap or key press.
 - **REQ-023** — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
 - **REQ-032** — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
 - **REQ-035** — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
+- **REQ-036** — Freelief offers the Visualizer, an activity with nothing to do: the person chooses Off, Music, Nature (rain or waves, chosen in Settings) or Both, soft shapes fade in and out, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Its sound is the background sound: it keeps playing on every screen until the person chooses Off or presses Stop in the sound bar under the header, breathing lowers it, and it waits while urgent help is open.
+- **REQ-037** — Freelief keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
 
 ### Could have
 
@@ -109,11 +111,11 @@ Not built (decided 2026-10-07):
 | | Count |
 |---|---|
 | Verified — shown to be met | 0 |
-| Agreed — specified, not yet shown | 32 |
+| Agreed — specified, not yet shown | 34 |
 | Proposed — waiting on a decision | 0 |
 | Withdrawn — no longer required | 3 |
 
-Of the 32 requirement(s) in the specification, 0 (0%) have had their verification carried out.
+Of the 34 requirement(s) in the specification, 0 (0%) have had their verification carried out.
 
 ## What has to land before what
 
@@ -129,4 +131,4 @@ Of the 32 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-09T09:02:57-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-09T17:33:54-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

@@ -166,7 +166,7 @@
   "about.selfHelp2": "If panic attacks happen often, or change how you live, please talk to a doctor or a mental health professional. Effective help exists.",
   "about.selfHelp3": "If you are in danger, or might harm yourself, use \"Need urgent help?\" at the top of every screen, or call your local emergency number.",
   "about.privacyHeading": "Your privacy",
-  "about.privacy1": "Freelief collects nothing about you. It has no account, no analytics and no advertising. Freelief sends nothing about you. The only thing that reaches the internet is your browser's check for a newer version of Freelief, from GitHub Pages.",
+  "about.privacy1": "Freelief collects nothing about you. It has no account, no analytics and no advertising. Freelief sends nothing about you. The only things that reach the internet are your browser's check for a newer version of Freelief and the download of Freelief's own files to update or repair it, from GitHub Pages.",
   "about.privacy2": "Freelief saves only the settings you change: your breathing rhythm, where it opens, how long the screen stays on, sound, vibration, colors, the Visualizer's sound and nature sound, and your country for urgent help. They stay on this device and are never sent anywhere. Clearing your browser data removes them.",
   "about.openHeading": "Free and open source",
   "about.open1": "Freelief is free to use and its source code is open, under the MIT license.",

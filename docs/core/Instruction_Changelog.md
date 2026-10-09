@@ -27,6 +27,56 @@ this log is only for changes to *how we work* (process/instructions).
 
 -->
 
+## 2026-10-09
+
+### The Release row runs in order: prepare, validate, gate, tag, deploy last
+- **Instruction:** the crisis-line re-check and the version bump come first, then the file audit,
+  bench, `build --release`, `test` and `doctor`, then the audit rounds to `GATE CLEAR`, then the tag
+  and the push, and `live` moves last. A fix for a round goes back to the start, so the tagged commit
+  is the audited commit.
+- **Why:** AUD-078. The old row moved `live` right after the gate and before the tag existed, and
+  changed shipped files after `GATE CLEAR`.
+- **Encoded in:** `AGENTS.md` (trigger phrases: Release).
+- Agent, 2026-10-09.
+
+### The file audit is a command
+- **Instruction:** "the file audit" is `python tools/freelief.py files`: it lists every shipped file
+  and fails when the offline copy and the shipped files disagree.
+- **Why:** AUD-108. The Release row named a step that nothing defined.
+- **Encoded in:** `tools/freelief.py` (`files`); `AGENTS.md` (Release).
+- Agent, 2026-10-09.
+
+### An incident may roll back at once
+- **Instruction:** the owner may move `live` back to the previous release tag at once, with no round,
+  and records it the same day. A fix forward runs a scoped round.
+- **Why:** AUD-105, owner's ruling 2026-10-09.
+- **Encoded in:** `AGENTS.md` (trigger phrases: Incident); the design, sections 7 and 9 and the
+  Decision Log.
+- Owner, 2026-10-09.
+
+### A new screen goes into four lists
+- **Instruction:** `ROUTES` and `QUIET_FOOTER` in `app.js`, `FILES` in `sw.js`, and `ITEMS` in
+  `screens/menu.js`. Tests check all four.
+- **Why:** AUD-100. AGENTS.md named two.
+- **Encoded in:** `AGENTS.md` (Architecture); `tools/tests/test_repo.py`.
+- Agent, 2026-10-09.
+
+### The network claim names the update and the repair
+- **Instruction:** after install, only the update check and the download of Freelief's own files to
+  update or repair it reach the internet.
+- **Why:** AUD-098, owner's ruling 2026-10-09. AGENTS.md said "no network call after install".
+- **Encoded in:** `AGENTS.md` (What this is); REQ-015; `about.privacy1`.
+- Owner, 2026-10-09.
+
+### Recorded late: three instruction changes of 2026-10-08
+- **Instruction:** (1) pending owner checks live in `RLG-033`, appended with `fragment.py append`,
+  and it closes only when the owner reports them all (AUD-017); (2) the routing posture is read from
+  `config.toml` `[routing] bias` (AUD-022); (3) the test command names the supported browsers and
+  the WebKit run in `test_engines.py` (AUD-028).
+- **Why:** AUD-096. They were made in UNT-079 and UNT-081 without an entry here.
+- **Encoded in:** `AGENTS.md` (Conventions; Routing posture; Commands); `config.toml`.
+- Agent, 2026-10-09.
+
 ## 2026-10-08
 
 ### doctor checks more, and says what it checks

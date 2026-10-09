@@ -10,6 +10,17 @@ audit.
 
 ---
 
+<a id="v0-7-12"></a>
+## [0.7.12] - 2026-10-09
+- **About**: the privacy text now says that, besides the update check, Freelief downloads its own
+  files to update or repair itself, and nothing about you is sent.
+  [AUD-098](../fragments/AUD-098.md).
+- Records: the documentation findings of audit round UNT-082 are fixed: the Release order and an
+  Incident rule, the file audit command, the design's principles, settings, contracts and
+  superseded entries, the technical references, REQ-007, REQ-015 and REQ-017, and new REQ-036 (the
+  Visualizer) and REQ-037 (the wake lock). New tests tie the fallback's copies to their source and
+  every activity to the menu. 176 tests.
+
 <a id="v0-7-11"></a>
 ## [0.7.11] - 2026-10-09
 - **Settings**: a **Reset settings** button, and a line that says whether this version is saved for
