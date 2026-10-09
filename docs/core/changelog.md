@@ -16,6 +16,7 @@ audit.
   built, ruled on by the owner, or waiting on the environment (AUD-072). Design audit round UNT-082
   closed the slice; its 37 new findings (AUD-076 to AUD-112) are the work queue for slice 8.
   150 tests.
+- The live preview moved to 0.7.0 on 2026-10-08, with the owner's yes in chat ("Yes, move live").
 
 <a id="v0-6-16"></a>
 ## [0.6.16] - 2026-10-08
