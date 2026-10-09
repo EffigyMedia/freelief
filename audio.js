@@ -322,6 +322,33 @@ export function drop() {
   oscillator.stop(now + settings.seconds + 0.02);
 }
 
+// A rain chime for mandala coloring (owner, 2026-10-08): a small bell struck once. A few sine
+// partials at the inharmonic ratios of a struck rod, each fading at its own rate, and a quieter
+// second strike a moment later, like a chime touched by rain. `frequency` is the color's note.
+export function chime(frequency) {
+  if (!canPlay()) return;
+  const ctx = ensureContext();
+  if (!ctx) return;
+  const settings = sounds.chime;
+  const strike = (delay, level) => {
+    const start = ctx.currentTime + delay;
+    for (const [ratio, partLevel, decay] of settings.partials) {
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.value = frequency * ratio;
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(settings.volume * level * partLevel, start + settings.attackSeconds);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + decay);
+      oscillator.connect(gain).connect(output);
+      oscillator.start(start);
+      oscillator.stop(start + decay + 0.05);
+    }
+  };
+  strike(0, 1);
+  strike(settings.echoSeconds, settings.echoLevel);
+}
+
 // The Calm screen's rain (owner: an atonal mode, "noise like rain"): looping noise, shaped by a
 // low-pass and a high-pass filter, whose level breathes slowly, with soft drops now and then.
 // `level` scales the volume (the Both mix). Returns { stop() }. Silent when sounds are off.

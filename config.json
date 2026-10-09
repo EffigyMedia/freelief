@@ -46,16 +46,6 @@
       "octaveLevel": 0.18
     },
     "cues": {
-      "step": {
-        "notes": [
-          392.0,
-          587.33
-        ],
-        "gapSeconds": 0.0,
-        "attackSeconds": 0.12,
-        "releaseSeconds": 1.4,
-        "volume": 0.018
-      },
       "loop": {
         "notes": [
           392.0,
@@ -113,7 +103,7 @@
         ]
       ],
       "beatHz": 1.4,
-      "volume": 0.035,
+      "volume": 0.021,
       "riseSeconds": 0.12,
       "fallSeconds": 0.45,
       "idleMs": 180,
@@ -189,6 +179,34 @@
       "volume": 0.014,
       "pitchVariation": 0.2,
       "lowpassHz": 700
+    },
+    "chime": {
+      "volume": 0.03,
+      "attackSeconds": 0.004,
+      "partials": [
+        [
+          1,
+          1.0,
+          2.6
+        ],
+        [
+          2.76,
+          0.35,
+          1.3
+        ],
+        [
+          5.4,
+          0.12,
+          0.6
+        ],
+        [
+          8.93,
+          0.05,
+          0.3
+        ]
+      ],
+      "echoSeconds": 0.11,
+      "echoLevel": 0.35
     }
   },
   "haptics": {
@@ -322,27 +340,33 @@
     "palette": [
       {
         "name": "sky",
-        "color": "hsl(205 60% 70%)"
+        "color": "hsl(205 60% 70%)",
+        "note": 523.25
       },
       {
         "name": "sea",
-        "color": "hsl(165 40% 62%)"
+        "color": "hsl(165 40% 62%)",
+        "note": 587.33
       },
       {
         "name": "lavender",
-        "color": "hsl(265 45% 74%)"
+        "color": "hsl(265 45% 74%)",
+        "note": 659.25
       },
       {
         "name": "peach",
-        "color": "hsl(25 75% 75%)"
+        "color": "hsl(25 75% 75%)",
+        "note": 783.99
       },
       {
         "name": "rose",
-        "color": "hsl(345 55% 76%)"
+        "color": "hsl(345 55% 76%)",
+        "note": 880.0
       },
       {
         "name": "sand",
-        "color": "hsl(45 55% 72%)"
+        "color": "hsl(45 55% 72%)",
+        "note": 1046.5
       }
     ],
     "designs": [

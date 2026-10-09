@@ -131,6 +131,31 @@ def test_every_shape_in_every_design_is_a_large_target_on_a_phone():
             page.locator(".new-mandala").click()
 
 
+def test_each_color_has_its_own_chime_note():
+    # Owner, 2026-10-08: each color plays a different note, as a rain chime, when chosen and when filled.
+    probe = """
+window.__freq = [];
+const create = AudioContext.prototype.createOscillator;
+AudioContext.prototype.createOscillator = function () {
+  const node = create.call(this);
+  setTimeout(() => window.__freq.push(node.frequency.value), 0);
+  return node;
+};"""
+    notes = [s["note"] for s in SETTINGS["palette"]]
+    assert len(set(notes)) == len(notes), "no two colors share a note"
+    with open_app(init_script=probe) as (page, _, _):
+        page.locator(".guide").click()
+        go(page, "mandala")
+        page.wait_for_timeout(300)
+        for swatch in SETTINGS["palette"][1:3]:
+            page.evaluate("window.__freq = []")
+            page.locator(f"input[name=mandala-color][value={swatch['name']}]").check()
+            wait_until(page, f"window.__freq.some(f => Math.abs(f - {swatch['note']}) < 0.5)", 2000)
+            page.evaluate("window.__freq = []")
+            page.locator(".mandala-part").first.click()
+            wait_until(page, f"window.__freq.some(f => Math.abs(f - {swatch['note']}) < 0.5)", 2000)
+
+
 def test_filling_a_shape_plays_the_step_cue():
     with open_app(init_script=OSC_PROBE) as (page, _, _):
         page.locator(".guide").click()  # the first gesture unlocks sound

@@ -939,6 +939,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   so the way to help is always one tap away on a long page. `body` now grows with its content, which
   a sticky header needs. The Visualizer's full screen and black screen still sit above it. —
   2026-10-08 (owner; UNT-083)
+- **Each mandala color has its own note, played as a rain chime; the trace's glass is softer.** —
+  Owner requests. Choosing a color and filling a shape play that color's note (C, D, E, G, A and
+  high C, a pentatonic scale, so any two sound well together) as a small struck chime: inharmonic
+  sine partials that fade at their own rates, with a quieter second strike, like a chime touched by
+  rain (`sounds.chime`, `mandala.palette[].note`). The old step cue, now unused, is removed. The
+  trace's crystal glass is 40% quieter (`sounds.glass.volume` 0.035 to 0.021). — 2026-10-08 (owner;
+  UNT-084)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

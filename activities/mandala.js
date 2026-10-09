@@ -130,7 +130,7 @@ export function start(container, ctx) {
   function paint(r, i) {
     current.fills[r][i] = current.color;
     current.focus = [r, i];
-    audio.play("step");
+    audio.chime(colorOf(current.color).note); // each color has its own note (owner, 2026-10-08)
     ctx.haptic("fill");
     const part = partAt(r, i);
     part.style.fill = colorOf(current.color).color;
@@ -150,7 +150,10 @@ export function start(container, ctx) {
   // The page's CSP refuses inline style attributes, so each swatch takes its color from script.
   container.querySelectorAll("input[name=mandala-color]").forEach((input) => {
     input.style.setProperty("--swatch", colorOf(input.value).color);
-    input.addEventListener("change", () => { current.color = input.value; });
+    input.addEventListener("change", () => {
+      current.color = input.value;
+      audio.chime(colorOf(input.value).note); // choosing a color sounds its note
+    });
   });
   container.querySelector(".new-mandala").addEventListener("click", newMandala);
   newMandala();

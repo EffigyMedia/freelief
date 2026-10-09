@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-7-1"></a>
+## [0.7.1] - 2026-10-08
+- **Color a mandala**: each color has its own note, played like a rain chime when you choose the
+  color and when you fill a shape.
+- **Trace a shape**: the crystal glass sound is softer. [RLG-036](../fragments/RLG-036.md),
+  [RLG-037](../fragments/RLG-037.md). 151 tests.
+
 <a id="v0-7-0"></a>
 ## [0.7.0] - 2026-10-08
 - **Slice 7 is complete.** The audit backlog from rounds before UNT-051 is cleared: every finding is
