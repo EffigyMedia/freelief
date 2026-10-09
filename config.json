@@ -323,30 +323,175 @@
       }
     ]
   },
-  "sort": {
+  "unblock": {
+    "size": 6,
+    "exitRow": 2,
     "dragThreshold": 8,
-    "lightness": [
-      88,
-      74,
-      60,
-      46,
-      32
-    ],
-    "palettes": [
+    "boards": [
       {
-        "name": "blue",
-        "hue": 212,
-        "saturation": 45
+        "level": "easy",
+        "rows": [
+          "..BBB.",
+          "CC..DD",
+          "AA.E.F",
+          ".GGE.F",
+          ".H...F",
+          ".HIII."
+        ]
       },
       {
-        "name": "green",
-        "hue": 150,
-        "saturation": 30
+        "level": "easy",
+        "rows": [
+          "..BB.C",
+          "D..EEC",
+          "DAA..C",
+          "F.GGHH",
+          "FII.J.",
+          "F...J."
+        ]
       },
       {
-        "name": "lavender",
-        "hue": 265,
-        "saturation": 30
+        "level": "easy",
+        "rows": [
+          ".BBB..",
+          "CDDEF.",
+          "CAAEFG",
+          "HHH.IG",
+          "JJ.KIL",
+          "MM.KIL"
+        ]
+      },
+      {
+        "level": "easy",
+        "rows": [
+          "BB.CC.",
+          "..DDEF",
+          "GAA.EF",
+          "G.HH.F",
+          "II..JJ",
+          "..KKLL"
+        ]
+      },
+      {
+        "level": "medium",
+        "rows": [
+          "..BCDD",
+          "EEBCF.",
+          ".AA.F.",
+          ".G..HI",
+          "JG.KHI",
+          "JLLKH."
+        ]
+      },
+      {
+        "level": "medium",
+        "rows": [
+          "BBCCDD",
+          ".EE.FF",
+          "GHAAIJ",
+          "GHKKIJ",
+          "LMMN.J",
+          "LOONPP"
+        ]
+      },
+      {
+        "level": "medium",
+        "rows": [
+          ".B.CCC",
+          "DB..EE",
+          "DAAFGH",
+          "II.FGH",
+          "JJJFK.",
+          "..LLK."
+        ]
+      },
+      {
+        "level": "medium",
+        "rows": [
+          "BC.DDD",
+          "BCEEF.",
+          "BCAAFG",
+          "HIIJKG",
+          "H.LJKM",
+          "NNLOOM"
+        ]
+      },
+      {
+        "level": "medium",
+        "rows": [
+          "BBCDD.",
+          "EECFG.",
+          "AACFGH",
+          "...IIH",
+          "JKLL..",
+          "JKMMNN"
+        ]
+      },
+      {
+        "level": "hard",
+        "rows": [
+          "B.CDD.",
+          "B.CEFG",
+          "AA.EFG",
+          "HHII.J",
+          "KKLLLJ",
+          "MMNNOO"
+        ]
+      },
+      {
+        "level": "hard",
+        "rows": [
+          "..BCDD",
+          "E.BC.F",
+          "EAAGHF",
+          "I..GHJ",
+          "IKKGHJ",
+          ".LLL.J"
+        ]
+      },
+      {
+        "level": "hard",
+        "rows": [
+          ".BC.DD",
+          ".BCEF.",
+          ".AAEFG",
+          ".HHIIG",
+          "J.KL.G",
+          "J.KLMM"
+        ]
+      },
+      {
+        "level": "hard",
+        "rows": [
+          "B.CDD.",
+          "B.CE.F",
+          ".AAEGF",
+          ".HHHGI",
+          "JJKKKI",
+          "LL..MM"
+        ]
+      },
+      {
+        "level": "hard",
+        "rows": [
+          ".BB.C.",
+          "..DDCE",
+          "FGAA.E",
+          "FGHIIE",
+          "JJHK..",
+          "LLLKMM"
+        ]
+      },
+      {
+        "level": "hard",
+        "rows": [
+          "BBBCDE",
+          ".FFCDE",
+          "AAGC..",
+          "H.G.II",
+          "H.JJKK",
+          ".LLLMM"
+        ]
       }
     ]
   },

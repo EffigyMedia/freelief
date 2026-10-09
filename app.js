@@ -20,7 +20,7 @@ const ROUTES = {
   breathe: () => import("./exercises/breathe.js"),
   bubbles: () => import("./activities/bubbles.js"),
   trace: () => import("./activities/trace.js"),
-  sort: () => import("./activities/sort.js"),
+  unblock: () => import("./activities/unblock.js"),
   ripple: () => import("./activities/ripple.js"),
   mandala: () => import("./activities/mandala.js"),
   calm: () => import("./activities/calm.js"),
@@ -32,7 +32,7 @@ const ROUTES = {
 const DEFAULT_ROUTE = "menu";
 // On these screens the footer shows only its calm line, so the exercise has the room (design review,
 // owner 2026-10-08). The menu and the info pages keep the full footer and its links.
-const QUIET_FOOTER = new Set(["breathe", "bubbles", "trace", "sort", "ripple", "mandala", "calm"]);
+const QUIET_FOOTER = new Set(["breathe", "bubbles", "trace", "unblock", "ripple", "mandala", "calm"]);
 
 let config = null;
 let current = null;

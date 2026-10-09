@@ -25,7 +25,7 @@ def test_footer_links_reach_every_page_from_every_screen():
             go(page, screen)
             assert page.locator(".footer-link").evaluate_all("els => els.map(e => e.getAttribute('href'))")                 == ["#about", "#standards", "#feedback"], screen
             assert page.locator(".footer-link").first.is_visible() and page.locator(".self-help").is_visible(), screen
-        for screen in ("breathe", "bubbles", "trace", "sort", "ripple", "mandala", "calm"):
+        for screen in ("breathe", "bubbles", "trace", "unblock", "ripple", "mandala", "calm"):
             go(page, screen)
             assert page.locator(".tagline").is_visible(), screen
             assert page.locator(".footer-link").first.is_hidden() and page.locator(".self-help").is_hidden(), screen

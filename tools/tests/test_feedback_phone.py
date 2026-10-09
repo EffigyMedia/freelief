@@ -4,7 +4,7 @@ which replaced "More ways to calm" the same day)."""
 
 from harness import open_app, wait_until
 
-EXERCISES = ["bubbles", "trace", "sort", "ripple", "mandala", "calm"]
+EXERCISES = ["bubbles", "trace", "unblock", "ripple", "mandala", "calm"]
 
 
 def go(page, route):

@@ -36,7 +36,7 @@ def test_no_request_leaves_the_origin():
         page.wait_for_timeout(300)
         page.keyboard.press("Escape")
         page.wait_for_timeout(200)
-        for route in ("menu", "breathe", "bubbles", "trace", "sort", "ripple", "mandala", "calm", "settings", "about", "standards", "feedback"):
+        for route in ("menu", "breathe", "bubbles", "trace", "unblock", "ripple", "mandala", "calm", "settings", "about", "standards", "feedback"):
             page.evaluate(f"location.hash = '{route}'")
             wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 5000)
         page.wait_for_timeout(300)

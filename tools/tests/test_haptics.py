@@ -29,9 +29,9 @@ def test_each_activity_event_gives_one_short_pulse():
         go(page, "bubbles")
         page.locator("button.bubble").first.click(force=True)
         assert buzz(page) == [PATTERNS["pop"]]
-        go(page, "sort")
-        page.locator(".sort-tile").nth(0).click()
-        page.locator(".sort-tile").nth(1).click()
+        go(page, "unblock")
+        page.locator(".unblock-block[data-block='A']").click()
+        page.locator(".unblock-slide button").nth(1).click()  # board 1: the blue block has room right
         assert buzz(page)[1:] == [PATTERNS["choose"], PATTERNS["swap"]]
         go(page, "ripple")
         page.locator(".pond").click(position={"x": 100, "y": 100})

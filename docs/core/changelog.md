@@ -10,6 +10,14 @@ audit.
 
 ---
 
+<a id="v0-7-8"></a>
+## [0.7.8] - 2026-10-09
+- **Unblock** replaces Sort colors: slide wooden blocks along their length to let the blue block
+  out. Fifteen boards from easy to hard, every one solvable. Drag a block, press the arrow keys on
+  it, or choose it and use the Slide buttons. Undo takes back any move; there is no score, no move
+  count and no timer. [RLG-040](../fragments/RLG-040.md), [REQ-035](../fragments/REQ-035.md).
+  163 tests.
+
 <a id="v0-7-7"></a>
 ## [0.7.7] - 2026-10-09
 - **Ripple pond**: the ripples interfere, like real water. Where two rings meet the water is

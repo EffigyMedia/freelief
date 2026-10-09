@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `5463dc63da29b5a8` · 34 requirement(s) recorded
+> Store stamp `75d371b105bc6a83` · 35 requirement(s) recorded
 
 ## The problem
 
@@ -94,10 +94,10 @@ Not built (decided 2026-10-07):
 ### Should have
 
 - **REQ-007** — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; the speaker button in the header turns them all off at once. Nothing plays before the person's first tap or key press.
-- **REQ-014** — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
 - **REQ-023** — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
 - **REQ-032** — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
+- **REQ-035** — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
 
 ### Could have
 
@@ -111,7 +111,7 @@ Not built (decided 2026-10-07):
 | Verified — shown to be met | 0 |
 | Agreed — specified, not yet shown | 32 |
 | Proposed — waiting on a decision | 0 |
-| Withdrawn — no longer required | 2 |
+| Withdrawn — no longer required | 3 |
 
 Of the 32 requirement(s) in the specification, 0 (0%) have had their verification carried out.
 
@@ -121,11 +121,12 @@ Of the 32 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ## What we dropped
 
-2 requirement(s) were once required and are not any more. They are kept rather than deleted, so the argument for dropping them survives with them - the reason is in each record, beneath the requirement itself.
+3 requirement(s) were once required and are not any more. They are kept rather than deleted, so the argument for dropping them survives with them - the reason is in each record, beneath the requirement itself.
 
 - **REQ-002** — Freelief offers a 5-4-3-2-1 sensory grounding exercise that the person steps through at their own pace.
 - **REQ-003** — Freelief offers calming statements, shown one at a time, that the person advances at their own pace.
+- **REQ-014** — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
 
 ---
 
-Generated 2026-10-08T13:21:49-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-09T08:28:44-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

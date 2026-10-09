@@ -35,7 +35,7 @@ def test_the_menu_is_home_and_reaches_every_screen_by_keyboard():
     with open_app(route=None) as (page, errors, _):
         assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
         hrefs = page.locator(".menu-item").evaluate_all("els => els.map(e => e.getAttribute('href'))")
-        assert hrefs == ["#breathe", "#bubbles", "#trace", "#sort", "#ripple", "#mandala", "#calm"]
+        assert hrefs == ["#breathe", "#bubbles", "#trace", "#unblock", "#ripple", "#mandala", "#calm"]
         page.locator(".menu-item").first.focus()
         page.keyboard.press("Enter")
         wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 2000)
@@ -124,7 +124,7 @@ def test_each_activity_plays_its_cue():
     with open_app(init_script=TONE_PROBE) as (page, _, _):
         page.locator(".guide").click()  # the first gesture unlocks sound
         for route, action in (("bubbles", lambda: page.locator("button.bubble").first.click(force=True)),
-                              ("sort", lambda: page.locator(".sort-tile").first.click())):
+                              ("unblock", lambda: page.locator(".unblock-block").first.click())):
             go(page, route)
             before = page.evaluate("window.__tones")
             action()

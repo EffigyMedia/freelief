@@ -1,0 +1,3 @@
+# Written by Commands/index.py. The index is derived from the fragments and is rebuilt on demand,
+# so a committed copy is stale by construction.
+.index.json

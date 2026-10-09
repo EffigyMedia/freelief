@@ -31,7 +31,7 @@ const FILES = [
   "exercises/breathe.js",
   "activities/bubbles.js",
   "activities/trace.js",
-  "activities/sort.js",
+  "activities/unblock.js",
   "activities/ripple.js",
   "activities/mandala.js",
   "activities/calm.js",

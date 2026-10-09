@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `5463dc63da29b5a8` · 32 requirement(s) specified, 2 not yet
+> Store stamp `75d371b105bc6a83` · 32 requirement(s) specified, 3 not yet
 
 ## 1. Introduction
 
@@ -30,8 +30,8 @@ Freelief is a progressive web app: plain HTML, CSS and JavaScript served from Gi
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 it shows the menu at once, with no account, question or notice before it. Breathe, a paced
 breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
-bubble field, a shape trace, a colour sort, a ripple pond and mandala coloring) and the Visualizer
-(music or rain with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
+bubble field, a shape trace, the Unblock puzzle, a ripple pond and mandala coloring) and the Visualizer
+(music, rain or waves with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
 GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
@@ -41,8 +41,10 @@ person's settings, on the device.
 
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, the colour sort, the ripple pond, mandala coloring, or the Visualizer.
-- **Visualizer** — the activity with nothing to do: music, rain or both, with soft shapes, a full
+  the shape trace, Unblock, the ripple pond, mandala coloring, or the Visualizer.
+- **Background sound** — the music, the nature sound or both, chosen in the Visualizer, which keeps
+  playing on every screen until the person chooses Off or presses Stop in the sound bar.
+- **Visualizer** — the activity with nothing to do: music, nature or both, with soft shapes, a full
   screen and a black screen.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
@@ -79,7 +81,6 @@ person's settings, on the device.
 - **REQ-007** *(should)* — Freelief plays subtle sounds: a soft tone that lasts each breathing phase, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a click and a rising phrase in the colour sort). Sounds are on by default; the speaker button in the header turns them all off at once. Nothing plays before the person's first tap or key press.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
-- **REQ-014** *(should)* — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
 - **REQ-018** *(must)* — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-020** *(must)* — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
@@ -89,6 +90,7 @@ person's settings, on the device.
 - **REQ-032** *(should)* — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** *(should)* — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
 - **REQ-034** *(could)* — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a finished sort, a finished loop, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
+- **REQ-035** *(should)* — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
 
 ### 3.3 Usability requirements
 
@@ -134,7 +136,6 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-007 | 3.2 | test | agreed |
 | REQ-012 | 3.2 | test | agreed |
 | REQ-013 | 3.2 | test | agreed |
-| REQ-014 | 3.2 | test | agreed |
 | REQ-018 | 3.2 | test | agreed |
 | REQ-020 | 3.2 | inspection | agreed |
 | REQ-022 | 3.2 | inspection | agreed |
@@ -144,6 +145,7 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-032 | 3.2 | test | agreed |
 | REQ-033 | 3.2 | test | agreed |
 | REQ-034 | 3.2 | test | agreed |
+| REQ-035 | 3.2 | test | agreed |
 | REQ-009 | 3.3 | test | agreed |
 | REQ-010 | 3.3 | test | agreed |
 | REQ-011 | 3.3 | inspection | agreed |
@@ -190,4 +192,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-08T13:21:47-04:00 by `Commands/srs.py` from 34 requirement record(s).
+Generated 2026-10-09T08:28:42-04:00 by `Commands/srs.py` from 35 requirement record(s).

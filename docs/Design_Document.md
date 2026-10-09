@@ -70,7 +70,7 @@ Freelief is a progressive web app: plain HTML, CSS and JavaScript served from Gi
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 it shows the menu at once, with no account, question or notice before it. Breathe, a paced
 breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
-bubble field, a shape trace, a colour sort, a ripple pond and mandala coloring) and the Visualizer
+bubble field, a shape trace, the Unblock puzzle, a ripple pond and mandala coloring) and the Visualizer
 (music, rain or waves with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
@@ -172,7 +172,7 @@ Not built (decided 2026-10-07):
 | Term | Meaning |
 |---|---|
 | **Exercise** | A guided self-help technique: paced breathing. |
-| **Activity** | A distraction activity: the bubble field, the shape trace, the colour sort, the ripple pond, mandala coloring, or the Visualizer. No score, no failure, no timer. |
+| **Activity** | A distraction activity: the bubble field, the shape trace, Unblock, the ripple pond, mandala coloring, or the Visualizer. No score, no failure, no timer. |
 | **Visualizer** | The activity with nothing to do: music, nature (rain or waves) or both, with soft shapes that fade in and out, a full screen and a black screen. Its sound is the background sound. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
@@ -189,7 +189,7 @@ restarts on the device (REQ-023, REQ-015).
 <!-- BEGIN srs-definitions - written by the interview, read by the generators -->
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, the colour sort, the ripple pond, mandala coloring, or the Visualizer.
+  the shape trace, Unblock, the ripple pond, mandala coloring, or the Visualizer.
 - **Background sound** — the music, the nature sound or both, chosen in the Visualizer, which keeps
   playing on every screen until the person chooses Off or presses Stop in the sound bar.
 - **Visualizer** — the activity with nothing to do: music, nature or both, with soft shapes, a full
@@ -245,11 +245,12 @@ statements come from the strings file. Outcome: the person stops when they choos
 
 **F5 — Distraction activities.** *Bubble field:* bubbles drift slowly; a tap or a key press pops the
 focused bubble with a soft visual (and a soft pop if sound is on). *Shape trace:* a looping shape;
-the person follows it with a finger or moves along it with the arrow keys. *Colour sort:* calm
-colour tiles to put in order from lightest to darkest: choose a tile, then the tile to swap it with,
-by touch, mouse or keyboard; or drag a tile onto another tile to swap the two, by touch or mouse.
-Each tile names its shade for a screen reader *(changed from "drag, or keyboard" at slice 5; drag
-added back beside choose-then-swap by the owner's decision, 2026-10-07, see REQ-014)*. *Ripple
+the person follows it with a finger or moves along it with the arrow keys. *Unblock (REQ-035,
+added 2026-10-09, replacing the colour sort, REQ-014):* wooden blocks on a 6 by 6 board, each
+sliding only along its length; the person slides them to let the blue block out through the gap in
+the right edge. A block moves by a drag, by the arrow keys on it, or by choosing it and pressing
+the two Slide buttons. Each block is named ("Block 3, down, column 4, rows 1 to 3"). Fifteen boards
+go from easy to hard; Undo takes back any move and Start again resets the board. *Ripple
 pond (REQ-032, added 2026-10-07):* still water; a touch makes soft rings spread from that point,
 and a finger drawn across it leaves a trail of ripples; a key press or a screen reader's activation
 makes a ripple at a random place; each ripple plays a soft water drop. The ripples interfere:
@@ -368,7 +369,7 @@ Each file below is one module with one responsibility.
 |---|---|---|
 | `index.html` + `app.js` (**shell**) | The page frame, the screen router, the footer, and the "Need urgent help?" control. | Contain exercise logic or text. |
 | `exercises/breathe.js` | The breathing exercise. *(`ground.js` and `statements.js` were removed 2026-10-07.)* | Read storage or the network; hold text. |
-| `activities/bubbles.js`, `trace.js`, `sort.js`, `ripple.js`, `mandala.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
+| `activities/bubbles.js`, `trace.js`, `unblock.js`, `ripple.js`, `mandala.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
 | `background.js` | The background sound: what plays (off, music, nature, both) and which nature sound, started and stopped through `audio`. The shell tells it what to play. | Touch storage; start a sound by itself. |
 | `activities/calm.js` (**the Visualizer**) | The choice of background sound, saved and played by the shell, soft shapes that fade in and out, Full screen with its own "Need urgent help?" button, and the black screen. Its shape loop uses timers inside the module; the person sees none. | Show a countdown, an end or a score; read storage; add shapes or animate while the screen is black. |
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
@@ -408,8 +409,8 @@ directory URL; the feedback repository URL and the email address (empty until de
 **Hard problems and de-risking.**
 1. *Offline install and update.* Proven first, in the walking skeleton, with an offline test and
    an update test.
-2. *Accessible activities.* The bubble field and the colour sort use DOM elements, not a canvas,
-   so a screen reader and the keyboard reach every item. The colour sort is built last.
+2. *Accessible activities.* Every activity uses DOM elements, not a canvas, so a screen reader
+   and the keyboard reach every item.
 3. *Launch in 1 second.* Keep all CSS in one small file, `styles.css`, linked from `index.html`
    (the CSP is `style-src 'self'`, so no style is inline), load only the shell, breathing and urgent
    help at start and every other screen on its first visit, and benchmark from the first slice.
@@ -1019,6 +1020,19 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   crest meeting a trough mostly cancels. Under reduced motion the rings still only fade, with no
   grid. — Rejected: a canvas (the architecture rule); overlapping CSS rings with a blend mode
   (they can brighten but cannot cancel). — 2026-10-09 (owner; UNT-095)
+- **Unblock replaces Sort colors.** — Owner request (RLG-040): a calm puzzle that does not even
+  seem to have a losing state; the owner rejected a falling-block game. Over three rounds the owner
+  saw nine kinds (turn tiles, picture swap, sliding tiles; turn the rings, color field, connect the
+  dots, matching pairs; picture logic, shape sudoku, flowing paths) and chose Unblock, a
+  sliding-block puzzle, after asking for "something more advanced". Fifteen boards in
+  `config.unblock.boards` go from easy (3 moves) to hard (26 moves); they were made by a
+  breadth-first solver and a hill-climb, and a test solves every one. The puzzle shows no score,
+  no move count and no timer; Undo takes back any move, even the last one. Three ways to move
+  serve touch, keyboard and screen reader: a drag (one drag is one move), arrow keys on a focused
+  block (each block is a tab stop), and choose then Slide buttons, which a screen reader reaches as
+  plain buttons. A drag never chooses; a tap does. REQ-014 is withdrawn and REQ-035 replaces it;
+  Sort colors' tests for keyboard, drag, targets and forced colors carry over in that form, and its
+  light-to-dark arrow goes with it. — 2026-10-09 (owner; UNT-096)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

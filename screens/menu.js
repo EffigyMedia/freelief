@@ -5,7 +5,7 @@ const ITEMS = [
   { route: "breathe", label: "nav.breathe", hint: "nav.breatheHint" },
   { route: "bubbles", label: "nav.bubbles", hint: "nav.bubblesHint" },
   { route: "trace", label: "nav.trace", hint: "nav.traceHint" },
-  { route: "sort", label: "nav.sort", hint: "nav.sortHint" },
+  { route: "unblock", label: "nav.unblock", hint: "nav.unblockHint" },
   { route: "ripple", label: "nav.ripple", hint: "nav.rippleHint" },
   { route: "mandala", label: "nav.mandala", hint: "nav.mandalaHint" },
   { route: "calm", label: "nav.calm", hint: "nav.calmHint" },
