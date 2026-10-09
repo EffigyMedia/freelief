@@ -252,7 +252,9 @@ Each tile names its shade for a screen reader *(changed from "drag, or keyboard"
 added back beside choose-then-swap by the owner's decision, 2026-10-07, see REQ-014)*. *Ripple
 pond (REQ-032, added 2026-10-07):* still water; a touch makes soft rings spread from that point,
 and a finger drawn across it leaves a trail of ripples; a key press or a screen reader's activation
-makes a ripple at a random place; each ripple plays a soft water drop. *Mandala coloring (REQ-033,
+makes a ripple at a random place; each ripple plays a soft water drop. The ripples interfere:
+the water is a fine grid of dots whose brightness is the sum of every ripple's wave, so it is
+brighter where crests meet and fainter where a crest meets a trough. *Mandala coloring (REQ-033,
 added 2026-10-07):* six soft colors and a mandala of shapes drawn from formulas; the person chooses
 a color, then taps or selects a shape to fill it; arrow keys move around a ring and between rings;
 each shape is named ("Ring 2, shape 3 of 12, blank"); New mandala starts the next of eight
@@ -1007,6 +1009,16 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   falls back, at uneven gaps (6 to 11 s) and heights. Noise has no pitch, so the key rule (RLG-046)
   holds. Settings chooses rain or waves; a saved "rain" choice from before becomes Nature with
   rain. — 2026-10-09 (owner; UNT-094)
+- **The ripples interfere, drawn as a grid of dots in SVG.** — Owner request (RLG-041): brighter
+  where rings meet, fainter where they cancel. Each ripple is a wave packet of a few crests that
+  travels out and fades; the height of the water at a point is the sum of every packet there
+  (`waveHeight` in `activities/ripple.js`, tuned by `ripple.wave`). The water is a grid of small
+  SVG dots, 10 px apart, whose opacity is that height over a faint rest level. A frame writes
+  only dots that changed visibly, and no frame is drawn while the water is still. A test checks
+  that the height is exactly the sum, that crests meeting give about twice one crest, and that a
+  crest meeting a trough mostly cancels. Under reduced motion the rings still only fade, with no
+  grid. — Rejected: a canvas (the architecture rule); overlapping CSS rings with a blend mode
+  (they can brighten but cannot cancel). — 2026-10-09 (owner; UNT-095)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

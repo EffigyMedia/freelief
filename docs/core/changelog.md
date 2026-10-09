@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-7-7"></a>
+## [0.7.7] - 2026-10-09
+- **Ripple pond**: the ripples interfere, like real water. Where two rings meet the water is
+  brighter, and where a crest meets a trough it is fainter. [RLG-041](../fragments/RLG-041.md).
+  163 tests.
+
 <a id="v0-7-6"></a>
 ## [0.7.6] - 2026-10-09
 - **Background sound**: the Visualizer's music, nature sound or both keeps playing when you leave

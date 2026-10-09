@@ -356,7 +356,18 @@
     "lifeSeconds": 3.4,
     "maxRipples": 9,
     "trailSpacing": 48,
-    "keyboardMargin": 48
+    "keyboardMargin": 48,
+    "wave": {
+      "speed": 55,
+      "wavelength": 30,
+      "packetWidth": 22,
+      "fadeSeconds": 3.0,
+      "spreadFalloff": 220,
+      "amplitude": 1.1,
+      "restLevel": 0.03,
+      "dotSpacing": 10,
+      "dotRadius": 2.6
+    }
   },
   "mandala": {
     "palette": [

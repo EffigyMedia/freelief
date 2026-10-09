@@ -32,12 +32,63 @@ def test_a_tap_makes_rings_spread_from_that_point_and_they_clear_away():
         assert sets(page).count() == 1
         ripple = sets(page).first
         assert ripple.evaluate("e => [e.style.left, e.style.top]") == ["80px", "60px"]
-        assert ripple.locator(".ripple-ring").count() == SETTINGS["rings"]
-        ring = ripple.locator(".ripple-ring").first
-        assert ring.evaluate("e => getComputedStyle(e).animationName") == "ripple-spread"
+        # The rings are drawn by the water's grid of dots (RLG-041): dots near the ring light up.
+        wave = SETTINGS["wave"]
+        lit = f"[...document.querySelectorAll('.pond-field circle')].filter(c => +c.getAttribute('opacity') > {wave['restLevel'] + 0.3}).length"
+        wait_until(page, f"{lit} > 10", 2000)
+        assert page.locator(".pond-field").get_attribute("aria-hidden") == "true"
         life = SETTINGS["lifeSeconds"] + SETTINGS["rings"] * SETTINGS["ringGapSeconds"]
         wait_until(page, "document.querySelectorAll('.pond .ripple-set').length === 0", int(life * 1000) + 1500)
+        wait_until(page, f"{lit} === 0", 1500)  # the water is still again
         assert not errors, errors
+
+
+def test_the_waves_add_where_crests_meet_and_cancel_where_a_crest_meets_a_trough():
+    # RLG-041: the water's height is the sum of the ripples' waves, so the rings interfere.
+    with open_app() as (page, _, _):
+        go(page, "ripple")
+        result = page.evaluate("""(async () => {
+            const { waveHeight } = await import('./activities/ripple.js');
+            const config = await (await fetch('config.json')).json();
+            const wave = config.ripple.wave;
+            const age = 1.5, front = wave.speed * age;  // the crest of each packet is here
+            const a = { x: 0, y: 0, born: 0 }, b = { x: 2 * front, y: 0, born: 0 };
+            const one = (s, x, y) => waveHeight([s], x, y, age, wave);
+            const both = (x, y) => waveHeight([a, b], x, y, age, wave);
+            // Midway between the sources, both crests arrive together.
+            const mid = [front, 0];
+            const half = wave.wavelength / 2;
+            const sum = [[13, 7], [front, 20], [40, -30]].every(([x, y]) =>
+                Math.abs(both(x, y) - (one(a, x, y) + one(b, x, y))) < 1e-9);
+            const single = one(a, ...mid), together = both(...mid);
+            // A crest of a meets a trough of b: the point at distance front from a and
+            // front + half from b, where the two circles cross.
+            const D = 2 * front, rA = front, rB = front + half;
+            const x = (rA * rA - rB * rB + D * D) / (2 * D), y = Math.sqrt(rA * rA - x * x);
+            const ra = Math.hypot(x, y), rb = Math.hypot(x - 2 * front, y);
+            const cancel = both(x, y), alone = Math.max(Math.abs(one(a, x, y)), Math.abs(one(b, x, y)));
+            return { sum, single, together, ra, rb, cancel, alone, front, half };
+        })()""")
+        assert result["sum"], "the height is exactly the sum of each ripple's wave"
+        assert result["together"] > 1.9 * result["single"] > 0, f"crests meeting are brighter: {result}"
+        assert abs(result["ra"] - result["front"]) < 1e-6 and abs(result["rb"] - result["front"] - result["half"]) < 1e-6
+        assert abs(result["cancel"]) < 0.35 * result["alone"], f"a crest and a trough cancel: {result}"
+
+
+def test_still_water_draws_nothing():
+    # The grid is redrawn only while a ripple moves, so the pond uses no power when it is still.
+    probe = """
+window.__frames = 0;
+const raf = window.requestAnimationFrame.bind(window);
+window.requestAnimationFrame = (f) => { window.__frames += 1; return raf(f); };"""
+    with open_app(init_script=probe) as (page, _, _):
+        go(page, "ripple")
+        page.locator(".pond").click(position={"x": 100, "y": 100})
+        life = SETTINGS["lifeSeconds"] + SETTINGS["rings"] * SETTINGS["ringGapSeconds"]
+        page.wait_for_timeout(int(life * 1000) + 500)
+        before = page.evaluate("window.__frames")
+        page.wait_for_timeout(1000)
+        assert page.evaluate("window.__frames") == before, "no frames are drawn on still water"
 
 
 def test_a_finger_drawn_across_the_water_leaves_a_trail_but_never_too_many():
