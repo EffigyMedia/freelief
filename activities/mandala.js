@@ -145,6 +145,9 @@ export function start(container, ctx) {
   function paint(r, i) {
     current.fills[r][i] = current.color;
     current.focus = [r, i];
+    // The part just filled is the tab stop, so Tab back into the art returns to it.
+    art.querySelectorAll(".mandala-part[tabindex='0']").forEach((p) => p.setAttribute("tabindex", "-1"));
+    partAt(r, i).setAttribute("tabindex", "0");
     audio.chime(colorOf(current.color).note); // each color has its own note (owner, 2026-10-08)
     ctx.haptic("fill");
     const part = partAt(r, i);

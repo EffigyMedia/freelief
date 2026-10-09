@@ -219,7 +219,13 @@ def test_reset_settings_brings_back_every_default_and_a_default_choice_is_not_st
         stored = page.evaluate("JSON.parse(localStorage.getItem('freelief.settings.v2'))")
         assert stored == {"rhythm": "slow"}, "choosing the default again stores nothing"
         page.locator(".reset-settings").click()
-        assert page.locator(".reset-status").inner_text() == STRINGS["settings.resetDone"]
+        assert page.locator(".reset-confirm").is_visible(), "one tap asks first"
+        page.locator(".reset-no").click()
+        assert page.locator(".reset-confirm").is_hidden()
+        assert page.evaluate("JSON.parse(localStorage.getItem('freelief.settings.v2'))") == {"rhythm": "slow"}
+        page.locator(".reset-settings").click()
+        page.locator(".reset-yes").click()
+        wait_until(page, f"document.querySelector('.reset-status').textContent === {STRINGS['settings.resetDone']!r}", 2000)
         assert page.evaluate("localStorage.getItem('freelief.settings.v2')") == "{}"
         page.reload()
         wait_until(page, "document.documentElement.dataset.ready === 'true'", 5000)

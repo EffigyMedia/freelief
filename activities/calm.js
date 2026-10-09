@@ -8,6 +8,21 @@
 
 let run = null;
 
+// Everything on the page except `keep` and what holds it becomes inert: Tab and a screen reader's
+// cursor cannot reach what a cover hides (web-interface-review, 2026-10-09). Returns the undo.
+function inertAround(keep) {
+  const made = [];
+  for (let node = keep; node && node !== document.body; node = node.parentElement) {
+    for (const sibling of node.parentElement.children) {
+      if (sibling !== node && !sibling.inert) {
+        sibling.inert = true;
+        made.push(sibling);
+      }
+    }
+  }
+  return () => made.forEach((element) => { element.inert = false; });
+}
+
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 // Each shape is drawn inside a 100 x 100 box, as an SVG element name and its attributes.
@@ -96,23 +111,32 @@ export function start(container, ctx) {
     later(addShape, settings.shapeEveryMs);
   }
 
-  // The black screen is one large button over everything, so a tap, Enter, Space or Escape all
-  // bring the screen back, and a screen reader can name it.
+  // The black screen is one large button over everything, so a tap or any key brings the screen
+  // back, and a screen reader can name it. The page under it is inert.
   function blackOut() {
     const cover = document.createElement("button");
     cover.type = "button";
     cover.className = "black-cover";
     cover.setAttribute("aria-label", t("calm.blackLabel"));
+    let release = () => {};
     const restore = () => {
+      if (!cover.isConnected) return;
+      release();
       cover.remove();
       current.cover = null;
+      current.releaseCover = null;
       stageBox.classList.remove("asleep");
       blackButton.focus();
     };
     cover.addEventListener("click", restore);
-    cover.addEventListener("keydown", (event) => { if (event.key === "Escape") restore(); });
+    cover.addEventListener("keydown", (event) => {
+      event.preventDefault();
+      restore();
+    });
     document.body.append(cover);
+    release = inertAround(cover);
     current.cover = cover;
+    current.releaseCover = release;
     // The shapes and the sky stop moving under the cover: nothing unseen is drawn.
     stageBox.classList.add("asleep");
     cover.focus();
@@ -128,7 +152,10 @@ export function start(container, ctx) {
   const exit = container.querySelector(".calm-exit");
   const stageActions = container.querySelector(".calm-stage-actions");
   const fullButton = container.querySelector(".full-screen");
+  let releaseFull = () => {};
   function leaveFull() {
+    releaseFull();
+    releaseFull = () => {};
     stage.classList.remove("full");
     stageActions.hidden = true;
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
@@ -137,6 +164,7 @@ export function start(container, ctx) {
   fullButton.addEventListener("click", () => {
     stage.classList.add("full");
     stageActions.hidden = false;
+    releaseFull = inertAround(stage);
     stage.requestFullscreen?.().catch(() => {});
     exit.focus();
   });
@@ -147,6 +175,11 @@ export function start(container, ctx) {
     document.querySelector(".help-open").click();
   });
   stage.addEventListener("keydown", (event) => { if (event.key === "Escape") leaveFull(); });
+  // The browser's own Escape leaves its full screen without a click on the button; the stage leaves too.
+  current.onFullscreen = () => {
+    if (!document.fullscreenElement && stage.classList.contains("full")) leaveFull();
+  };
+  document.addEventListener("fullscreenchange", current.onFullscreen);
   current.leaveFull = () => { if (stage.classList.contains("full")) leaveFull(); };
 
   blackButton.addEventListener("click", blackOut);
@@ -164,7 +197,12 @@ export function stop() {
   if (run) {
     run.timers.forEach(clearTimeout);
     run.wake();
-    if (run.cover) run.cover.remove();
+    if (run.cover) {
+      run.releaseCover?.();
+      run.cover.remove();
+    }
+    run.leaveFull?.();
+    document.removeEventListener("fullscreenchange", run.onFullscreen);
     if (run.leaveFull && document.fullscreenElement) document.exitFullscreen().catch(() => {});
   }
   run = null;

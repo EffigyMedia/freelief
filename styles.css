@@ -146,7 +146,12 @@ h1:focus, h1:focus-visible { outline: none; }
 [hidden] { display: none !important; }
 
 /* body grows with its content, so the sticky header has the whole page to stay within. */
-html { height: 100%; }
+html {
+  height: 100%;
+  /* The sticky header covers the top of the page, so a control reached by Tab or a jump stops below
+     it, even when the sound bar makes the header two rows (web-interface-review, 2026-10-09). */
+  scroll-padding-top: 9rem;
+}
 
 body {
   margin: 0;
@@ -215,7 +220,9 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: max(1rem, env(safe-area-inset-top)) 1.25rem 0.5rem;
+  /* The notch of a phone held sideways is on the left or the right, so those insets count too. */
+  padding: max(1rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) 0.5rem
+    max(1.25rem, env(safe-area-inset-left));
   border-bottom: 2px solid var(--accent-soft); /* the line under the header (owner, 2026-10-07) */
   /* Frozen at the top; the page scrolls under it (owner, 2026-10-08). Above the screens, below the
      Visualizer's full screen (90) and black screen (100). */
@@ -312,11 +319,12 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1rem max(1rem, env(safe-area-inset-right)) 1rem max(1rem, env(safe-area-inset-left));
 }
 
 .bottom {
-  padding: 0.5rem 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+  padding: 0.5rem max(1.25rem, env(safe-area-inset-right)) max(1.25rem, env(safe-area-inset-bottom))
+    max(1.25rem, env(safe-area-inset-left));
   border-top: 2px solid var(--accent-soft); /* the line over the footer (owner, 2026-10-07) */
   text-align: center;
   color: var(--muted);
@@ -615,7 +623,8 @@ main {
   stroke-width: 10;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.35;
+  /* At least 3 to 1 against the field, because this is the path the person follows (WCAG 1.4.11). */
+  opacity: 0.65;
 }
 
 .trace-done {
@@ -788,6 +797,10 @@ main {
 .maker-logo { width: 120px; height: auto; margin: 0.5rem 0; fill: var(--text); }
 
 .text-link { color: var(--text); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.text-link:hover { text-decoration-thickness: 3px; }
+/* A link that stands alone, or one in a list of sources, is a 44 px target (the stress checks). A
+   link inside a sentence keeps the line's height, as WCAG 2.5.8 allows. */
+.sources .text-link, .source-link .text-link { display: inline-block; padding: 0.7rem 0; }
 
 .sources { margin: 0 0 0.5rem; padding-left: 1.25rem; }
 .sources li { margin: 0.4rem 0; overflow-wrap: anywhere; }
@@ -860,8 +873,8 @@ main {
 /* In full screen: the way to urgent help and the way out, at the top right. */
 .calm-stage-actions {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -906,4 +919,29 @@ main {
   .unblock-block.key::before { border-width: 5px; }
   .mandala-part { stroke: CanvasText; }
   .pond-field circle { fill: CanvasText; }
+}
+
+/* ---- added by the interface review (2026-10-09) ---- */
+/* A double tap does not zoom a control, and a tap shows no grey box. */
+.button, .gear, .sound-toggle, .menu-item, .choice, .footer-link, .text-link, .unblock-block, .bubble {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.footer-link:hover { text-decoration-thickness: 3px; }
+h1, h2, h3 { text-wrap: balance; }
+/* A phone number never breaks across two lines. */
+.line-actions .button, .emergency-call { white-space: nowrap; }
+/* The edge of the pond and of the Unblock board are visible parts of the control (WCAG 1.4.11). */
+.pond { border-color: var(--accent); }
+/* The freed blue block slides out of sight without making the page scroll sideways. */
+.activity.unblock { overflow-x: clip; }
+/* The blue block is set apart by a shape as well as by its color: an arrow toward the exit. */
+.unblock-block.key::after {
+  content: "";
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  border: 0.45rem solid transparent;
+  border-left-color: hsl(210 45% 30%);
+  transform: translateY(-50%);
 }

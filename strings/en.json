@@ -71,7 +71,7 @@
   "calm.blackHint": "The screen turns black and the sound keeps playing. Tap anywhere to bring it back.",
   "calm.fullScreen": "Full screen",
   "calm.exitFullScreen": "Leave full screen",
-  "calm.blackLabel": "Black screen. Tap or press any key to bring the screen back.",
+  "calm.blackLabel": "Black screen. Tap, or press any key, to bring the screen back.",
   "calm.soundsOff": "Sound is off. Use the speaker button at the top to hear it.",
   "unblock.title": "Unblock",
   "unblock.intro": "Slide the blocks to make a way for the blue block to leave through the gap in the right edge. Each block slides only along its length. Drag a block, or press the arrow keys on it, or choose it and use the Slide buttons. There is no score and no time limit, and Undo takes back any move.",
@@ -244,5 +244,8 @@
   "settings.resetHint": "Puts every setting back to how Freelief comes.",
   "settings.resetDone": "Settings are back to how Freelief comes.",
   "settings.offlineReady": "This version is saved on this device and works with no internet.",
-  "settings.offlineNotReady": "This version is not saved for use with no internet yet. Open Freelief once while online."
+  "settings.offlineNotReady": "This version is not saved for use with no internet yet. Open Freelief once while online.",
+  "settings.resetQuestion": "Reset every setting, including your country for urgent help?",
+  "settings.resetYes": "Yes, reset",
+  "settings.resetNo": "Keep my settings"
 }

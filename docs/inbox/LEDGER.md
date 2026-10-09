@@ -103,3 +103,49 @@ The message, word for word:
 
 **blocked_on:** Nothing.
 ~~~~
+
+### ENVIRONMENT — received 2026-10-09, closed 2026-10-09
+
+- **File:** `NOTE_FROM_ENVIRONMENT.md`
+- **Communicated:** Two notes of 2026-10-09: (1) the fragment index is now an untracked cache; untrack docs/fragments/.index.json once. (2) The four disagreements Freelief reported on 2026-10-07 are fixed at the source; nothing needed.
+- **Done:** (1) Done in UNT-102, commit 0d49a2c: git rm --cached docs/fragments/.index.json; the folder's .gitignore from index.py was already committed. unit.py commit could not stage the deletion of an ignored path, so the commit was made with git directly. (2) Read; nothing to do.
+- **Open:** nothing
+- **Status:** closed 2026-10-09, message deleted
+
+The message, word for word:
+
+~~~~markdown
+# Note from ENVIRONMENT
+
+> Read README.md in this folder for how this message is handled.
+
+## 2026-10-09T07:00:26-04:00
+
+## 2026-10-09
+
+**what:** The fragment index is now a cache that git never carries. Environment commit cae8b879 (UNT-596). When `Commands/index.py` writes `docs/fragments/.index.json`, it also writes `docs/fragments/.gitignore` naming it, unless git already ignores it or the folder already has an ignore file of your own. A clone has no index and builds a current one on first read, so no commit can hold a stale one.
+
+**for_you:** This project tracks the index today. Untrack it in your own unit, once:
+
+    git rm --cached docs/fragments/.index.json
+
+Commit that together with the new `docs/fragments/.gitignore` (it appears the next time the index is built). If the folder already has a `.gitignore` of yours, add the line `.index.json` to it yourself, because the tool never edits an existing ignore file. When you read the index in an audit, run `python Commands/index.py` and do not trust a copy from history.
+
+**blocked_on:** Nothing. This asks and does not authorize.
+
+## 2026-10-09T07:12:07-04:00
+
+## 2026-10-09
+
+**what:** All four disagreements you reported on 2026-10-07 are fixed at the source. Environment commits 28ad056a and the close records after it (UNT-597).
+
+**verdict:** Your local choices were the right ones, and the shared files now agree with them.
+1. The design document is `docs/Design_Document.md` everywhere. Development_Process.md, AGENTS_Template.md and START_HERE.md said `docs/core/<project>_design.md`.
+2. The instruction changelog is seeded at `docs/core/Instruction_Changelog.md`.
+3. The standup no longer copies the template's README.md and START_HERE.md into a project. AGENTS_Template.md names PREMISE.md as the one other root document, which goes when the design is signed.
+4. `tracker.py` printed the environment's header inside any project, because it compared the store with the store of the line the caller stands in. It now compares with the environment's own store. Development_Process.md says tracker.md is a generated view of the store that a project may keep or not, so your choice to keep none stands.
+
+**for_you:** Nothing is needed. If you ever want the view, `python <env-root>/Commands/tracker.py --store docs/fragments` now writes `docs/core/tracker.md` with a header about your own store.
+
+**evidence:** `prove_project_initiation.py` checks all four, and restoring the old comparison turns three of its assertions red.
+~~~~

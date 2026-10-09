@@ -10,6 +10,17 @@ audit.
 
 ---
 
+<a id="v0-7-13"></a>
+## [0.7.13] - 2026-10-09
+- Fixes from an interface review of every screen: **Reset settings** asks once more first; the
+  page under the black screen and the full screen cannot be reached by Tab or a screen reader, and
+  any key ends the black screen; choosing a country in urgent help announces the new emergency
+  number; a focused control is never hidden under the header; the edges of a phone with a notch are
+  kept clear; the trace loop and the pond's edge are easier to see; source links are larger
+  targets; Open on GitHub opens a new tab, so the typed message is kept; the freed Unblock block
+  leaves the Tab order and the page does not scroll sideways; the blue block also has an arrow.
+  The rest is tracked in [RLG-047](../fragments/RLG-047.md). 178 tests.
+
 <a id="v0-7-12"></a>
 ## [0.7.12] - 2026-10-09
 - **About**: the privacy text now says that, besides the update check, Freelief downloads its own

@@ -65,6 +65,11 @@ export function start(container, ctx) {
       <div class="reset">
         <button type="button" class="button reset-settings" aria-describedby="reset-hint">${t("settings.reset")}</button>
         <p id="reset-hint" class="hint">${t("settings.resetHint")}</p>
+        <div class="reset-confirm" hidden>
+          <p id="reset-question">${t("settings.resetQuestion")}</p>
+          <button type="button" class="button reset-yes" aria-describedby="reset-question">${t("settings.resetYes")}</button>
+          <button type="button" class="button reset-no">${t("settings.resetNo")}</button>
+        </div>
         <p class="reset-status" aria-live="polite"></p>
       </div>
       <div class="app-version">
@@ -92,12 +97,24 @@ export function start(container, ctx) {
   // A saved region that is no longer curated shows as Automatic, which is what the dialog does.
   region.value = [...region.options].some((o) => o.value === getSetting("helpRegion")) ? getSetting("helpRegion") : "auto";
   region.addEventListener("change", () => setSetting("helpRegion", region.value));
+  // Reset clears every choice, including the region for urgent help, so it asks once more. One
+  // stray tap changes nothing (web-interface-review, 2026-10-09).
+  const confirm = container.querySelector(".reset-confirm");
   container.querySelector(".reset-settings").addEventListener("click", () => {
-    resetSettings();
-    // Draw the screen again with the defaults, then say what happened.
-    start(container, ctx);
-    container.querySelector(".reset-status").textContent = t("settings.resetDone");
+    confirm.hidden = false;
+    container.querySelector(".reset-no").focus();
+  });
+  container.querySelector(".reset-no").addEventListener("click", () => {
+    confirm.hidden = true;
     container.querySelector(".reset-settings").focus();
+  });
+  container.querySelector(".reset-yes").addEventListener("click", () => {
+    resetSettings();
+    // Draw the screen again with the defaults. The status is set a moment after the new live region
+    // exists, so a screen reader announces it.
+    start(container, ctx);
+    container.querySelector(".reset-settings").focus();
+    setTimeout(() => { container.querySelector(".reset-status").textContent = t("settings.resetDone"); }, 100);
   });
   // Whether this version is saved for use with no network (AUD-112). The offline copy is written
   // all at once, so its cache exists only when every file is in it.
@@ -106,7 +123,17 @@ export function start(container, ctx) {
     .catch(() => false)
     .then((ready) => { offline.textContent = t(ready ? "settings.offlineReady" : "settings.offlineNotReady"); });
   const status = container.querySelector(".update-status");
-  container.querySelector(".update-now").addEventListener("click", () => updateNow(status, t));
+  const updateButton = container.querySelector(".update-now");
+  updateButton.addEventListener("click", async () => {
+    // One update at a time: repeated taps do not start parallel runs.
+    if (updateButton.getAttribute("aria-disabled") === "true") return;
+    updateButton.setAttribute("aria-disabled", "true");
+    try {
+      await updateNow(status, t);
+    } finally {
+      updateButton.removeAttribute("aria-disabled");
+    }
+  });
 }
 
 // "Update now" (owner, 2026-10-07): get the newest version and restart. Nothing is removed until

@@ -20,7 +20,7 @@ export function start(container, ctx) {
       ${paragraph("about.privacy2")}
       <h2>${t("about.openHeading")}</h2>
       ${paragraph("about.open1")}
-      <p><a class="text-link" href="${escape(config.project.sourceUrl)}" rel="noopener">${t("about.sourceLink")}</a></p>
+      <p class="source-link"><a class="text-link" href="${escape(config.project.sourceUrl)}" rel="noopener">${t("about.sourceLink")}</a></p>
       <h2>${t("about.madeByHeading")}</h2>
       <div class="maker">
         <svg class="maker-logo" viewBox="0 0 197 94" role="img" aria-label="${t("about.logoAlt")}">

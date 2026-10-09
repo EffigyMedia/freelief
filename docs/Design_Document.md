@@ -1140,6 +1140,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **The Visualizer and the wake lock have their own requirements.** — AUD-109: REQ-036 (the
   Visualizer and the background sound) and REQ-037 (the screen wake lock and its idle setting),
   agreed by the owner from the earlier requests. — 2026-10-09 (owner; UNT-101)
+- **The interface review is part of a slice, and its fixes follow the stress checks.** — The
+  environment's `web-interface-review` skill (AUD-097) ran on every screen on 2026-10-09 and found no
+  High finding. The fixes: Reset settings asks once more; a cover (black screen, full screen) makes
+  the rest of the page inert; any key ends the black screen, as its label says; the help dialog's
+  emergency line is a polite live region; `scroll-padding-top` keeps a focused control below the
+  sticky header; every edge honours the safe-area insets; the trace loop has 3 to 1 contrast; links
+  that stand alone are 44 px targets; Open on GitHub opens a new tab. What was not fixed, and why,
+  is in RLG-047. — 2026-10-09 (UNT-103)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

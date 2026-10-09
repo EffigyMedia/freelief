@@ -346,3 +346,18 @@ def test_a_visualizer_opened_before_any_tap_starts_its_sound_at_the_first_tap():
         assert page.evaluate("window.__osc.length") == 0, "nothing plays before a gesture"
         page.locator("h1").click()
         wait_until(page, "window.__osc.length > 0", 3000)
+
+
+def test_any_key_ends_the_black_screen_and_the_page_under_a_cover_cannot_be_reached():
+    # web-interface-review, 2026-10-09: the label says any key; Tab must not reach hidden controls.
+    with open_app() as (page, _, _):
+        go(page, "calm")
+        page.locator(".black-screen").click()
+        assert page.evaluate("document.querySelector('main').inert"), "the page under the cover is inert"
+        page.keyboard.press("a")
+        assert page.locator(".black-cover").count() == 0, "any key brings the screen back"
+        assert not page.evaluate("document.querySelector('main').inert")
+        page.locator(".full-screen").click()
+        assert page.evaluate("document.querySelector('header').inert"), "full screen makes the rest inert"
+        page.keyboard.press("Escape")
+        assert not page.evaluate("document.querySelector('header').inert")

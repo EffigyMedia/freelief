@@ -139,6 +139,7 @@ export function start(container, ctx) {
     if (block.key && block.col + block.length === size) {
       current.free = true;
       block.element.classList.add("free");
+      block.element.inert = true; // out of sight, so out of the Tab order
       audio.play("done");
       ctx.haptic("done");
       status.textContent = t("unblock.free");
@@ -148,7 +149,8 @@ export function start(container, ctx) {
     }
     audio.play("swap");
     ctx.haptic("swap");
-    status.textContent = nameOf(block);
+    // A drag says where the block ended only once, when it is let go, not at every cell.
+    if (!current.drag) status.textContent = nameOf(block);
     updateSlideBar();
     return true;
   }
@@ -238,6 +240,7 @@ export function start(container, ctx) {
     current.dragged = true;
     setTimeout(() => { current.dragged = false; }, 0);
     if (drag.steps) current.history.push({ id: drag.block.id, steps: drag.steps });
+    if (drag.steps && !current.free) status.textContent = nameOf(drag.block);
   }
 
   function undo() {
@@ -250,6 +253,7 @@ export function start(container, ctx) {
     if (current.free) {
       current.free = false;
       block.element.classList.remove("free");
+      block.element.inert = false;
     }
     slide(block, -last.steps, { record: false });
     status.textContent = t("unblock.undone", { name: nameOf(block) });

@@ -43,12 +43,12 @@ export function start(container, ctx) {
           <span>${t("feedback.kind.problem")}</span></label>
       </fieldset>
       <label class="field-label" for="feedback-message">${t("feedback.messageLabel")}</label>
-      <textarea id="feedback-message" class="message" rows="14"></textarea>
+      <textarea id="feedback-message" name="message" class="message" rows="14"></textarea>
       <p class="feedback-safety">${t("feedback.danger")}</p>
       <div class="send-choice">
         <button type="button" class="button primary copy-message">${t("feedback.copy")}</button>
         <p class="copy-status hint" aria-live="polite"></p>
-        <a class="button github" rel="noopener" aria-describedby="github-note">${t("feedback.github")}</a>
+        <a class="button github" target="_blank" rel="noopener" aria-describedby="github-note">${t("feedback.github")}</a>
         <p id="github-note" class="hint">${t("feedback.githubNote")}</p>
       </div>
       <div class="send-choice email-choice" ${project.feedbackEmail ? "" : "hidden"}>
@@ -98,7 +98,9 @@ export function start(container, ctx) {
   container.querySelector(".copy-message").addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(message.value);
-      copyStatus.textContent = t("feedback.copied");
+      // Cleared first, so a second copy is announced again.
+      copyStatus.textContent = "";
+      setTimeout(() => { copyStatus.textContent = t("feedback.copied"); }, 100);
     } catch {
       message.focus();
       message.select();

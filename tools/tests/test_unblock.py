@@ -303,3 +303,20 @@ def test_under_reduced_motion_the_blocks_do_not_slide():
         go(page, "unblock")
         duration = page.locator(".unblock-block").first.evaluate("e => getComputedStyle(e).transitionDuration")
         assert set(duration.replace(" ", "").split(",")) == {"0s"}
+
+
+def test_the_freed_block_leaves_the_tab_order_and_the_page_does_not_scroll_sideways():
+    path = solve(SETTINGS["boards"][0]["rows"])
+    with open_app(viewport={"width": 360, "height": 740}) as (page, _, _):
+        go(page, "unblock")
+        for name, steps in path:
+            block(page, name).focus()
+            across = "across" in block(page, name).get_attribute("class")
+            key = ("ArrowRight" if steps > 0 else "ArrowLeft") if across else ("ArrowDown" if steps > 0 else "ArrowUp")
+            for _ in range(abs(steps)):
+                page.keyboard.press(key)
+        page.wait_for_timeout(600)
+        assert block(page, "A").evaluate("e => e.inert"), "a block out of sight is out of the Tab order"
+        assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "no sideways scroll"
+        page.locator(".unblock-undo").click()
+        assert not block(page, "A").evaluate("e => e.inert")

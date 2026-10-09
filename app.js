@@ -70,7 +70,7 @@ function lineCard(line) {
   // Calls and texts work offline; a web chat does not, so it says so (AUD-052).
   const webNote = line.web ? element("p", { class: "line-checked", text: t("help.chatNote") }) : null;
   return element("li", { class: "line" }, [
-    element("h3", { text: line.name }),
+    element("h4", { text: line.name }),
     element("p", { class: "line-hours", text: line.hours }),
     actions,
     webNote,
@@ -98,7 +98,8 @@ function buildHelpDialog() {
     back,
   ]);
 
-  const emergency = element("p", { class: "emergency" });
+  // A new country changes the emergency number, so a screen reader hears it (web-interface-review).
+  const emergency = element("p", { class: "emergency", "aria-live": "polite" });
   // The emergency number is the first thing to tap, not only to read (design review, 2026-10-08).
   // The numbers come from the region's own emergency text, so "112 or 999" gives two buttons.
   const emergencyCalls = element("div", { class: "emergency-calls" });
@@ -177,7 +178,7 @@ function buildShell() {
   });
   const header = element("header", { class: "top" }, [
     // Plain text, not a link: "Need urgent help?" stays the first stop for the Tab key.
-    element("p", { class: "brand", text: t("app.name") }),
+    element("p", { class: "brand", translate: "no", text: t("app.name") }),
     element("div", { class: "top-actions" }, [helpButton, soundButton, gear]),
   ]);
   // The sound bar (RLG-045, owner 2026-10-09): while music or nature plays, every screen but the
