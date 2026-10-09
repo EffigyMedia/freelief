@@ -502,6 +502,15 @@ fixed as its own unit, High first, and an owner decision is put to the owner. Do
 finding is built, declined by the owner, or waiting on the environment, and a design audit round
 closes the slice; then 0.7.0.
 
+**Slice 8 — new play and the round UNT-082 findings (v0.7.4 to v0.8.0).** *Planned 2026-10-09 by the
+owner.* Owner features: Puzzle replaces Sort colors, a calm puzzle with no losing state at all, its
+kind chosen by the owner from proposals first (RLG-040); ripples that interfere (RLG-041); more
+mandala designs (RLG-042); crashing waves in the Visualizer, a Nature button and a rain-or-waves
+setting (RLG-043); Standards and research rewritten for them, every source checked in the session
+(RLG-044). Then the 37 findings of round UNT-082 (AUD-076 to AUD-112), Medium first, and a review of
+every screen with the web-interface-review skill. Done when: those are built or ruled on, a design
+audit round closes the slice, and the version is 0.8.0.
+
 **Definition of done per slice:** it works, `test` is green, `bench` is spot-checked, the design
 document and records agree with the code, `docs/README.md` describes what a person sees (when the
 slice adds or changes a feature that users see), and it is committed. *(README added 2026-10-08,
