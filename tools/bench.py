@@ -2,13 +2,16 @@
 
 Workload: the installed app, offline, cold-launched in a fresh page, with the CPU throttled 4x
 as the stand-in for a mid-range phone. Each figure is the median of RUNS launches.
-Writes output/bench.json and prints a table. Exit 1 if a target is missed.
+Writes output/bench.json and prints a table. Exit 1 if a target is missed. Exit 2 if the machine
+was busy, because a timing taken on a busy machine is not valid either way (AUD-079).
 
 Run:  python tools/freelief.py bench
 """
 
 import json
+import os
 import statistics
+import subprocess
 import sys
 from pathlib import Path
 
@@ -27,19 +30,42 @@ RESPONSE_TARGET_MS = 100
 # fails (AUD-058). Keep these in step with baseline.md when it is re-baselined.
 BASELINE = {"launch_ms": 178, "response_ms": 74, "size_kb": 188.7}
 TIMING_TOLERANCE = 0.25  # +25% for the two timings; any size growth is flagged
+# A quiet machine is a condition of the measurement (Performance_Testing.md section 2). Above this
+# CPU load, sampled before and after every run, the result is not valid (AUD-079).
+BUSY_LOAD_PERCENT = 35
 
-# Response: from a click on "Need urgent help?" (on every screen) to the next frame after the dialog
-# opens. It was the breathing screen's Pause button until the menu became the first screen.
+# Response: from a click on "Need urgent help?" (on every screen) to the moment after the frame that
+# shows the dialog is painted. A requestAnimationFrame callback runs before that paint, so the probe
+# ends on a message posted from it, which runs after the paint (AUD-087).
 RESPONSE_PROBE = """() => new Promise(resolve => {
   const button = document.querySelector('.help-open');
   const dialog = document.querySelector('dialog.help');
   const start = performance.now();
   new MutationObserver((_, observer) => {
     observer.disconnect();
-    requestAnimationFrame(() => resolve(performance.now() - start));
+    requestAnimationFrame(() => {
+      const channel = new MessageChannel();
+      channel.port1.onmessage = () => resolve(performance.now() - start);
+      channel.port2.postMessage(0);
+    });
   }).observe(dialog, { attributes: true });
   button.click();
 })"""
+
+
+def cpu_load() -> float | None:
+    """The machine's CPU load in percent, or None where it cannot be read."""
+    if os.name == "nt":
+        probe = subprocess.run(["powershell", "-NoProfile", "-Command",
+                                "(Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average"],
+                               capture_output=True, text=True)
+        try:
+            return float(probe.stdout.strip())
+        except ValueError:
+            return None
+    if hasattr(os, "getloadavg"):
+        return 100 * os.getloadavg()[0] / (os.cpu_count() or 1)
+    return None
 
 
 def main() -> int:
@@ -52,8 +78,9 @@ def main() -> int:
     page.close()
     context.set_offline(True)
 
-    launches, responses = [], []
+    launches, responses, loads = [], [], []
     for _ in range(RUNS):
+        loads.append(cpu_load())
         page = context.new_page()
         cdp = context.new_cdp_session(page)
         cdp.send("Emulation.setCPUThrottlingRate", {"rate": CPU_SLOWDOWN})
@@ -62,7 +89,10 @@ def main() -> int:
         launches.append(page.evaluate("performance.getEntriesByName('freelief-ready')[0].startTime"))
         responses.append(page.evaluate(RESPONSE_PROBE))
         page.close()
+        loads.append(cpu_load())
     context.close()
+    known = [load for load in loads if load is not None]
+    busiest = max(known) if known else None
 
     size_kb = sum(f.stat().st_size for f in freelief.shipped_files()) / 1024
     result = {
@@ -72,7 +102,9 @@ def main() -> int:
         "response_ms": round(statistics.median(responses), 1),
         "launch_worst_ms": round(max(launches), 1),
         "response_worst_ms": round(max(responses), 1),
+        "response_spread_ms": round(statistics.pstdev(responses), 1),
         "size_kb": round(size_kb, 1),
+        "busiest_cpu_load_percent": busiest,
     }
     out = ROOT / "output" / "bench.json"
     out.parent.mkdir(exist_ok=True)
@@ -95,6 +127,14 @@ def main() -> int:
         print(f"[{status}] {label}: {value} {unit} (target {target:g} {unit}; "
               f"baseline {baseline:g} {unit}, {change:+.0%})")
     print("A FLAG does not fail: record it in docs/performance/log.md (AUD-058).")
+    print(f"Response spread {result['response_spread_ms']} ms; worst {result['response_worst_ms']} ms; "
+          f"busiest CPU load {busiest if busiest is not None else 'unknown'}%.")
+    if busiest is None:
+        print("[WARN] the CPU load could not be read, so the quiet-machine condition is not checked")
+    elif busiest > BUSY_LOAD_PERCENT:
+        print(f"[BUSY] the CPU load reached {busiest:g}%, over {BUSY_LOAD_PERCENT}%: this run is not valid, "
+              "pass or fail. Close other work and run it again.")
+        return 2
     return 1 if failed else 0
 
 

@@ -11,13 +11,20 @@ Playwright 1.63, with the CPU throttled 4x through the Chrome DevTools Protocol.
 390 x 844. The figures are a stand-in, not a measurement on a real phone; the owner's phone check
 is the on-target confirmation.
 
+**A quiet machine is a condition of every run (AUD-079).** `bench.py` samples the CPU load before
+and after each run. If the busiest sample is over 35%, the run is not valid, pass or fail, and
+bench exits 2. On 2026-10-09 this machine stayed between 33% and 63% load from other applications,
+so the figures below were not re-taken; a re-baseline on a quiet machine is owed (RLG-033).
+
 ## Workload
 `tools/bench.py`, run by `python tools/freelief.py bench`. The app is installed (one online visit
 lets the service worker cache it), then the browser context goes offline. Each run opens a fresh
 page, cold, and measures:
 - **Launch:** from navigation start to the `freelief-ready` mark that `app.js` sets after the
   first screen (the menu) is on screen.
-- **Response:** from a click on `Need urgent help?` to the next frame after the dialog opens.
+- **Response:** from a click on `Need urgent help?` to just after the frame that shows the dialog
+  is painted (since 2026-10-09, AUD-087: it ended before that paint). The 74 ms baseline used the
+  old end point.
 - **Size:** the bytes of every shipped file (`build` uses the same list).
 
 Seven runs; the median and the worst are recorded. Results go to `output/bench.json`.

@@ -2,6 +2,19 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-09 — Slice 8 checkpoint (v0.7.11), NOT VALID: busy machine
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to first screen (the menu) | 178 ms | 186.4 ms | +5% | OK, but the run is not valid |
+| Response: Need urgent help? opens | 74 ms | 96.5 ms | +30% | FLAG, under target; not valid; new end point |
+| Shipped size | 188.7 KB | 232.8 KB | +23% | FLAG, expected; 17 KB of budget left |
+Notes: the busiest CPU load sample was 58%, over the 35% limit that bench now enforces (AUD-079),
+so the two timings are not evidence either way. The response probe now ends after the dialog's
+frame is painted (AUD-087), so it is not comparable with the 74 ms baseline. The size is exact and
+valid: slice 8 added Unblock and its fifteen boards, the background sound and waves, the
+interfering pond and the five mandala designs. A re-baseline on a quiet machine is owed before a
+release (RLG-033). The response is the metric to watch: on this busy run it had 3.5 ms of headroom.
+
 ## 2026-10-08 — Slice 6 checkpoint and re-baseline (v0.6.2)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|
