@@ -508,6 +508,7 @@ kind chosen by the owner from proposals first (RLG-040); ripples that interfere 
 mandala designs (RLG-042); crashing waves in the Visualizer, a Nature button and a rain-or-waves
 setting (RLG-043), and music and nature sound that persist across screens until turned off, the
 Visualizer's name and design rethought, with the owner choosing from proposals first (RLG-045);
+every sound diatonic to the music's key, C major, with a test (RLG-046);
 Standards and research rewritten for them, every source checked in the session
 (RLG-044). Then the 37 findings of round UNT-082 (AUD-076 to AUD-112), Medium first, and a review of
 every screen with the web-interface-review skill. Done when: those are built or ruled on, a design
