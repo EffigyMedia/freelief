@@ -73,6 +73,8 @@
   "calm.blackLabel": "Black screen. Tap or press any key to bring the screen back.",
   "calm.soundsOff": "Sound is off. Use the speaker button at the top to hear it.",
   "sort.title": "Sort colors",
+  "sort.light": "Light",
+  "sort.dark": "Dark",
   "sort.intro": "Put the tiles in order, from lightest on the left to darkest on the right. Choose a tile, then choose the tile to swap it with, or drag a tile onto another. Arrow keys move between tiles.",
   "sort.tileLabel": "{hue}, {shade}",
   "sort.tilePosition": "{name}, place {position} of {total}",

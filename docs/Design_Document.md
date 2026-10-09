@@ -952,6 +952,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   and resumed with the sound. Now each fading sound is registered, and is cut off silently just
   before the audio pauses; a sound stopped while the audio is already paused is cut off at once. —
   2026-10-08 (owner report; UNT-085)
+- **Sort colors shows the order with an arrow under the tiles.** — Owner request. A horizontal arrow
+  points right, from "Light" under its left end to "Dark" under its right end, so a person who can
+  see the tiles knows the task without reading. It is hidden from a screen reader, because the
+  intro already says the order. — 2026-10-08 (owner; UNT-086)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

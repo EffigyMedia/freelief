@@ -28,6 +28,11 @@ export function start(container, ctx) {
       <h1>${t("sort.title")}</h1>
       <p class="visually-hidden" id="sort-intro">${t("sort.intro")}</p>
       <ul class="sort-tiles" aria-describedby="sort-intro"></ul>
+      <div class="sort-scale" aria-hidden="true">
+        <div class="sort-arrow"></div>
+        <span class="sort-scale-light">${t("sort.light")}</span>
+        <span class="sort-scale-dark">${t("sort.dark")}</span>
+      </div>
       <p class="sort-status" aria-live="polite"></p>
       <div class="exercise-actions">
         <button type="button" class="button new-colours">${t("sort.newColours")}</button>

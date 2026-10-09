@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-7-3"></a>
+## [0.7.3] - 2026-10-08
+- **Sort colors**: an arrow under the tiles shows the order, with **Light** on the left and **Dark**
+  on the right. [RLG-039](../fragments/RLG-039.md). 153 tests.
+
 <a id="v0-7-2"></a>
 ## [0.7.2] - 2026-10-08
 - Fixed: muting the Visualizer, leaving it and unmuting no longer plays its music again before it

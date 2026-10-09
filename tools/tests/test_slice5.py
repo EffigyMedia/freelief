@@ -187,3 +187,20 @@ def test_in_forced_colors_the_shades_keep_their_colors():
         colors = tiles.evaluate_all("els => els.map(e => getComputedStyle(e).backgroundColor)")
         assert len(set(colors)) == COUNT, f"each shade keeps its own color: {colors}"
         assert tiles.first.evaluate("e => getComputedStyle(e).forcedColorAdjust") == "none"
+
+
+def test_an_arrow_shows_light_on_the_left_and_dark_on_the_right():
+    # Owner, 2026-10-08: an arrow under the tiles, Light under its left end, Dark under its right.
+    with open_app() as (page, _, _):
+        go(page, "sort")
+        tiles = page.locator(".sort-tiles").bounding_box()
+        arrow = page.locator(".sort-arrow").bounding_box()
+        light = page.locator(".sort-scale-light").bounding_box()
+        dark = page.locator(".sort-scale-dark").bounding_box()
+        assert page.locator(".sort-scale-light").inner_text() == "Light"
+        assert page.locator(".sort-scale-dark").inner_text() == "Dark"
+        assert arrow["y"] >= tiles["y"] + tiles["height"] - 1, "the arrow is below the tiles"
+        assert light["y"] > arrow["y"] and dark["y"] > arrow["y"], "the words are under the arrow"
+        assert abs(light["x"] - arrow["x"]) < 4, "Light is at the left end"
+        assert abs((dark["x"] + dark["width"]) - (arrow["x"] + arrow["width"] + 8)) < 4, "Dark is at the right end"
+        assert page.locator(".sort-scale").get_attribute("aria-hidden") == "true"
