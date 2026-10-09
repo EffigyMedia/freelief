@@ -1033,6 +1033,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   plain buttons. A drag never chooses; a tap does. REQ-014 is withdrawn and REQ-035 replaces it;
   Sort colors' tests for keyboard, drag, targets and forced colors carry over in that form, and its
   light-to-dark arrow goes with it. — 2026-10-09 (owner; UNT-096)
+- **Standards and research cite Vytal 2012 for Unblock and Buxton 2021 for the waves.** — RLG-044.
+  Unblock is backed by a laboratory study in which a hard task, unlike an easy one, reduced induced
+  anxiety (vytal2012), and by the review of video games already cited (pallavicini2021). The Tetris
+  sources (holmes2009, james2015) were about intrusive memories and are no longer cited; their
+  notes stay in `docs/research/sources.md`. The Visualizer adds a meta-analysis of natural sounds
+  (buxton2021) and says its rain and waves are imitations. Every DOI was checked on Crossref in the
+  session, and the two new abstracts were read on PubMed. — 2026-10-09 (owner request; UNT-097)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

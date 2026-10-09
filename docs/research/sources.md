@@ -12,6 +12,11 @@ its full note in the first section and a pointer in the second.
 
 These sources support the *techniques*. No study has tested Freelief itself.
 
+**How the 2026-10-09 check was made (RLG-044, UNT-097).** Every DOI in `data/research.json` was
+looked up on Crossref in this session, and the title, authors, year, journal, volume and pages
+matched each citation. The abstracts of the two new sources, vytal2012 and buxton2021, were read on
+PubMed. The notes of the other sources were not changed; they come from the 2026-10-08 checks below.
+
 **How the 2026-10-08 checks were made.** In UNT-049 (RLG-018) a research agent confirmed every
 citation through Crossref, Europe PMC, PMC or the paper itself, and the session re-checked
 pallavicini2021, engelhard2010 and koo2020 on Crossref. On 2026-10-08 (AUD-063) the abstracts of
@@ -23,7 +28,7 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
 
 - **[balban2023]** Balban, M. Y., Neri, E., Kogon, M. M., et al. (2023). Brief structured
   respiration practices enhance mood and reduce physiological arousal. *Cell Reports Medicine*,
-  4(1), 100895. https://doi.org/10.1016/j.xcrm.2022.100895 — checked 2026-10-08 (PMC9873947).
+  4(1), 100895. https://doi.org/10.1016/j.xcrm.2022.100895 — checked 2026-10-09 (PMC9873947).
   *Evidence:* a remote randomized controlled trial of daily 5-minute practices for a month. The
   exhale-focused practice (cyclic sighing: a double breath in, then a long breath out) improved
   mood and lowered respiratory rate significantly more than mindfulness meditation. Box breathing
@@ -35,14 +40,14 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
 - **[zaccaro2018]** Zaccaro, A., Piarulli, A., Laurino, M., et al. (2018). How breath-control can
   change your life: A systematic review on psycho-physiological correlates of slow breathing.
   *Frontiers in Human Neuroscience*, 12, 353. https://doi.org/10.3389/fnhum.2018.00353 — checked
-  2026-10-08.
+  2026-10-09.
   *Evidence:* a systematic review. Slow breathing (under 10 breaths a minute) is linked with more
   parasympathetic activity and with emotional control, in healthy people. Every Freelief rhythm is
   under 10 breaths a minute.
 - **[meuret2010]** Meuret, A. E., Rosenfield, D., Seidel, A., Bhaskara, L., & Hofmann, S. G. (2010).
   Respiratory and cognitive mediators of treatment change in panic disorder: Evidence for
   intervention specificity. *Journal of Consulting and Clinical Psychology*, 78(5), 691–704.
-  https://doi.org/10.1037/a0019552 — checked 2026-10-08.
+  https://doi.org/10.1037/a0019552 — checked 2026-10-09.
   *Evidence:* a randomized trial in 41 people with panic disorder. A four-week breathing training
   reduced panic symptom severity, comparably to cognitive training. It used a CO2 monitor for
   feedback, which Freelief does not have, and Freelief does not copy the training.
@@ -51,14 +56,14 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
 
 - **[webb2012]** Webb, T. L., Miles, E., & Sheeran, P. (2012). Dealing with feeling: A meta-analysis
   of the effectiveness of strategies derived from the process model of emotion regulation.
-  *Psychological Bulletin*, 138(4), 775–808. https://doi.org/10.1037/a0027600 — checked 2026-10-08.
+  *Psychological Bulletin*, 138(4), 775–808. https://doi.org/10.1037/a0027600 — checked 2026-10-09.
   *Evidence:* a meta-analysis of experiments on emotion-regulation strategies. Turning attention to
   something else (attentional deployment, which includes distraction) changed emotional outcomes,
   with a small effect overall. Short-term regulation in experiments, not a treatment, and not a
   study of popping bubbles.
 - **[pallavicini2021]** Pallavicini, F., Pepe, A., & Mantovani, F. (2021). Commercial off-the-shelf
   video games for reducing stress and anxiety: Systematic review. *JMIR Mental Health*, 8(8),
-  e28150. https://doi.org/10.2196/28150 — checked 2026-10-08.
+  e28150. https://doi.org/10.2196/28150 — checked 2026-10-09.
   *Evidence:* a systematic review of 28 studies published from 2006 to 2021. Ordinary commercial
   video games, including casual games and exergames, reduced stress and anxiety in children, adults
   and older adults; most studies recruited young adults. The effects depended on the game. It is a
@@ -69,45 +74,41 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
 
 - **[engelhard2010]** Engelhard, I. M., van den Hout, M. A., Janssen, W. C., & van der Beek, J.
   (2010). Eye movements reduce vividness and emotionality of "flashforwards". *Behaviour Research
-  and Therapy*, 48(5), 442–447. https://doi.org/10.1016/j.brat.2010.01.003 — checked 2026-10-08.
+  and Therapy*, 48(5), 442–447. https://doi.org/10.1016/j.brat.2010.01.003 — checked 2026-10-09.
   *Evidence:* a laboratory experiment with a non-clinical sample. People held images of feared
   future events in mind while they made eye movements, or with no second task. With eye movements,
   they rated the images as less vivid and less emotional. The authors explain this as the two
   tasks competing for working memory. It tested eye movements, not tracing a shape with a finger.
 - **[lee2013]** Lee, C. W., & Cuijpers, P. (2013). A meta-analysis of the contribution of eye
   movements in processing emotional memories. *Journal of Behavior Therapy and Experimental
-  Psychiatry*, 44(2), 231–239. https://doi.org/10.1016/j.jbtep.2012.11.001 — checked 2026-10-08.
+  Psychiatry*, 44(2), 231–239. https://doi.org/10.1016/j.jbtep.2012.11.001 — checked 2026-10-09.
   *Evidence:* a meta-analysis of 15 clinical trials (EMDR with and without eye movements) and 11
   laboratory studies, 849 participants in all. Eye movements added a moderate effect in therapy
   (d = 0.41) and a large one in the laboratory (d = 0.74), strongest on vividness. It is about
   distressing memories and eye movements, not about panic or a tracing task. **No study has tested
   this activity itself.**
 
-## Sort colors (technique `sort`)
+## Unblock (technique `unblock`)
 
-- **[holmes2009]** Holmes, E. A., James, E. L., Coode-Bate, T., & Deeprose, C. (2009). Can playing
-  the computer game "Tetris" reduce the build-up of flashbacks for trauma? A proposal from cognitive
-  science. *PLoS ONE*, 4(1), e4153. https://doi.org/10.1371/journal.pone.0004153 — checked
-  2026-10-08.
-  *Evidence:* a laboratory experiment with volunteers. Everyone watched a distressing film of real
-  injury and death; 30 minutes later they played Tetris for 10 minutes or had no task. The Tetris group had
-  significantly fewer flashbacks over the next week. The idea is that a visuospatial task competes
-  with mental images. It is about memories of a film, not about panic.
-- **[james2015]** James, E. L., Bonsall, M. B., Hoppitt, L., et al. (2015). Computer game play
-  reduces intrusive memories of experimental trauma via reconsolidation-update mechanisms.
-  *Psychological Science*, 26(8), 1201–1215. https://doi.org/10.1177/0956797615583071 — checked
-  2026-10-08.
-  *Evidence:* two laboratory experiments with volunteers and a distressing film. A memory
-  reminder followed by Tetris, 24 hours after the film, greatly reduced intrusive memories; the
-  second experiment showed that both the reminder and the game were needed. Again about memories,
-  not panic. **No study has tested this activity itself.**
+- **[vytal2012]** Vytal, K., Cornwell, B., Arkin, N., & Grillon, C. (2012). Describing the interplay
+  between anxiety and cognition: From impaired performance under low cognitive load to reduced
+  anxiety under high load. *Psychophysiology*, 49(6), 842–852.
+  https://doi.org/10.1111/j.1469-8986.2012.01358.x — checked 2026-10-09 (PubMed 22332819).
+  *Evidence:* a laboratory experiment with volunteers under an induced threat. They did a verbal
+  memory task (the n-back) at low, moderate and high load. Anxiety impaired performance at low load,
+  but it was reduced when the task was hard enough to occupy the mind; anxiety was measured by the
+  startle reflex. The task was a memory task, not a puzzle, and the anxiety was induced in a
+  laboratory, not a panic attack. It is the reason Unblock asks for real thought.
+- **[pallavicini2021]** — the full note is under Pop bubbles, above: ordinary video games lowered
+  stress and anxiety in a systematic review. Unblock is a puzzle game of that kind. **No study has
+  tested this activity itself.**
 
 ## Ripple pond (technique `ripple`)
 
 - **[white2010]** White, M., Smith, A., Humphryes, K., Pahl, S., Snelling, D., & Depledge, M.
   (2010). Blue space: The importance of water for preference, affect, and restorativeness ratings of
   natural and built scenes. *Journal of Environmental Psychology*, 30(4), 482–493.
-  https://doi.org/10.1016/j.jenvp.2010.04.004 — checked 2026-10-08.
+  https://doi.org/10.1016/j.jenvp.2010.04.004 — checked 2026-10-09.
   *Evidence:* adults rated photographs of natural and built scenes. Scenes that held water were
   rated as more preferred, more pleasant and more restful. Ratings of photographs, not a measure of
   stress or anxiety, and not an interactive pond. (Note from the UNT-049 check; no abstract was
@@ -119,42 +120,51 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
 ## Color a mandala (technique `mandala`)
 
 - **[curry2005]** Curry, N. A., & Kasser, T. (2005). Can coloring mandalas reduce anxiety? *Art
-  Therapy*, 22(2), 81–85. https://doi.org/10.1080/07421656.2005.10129441 — checked 2026-10-08.
+  Therapy*, 22(2), 81–85. https://doi.org/10.1080/07421656.2005.10129441 — checked 2026-10-09.
   *Evidence:* a randomized experiment with 84 students after a mild anxiety induction. Twenty
   minutes of coloring a mandala, or a plaid pattern, reduced anxiety more than free drawing; the
   plaid worked as well as the mandala.
 - **[vandervennet2012]** van der Vennet, R., & Serice, S. (2012). Can coloring mandalas reduce
   anxiety? A replication study. *Art Therapy*, 29(2), 87–92.
-  https://doi.org/10.1080/07421656.2012.680047 — checked 2026-10-08.
+  https://doi.org/10.1080/07421656.2012.680047 — checked 2026-10-09.
   *Evidence:* a small replication of Curry and Kasser with adults after a mild anxiety induction.
   Coloring a mandala reduced anxiety more than coloring a plaid pattern or free drawing. (Note from
   the UNT-049 check; no abstract was available to re-read on 2026-10-08.)
 - **[koo2020]** Koo, M., Chen, H.-P., & Yeh, Y.-C. (2020). Coloring activities for anxiety reduction
   and mood improvement in Taiwanese community-dwelling older adults: A randomized controlled study.
   *Evidence-Based Complementary and Alternative Medicine*, 2020, 6964737.
-  https://doi.org/10.1155/2020/6964737 — checked 2026-10-08.
+  https://doi.org/10.1155/2020/6964737 — checked 2026-10-09.
   *Evidence:* a randomized controlled study of 120 adults aged 55 to 75 in Taiwan, after a brief
   anxiety induction. Twenty minutes of mandala coloring, plaid coloring, free drawing or reading.
   Only the mandala group had significantly lower anxiety than the reading group.
   Short-term, small, and none of these studies was about a panic attack.
 
-## Visualizer: music and rain (technique `calm`)
+## Visualizer: music, rain and waves (technique `calm`)
 
 - **[dewitte2020]** de Witte, M., Spruit, A., van Hooren, S., Moonen, X., & Stams, G.-J. (2020).
   Effects of music interventions on stress-related outcomes: A systematic review and two
   meta-analyses. *Health Psychology Review*, 14(2), 294–324.
-  https://doi.org/10.1080/17437199.2019.1627897 — checked 2026-10-08.
+  https://doi.org/10.1080/17437199.2019.1627897 — checked 2026-10-09.
   *Evidence:* two meta-analyses of 104 randomized trials (9,617 participants). Music interventions
   reduced physiological stress (d = 0.38) and psychological stress (d = 0.55). The trials used many
   kinds of music; Freelief's generated pads were not studied.
+- **[buxton2021]** Buxton, R. T., Pearson, A. L., Allou, C., Fristrup, K., & Wittemyer, G. (2021). A
+  synthesis of health benefits of natural sounds and their distribution in national parks.
+  *Proceedings of the National Academy of Sciences*, 118(14), e2013097118.
+  https://doi.org/10.1073/pnas.2013097118 — checked 2026-10-09 (PubMed 33753555).
+  *Evidence:* a systematic review of 36 publications and a meta-analysis of 18. Natural sounds were
+  linked with less stress and annoyance (g = −0.60) and with better health and positive mood
+  (g = 1.63), with wide confidence intervals. The studies used recordings and real places of many
+  kinds; Freelief's rain and waves are synthesized noise, so the link is indirect, and the app says
+  so.
 - **[alvarsson2010]** Alvarsson, J. J., Wiens, S., & Nilsson, M. E. (2010). Stress recovery during
   exposure to nature sound and environmental noise. *International Journal of Environmental
   Research and Public Health*, 7(3), 1036–1046. https://doi.org/10.3390/ijerph7031036 — checked
-  2026-10-08.
+  2026-10-09.
   *Evidence:* **weak.** One experiment with 40 people after a stressful task. Skin conductance
   tended to recover faster during nature sound (a fountain and birds) than during road noise;
-  heart-rate variability showed no effect. Freelief's rain is synthesized noise, not a nature
-  recording, so the link is indirect, and the app says so. The Visualizer itself has not been
+  heart-rate variability showed no effect. Freelief's rain and waves are synthesized noise, not
+  nature recordings, so the link is indirect, and the app says so. The Visualizer itself has not been
   studied.
 
 ## About all the activities (technique `distraction`)
@@ -164,7 +174,7 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
 - **[helbiglang2010]** Helbig-Lang, S., & Petermann, F. (2010). Tolerate or eliminate? A systematic
   review on the effects of safety behavior across anxiety disorders. *Clinical Psychology: Science
   and Practice*, 17(3), 218–233. https://doi.org/10.1111/j.1468-2850.2010.01213.x — checked
-  2026-10-08.
+  2026-10-09.
   *Evidence and caveat:* a systematic review. Behaviors used to escape anxiety, which can include
   distraction, may keep an anxiety disorder going in the long term, though the evidence is mixed.
   **This is why Freelief offers distraction for the moment and never presents it as a way to
@@ -199,3 +209,27 @@ record only. No screen uses them, and `data/research.json` does not cite them.
   461–470. https://doi.org/10.1016/0005-7967(86)90011-2 — checked 2026-10-07.
   *Evidence:* the founding cognitive model of panic: panic grows from a catastrophic reading of
   body sensations. A theory paper, not a trial.
+
+## Removed 2026-10-09 (RLG-044, UNT-097)
+
+Sort colors was replaced by Unblock (RLG-040). Its two sources were about Tetris and intrusive
+memories of a distressing film, which is further from a sliding-block puzzle in a moment of panic
+than vytal2012 and pallavicini2021, so they are no longer cited. Their notes are kept here.
+
+- **[holmes2009]** Holmes, E. A., James, E. L., Coode-Bate, T., & Deeprose, C. (2009). Can playing
+  the computer game "Tetris" reduce the build-up of flashbacks for trauma? A proposal from cognitive
+  science. *PLoS ONE*, 4(1), e4153. https://doi.org/10.1371/journal.pone.0004153 — checked
+  2026-10-08.
+  *Evidence:* a laboratory experiment with volunteers. Everyone watched a distressing film of real
+  injury and death; 30 minutes later they played Tetris for 10 minutes or had no task. The Tetris group had
+  significantly fewer flashbacks over the next week. The idea is that a visuospatial task competes
+  with mental images. It is about memories of a film, not about panic.
+- **[james2015]** James, E. L., Bonsall, M. B., Hoppitt, L., et al. (2015). Computer game play
+  reduces intrusive memories of experimental trauma via reconsolidation-update mechanisms.
+  *Psychological Science*, 26(8), 1201–1215. https://doi.org/10.1177/0956797615583071 — checked
+  2026-10-08.
+  *Evidence:* two laboratory experiments with volunteers and a distressing film. A memory
+  reminder followed by Tetris, 24 hours after the film, greatly reduced intrusive memories; the
+  second experiment showed that both the reminder and the game were needed. Again about memories,
+  not panic. **No study has tested this activity itself.**
+

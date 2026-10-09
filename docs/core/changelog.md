@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-7-9"></a>
+## [0.7.9] - 2026-10-09
+- **Standards and research**: rewritten for Unblock and the waves. Unblock cites a study in which a
+  hard task lowered anxiety, and the Visualizer cites a review of natural sounds. Every source was
+  checked again on 2026-10-09. [RLG-044](../fragments/RLG-044.md). 163 tests.
+
 <a id="v0-7-8"></a>
 ## [0.7.8] - 2026-10-09
 - **Unblock** replaces Sort colors: slide wooden blocks along their length to let the blue block
