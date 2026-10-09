@@ -7,6 +7,7 @@ import { initSettings, getSetting, setSetting, onSettingChange } from "./setting
 import { initHaptics, pulse as haptic } from "./haptics.js";
 import { keepAwake } from "./wakelock.js";
 import * as audio from "./audio.js";
+import * as background from "./background.js";
 import * as motion from "./motion.js";
 import * as menu from "./screens/menu.js";
 
@@ -39,6 +40,7 @@ let main = null;
 let backLink = null;
 let nav = null;
 let footer = null;
+let soundBar = null;
 
 async function loadConfig() {
   const response = await fetch("config.json");
@@ -163,9 +165,14 @@ function buildShell() {
   soundButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><g class="sound-waves" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="sound-cross" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15.5 9.5l5 5"/><path d="M20.5 9.5l-5 5"/></g></svg>';
   soundButton.addEventListener("click", () => setSetting("sounds", !getSetting("sounds")));
   onSettingChange((name, value) => {
+    if (name === "calmMode") background.play(value);
+    if (name === "natureSound") background.setNature(value);
     if (name !== "sounds") return;
     soundButton.setAttribute("aria-pressed", String(value));
     audio.applySound(value);
+    // While sound is off every sound is silent, so the background starts again when it returns.
+    background.restart();
+    showSoundBar();
     current?.soundChanged?.(value);
   });
   const header = element("header", { class: "top" }, [
@@ -173,6 +180,25 @@ function buildShell() {
     element("p", { class: "brand", text: t("app.name") }),
     element("div", { class: "top-actions" }, [helpButton, soundButton, gear]),
   ]);
+  // The sound bar (RLG-045, owner 2026-10-09): while music or nature plays, every screen but the
+  // Visualizer says what plays, with a Stop button. Stop is the same as Off in the Visualizer.
+  const soundBarText = element("p", { class: "sound-bar-text", id: "sound-bar-text" });
+  const stopButton = element("button", {
+    type: "button", class: "button sound-bar-stop", "aria-describedby": "sound-bar-text", text: t("soundBar.stop"),
+  });
+  stopButton.addEventListener("click", () => {
+    setSetting("calmMode", "off");
+    // The bar goes away, so focus moves to the screen's heading rather than being lost.
+    const heading = main.querySelector("h1");
+    if (heading) {
+      heading.setAttribute("tabindex", "-1");
+      heading.focus();
+    }
+  });
+  // It sits in the header, so it is inside a landmark and stays in sight as the page scrolls.
+  soundBar = element("div", { class: "sound-bar", hidden: "" }, [soundBarText, stopButton]);
+  header.append(soundBar);
+  background.onChange(showSoundBar);
   main = element("main", { id: "screen" });
   // Every screen goes back to the menu, from the top of the screen (owner, 2026-10-07).
   backLink = element("a", { class: "button nav-link nav-back", href: "#menu", text: t("nav.backMenu") });
@@ -207,6 +233,13 @@ function buildShell() {
   document.body.replaceChildren(header, nav, main, footer, dialog);
 }
 
+function showSoundBar() {
+  const mode = background.current();
+  const nature = t(`soundBar.nature.${background.natureSound()}`);
+  soundBar.hidden = mode === "off" || !getSetting("sounds") || main.dataset.screen === "calm";
+  if (!soundBar.hidden) soundBar.querySelector(".sound-bar-text").textContent = t(`soundBar.${mode}`, { nature });
+}
+
 function routeName() {
   const name = location.hash.replace(/^#/, "");
   // With no address, Freelief opens where Settings says: the menu, or breathing (owner, 2026-10-08).
@@ -223,6 +256,9 @@ async function show(name, { moveFocus }) {
   const request = ++showing;
   main.dataset.screen = name;
   delete main.dataset.shown;
+  // A screen with its own tones lowers the background sound under them (RLG-045).
+  audio.duck(config.calm.duckRoutes.includes(name));
+  showSoundBar();
   let screen;
   try {
     screen = await ROUTES[name]();
@@ -248,6 +284,8 @@ async function show(name, { moveFocus }) {
       // Activities never touch Settings themselves (AUD-066): the shell hands over the Visualizer's
       // sound choice and saves a new one.
       calmMode: getSetting("calmMode"), saveCalmMode: (mode) => setSetting("calmMode", mode),
+      // The Visualizer starts the background sound it last chose, unless something already plays.
+      startBackground: () => { if (background.current() === "off") background.play(getSetting("calmMode")); },
     });
   } catch (error) {
     // A screen that fails as it starts falls back to the menu, as a screen that cannot load does.
@@ -287,6 +325,16 @@ async function boot() {
   config = loaded;
   initSettings(config);
   audio.initAudio(config);
+  background.initBackground(config, getSetting("natureSound"));
+  // A browser plays nothing before the first tap or key press. If the Visualizer was opened before
+  // one, its sound starts at that first gesture, so the sound bar never names a silent sound.
+  const firstGesture = () => {
+    window.removeEventListener("pointerdown", firstGesture, true);
+    window.removeEventListener("keydown", firstGesture, true);
+    if (background.current() !== "off") background.restart();
+  };
+  window.addEventListener("pointerdown", firstGesture, true);
+  window.addEventListener("keydown", firstGesture, true);
   initHaptics(config);
   applyTheme(getSetting("theme"));
   onSettingChange((name, value) => { if (name === "theme") applyTheme(value); });

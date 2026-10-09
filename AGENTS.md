@@ -214,14 +214,17 @@ the Chrome already on the machine. Run from the repo root:
 - **Screens** (`screens/*.js`) — the menu, Settings, About, Standards and research, and Feedback,
   same contract. Routing is by URL hash (`#menu` is the default, and a screen that cannot load falls
   back to it); a new screen is added to `ROUTES` in `app.js` and to `FILES` in `sw.js`.
-- **The Visualizer** (`activities/calm.js`, route `#calm`) — music or rain with soft shapes, a full
+- **The Visualizer** (`activities/calm.js`, route `#calm`) — music, nature (rain or waves) or both, with soft shapes, a full
   screen and a black screen; an activity under the same rules. Its shape loop is not a timer the
   person sees.
 - **Shared helpers, given to screens through `ctx`:** `audio.js` (every sound, made with Web Audio;
   plays nothing while sound is off), `haptics.js` (one short vibration per triggered event; nothing
   continuous), `wakelock.js` (keeps the screen on during breathing and the Visualizer; fails
   silently), `motion.js` (reduced-motion detection, which every animation asks). They **must not**
-  touch storage except by reading `settings.js`.
+  silently), `motion.js` (reduced-motion detection, which every animation asks).
+- **`background.js`** — the background sound (RLG-045): music, nature or both, which plays on every
+  screen until turned off. The shell tells it what to play and shows the sound bar; it never
+  touches storage.
 - **`fallback.js`** — a classic script in `<head>` that shows the static fallback in `index.html` if
   the app has not started in 2 s; it **must not** depend on `config.json` or any module.
 - **`settings.js`** — **the single source of truth for Settings** and the only module that touches

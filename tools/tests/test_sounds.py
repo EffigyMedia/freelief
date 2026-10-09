@@ -160,7 +160,7 @@ AudioContext.prototype.createGain = function () {
 # RLG-046 (owner, 2026-10-09): every sound is diatonic to the music's key, C major (C D E F G A B).
 C_MAJOR = {0, 2, 4, 5, 7, 9, 11}  # semitones above C
 # Filter corners, a swell rate and a beat rate shape a sound; they are not notes.
-UNPITCHED = {"noiseHz", "cutoffHz", "lowpassHz", "highpassHz", "swellHz", "beatHz"}
+UNPITCHED = {"noiseHz", "cutoffHz", "lowpassHz", "highpassHz", "swellHz", "beatHz", "troughHz", "crestHz"}
 # The bubble pop and the ripple's water drop are natural sounds, so their pitch stays random
 # (owner, 2026-10-09).
 NATURAL = {"sounds.pop", "sounds.drop"}

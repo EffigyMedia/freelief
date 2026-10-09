@@ -28,6 +28,7 @@ function validators(config) {
     haptics: (v) => typeof v === "boolean",
     theme: (v) => config.theme.choices.includes(v),
     calmMode: (v) => config.calm.modes.includes(v),
+    natureSound: (v) => config.calm.natureChoices.includes(v),
     // "auto", or a two-letter region code. crisis.js shows the general route for a region it does
     // not have, so a code that is no longer curated is safe.
     helpRegion: (v) => v === "auto" || /^[A-Z]{2}$/.test(v),
@@ -63,6 +64,7 @@ export function initSettings(config) {
     sounds: config.sounds.enabledByDefault,
     theme: config.theme.default,
     calmMode: config.calm.defaultMode,
+    natureSound: config.calm.natureDefault,
     helpRegion: config.crisis.defaultRegion,
     haptics: config.haptics.enabledByDefault,
     openOn: config.settings.openOnDefault,
@@ -75,6 +77,9 @@ export function initSettings(config) {
     hasV2 = false;
   }
   const stored = hasV2 ? read(key) : migrate(config, valid);
+  // Before 0.8.0 the Visualizer's choices were Music, Rain and Both. Rain is now Nature, with rain
+  // as its nature sound (RLG-043).
+  if (stored.calmMode === "rain") stored.calmMode = "nature";
   chosen = {};
   for (const [name, check] of Object.entries(valid)) {
     if (Object.hasOwn(stored, name) && check(stored[name])) chosen[name] = stored[name];

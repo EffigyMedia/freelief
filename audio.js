@@ -25,7 +25,11 @@ export function initAudio(config) {
 }
 
 // Every sound goes through one master volume, so the sound button can fade it (owner, 2026-10-08).
+// The background sound (music and nature, RLG-045) goes through its own volume first, so a screen
+// with its own tones, such as breathing, can lower it under them.
 let output = null;
+let bed = null;
+let ducked = false;
 let fadeTimer = 0;
 
 function ensureContext() {
@@ -35,6 +39,9 @@ function ensureContext() {
     context = new AudioContextClass();
     output = context.createGain();
     output.connect(context.destination);
+    bed = context.createGain();
+    bed.gain.value = ducked ? sounds.background.duckLevel : 1;
+    bed.connect(output);
   }
   if (context.state === "suspended") context.resume();
   return context;
@@ -72,6 +79,17 @@ export function applySound(on) {
     fading.clear();
     if (context.state === "running") context.suspend();
   }, fade * 1000 + 50);
+}
+
+// Lower the background sound under a screen's own tones, or bring it back (RLG-045). The change is a
+// slow ramp, so it is not heard as a step.
+export function duck(on) {
+  ducked = on;
+  if (!bed) return;
+  const now = context.currentTime;
+  bed.gain.cancelScheduledValues(now);
+  bed.gain.setValueAtTime(bed.gain.value, now);
+  bed.gain.linearRampToValueAtTime(on ? sounds.background.duckLevel : 1, now + sounds.background.duckSeconds);
 }
 
 // While sound is off the audio clock is paused, so a fade scheduled on it would only run when sound
@@ -167,7 +185,7 @@ export function cue(phaseKey, seconds) {
   };
 }
 
-// The Calm screen's music (owner, 2026-10-07): slow, soft pads that move through a few gentle
+// The background music (owner, 2026-10-07; RLG-045): slow, soft pads that move through a few gentle
 // chords. Each chord note is two slightly detuned triangle waves through a low-pass filter, with
 // long swells, and each chord overlaps the next. `level` scales the volume (the Both mix).
 // Returns { stop() }. Silent when sounds are off.
@@ -181,7 +199,7 @@ export function pads(level = 1) {
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
   filter.frequency.value = settings.cutoffHz;
-  filter.connect(master).connect(output);
+  filter.connect(master).connect(bed);
   const live = new Set();
   let chord = 0;
   let timer = 0;
@@ -395,7 +413,7 @@ export function chime(frequency) {
   strike(settings.echoSeconds, settings.echoLevel);
 }
 
-// The Calm screen's rain (owner: an atonal mode, "noise like rain"): looping noise, shaped by a
+// The background rain (owner: an atonal mode, "noise like rain"): looping noise, shaped by a
 // low-pass and a high-pass filter, whose level breathes slowly, with soft drops now and then.
 // `level` scales the volume (the Both mix). Returns { stop() }. Silent when sounds are off.
 export function rain(level = 1) {
@@ -406,10 +424,10 @@ export function rain(level = 1) {
   const master = ctx.createGain();
   master.gain.setValueAtTime(0, ctx.currentTime);
   master.gain.linearRampToValueAtTime(settings.volume * level, ctx.currentTime + settings.fadeInSeconds);
-  master.connect(output);
+  master.connect(bed);
 
-  const bed = noise(ctx);
-  bed.loop = true;
+  const hiss = noise(ctx);
+  hiss.loop = true;
   const low = ctx.createBiquadFilter();
   low.type = "lowpass";
   low.frequency.value = settings.lowpassHz;
@@ -423,8 +441,8 @@ export function rain(level = 1) {
   lfo.frequency.value = settings.swellHz;
   lfoDepth.gain.value = settings.swellDepth;
   lfo.connect(lfoDepth).connect(swell.gain);
-  bed.connect(low).connect(high).connect(swell).connect(master);
-  bed.start();
+  hiss.connect(low).connect(high).connect(swell).connect(master);
+  hiss.start();
   lfo.start();
 
   let timer = 0;
@@ -451,17 +469,83 @@ export function rain(level = 1) {
       const now = ctx.currentTime;
       if (paused(ctx)) {
         master.disconnect();
-        bed.stop();
+        hiss.stop();
         lfo.stop();
         return;
       }
       master.gain.cancelScheduledValues(now);
       master.gain.setTargetAtTime(0, now, 0.4);
-      bed.stop(now + 2);
+      hiss.stop(now + 2);
       lfo.stop(now + 2);
       fadingUntil(() => {
         master.disconnect();
-        try { bed.stop(); lfo.stop(); } catch { /* already stopped */ }
+        try { hiss.stop(); lfo.stop(); } catch { /* already stopped */ }
+      }, 2);
+    },
+  };
+}
+
+// Waves on a shore (RLG-043): looping noise under a low-pass filter. Each wave swells and opens the
+// filter as it rises, then breaks and falls back to a quiet trough. The waves come at uneven gaps
+// and reach uneven heights, as on a real shore. Noise has no pitch, so it is in every key.
+// `level` scales the volume (the Both mix). Returns { stop() }. Silent when sounds are off.
+export function waves(level = 1) {
+  if (!canPlay()) return { stop: SILENT };
+  const ctx = ensureContext();
+  if (!ctx) return { stop: SILENT };
+  const settings = sounds.waves;
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(0, ctx.currentTime);
+  master.gain.linearRampToValueAtTime(settings.volume * level, ctx.currentTime + settings.fadeInSeconds);
+  master.connect(bed);
+
+  const surf = noise(ctx);
+  surf.loop = true;
+  const high = ctx.createBiquadFilter();
+  high.type = "highpass";
+  high.frequency.value = settings.highpassHz;
+  const low = ctx.createBiquadFilter();
+  low.type = "lowpass";
+  low.frequency.value = settings.troughHz;
+  const swell = ctx.createGain();
+  swell.gain.value = settings.troughLevel;
+  surf.connect(high).connect(low).connect(swell).connect(master);
+  surf.start();
+
+  let timer = 0;
+  const between = (min, max) => min + Math.random() * (max - min);
+  function wave() {
+    const now = ctx.currentTime;
+    const seconds = between(settings.minSeconds, settings.maxSeconds);
+    const crest = now + seconds * settings.riseShare;
+    const height = between(settings.minPeak, 1);
+    swell.gain.cancelScheduledValues(now);
+    swell.gain.setValueAtTime(swell.gain.value, now);
+    swell.gain.linearRampToValueAtTime(height, crest);
+    swell.gain.exponentialRampToValueAtTime(settings.troughLevel, now + seconds);
+    low.frequency.cancelScheduledValues(now);
+    low.frequency.setValueAtTime(low.frequency.value, now);
+    low.frequency.exponentialRampToValueAtTime(settings.troughHz + (settings.crestHz - settings.troughHz) * height, crest);
+    low.frequency.exponentialRampToValueAtTime(settings.troughHz, now + seconds);
+    timer = setTimeout(wave, seconds * 1000);
+  }
+  wave();
+
+  return {
+    stop() {
+      clearTimeout(timer);
+      const now = ctx.currentTime;
+      if (paused(ctx)) {
+        master.disconnect();
+        surf.stop();
+        return;
+      }
+      master.gain.cancelScheduledValues(now);
+      master.gain.setTargetAtTime(0, now, 0.4);
+      surf.stop(now + 2);
+      fadingUntil(() => {
+        master.disconnect();
+        try { surf.stop(); } catch { /* already stopped */ }
       }, 2);
     },
   };

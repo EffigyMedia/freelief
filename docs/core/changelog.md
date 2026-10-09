@@ -10,6 +10,15 @@ audit.
 
 ---
 
+<a id="v0-7-6"></a>
+## [0.7.6] - 2026-10-09
+- **Background sound**: the Visualizer's music, nature sound or both keeps playing when you leave
+  it. Every other screen shows a slim bar under the header with what plays and a **Stop** button.
+  The Visualizer has a new **Off** choice. Breathing lowers the background sound under its tones.
+  [RLG-045](../fragments/RLG-045.md).
+- **Waves**: **Rain** is now **Nature**, which plays rain or waves. Choose which in Settings.
+  [RLG-043](../fragments/RLG-043.md). 161 tests.
+
 <a id="v0-7-5"></a>
 ## [0.7.5] - 2026-10-09
 - **Visualizer**: the rain's drops are tuned to the notes of the music's key, C major. The bubble

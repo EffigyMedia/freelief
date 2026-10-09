@@ -1,6 +1,8 @@
 // Calm (owner, 2026-10-07): slow musical pads, and simple geometric shapes that fade in and out
 // like a screen saver. "Black screen" covers everything in black; one tap or key brings the
 // screen back, and the music keeps playing. Nothing to do, nothing to win.
+// The sound is the background sound (RLG-045): this screen chooses it, and it keeps playing after
+// the person leaves, until they choose Off here or Stop in the shell's sound bar.
 // Under reduced motion the shapes do not move or grow; they only fade.
 
 
@@ -20,7 +22,7 @@ const FORMS = [
 
 export function start(container, ctx) {
   stop();
-  const { t, config, motion, audio } = ctx;
+  const { t, config, motion } = ctx;
   const settings = config.calm;
   const still = motion.reducedMotion();
 
@@ -28,11 +30,12 @@ export function start(container, ctx) {
     <section class="activity calm">
       <h1>${t("calm.title")}</h1>
       <p class="visually-hidden">${t("calm.intro")}</p>
-      <fieldset class="calm-mode">
+      <fieldset class="calm-mode" aria-describedby="nature-hint">
         <legend>${t("calm.mode")}</legend>
         ${config.calm.modes.map((mode) => `<label class="choice"><input type="radio" name="calm-mode" value="${mode}"
           ${mode === ctx.calmMode ? "checked" : ""}><span>${t(`calm.mode.${mode}`)}</span></label>`).join("")}
       </fieldset>
+      <p id="nature-hint" class="hint">${t("calm.natureHint")}</p>
       <div class="calm-stage">
         <svg class="calm-field" viewBox="0 0 400 300" aria-hidden="true" focusable="false"></svg>
         <div class="calm-stage-actions" hidden>
@@ -51,18 +54,11 @@ export function start(container, ctx) {
   const field = container.querySelector(".calm-field");
   const stageBox = container.querySelector(".calm-stage");
   const blackButton = container.querySelector(".black-screen");
-  // Music (tonal pads), Rain (atonal noise) or Both, remembered in Settings (owner, 2026-10-07).
-  // Both plays the two at once, each at its own level from config.json, so the rain sits under
-  // the music.
-  function playMode(mode) {
-    if (mode === "rain") return audio.rain();
-    if (mode !== "both") return audio.pads();
-    const mix = config.calm.bothMix;
-    const parts = [audio.pads(mix.music), audio.rain(mix.rain)];
-    return { stop() { parts.forEach((part) => part.stop()); } };
-  }
-  const current = { timers: [], music: playMode(ctx.calmMode), cover: null, playMode, mode: ctx.calmMode,
-    wake: ctx.keepAwake() };
+  // Off, Music (tonal pads), Nature (rain or waves, chosen in Settings) or Both, remembered in
+  // Settings (owner, 2026-10-07; RLG-043, RLG-045). The shell owns the sound: a choice here is saved,
+  // and the shell plays it.
+  ctx.startBackground();
+  const current = { timers: [], cover: null, wake: ctx.keepAwake() };
   run = current;
   current.note = container.querySelector(".calm-sound-note");
   current.note.hidden = ctx.soundsOn;
@@ -115,10 +111,7 @@ export function start(container, ctx) {
   }
 
   container.querySelectorAll("input[name=calm-mode]").forEach((input) => input.addEventListener("change", () => {
-    current.mode = input.value;
-    ctx.saveCalmMode(input.value); // the shell owns Settings (AUD-066)
-    current.music.stop();
-    current.music = playMode(input.value);
+    ctx.saveCalmMode(input.value); // the shell owns Settings (AUD-066) and the background sound
   }));
 
   // Full screen (owner, 2026-10-07): the stage fills the screen. The browser's own full screen is
@@ -152,18 +145,16 @@ export function start(container, ctx) {
   addShape();
 }
 
-// The header's sound button changed: start the chosen sound, or stop it, without leaving.
+// The header's sound button changed. The shell starts or stops the sound; this screen only shows
+// or hides its note that sound is off.
 export function soundChanged(on) {
   if (!run) return;
-  run.music.stop();
-  run.music = on ? run.playMode(run.mode) : { stop() {} };
   run.note.hidden = on;
 }
 
 export function stop() {
   if (run) {
     run.timers.forEach(clearTimeout);
-    run.music.stop();
     run.wake();
     if (run.cover) run.cover.remove();
     if (run.leaveFull && document.fullscreenElement) document.exitFullscreen().catch(() => {});

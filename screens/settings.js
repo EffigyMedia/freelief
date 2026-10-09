@@ -1,4 +1,4 @@
-// Settings: breathing rhythm, colors, vibration and the region for urgent help (REQ-023, REQ-007,
+// Settings: breathing rhythm, the nature sound, colors, vibration and the region for urgent help (REQ-023, REQ-007,
 // REQ-021, REQ-005). Every change is saved at once through settings.js, the only module that
 // touches storage.
 
@@ -26,6 +26,11 @@ export function start(container, ctx) {
       <fieldset>
         <legend>${t("settings.openOn")}</legend>
         ${radios("openOn", config.settings.openOnChoices, getSetting("openOn"), "settings.openOn")}
+      </fieldset>
+      <fieldset aria-describedby="nature-hint">
+        <legend>${t("settings.nature")}</legend>
+        ${radios("natureSound", config.calm.natureChoices, getSetting("natureSound"), "settings.nature")}
+        <p id="nature-hint" class="hint small-hint">${t("settings.natureHint")}</p>
       </fieldset>
       <fieldset>
         <legend>${t("settings.theme")}</legend>
@@ -60,6 +65,8 @@ export function start(container, ctx) {
     input.addEventListener("change", () => setSetting("rhythm", input.value)));
   container.querySelectorAll("input[name=openOn]").forEach((input) =>
     input.addEventListener("change", () => setSetting("openOn", input.value)));
+  container.querySelectorAll("input[name=natureSound]").forEach((input) =>
+    input.addEventListener("change", () => setSetting("natureSound", input.value)));
   container.querySelectorAll("input[name=theme]").forEach((input) =>
     input.addEventListener("change", () => setSetting("theme", input.value)));
   container.querySelector("input[name=haptics]").addEventListener("change", (event) =>

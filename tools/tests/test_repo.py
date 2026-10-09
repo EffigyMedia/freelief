@@ -140,6 +140,7 @@ PRIVACY_WORDS = {
     "sounds": "sound",
     "theme": "colors",
     "calmMode": "Visualizer",
+    "natureSound": "nature",
     "helpRegion": "country",
     "haptics": "vibration",
     "openOn": "opens",

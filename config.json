@@ -213,6 +213,22 @@
       ],
       "echoSeconds": 0.11,
       "echoLevel": 0.35
+    },
+    "background": {
+      "duckLevel": 0.35,
+      "duckSeconds": 1.2
+    },
+    "waves": {
+      "volume": 0.05,
+      "fadeInSeconds": 3,
+      "highpassHz": 120,
+      "troughHz": 350,
+      "crestHz": 1500,
+      "troughLevel": 0.18,
+      "minPeak": 0.55,
+      "minSeconds": 6,
+      "maxSeconds": 11,
+      "riseShare": 0.4
     }
   },
   "haptics": {
@@ -636,14 +652,23 @@
     "minSize": 50,
     "maxSize": 130,
     "modes": [
+      "off",
       "music",
-      "rain",
+      "nature",
       "both"
     ],
     "defaultMode": "music",
     "bothMix": {
       "music": 0.9,
-      "rain": 0.6
-    }
+      "nature": 0.6
+    },
+    "natureChoices": [
+      "rain",
+      "waves"
+    ],
+    "natureDefault": "rain",
+    "duckRoutes": [
+      "breathe"
+    ]
   }
 }

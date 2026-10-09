@@ -71,7 +71,7 @@ installs to the home screen of a phone or a desktop and then works fully offline
 it shows the menu at once, with no account, question or notice before it. Breathe, a paced
 breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
 bubble field, a shape trace, a colour sort, a ripple pond and mandala coloring) and the Visualizer
-(music or rain with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
+(music, rain or waves with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
 GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
@@ -173,12 +173,12 @@ Not built (decided 2026-10-07):
 |---|---|
 | **Exercise** | A guided self-help technique: paced breathing. |
 | **Activity** | A distraction activity: the bubble field, the shape trace, the colour sort, the ripple pond, mandala coloring, or the Visualizer. No score, no failure, no timer. |
-| **Visualizer** | The activity with nothing to do: music, rain or both, with soft shapes that fade in and out, a full screen and a black screen. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
+| **Visualizer** | The activity with nothing to do: music, nature (rain or waves) or both, with soft shapes that fade in and out, a full screen and a black screen. Its sound is the background sound. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
 | **Region** | The country taken from the device language and region setting. Never from location. |
-| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, sound on or off, vibration on or off, the light or dark theme, the Visualizer's sound (music, rain or both), and the region for urgent help. On the device only. |
+| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, sound on or off, vibration on or off, the light or dark theme, the Visualizer's sound (off, music, nature or both), the nature sound (rain or waves), and the region for urgent help. On the device only. |
 | **Standard** | An external standard Freelief claims to meet, such as WCAG 2.2 AA. It has a level, a check date, and the tester of the manual check. |
 | **Source** | A published research citation behind a technique. |
 
@@ -190,7 +190,9 @@ restarts on the device (REQ-023, REQ-015).
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
   the shape trace, the colour sort, the ripple pond, mandala coloring, or the Visualizer.
-- **Visualizer** — the activity with nothing to do: music, rain or both, with soft shapes, a full
+- **Background sound** — the music, the nature sound or both, chosen in the Visualizer, which keeps
+  playing on every screen until the person chooses Off or presses Stop in the sound bar.
+- **Visualizer** — the activity with nothing to do: music, nature or both, with soft shapes, a full
   screen and a black screen.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
@@ -258,7 +260,11 @@ designs, blank, and after the last it starts the first again.
 States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
 and its action. *Visualizer (added 2026-10-07; named 2026-10-07, UNT-034):* nothing to do; the
-person chooses Music, Rain or Both, and soft shapes fade in and out. Full screen fills the screen
+person chooses Off, Music, Nature or Both, and soft shapes fade in and out. Nature plays rain or
+waves, as Settings chooses. The sound is the background sound: it keeps playing when the person
+leaves, and every other screen shows the sound bar under the header ("Playing: music and rain",
+with Stop) until the person chooses Off or presses Stop. Breathing lowers it under its tones, and
+it waits while urgent help is open. Full screen fills the screen
 and keeps its own "Need urgent help?" button. Black screen covers everything in black while the
 sound plays; one tap or key brings the screen back. Under reduced motion the shapes only fade. The
 screen stays awake while it runs.
@@ -361,11 +367,12 @@ Each file below is one module with one responsibility.
 | `index.html` + `app.js` (**shell**) | The page frame, the screen router, the footer, and the "Need urgent help?" control. | Contain exercise logic or text. |
 | `exercises/breathe.js` | The breathing exercise. *(`ground.js` and `statements.js` were removed 2026-10-07.)* | Read storage or the network; hold text. |
 | `activities/bubbles.js`, `trace.js`, `sort.js`, `ripple.js`, `mandala.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
-| `activities/calm.js` (**the Visualizer**) | Music, rain or both through `audio`, soft shapes that fade in and out, Full screen with its own "Need urgent help?" button, and the black screen. Its shape loop uses timers inside the module; the person sees none. | Show a countdown, an end or a score; read storage; add shapes or animate while the screen is black. |
+| `background.js` | The background sound: what plays (off, music, nature, both) and which nature sound, started and stopped through `audio`. The shell tells it what to play. | Touch storage; start a sound by itself. |
+| `activities/calm.js` (**the Visualizer**) | The choice of background sound, saved and played by the shell, soft shapes that fade in and out, Full screen with its own "Need urgent help?" button, and the black screen. Its shape loop uses timers inside the module; the person sees none. | Show a countdown, an end or a score; read storage; add shapes or animate while the screen is black. |
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
 | `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
 | `crisis.js` + `data/crisis-lines.json` | The choice of crisis lines from the device region. | Ask for location. |
-| `audio.js` | Every sound, made with Web Audio: the breathing tones, the activity cues and the Visualizer's music and rain. Nothing plays before the first tap or key press. | Play anything while sound is off, while urgent help is open, or while the app is hidden; load an audio file. |
+| `audio.js` | Every sound, made with Web Audio: the breathing tones, the activity cues and the background music, rain and waves, which share one volume that a screen can lower. Nothing plays before the first tap or key press. | Play anything while sound is off, while urgent help is open, or while the app is hidden; load an audio file. |
 | `haptics.js` | One short vibration from `config.json` → `haptics.patterns` for a single triggered event in an activity. A device without the Vibration API gets nothing. | Vibrate for anything continuous (the breath, a drag trail, the trace tone); vibrate while vibration is off. |
 | `wakelock.js` | The screen wake lock while breathing or the Visualizer runs, taken again when the page comes back. | Fail when the browser has no wake lock or refuses it; keep the lock after the last screen releases it. |
 | `motion.js` | Reduced-motion detection; every animation asks it. | — |
@@ -985,6 +992,21 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   water drop keep their random pitch, because they are natural sounds, and the test excludes them
   by name. Filter corners, the rain's swell and the glass's beat are not notes. — Rejected: C-major
   notes for the pop and the water drop (owner). — 2026-10-09 (owner; UNT-093)
+- **The background sound keeps playing until it is turned off, and a sound bar shows it.** — Owner
+  request (RLG-045); the owner chose the sound bar from three designs (a header sound menu with the
+  Visualizer renamed, and a choice in Settings only, were not chosen). The Visualizer keeps its name
+  and gains Off. Its choice is the background sound, owned by the shell through `background.js`:
+  it keeps playing when the person leaves, and every other screen shows a slim bar at the foot of
+  the header with what plays and a Stop button. Stop is the same as Off and is saved, so the
+  Visualizer opens silent after it. The bar sits inside the header, a landmark. Breathing lowers
+  the background to `sounds.background.duckLevel` under its tones (`calm.duckRoutes`); urgent help
+  and a hidden app pause it, as before. The background does not start when the app opens; it
+  starts when the person opens the Visualizer. — 2026-10-09 (owner; UNT-094)
+- **Rain becomes Nature, which plays rain or waves.** — Owner request (RLG-043). The waves are
+  looping noise under a low-pass filter; each wave swells and opens the filter, then breaks and
+  falls back, at uneven gaps (6 to 11 s) and heights. Noise has no pitch, so the key rule (RLG-046)
+  holds. Settings chooses rain or waves; a saved "rain" choice from before becomes Nature with
+  rain. — 2026-10-09 (owner; UNT-094)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

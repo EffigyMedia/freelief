@@ -25,6 +25,7 @@ const FILES = [
   "motion.js",
   "settings.js",
   "audio.js",
+  "background.js",
   "haptics.js",
   "wakelock.js",
   "exercises/breathe.js",
