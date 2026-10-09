@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-7-4"></a>
+## [0.7.4] - 2026-10-09
+- **Color a mandala**: five new designs, eight in all, with two new shapes: a scallop with a rounded
+  edge and a diamond. [RLG-042](../fragments/RLG-042.md). 154 tests.
+
 <a id="v0-7-3"></a>
 ## [0.7.3] - 2026-10-08
 - **Sort colors**: an arrow under the tiles shows the order, with **Light** on the left and **Dark**

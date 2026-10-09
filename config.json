@@ -452,6 +452,142 @@
           "offset": 0.5,
           "width": 0.5
         }
+      ],
+      [
+        {
+          "center": true,
+          "count": 1,
+          "outer": 14
+        },
+        {
+          "shape": "scallop",
+          "count": 8,
+          "inner": 14,
+          "outer": 44
+        },
+        {
+          "shape": "diamond",
+          "count": 8,
+          "inner": 44,
+          "outer": 72,
+          "offset": 0.5,
+          "width": 0.5
+        },
+        {
+          "shape": "scallop",
+          "count": 16,
+          "inner": 72,
+          "outer": 100
+        }
+      ],
+      [
+        {
+          "center": true,
+          "count": 1,
+          "outer": 16
+        },
+        {
+          "shape": "dot",
+          "count": 6,
+          "inner": 16,
+          "outer": 40
+        },
+        {
+          "shape": "band",
+          "count": 12,
+          "inner": 40,
+          "outer": 64
+        },
+        {
+          "shape": "diamond",
+          "count": 12,
+          "inner": 64,
+          "outer": 100,
+          "offset": 0.5,
+          "width": 0.5
+        }
+      ],
+      [
+        {
+          "center": true,
+          "count": 1,
+          "outer": 14
+        },
+        {
+          "shape": "diamond",
+          "count": 6,
+          "inner": 14,
+          "outer": 46,
+          "width": 0.45
+        },
+        {
+          "shape": "petal",
+          "count": 12,
+          "inner": 46,
+          "outer": 72,
+          "offset": 0.5,
+          "width": 0.5
+        },
+        {
+          "shape": "scallop",
+          "count": 12,
+          "inner": 72,
+          "outer": 100
+        }
+      ],
+      [
+        {
+          "center": true,
+          "count": 1,
+          "outer": 18
+        },
+        {
+          "shape": "scallop",
+          "count": 6,
+          "inner": 18,
+          "outer": 48
+        },
+        {
+          "shape": "dot",
+          "count": 12,
+          "inner": 48,
+          "outer": 70,
+          "offset": 0.5
+        },
+        {
+          "shape": "band",
+          "count": 12,
+          "inner": 70,
+          "outer": 100
+        }
+      ],
+      [
+        {
+          "center": true,
+          "count": 1,
+          "outer": 15
+        },
+        {
+          "shape": "petal",
+          "count": 10,
+          "inner": 15,
+          "outer": 48,
+          "width": 0.8
+        },
+        {
+          "shape": "band",
+          "count": 10,
+          "inner": 48,
+          "outer": 70,
+          "offset": 0.5
+        },
+        {
+          "shape": "diamond",
+          "count": 20,
+          "inner": 70,
+          "outer": 100,
+          "width": 0.5
+        }
       ]
     ]
   },

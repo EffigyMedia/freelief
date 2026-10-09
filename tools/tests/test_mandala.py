@@ -164,3 +164,15 @@ def test_filling_a_shape_plays_the_step_cue():
         before = page.evaluate("window.__osc")
         page.locator(".mandala-part").first.click()
         wait_until(page, f"window.__osc > {before}", 2000)
+
+
+def test_every_ring_uses_a_known_shape_and_diamonds_do_not_overlap():
+    # RLG-042: an unknown shape would draw as a petal with no warning. Two diamonds side by side
+    # overlap when each is wider than half a step, and then the shared edge is hard to tap.
+    for d, design in enumerate(SETTINGS["designs"]):
+        assert design[0].get("center"), f"design {d} starts with its center"
+        for ring in design[1:]:
+            assert ring["shape"] in ("petal", "band", "dot", "scallop", "diamond"), f"design {d}: {ring}"
+            assert ring["inner"] < ring["outer"], f"design {d}: {ring}"
+            if ring["shape"] == "diamond":
+                assert ring.get("width", 0.45) <= 0.5, f"design {d}: diamonds overlap"

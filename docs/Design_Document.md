@@ -253,7 +253,8 @@ and a finger drawn across it leaves a trail of ripples; a key press or a screen 
 makes a ripple at a random place; each ripple plays a soft water drop. *Mandala coloring (REQ-033,
 added 2026-10-07):* six soft colors and a mandala of shapes drawn from formulas; the person chooses
 a color, then taps or selects a shape to fill it; arrow keys move around a ring and between rings;
-each shape is named ("Ring 2, shape 3 of 12, blank"); New mandala starts the next design, blank.
+each shape is named ("Ring 2, shape 3 of 12, blank"); New mandala starts the next of eight
+designs, blank, and after the last it starts the first again.
 States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
 and its action. *Visualizer (added 2026-10-07; named 2026-10-07, UNT-034):* nothing to do; the
@@ -968,6 +969,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   points right, from "Light" under its left end to "Dark" under its right end, so a person who can
   see the tiles knows the task without reading. It is hidden from a screen reader, because the
   intro already says the order. — 2026-10-08 (owner; UNT-086)
+- **The mandala has eight designs and five shape kinds.** — Owner request (RLG-042): more designs.
+  Five designs are added to the three, and two shape kinds are added to petal, band and dot: a
+  scallop (a sector with a rounded outer edge) and a diamond (four straight sides, widest at the
+  middle). The designs are still data in `config.json`, so no image ships. Every shape in every
+  design stays at least 24 px at a 360 px width, and a test keeps two diamonds side by side from
+  overlapping, because a shared edge is hard to tap. — Rejected: designs from image files (size,
+  and no names for the shapes). — 2026-10-09 (owner; UNT-091)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

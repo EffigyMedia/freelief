@@ -10,11 +10,26 @@ const polar = (r, a) => [r * Math.cos(a - Math.PI / 2), r * Math.sin(a - Math.PI
 const pt = ([x, y]) => `${x.toFixed(2)} ${y.toFixed(2)}`;
 
 // One path per part of a ring. "petal" is a pointed leaf from the inner to the outer radius;
-// "band" is a sector of the ring; "dot" is a circle in the middle of the ring.
+// "band" is a sector of the ring; "dot" is a circle in the middle of the ring; "scallop" is a
+// sector with a rounded outer edge; "diamond" has four straight sides, widest at the middle.
 function ringPaths(ring) {
   const step = (2 * Math.PI) / ring.count;
   return [...Array(ring.count).keys()].map((i) => {
     const a = (i + (ring.offset || 0)) * step;
+    if (ring.shape === "scallop") {
+      const [a0, a1] = [a - step / 2, a + step / 2];
+      const edge = ring.inner + (ring.outer - ring.inner) * 0.6;
+      return `M${pt(polar(ring.inner, a0))} L${pt(polar(edge, a0))} `
+        + `Q${pt(polar(ring.outer * 1.04, a0))} ${pt(polar(ring.outer, a))} `
+        + `Q${pt(polar(ring.outer * 1.04, a1))} ${pt(polar(edge, a1))} `
+        + `L${pt(polar(ring.inner, a1))} A${ring.inner} ${ring.inner} 0 0 0 ${pt(polar(ring.inner, a0))}Z`;
+    }
+    if (ring.shape === "diamond") {
+      const middle = (ring.inner + ring.outer) / 2;
+      const half = step * (ring.width || 0.45);
+      return `M${pt(polar(ring.inner, a))} L${pt(polar(middle, a - half))} L${pt(polar(ring.outer, a))} `
+        + `L${pt(polar(middle, a + half))}Z`;
+    }
     if (ring.shape === "band") {
       const [a0, a1] = [a - step / 2, a + step / 2];
       return `M${pt(polar(ring.inner, a0))} L${pt(polar(ring.outer, a0))} `
