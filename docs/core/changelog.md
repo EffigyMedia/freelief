@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-7-2"></a>
+## [0.7.2] - 2026-10-08
+- Fixed: muting the Visualizer, leaving it and unmuting no longer plays its music again before it
+  fades. [RLG-038](../fragments/RLG-038.md). 152 tests.
+
 <a id="v0-7-1"></a>
 ## [0.7.1] - 2026-10-08
 - **Color a mandala**: each color has its own note, played like a rain chime when you choose the

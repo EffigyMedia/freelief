@@ -946,6 +946,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   rain (`sounds.chime`, `mandala.palette[].note`). The old step cue, now unused, is removed. The
   trace's crystal glass is 40% quieter (`sounds.glass.volume` 0.035 to 0.021). — 2026-10-08 (owner;
   UNT-084)
+- **A sound that stops while sound is off, or while the off-fade runs, is cut off at once.** — The
+  owner found that muting in the Visualizer, leaving it and unmuting played the music again and then
+  faded it. Muting pauses the audio clock after its fade, so a sound's own fade-out froze partway
+  and resumed with the sound. Now each fading sound is registered, and is cut off silently just
+  before the audio pauses; a sound stopped while the audio is already paused is cut off at once. —
+  2026-10-08 (owner report; UNT-085)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

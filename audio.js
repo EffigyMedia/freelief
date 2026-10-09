@@ -68,8 +68,25 @@ export function applySound(on) {
   output.gain.setValueAtTime(output.gain.value, now);
   output.gain.linearRampToValueAtTime(0, now + fade);
   fadeTimer = setTimeout(() => {
+    fading.forEach((cut) => cut());
+    fading.clear();
     if (context.state === "running") context.suspend();
   }, fade * 1000 + 50);
+}
+
+// While sound is off the audio clock is paused, so a fade scheduled on it would only run when sound
+// comes back, and the person would hear the old sound again (owner report, 2026-10-08). A sound
+// stopped while the clock is paused is cut off at once instead: silent, because nothing is heard.
+function paused(ctx) {
+  return ctx.state !== "running";
+}
+
+// Sounds that are fading out. When the audio pauses partway through a fade, each is cut off first,
+// so the frozen tail of the fade cannot play when sound comes back (owner report, 2026-10-08).
+const fading = new Set();
+function fadingUntil(cut, seconds) {
+  fading.add(cut);
+  setTimeout(() => fading.delete(cut), seconds * 1000);
 }
 
 // One sine note that swells and fades, starting `delay` seconds from now.
@@ -135,9 +152,18 @@ export function cue(phaseKey, seconds) {
   });
   return () => {
     const now = ctx.currentTime;
+    if (paused(ctx)) {
+      gain.disconnect();
+      voices.forEach((oscillator) => { try { oscillator.stop(); } catch { /* already stopped */ } });
+      return;
+    }
     gain.gain.cancelScheduledValues(now);
     gain.gain.setTargetAtTime(0, now, 0.08);
     voices.forEach((oscillator) => { try { oscillator.stop(now + 0.4); } catch { /* already stopped */ } });
+    fadingUntil(() => {
+      gain.disconnect();
+      voices.forEach((oscillator) => { try { oscillator.stop(); } catch { /* already stopped */ } });
+    }, 0.4);
   };
 }
 
@@ -191,8 +217,17 @@ export function pads(level = 1) {
     stop() {
       clearTimeout(timer);
       const now = ctx.currentTime;
+      if (paused(ctx)) {
+        master.disconnect();
+        live.forEach((oscillator) => { try { oscillator.stop(); } catch { /* already stopped */ } });
+        return;
+      }
       master.gain.setTargetAtTime(0, now, 0.4);
       live.forEach((oscillator) => { try { oscillator.stop(now + 2); } catch { /* already stopped */ } });
+      fadingUntil(() => {
+        master.disconnect();
+        live.forEach((oscillator) => { try { oscillator.stop(); } catch { /* already stopped */ } });
+      }, 2);
     },
   };
 }
@@ -243,6 +278,12 @@ export function glass(frequency) {
       clearTimeout(idle);
       if (!voice) return;
       const { ctx, master, oscillators } = voice;
+      if (paused(ctx)) {
+        master.disconnect();
+        oscillators.forEach((oscillator) => oscillator.stop());
+        voice = null;
+        return;
+      }
       master.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
       oscillators.forEach((oscillator) => oscillator.stop(ctx.currentTime + 0.6));
       voice = null;
@@ -403,10 +444,20 @@ export function rain(level = 1) {
     stop() {
       clearTimeout(timer);
       const now = ctx.currentTime;
+      if (paused(ctx)) {
+        master.disconnect();
+        bed.stop();
+        lfo.stop();
+        return;
+      }
       master.gain.cancelScheduledValues(now);
       master.gain.setTargetAtTime(0, now, 0.4);
       bed.stop(now + 2);
       lfo.stop(now + 2);
+      fadingUntil(() => {
+        master.disconnect();
+        try { bed.stop(); lfo.stop(); } catch { /* already stopped */ }
+      }, 2);
     },
   };
 }

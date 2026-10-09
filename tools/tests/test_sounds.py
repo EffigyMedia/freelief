@@ -128,3 +128,29 @@ def test_the_sound_button_fades_out_and_in_rather_than_cutting():
         wait_until(page, "window.__osc.at(-1).ctx.state === 'suspended'", int(fade * 1000) + 2000)
         page.locator("button.sound-toggle").click()
         wait_until(page, "window.__osc.at(-1).ctx.state === 'running'", 2000)
+
+
+def test_music_left_while_muted_does_not_come_back_when_sound_returns():
+    # Owner report, 2026-10-08: mute in the Visualizer, leave it, unmute, and the music played and
+    # then faded. A sound stopped while muted must be over at once.
+    probe = """
+window.__gain = [];
+const createGain = AudioContext.prototype.createGain;
+AudioContext.prototype.createGain = function () {
+  const node = createGain.call(this);
+  const record = { connected: true };
+  window.__gain.push(record);
+  const disconnect = node.disconnect.bind(node);
+  node.disconnect = (...args) => { record.connected = false; return disconnect(...args); };
+  return node;
+};"""
+    with open_app(init_script=PROBE + probe) as (page, _, _):
+        page.locator(".guide").click()
+        go(page, "calm")
+        wait_until(page, "window.__osc.length > 0", 3000)
+        page.locator("button.sound-toggle").click()
+        wait_until(page, "window.__osc.at(-1).ctx.state === 'suspended'", 3000)
+        assert page.evaluate("window.__gain.some(g => !g.connected)"),             "the music fading out when the audio paused was cut off, not frozen"
+        go(page, "bubbles")
+        stops = page.evaluate("window.__osc.filter(o => o.stop !== null).map(o => o.stop - o.ctx.currentTime)")
+        assert stops and max(stops) <= 0.01, f"no stop left scheduled for later: {max(stops)}"
