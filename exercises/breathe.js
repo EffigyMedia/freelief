@@ -77,12 +77,15 @@ export function start(container, ctx) {
     clearTimers();
     if (paused) {
       run.stopTone();
+      // A paused screen has no reason to stay on (AUD-103); resuming keeps it on again.
+      run.wake();
       phaseLabel.textContent = t("breathe.paused");
       count.textContent = "";
       const current = getComputedStyle(circle).transform;
       circle.style.transition = "none";
       circle.style.transform = current === "none" ? "" : current;
     } else {
+      run.wake = ctx.keepAwake();
       runPhase();
     }
   }

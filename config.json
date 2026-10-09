@@ -826,5 +826,13 @@
     "duckRoutes": [
       "breathe"
     ]
+  },
+  "wakeLock": {
+    "idleMinutesChoices": [
+      10,
+      30,
+      60
+    ],
+    "idleMinutesDefault": 30
   }
 }

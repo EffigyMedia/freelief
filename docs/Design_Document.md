@@ -453,8 +453,9 @@ a Playwright run with CPU throttled 4x as its stand-in. `bench` records all thre
 are a supply-chain change (none: no third-party code ships), a tampered crisis line, and a
 misleading claim (REQ-025). The control against a tampered crisis line is this: the owner is the
 only person who commits; a crisis line is added or changed only with a source checked in the same
-session (AGENTS.md); and a repository test pins each crisis number to its record, so a changed
-number fails the tests unless its record changes too (`test_every_crisis_number_is_pinned`). No
+session (AGENTS.md); and a repository test pins each crisis number, and the directory link, to
+its record, so a changed number or link fails the tests unless its record changes too
+(`test_every_crisis_number_is_pinned`; the directory since AUD-076). No
 enforced review of a commit exists. *(Changed 2026-10-08, AUD-007: it first said "every change goes
 through a reviewed commit", a control that did not exist.)*
 
@@ -883,7 +884,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   reloads once) or when the person presses Update now. After a touch the page keeps its own
   version, files and all, and the next open gets the new one. A screen that cannot load falls back
   to the menu and the address becomes `#menu`, so the failed screen's link works again. —
-  2026-10-08 (UNT-057)
+  2026-10-08 (UNT-057) *Amended 2026-10-09 (AUD-107, UNT-098): a running breathing screen also
+  counts as in use, so with "Start breathing at once" an update found at launch waits for the next
+  open and does not restart the breath.*
 - **The Breathe card stands out, and Settings can make Freelief open on breathing.** — The design
   review found that, since the app opens on the menu, a person in panic must read and choose before
   any help starts. The owner kept the menu as the default and chose two polish items: the Breathe
@@ -1040,6 +1043,22 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   notes stay in `docs/research/sources.md`. The Visualizer adds a meta-analysis of natural sounds
   (buxton2021) and says its rain and waves are imitations. Every DOI was checked on Crossref in the
   session, and the two new abstracts were read on PubMed. — 2026-10-09 (owner request; UNT-097)
+- **The screen may sleep after a time with no touch, chosen in Settings.** — AUD-103: a person who
+  falls asleep on Breathe or the Visualizer left the screen on for hours. The owner chose a default
+  of 30 minutes and a setting of 10, 30 or 60 minutes ("Keep the screen on", `awakeMinutes`,
+  `config.wakeLock`). After that time with no touch or key the wake lock is released and the
+  exercise goes on; the next touch takes it back. No countdown is shown, so REQ-011 holds. Pausing
+  breathing releases the lock at once. A lock granted after the screen stopped wanting it is
+  released at once (AUD-081). — 2026-10-09 (owner; UNT-098)
+- **Freelief asks the browser to keep its offline copy.** — AUD-080: best-effort storage can be
+  evicted on a full phone, and then the app does not open offline. After the start, Freelief calls
+  `navigator.storage.persist()` where the browser decides with no question (Chromium, Safari). It
+  does not call it in Firefox, which asks the person, because the app opens with no question
+  (REQ-018). The call never holds up the start. — 2026-10-09 (UNT-098)
+- **Nothing wakes the audio while it is held silent.** — AUD-082: a breathing tone resumed the
+  paused audio behind urgent help. While sound is off, help is open or the app is hidden, no sound
+  is made and the audio is not resumed. A failed crisis-lines load and a failed offline install
+  are now logged with their reason (AUD-084, AUD-085). — 2026-10-09 (UNT-098)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

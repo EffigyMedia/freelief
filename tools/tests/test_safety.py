@@ -112,3 +112,68 @@ def test_nothing_is_drawn_under_the_black_screen_and_one_tap_brings_help_back():
         page.locator(".black-cover").click()
         assert "asleep" not in page.locator(".calm-stage").get_attribute("class")
         assert page.locator(".help-open").is_visible(), "one tap from black, help is in reach again"
+
+
+# AUD-103 (owner, 2026-10-09): the screen may sleep after a time with no touch, chosen in Settings.
+# The probe shortens any wait of ten minutes or more to a moment, so the test does not wait.
+SHORT_WAITS = """
+const realTimeout = window.setTimeout.bind(window);
+window.setTimeout = (callback, ms, ...rest) => realTimeout(callback, ms >= 600000 ? 400 : ms, ...rest);
+"""
+
+
+def test_the_screen_may_sleep_after_the_idle_time_and_a_touch_keeps_it_on_again():
+    with open_app(init_script=WAKE_PROBE + SHORT_WAITS, route="menu") as (page, _, _):
+        go(page, "calm")
+        wait_until(page, "window.__wake.held === 1", 2000)
+        wait_until(page, "window.__wake.held === 0", 3000)  # no touch for the idle time
+        page.locator("h1").click()
+        wait_until(page, "window.__wake.held === 1", 2000)
+
+
+def test_pausing_breathing_lets_the_screen_sleep_and_resuming_keeps_it_on():
+    with open_app(init_script=WAKE_PROBE) as (page, _, _):
+        wait_until(page, "window.__wake.held === 1", 2000)
+        page.locator(".pause").click()
+        wait_until(page, "window.__wake.held === 0", 2000)
+        page.locator(".pause").click()
+        wait_until(page, "window.__wake.held === 1", 2000)
+
+
+def test_the_screen_on_time_is_a_setting_that_is_kept():
+    with open_app(route="settings") as (page, _, _):
+        assert page.locator("input[name=awakeMinutes][value='30']").is_checked()
+        page.locator("input[name=awakeMinutes][value='60']").check()
+        page.reload()
+        wait_until(page, "document.documentElement.dataset.ready === 'true'", 5000)
+        assert page.locator("input[name=awakeMinutes][value='60']").is_checked(), "saved, reloaded, read"
+
+
+def test_a_wake_lock_granted_after_leaving_is_let_go_at_once():
+    # AUD-081: a lock granted late, after the screen left breathing, must not keep the screen on.
+    slow = """
+window.__wake = { held: 0 };
+Object.defineProperty(navigator, 'wakeLock', { configurable: true, value: {
+  request: () => new Promise((resolve) => setTimeout(() => {
+    window.__wake.held += 1;
+    const sentinel = new EventTarget();
+    sentinel.release = async () => { window.__wake.held -= 1; };
+    resolve(sentinel);
+  }, 500)) } });
+"""
+    with open_app(init_script=slow, route="menu") as (page, _, _):
+        go(page, "breathe")
+        go(page, "menu")  # leave before the lock is granted
+        page.wait_for_timeout(900)
+        assert page.evaluate("window.__wake.held") == 0
+
+
+def test_a_breathing_tone_does_not_wake_the_audio_while_urgent_help_is_open():
+    # AUD-082: a cue must not resume the paused audio behind the crisis lines.
+    with open_app(init_script=OSC_PROBE) as (page, _, _):
+        page.locator(".guide").click()
+        wait_until(page, "window.__ctx.length > 0 && window.__ctx[0].state === 'running'", 9000)
+        page.locator(".help-open").click()
+        wait_until(page, "window.__ctx[0].state === 'suspended'", 2000)
+        page.wait_for_timeout(7000)  # more than one breathing phase
+        assert page.evaluate("window.__ctx[0].state") == "suspended"

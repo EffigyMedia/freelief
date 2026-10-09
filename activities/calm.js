@@ -64,6 +64,14 @@ export function start(container, ctx) {
   current.note.hidden = ctx.soundsOn;
 
   const random = (min, max) => min + Math.random() * (max - min);
+  // A timer drops its own id when it fires, so the list holds only pending timers (AUD-038, AUD-083).
+  function later(callback, ms) {
+    const id = setTimeout(() => {
+      current.timers = current.timers.filter((pending) => pending !== id);
+      callback();
+    }, ms);
+    current.timers.push(id);
+  }
 
   function addShape() {
     if (run !== current) return;
@@ -83,9 +91,9 @@ export function start(container, ctx) {
       inner.append(shape);
       group.append(inner);
       field.append(group);
-      current.timers.push(setTimeout(() => group.remove(), settings.shapeLifeSeconds * 1000));
+      later(() => group.remove(), settings.shapeLifeSeconds * 1000);
     }
-    current.timers.push(setTimeout(addShape, settings.shapeEveryMs));
+    later(addShape, settings.shapeEveryMs);
   }
 
   // The black screen is one large button over everything, so a tap, Enter, Space or Escape all

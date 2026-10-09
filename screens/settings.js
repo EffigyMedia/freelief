@@ -27,6 +27,15 @@ export function start(container, ctx) {
         <legend>${t("settings.openOn")}</legend>
         ${radios("openOn", config.settings.openOnChoices, getSetting("openOn"), "settings.openOn")}
       </fieldset>
+      <fieldset aria-describedby="awake-hint">
+        <legend>${t("settings.awake")}</legend>
+        ${config.wakeLock.idleMinutesChoices.map((minutes) => `
+        <label class="choice">
+          <input type="radio" name="awakeMinutes" value="${minutes}" ${minutes === getSetting("awakeMinutes") ? "checked" : ""}>
+          <span>${t(`settings.awake.${minutes}`)}</span>
+        </label>`).join("")}
+        <p id="awake-hint" class="hint small-hint">${t("settings.awakeHint")}</p>
+      </fieldset>
       <fieldset aria-describedby="nature-hint">
         <legend>${t("settings.nature")}</legend>
         ${radios("natureSound", config.calm.natureChoices, getSetting("natureSound"), "settings.nature")}
@@ -65,6 +74,8 @@ export function start(container, ctx) {
     input.addEventListener("change", () => setSetting("rhythm", input.value)));
   container.querySelectorAll("input[name=openOn]").forEach((input) =>
     input.addEventListener("change", () => setSetting("openOn", input.value)));
+  container.querySelectorAll("input[name=awakeMinutes]").forEach((input) =>
+    input.addEventListener("change", () => setSetting("awakeMinutes", Number(input.value))));
   container.querySelectorAll("input[name=natureSound]").forEach((input) =>
     input.addEventListener("change", () => setSetting("natureSound", input.value)));
   container.querySelectorAll("input[name=theme]").forEach((input) =>

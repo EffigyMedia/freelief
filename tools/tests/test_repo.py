@@ -141,6 +141,7 @@ PRIVACY_WORDS = {
     "theme": "colors",
     "calmMode": "Visualizer",
     "natureSound": "nature",
+    "awakeMinutes": "screen stays on",
     "helpRegion": "country",
     "haptics": "vibration",
     "openOn": "opens",
@@ -218,6 +219,9 @@ CRISIS_PINS = {
 }
 
 
+DIRECTORY_PIN = "https://findahelpline.com/"
+
+
 def test_every_crisis_number_is_pinned():
     data = json.loads((freelief.ROOT / "data" / "crisis-lines.json").read_text("utf-8"))
     found = {code: {"emergency": region["emergency"],
@@ -225,3 +229,5 @@ def test_every_crisis_number_is_pinned():
                               for line in region["lines"]}}
              for code, region in data["regions"].items()}
     assert found == CRISIS_PINS, "a crisis number differs from its pin; check the source, then change both"
+    # The directory is the one curated route for everyone outside the pinned regions (AUD-076).
+    assert data["directory"]["url"] == DIRECTORY_PIN, "the directory link differs from its pin"

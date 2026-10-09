@@ -33,6 +33,7 @@ function validators(config) {
     // not have, so a code that is no longer curated is safe.
     helpRegion: (v) => v === "auto" || /^[A-Z]{2}$/.test(v),
     openOn: (v) => config.settings.openOnChoices.includes(v),
+    awakeMinutes: (v) => config.wakeLock.idleMinutesChoices.includes(v),
   };
 }
 
@@ -68,6 +69,7 @@ export function initSettings(config) {
     helpRegion: config.crisis.defaultRegion,
     haptics: config.haptics.enabledByDefault,
     openOn: config.settings.openOnDefault,
+    awakeMinutes: config.wakeLock.idleMinutesDefault,
   };
   const valid = validators(config);
   let hasV2 = false;
@@ -77,7 +79,7 @@ export function initSettings(config) {
     hasV2 = false;
   }
   const stored = hasV2 ? read(key) : migrate(config, valid);
-  // Before 0.8.0 the Visualizer's choices were Music, Rain and Both. Rain is now Nature, with rain
+  // Before 0.7.6 the Visualizer's choices were Music, Rain and Both. Rain is now Nature, with rain
   // as its nature sound (RLG-043).
   if (stored.calmMode === "rain") stored.calmMode = "nature";
   chosen = {};

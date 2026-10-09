@@ -10,6 +10,21 @@ audit.
 
 ---
 
+<a id="v0-7-10"></a>
+## [0.7.10] - 2026-10-09
+- **Keep the screen on**: a new setting. During breathing and the Visualizer, the screen may turn
+  off after 10, 30 (the default) or 60 minutes with no touch; the exercise goes on. Pausing
+  breathing lets the screen sleep at once. [AUD-103](../fragments/AUD-103.md),
+  [AUD-081](../fragments/AUD-081.md).
+- Freelief asks the browser to keep its offline copy, so it still opens offline on a full phone.
+  [AUD-080](../fragments/AUD-080.md).
+- Fixed: a breathing tone no longer wakes the audio behind urgent help. An update found while
+  breathing runs waits for the next open. Failed loads are logged. The directory link is pinned in
+  the tests, and the Visualizer and the pond no longer keep old timer ids.
+  [AUD-082](../fragments/AUD-082.md), [AUD-107](../fragments/AUD-107.md),
+  [AUD-084](../fragments/AUD-084.md), [AUD-085](../fragments/AUD-085.md),
+  [AUD-076](../fragments/AUD-076.md), [AUD-083](../fragments/AUD-083.md). 171 tests.
+
 <a id="v0-7-9"></a>
 ## [0.7.9] - 2026-10-09
 - **Standards and research**: rewritten for Unblock and the waves. Unblock cites a study in which a

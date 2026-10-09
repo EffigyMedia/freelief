@@ -10,6 +10,8 @@ EMERGENCY = "call your local emergency number"
 def _open_with_failure(path, javascript=True):
     context = browser().new_context(service_workers="block", java_script_enabled=javascript)
     page = context.new_page()
+    page.console_errors = []
+    page.on("console", lambda m: page.console_errors.append(m.text) if m.type == "error" else None)
     if path:
         page.route(f"**/{path}", lambda route: route.abort("internetdisconnected"))
     page.goto(base_url())
@@ -30,6 +32,8 @@ def test_a_failed_crisis_file_keeps_the_guide_and_the_emergency_route():
         dialog = page.locator("dialog.help")
         assert EMERGENCY in dialog.locator(".emergency").inner_text()
         assert dialog.locator(".directory a").get_attribute("href") == "https://findahelpline.com/"
+        # The reason is logged, so a field report of "no lines" can be debugged (AUD-084).
+        assert any("could not load the crisis lines" in e for e in page.console_errors), page.console_errors
     finally:
         context.close()
 

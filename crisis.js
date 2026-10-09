@@ -11,7 +11,9 @@ export async function loadCrisisLines() {
     const response = await fetch("data/crisis-lines.json");
     if (!response.ok) throw new Error(`crisis lines: HTTP ${response.status}`);
     data = await response.json();
-  } catch {
+  } catch (error) {
+    // Kept for a field report of "no lines in urgent help" (AUD-084).
+    console.error("Freelief could not load the crisis lines:", error);
     data = null;
   }
 }

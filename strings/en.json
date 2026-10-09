@@ -167,7 +167,7 @@
   "about.selfHelp3": "If you are in danger, or might harm yourself, use \"Need urgent help?\" at the top of every screen, or call your local emergency number.",
   "about.privacyHeading": "Your privacy",
   "about.privacy1": "Freelief collects nothing about you. It has no account, no analytics and no advertising. Freelief sends nothing about you. The only thing that reaches the internet is your browser's check for a newer version of Freelief, from GitHub Pages.",
-  "about.privacy2": "Freelief saves only the settings you change: your breathing rhythm, where it opens, sound, vibration, colors, the Visualizer's sound and nature sound, and your country for urgent help. They stay on this device and are never sent anywhere. Clearing your browser data removes them.",
+  "about.privacy2": "Freelief saves only the settings you change: your breathing rhythm, where it opens, how long the screen stays on, sound, vibration, colors, the Visualizer's sound and nature sound, and your country for urgent help. They stay on this device and are never sent anywhere. Clearing your browser data removes them.",
   "about.openHeading": "Free and open source",
   "about.open1": "Freelief is free to use and its source code is open, under the MIT license.",
   "about.sourceLink": "See the source code",
@@ -234,5 +234,10 @@
   "settings.nature": "Nature sound",
   "settings.natureHint": "What Nature plays in the Visualizer.",
   "settings.nature.rain": "Rain",
-  "settings.nature.waves": "Waves"
+  "settings.nature.waves": "Waves",
+  "settings.awake": "Keep the screen on",
+  "settings.awakeHint": "During breathing and the Visualizer, the screen stays on. After this long with no touch, it may turn off, and the exercise goes on.",
+  "settings.awake.10": "For 10 minutes",
+  "settings.awake.30": "For 30 minutes",
+  "settings.awake.60": "For 60 minutes"
 }

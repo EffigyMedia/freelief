@@ -351,6 +351,18 @@ async function boot() {
   });
   document.documentElement.dataset.ready = "true";
   performance.mark("freelief-ready");
+  keepOfflineCopy();
+}
+
+// Ask the browser to keep the offline copy under storage pressure (AUD-080), so Freelief still
+// opens offline on a full phone. Chromium and Safari decide without a question. Firefox asks the
+// person, and Freelief opens with no question or notice (REQ-018), so it is not asked there. The
+// call never holds up the start.
+function keepOfflineCopy() {
+  if (!navigator.storage?.persist || /Firefox\//.test(navigator.userAgent)) return;
+  navigator.storage.persisted()
+    .then((kept) => (kept ? true : navigator.storage.persist()))
+    .catch(() => {});
 }
 
 // Another app on the shared origin may have deleted Freelief's offline cache (AUD-001). On each
@@ -377,11 +389,14 @@ if ("serviceWorker" in navigator) {
   const touched = () => { interacted = true; };
   window.addEventListener("pointerdown", touched, { capture: true, once: true });
   window.addEventListener("keydown", touched, { capture: true, once: true });
+  // A breathing screen that runs counts as in use, even before a touch: with "Start breathing at
+  // once" a reload would restart the breath the person is following (AUD-107).
+  const inUse = () => interacted || document.querySelector("main")?.dataset.screen === "breathe";
   const offerTakeover = (worker) => {
-    if (worker && hadController && !interacted) worker.postMessage("skip");
+    if (worker && hadController && !inUse()) worker.postMessage("skip");
   };
   navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (hadController && !interacted && !reloaded) {
+    if (hadController && !inUse() && !reloaded) {
       reloaded = true;
       location.reload();
     }
@@ -390,6 +405,8 @@ if ("serviceWorker" in navigator) {
   // is seen at once under GitHub Pages' ten-minute caching (AUD-013).
   navigator.serviceWorker.register("sw.js", { updateViaCache: "none" })
     .then((registration) => {
+      // A browser that blocks workers (a test, a strict setting) gives no registration.
+      if (!registration) return undefined;
       offerTakeover(registration.waiting);
       registration.addEventListener("updatefound", () => {
         const worker = registration.installing;
@@ -399,8 +416,10 @@ if ("serviceWorker" in navigator) {
       });
       return healOfflineCache();
     })
-    .catch(() => {
-      // Offline support is lost, but the app still works online.
+    .catch((error) => {
+      // Offline support is lost, but the app still works online. The reason is kept for a field
+      // report (AUD-085).
+      console.error("Freelief could not install its offline copy:", error);
     });
 }
 

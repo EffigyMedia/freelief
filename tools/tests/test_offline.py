@@ -330,3 +330,49 @@ def test_an_update_gets_past_the_http_cache_and_works_offline():
             assert "About Freelief 9.9.5" in page.locator("main h1").inner_text(), "the changed file, not the HTTP-cached one"
         finally:
             context.close()
+
+
+def test_the_offline_copy_is_asked_to_be_kept_without_holding_up_the_start():
+    # AUD-080: best-effort storage can be evicted on a full phone. Freelief asks to keep it, where the
+    # browser decides without a question, and the call never delays the start.
+    probe = """
+window.__persist = 0;
+Object.defineProperty(navigator, 'storage', { configurable: true, value: {
+  persisted: () => Promise.resolve(false),
+  persist: () => { window.__persist += 1; return new Promise(() => {}); },
+  estimate: () => Promise.resolve({}),
+} });"""
+    with open_app(init_script=probe) as (page, errors, _):
+        assert page.evaluate("document.documentElement.dataset.ready") == "true", "a call that never ends does not block"
+        wait_until(page, "window.__persist === 1", 2000)
+        assert not errors, errors
+
+
+def test_an_update_found_while_breathing_runs_waits_for_the_next_open():
+    # AUD-107: with "Start breathing at once", a reload would restart the breath being followed.
+    import shutil
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = Path(temp) / "app"
+        shutil.copytree(ROOT, app, ignore=shutil.ignore_patterns(
+            ".git", ".venv", "output", "input", "docs", "tools", "__pycache__", ".claude", ".github"))
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = context.new_page()
+            page.goto(url)
+            page.evaluate("localStorage.setItem('freelief.settings.v2', JSON.stringify({ openOn: 'breathe' }))")
+            page.evaluate("navigator.serviceWorker.ready")
+            page.reload()
+            wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
+            old = page.evaluate("self.FREELIEF_VERSION")
+            (app / "version.js").write_text('self.FREELIEF_VERSION = "9.9.7";\n', "utf-8")
+            page.reload()  # the new version installs; breathing runs at once, so it must wait
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            assert page.evaluate("document.querySelector('main').dataset.screen") == "breathe"
+            page.evaluate("window.__still = true")
+            page.wait_for_timeout(4000)
+            assert page.evaluate("window.__still === true"), "the page did not reload under the breathing"
+            assert page.evaluate("self.FREELIEF_VERSION") == old
+        finally:
+            context.close()

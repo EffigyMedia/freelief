@@ -50,6 +50,14 @@ export function start(container, ctx) {
   const current = { timers: [], last: null, fromPointer: false, sources: [], frame: 0, dots: [] };
   run = current;
   const clock = () => performance.now() / 1000;
+  // A timer drops its own id when it fires, so the list holds only pending timers (AUD-083).
+  function later(callback, ms) {
+    const id = setTimeout(() => {
+      current.timers = current.timers.filter((pending) => pending !== id);
+      callback();
+    }, ms);
+    current.timers.push(id);
+  }
 
   // The water's grid of dots, laid out again when the pond changes size.
   let field = null;
@@ -124,7 +132,7 @@ export function start(container, ctx) {
     }
     pond.append(set);
     const life = settings.lifeSeconds + settings.rings * settings.ringGapSeconds;
-    current.timers.push(setTimeout(() => set.remove(), life * 1000));
+    later(() => set.remove(), life * 1000);
     audio.drop();
   }
 

@@ -11,6 +11,9 @@ import { getSetting } from "./settings.js";
 let context = null;
 let sounds = null;
 let unlocked = false;
+// Set while sound is off, urgent help is open or the app is hidden. Then nothing may wake the
+// audio: a breathing tone or a cue would otherwise resume it silently in the background (AUD-082).
+let held = false;
 
 export function initAudio(config) {
   sounds = config.sounds;
@@ -43,7 +46,7 @@ function ensureContext() {
     bed.gain.value = ducked ? sounds.background.duckLevel : 1;
     bed.connect(output);
   }
-  if (context.state === "suspended") context.resume();
+  if (context.state === "suspended" && !held) context.resume();
   return context;
 }
 
@@ -60,6 +63,7 @@ export function unlockAudio() {
 export function applySound(on) {
   const fade = sounds?.muteFadeSeconds ?? 0.6;
   clearTimeout(fadeTimer);
+  held = !on;
   if (on) {
     unlockAudio();
     if (!output) return;
@@ -123,7 +127,7 @@ function note(ctx, frequency, delay, attack, release, volume) {
 }
 
 function canPlay() {
-  return sounds && unlocked && getSetting("sounds");
+  return sounds && unlocked && !held && getSetting("sounds");
 }
 
 // A named cue from config.json → sounds.cues: one or more notes, a gap apart.
