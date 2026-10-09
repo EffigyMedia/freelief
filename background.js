@@ -63,6 +63,14 @@ export function restart() {
   playing = start();
 }
 
+// While urgent help is open or the app is hidden, the audio clock is paused. A loop that kept
+// scheduling would queue its notes at one frozen time, and they would all play at once when sound
+// came back (AUD-113). So the loops stop while sound is held, and the choice is kept.
+export function hold() {
+  playing.stop();
+  playing = { stop() {} };
+}
+
 export function onChange(listener) {
   listeners.add(listener);
 }

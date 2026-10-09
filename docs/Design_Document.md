@@ -385,10 +385,10 @@ Each file below is one module with one responsibility.
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
 | `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
 | `crisis.js` + `data/crisis-lines.json` | The choice of crisis lines from the device region. | Ask for location. |
-| `audio.js` | Every sound, made with Web Audio: the breathing tones, the activity cues and the background music, rain and waves, which share one volume that a screen can lower. Nothing plays before the first tap or key press. | Play anything while sound is off, while urgent help is open, or while the app is hidden; load an audio file. |
-| `haptics.js` | One short vibration from `config.json` → `haptics.patterns` for a single triggered event in an activity. A device without the Vibration API gets nothing. | Vibrate for anything continuous (the breath, a drag trail, the trace tone); vibrate while vibration is off. |
-| `wakelock.js` | The screen wake lock while breathing or the Visualizer runs, taken again when the page comes back. | Fail when the browser has no wake lock or refuses it; keep the lock after the last screen releases it. |
-| `motion.js` | Reduced-motion detection; every animation asks it. | — |
+| `audio.js` | Every sound, made with Web Audio: the breathing tones, the activity cues and the background music, rain and waves, which share one volume that a screen can lower. Nothing plays before the first tap or key press. | Play anything while sound is off, while urgent help is open, or while the app is hidden; load an audio file; touch storage except by reading `settings.js` (AUD-117). |
+| `haptics.js` | One short vibration from `config.json` → `haptics.patterns` for a single triggered event in an activity. A device without the Vibration API gets nothing. | Vibrate for anything continuous (the breath, a drag trail, the trace tone); vibrate while vibration is off; touch storage except by reading `settings.js` (AUD-117). |
+| `wakelock.js` | The screen wake lock while breathing or the Visualizer runs, taken again when the page comes back. | Fail when the browser has no wake lock or refuses it; keep the lock after the last screen releases it; touch storage except by reading `settings.js` (AUD-117). |
+| `motion.js` | Reduced-motion detection; every animation asks it. | Touch storage except by reading `settings.js` (AUD-117). |
 | `fallback.js` | A classic script in `<head>`: it hides the static fallback in `index.html` while the app starts, and shows it if the app has not started in 2 s. The 2 s is a constant in the file. | Depend on `config.json`, a module or the network, because it must work when they fail. |
 | `config.json` | **Every tunable**, with its committed default. | — |
 | `sw.js` | The offline cache, versioned by the app version. | Fetch from any other origin. |
@@ -557,6 +557,15 @@ Standards and research rewritten for them, every source checked in the session
 (RLG-044). Then the 37 findings of round UNT-082 (AUD-076 to AUD-112), Medium first, and a review of
 every screen with the web-interface-review skill. Done when: those are built or ruled on, a design
 audit round closes the slice, and the version is 0.8.0.
+*Closed 2026-10-09: round UNT-104 closed the slice, and its High and Medium findings (AUD-113 to
+AUD-117) were fixed before 0.8.0 by the owner's choice.*
+
+**Slice 9 — the open findings (from v0.8.0).** *Planned 2026-10-09 (AUD-116).* The Low findings of
+round UNT-104 (AUD-118 to AUD-128). The findings that rounds re-opened and no plan named: AUD-028
+(Firefox has no test run), AUD-032, AUD-033, AUD-045, AUD-057 (an update under a second window),
+AUD-071 and AUD-093. The interface review's open items (RLG-047), with the owner's ruling on the
+mandala's target size first. The owner's phone checks (RLG-033). Each is fixed or ruled on by the
+owner. Done when: none is open without a ruling, and a design audit round closes the slice.
 
 **Definition of done per slice:** it works, `test` is green, `bench` is spot-checked, the design
 document and records agree with the code, `docs/README.md` describes what a person sees (when the
@@ -1148,6 +1157,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   sticky header; every edge honours the safe-area insets; the trace loop has 3 to 1 contrast; links
   that stand alone are 44 px targets; Open on GitHub opens a new tab. What was not fixed, and why,
   is in RLG-047. — 2026-10-09 (UNT-103)
+- **The background sound stops while sound is held, and a reset never starts it.** — Round UNT-104
+  found that the background loops kept scheduling notes into the paused audio clock while urgent help
+  was open or the app was hidden, so every queued chord played at once on return (AUD-113, High).
+  `background.hold()` now stops the loops when sound is held, and `restart()` starts the chosen sound
+  again on return. The round also found that Reset settings started the music and turned sound back
+  on (AUD-114). Now only a choice on the Visualizer starts a sound (Off and Stop end it from
+  anywhere), and a reset keeps the speaker's sound setting. — 2026-10-09 (owner chose to fix before
+  0.8.0; UNT-105)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

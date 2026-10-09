@@ -10,6 +10,23 @@ audit.
 
 ---
 
+<a id="v0-8-0"></a>
+## [0.8.0] - 2026-10-09
+**Slice 8 is complete.** Since 0.7.3: Unblock in place of Sort colors, ripples that interfere,
+eight mandala designs, background music, rain or waves that keep playing until you stop them, a
+Keep the screen on setting, Reset settings, every sound in the music's key, rewritten Standards and
+research, the fixes from audit round UNT-082 and from an interface review of every screen, and
+design audit round UNT-104.
+- Fixed before release (round UNT-104): after urgent help was open for a while, the background
+  music could play a burst of queued notes at once; it now stops while help is open and starts
+  again after. Reset settings no longer starts the music or turns sound back on. The help dialog
+  opens with less work. [AUD-113](../fragments/AUD-113.md), [AUD-114](../fragments/AUD-114.md),
+  [AUD-115](../fragments/AUD-115.md).
+- Tools and records: bench reads the CPU load correctly and is re-baselined (response 77 ms of
+  100 ms); the shared helpers' storage rule is restored in AGENTS.md; slice 9 plans the open
+  findings. [AUD-079](../fragments/AUD-079.md), [AUD-116](../fragments/AUD-116.md),
+  [AUD-117](../fragments/AUD-117.md). 181 tests.
+
 <a id="v0-7-13"></a>
 ## [0.7.13] - 2026-10-09
 - Fixes from an interface review of every screen: **Reset settings** asks once more first; the

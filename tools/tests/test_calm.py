@@ -361,3 +361,46 @@ def test_any_key_ends_the_black_screen_and_the_page_under_a_cover_cannot_be_reac
         assert page.evaluate("document.querySelector('header').inert"), "full screen makes the rest inert"
         page.keyboard.press("Escape")
         assert not page.evaluate("document.querySelector('header').inert")
+
+
+def test_no_notes_queue_up_while_urgent_help_is_open():
+    # AUD-113: the music must not schedule chords into the paused clock and play them all at once.
+    # The probe shortens the chord gap of 10 s to a moment, so several chords would queue.
+    probe = OSC_PROBE + """
+const realTimeout = window.setTimeout.bind(window);
+window.setTimeout = (callback, ms, ...rest) => realTimeout(callback, ms >= 9000 ? 200 : ms, ...rest);
+"""
+    voices = len(CONFIG["sounds"]["pads"]["chords"][0]) * 2
+    with open_app(init_script=probe) as (page, _, _):
+        page.locator(".guide").click()
+        go(page, "calm")
+        wait_until(page, f"window.__osc.length >= {voices}", 3000)
+        page.locator(".help-open").click()
+        page.wait_for_timeout(300)
+        before = page.evaluate("window.__osc.filter(o => o.node.type === 'triangle').length")
+        page.wait_for_timeout(1500)  # about seven chord gaps
+        during = page.evaluate("window.__osc.filter(o => o.node.type === 'triangle').length") - before
+        assert during == 0, f"{during} voices were queued while help was open"
+        page.locator("dialog.help .help-back").click()
+        wait_until(page, f"window.__osc.filter(o => o.node.type === 'triangle').length >= {before + voices}", 3000)
+
+
+def test_reset_settings_never_starts_the_music_or_turns_sound_on():
+    # AUD-114: on the Visualizer choose Off and mute; Reset in Settings must leave both alone.
+    with open_app(init_script=OSC_PROBE) as (page, errors, _):
+        page.locator(".guide").click()
+        go(page, "calm")
+        page.locator("input[name=calm-mode][value=off]").check()
+        page.locator("button.sound-toggle").click()
+        go(page, "settings")
+        before = page.evaluate("window.__osc.length")
+        page.locator(".reset-settings").click()
+        page.locator(".reset-yes").click()
+        page.wait_for_timeout(500)
+        assert page.evaluate("window.__osc.length") == before, "no sound starts"
+        assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "false", "sound stays off"
+        assert page.locator(".sound-bar").is_hidden()
+        page.locator("button.sound-toggle").click()  # sound on again: still nothing plays
+        page.wait_for_timeout(500)
+        assert page.evaluate("window.__osc.length") == before
+        assert not errors, errors

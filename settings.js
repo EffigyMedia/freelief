@@ -110,11 +110,17 @@ export function setSetting(name, value) {
   listeners.forEach((listener) => listener(name, value));
 }
 
-// Every setting back to its default (AUD-110). Each listener hears each setting that changed.
+// Every setting back to its default (AUD-110). Each listener hears each setting that changed. Sound
+// on or off is the header's speaker, not a setting on the Settings screen, so a reset leaves it as
+// it is: a reset must never make Freelief start to play (AUD-114).
+const KEPT_BY_RESET = ["sounds"];
+
 export function resetSettings() {
-  const changed = Object.keys(chosen).filter((name) => chosen[name] !== defaults[name]);
-  chosen = {};
-  values = { ...defaults };
+  const kept = Object.fromEntries(KEPT_BY_RESET.filter((name) => Object.hasOwn(chosen, name))
+    .map((name) => [name, chosen[name]]));
+  const changed = Object.keys(chosen).filter((name) => !Object.hasOwn(kept, name) && chosen[name] !== defaults[name]);
+  chosen = kept;
+  values = { ...defaults, ...kept };
   save();
   changed.forEach((name) => listeners.forEach((listener) => listener(name, values[name])));
 }

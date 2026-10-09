@@ -2,6 +2,18 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-09 — Slice 8 close and re-baseline (v0.7.13)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to first screen (the menu) | 178 ms | 154 ms | -13% | OK; RE-BASELINED |
+| Response: Need urgent help? opens (to after paint) | 74 ms (old end point) | 77 ms | n/a | OK; RE-BASELINED; 23 ms of headroom |
+| Shipped size | 188.7 KB | 239.8 KB | +27% | FLAG, expected; RE-BASELINED; 10 KB of budget left |
+Notes: the first valid runs since AUD-087 moved the end point. The load probe was fixed in round
+UNT-104 (AUD-079): it now reads kernel CPU times and agreed with the system counter (14% to 17%
+idle). Runs at 22.2%, 26.6% and 25.9% busiest load gave 79.7, 77.6 and 76.8 ms; the last two follow
+a change that skips redrawing the help dialog when its region is unchanged (AUD-115). Size is near
+its limit (AUD-124): the next slice must plan against the 10 KB left.
+
 ## 2026-10-09 — Slice 8 checkpoint (v0.7.11), NOT VALID: busy machine
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|

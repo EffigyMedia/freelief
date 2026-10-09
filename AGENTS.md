@@ -197,6 +197,8 @@ the Chrome already on the machine. Run from the repo root:
 - `python tools/freelief.py build` — no build step; reports the shipped size against 250 KB
   (REQ-028) and fails over it.
 - `python tools/freelief.py clean` — remove `output/` and Python caches. Never touches `input/`.
+- `python tools/freelief.py files` — the file audit: every shipped file, its size, and whether the
+  offline copy holds it; it fails when they disagree.
 - `python tools/freelief.py bench` — the launch, response and size benchmark against
   `docs/performance/baseline.md`; it exits 1 when a target is missed.
 - `.venv/Scripts/python tools/previews.py` — screenshots to `output/previews/` for a look check.
@@ -225,7 +227,7 @@ the Chrome already on the machine. Run from the repo root:
   plays nothing while sound is off), `haptics.js` (one short vibration per triggered event; nothing
   continuous), `wakelock.js` (keeps the screen on during breathing and the Visualizer; fails
   silently), `motion.js` (reduced-motion detection, which every animation asks). They **must not**
-  silently), `motion.js` (reduced-motion detection, which every animation asks).
+  touch storage except by reading `settings.js`.
 - **`background.js`** — the background sound (RLG-045): music, nature or both, which plays on every
   screen until turned off. The shell tells it what to play and shows the sound bar; it never
   touches storage.

@@ -29,6 +29,16 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-09
 
+### The shared helpers' storage rule is restored, and background.js is a helper
+- **Instruction:** `audio.js`, `haptics.js`, `wakelock.js` and `motion.js` must not touch storage
+  except by reading `settings.js`. `background.js` plays the background sound and never touches
+  storage. `python tools/freelief.py files` is listed under Commands.
+- **Why:** AUD-117. A sed edit in UNT-094 (v0.7.6) deleted the rule and doubled a half-line, and
+  the background.js addition had no entry here.
+- **Encoded in:** `AGENTS.md` (Architecture; Commands); the design, section 8 module table;
+  `tools/tests/test_repo.py` (`test_agents_md_repeats_no_line`).
+- Agent, 2026-10-09.
+
 ### The Release row runs in order: prepare, validate, gate, tag, deploy last
 - **Instruction:** the crisis-line re-check and the version bump come first, then the file audit,
   bench, `build --release`, `test` and `doctor`, then the audit rounds to `GATE CLEAR`, then the tag

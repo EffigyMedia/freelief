@@ -114,7 +114,12 @@ function buildHelpDialog() {
       element("label", { for: "help-country", text: t("help.country") }), select])
     : null;
 
+  // The region shown now. Opening help on the same region again draws nothing, so the dialog opens
+  // with the least work: it is the never-break response of REQ-027 (AUD-115).
+  let shown;
   function showRegion(code) {
+    if (code === shown) return;
+    shown = code;
     const { own } = linesFor(code);
     emergency.textContent = own
       ? t("help.emergency", { number: own.emergency })
@@ -166,7 +171,9 @@ function buildShell() {
   soundButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><g class="sound-waves" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="sound-cross" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15.5 9.5l5 5"/><path d="M20.5 9.5l-5 5"/></g></svg>';
   soundButton.addEventListener("click", () => setSetting("sounds", !getSetting("sounds")));
   onSettingChange((name, value) => {
-    if (name === "calmMode") background.play(value);
+    // Only a choice on the Visualizer starts a sound; Off or Stop ends it from anywhere. A reset in
+    // Settings changes the stored choice and leaves what plays alone (AUD-114).
+    if (name === "calmMode" && (value === "off" || main.dataset.screen === "calm")) background.play(value);
     if (name === "natureSound") background.setNature(value);
     if (name !== "sounds") return;
     soundButton.setAttribute("aria-pressed", String(value));
@@ -217,8 +224,10 @@ function buildShell() {
   // history entry, and going back closes it.
   helpButton.addEventListener("click", () => {
     showRegion(activeRegion(getSetting("helpRegion")));
-    // Nothing plays over the crisis lines (AUD-074): sound waits until help closes.
+    // Nothing plays over the crisis lines (AUD-074): sound waits until help closes, and the
+    // background loops stop, so nothing queues up meanwhile (AUD-113).
     audio.applySound(false);
+    background.hold();
     dialog.showModal();
     // A modal dialog blocks taps on the page, but on a phone a swipe on the backdrop still scrolls
     // the page under it (owner report). The page does not scroll while help is open.
@@ -228,7 +237,10 @@ function buildShell() {
   window.addEventListener("popstate", () => { if (dialog.open) dialog.close(); });
   dialog.addEventListener("close", () => {
     document.documentElement.classList.remove("help-is-open");
-    if (getSetting("sounds")) audio.applySound(true);
+    if (getSetting("sounds")) {
+      audio.applySound(true);
+      background.restart();
+    }
     if (history.state?.freeliefHelp) history.back();
   });
   document.body.replaceChildren(header, nav, main, footer, dialog);
@@ -347,8 +359,13 @@ async function boot() {
   // Silence while Freelief is out of sight, for example during a call to a line (AUD-074).
   document.addEventListener("visibilitychange", () => {
     const helpOpen = document.querySelector("dialog.help")?.open;
-    if (document.visibilityState === "hidden") audio.applySound(false);
-    else if (getSetting("sounds") && !helpOpen) audio.applySound(true);
+    if (document.visibilityState === "hidden") {
+      audio.applySound(false);
+      background.hold();
+    } else if (getSetting("sounds") && !helpOpen) {
+      audio.applySound(true);
+      background.restart();
+    }
   });
   document.documentElement.dataset.ready = "true";
   performance.mark("freelief-ready");

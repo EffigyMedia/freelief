@@ -284,3 +284,13 @@ def test_the_design_names_every_setting_that_is_stored():
                  awakeMinutes="screen stays on", calmMode="Visualizer's sound")
     absent = [k for k in keys if words[k].lower() not in row.lower()]
     assert not absent, f"the design's Settings definition does not name: {absent}"
+
+
+def test_agents_md_repeats_no_line():
+    # AUD-117: a bad edit once doubled a line and dropped the rule after "They **must not**".
+    text = (freelief.ROOT / "AGENTS.md").read_text("utf-8")
+    lines = [l.strip() for l in text.splitlines() if len(l.strip()) > 40]
+    # A doubled line may be a copy, or the start of the line above it with its end cut off.
+    repeated = sorted({b for a, b in zip(lines, lines[1:]) if a.startswith(b)}
+                      | {l for l in lines if lines.count(l) > 1})
+    assert not repeated, f"AGENTS.md repeats a line: {repeated[:3]}"

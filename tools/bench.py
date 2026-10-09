@@ -11,7 +11,6 @@ Run:  python tools/freelief.py bench
 import json
 import os
 import statistics
-import subprocess
 import sys
 from pathlib import Path
 
@@ -28,7 +27,7 @@ RESPONSE_TARGET_MS = 100
 # The recorded baseline (docs/performance/baseline.md) and its tolerance. Over tolerance prints FLAG
 # but does not fail: a flagged metric goes into docs/performance/log.md, and only a missed target
 # fails (AUD-058). Keep these in step with baseline.md when it is re-baselined.
-BASELINE = {"launch_ms": 178, "response_ms": 74, "size_kb": 188.7}
+BASELINE = {"launch_ms": 154, "response_ms": 77, "size_kb": 239.8}
 TIMING_TOLERANCE = 0.25  # +25% for the two timings; any size growth is flagged
 # A quiet machine is a condition of the measurement (Performance_Testing.md section 2). Above this
 # CPU load, sampled before and after every run, the result is not valid (AUD-079).
@@ -53,16 +52,32 @@ RESPONSE_PROBE = """() => new Promise(resolve => {
 })"""
 
 
-def cpu_load() -> float | None:
-    """The machine's CPU load in percent, or None where it cannot be read."""
+def cpu_load(seconds: float = 1.0) -> float | None:
+    """The machine's CPU load in percent over `seconds`, or None where it cannot be read.
+
+    On Windows it reads the kernel's idle, kernel and user times twice (GetSystemTimes) and takes the
+    busy share between the readings. An earlier probe started PowerShell for each sample and mostly
+    measured its own start-up, so every run read as busy (AUD-079, round UNT-104)."""
+    import time
     if os.name == "nt":
-        probe = subprocess.run(["powershell", "-NoProfile", "-Command",
-                                "(Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average"],
-                               capture_output=True, text=True)
-        try:
-            return float(probe.stdout.strip())
-        except ValueError:
+        import ctypes
+        from ctypes import wintypes
+
+        def times():
+            idle, kernel, user = wintypes.FILETIME(), wintypes.FILETIME(), wintypes.FILETIME()
+            if not ctypes.windll.kernel32.GetSystemTimes(ctypes.byref(idle), ctypes.byref(kernel), ctypes.byref(user)):
+                return None
+            value = lambda ft: (ft.dwHighDateTime << 32) | ft.dwLowDateTime
+            return value(idle), value(kernel), value(user)
+
+        first = times()
+        time.sleep(seconds)
+        second = times()
+        if not first or not second:
             return None
+        idle = second[0] - first[0]
+        total = (second[1] - first[1]) + (second[2] - first[2])  # kernel time includes idle time
+        return round(100 * (total - idle) / total, 1) if total else None
     if hasattr(os, "getloadavg"):
         return 100 * os.getloadavg()[0] / (os.cpu_count() or 1)
     return None
