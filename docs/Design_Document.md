@@ -506,7 +506,9 @@ closes the slice; then 0.7.0.
 owner.* Owner features: Puzzle replaces Sort colors, a calm puzzle with no losing state at all, its
 kind chosen by the owner from proposals first (RLG-040); ripples that interfere (RLG-041); more
 mandala designs (RLG-042); crashing waves in the Visualizer, a Nature button and a rain-or-waves
-setting (RLG-043); Standards and research rewritten for them, every source checked in the session
+setting (RLG-043), and music and nature sound that persist across screens until turned off, the
+Visualizer's name and design rethought, with the owner choosing from proposals first (RLG-045);
+Standards and research rewritten for them, every source checked in the session
 (RLG-044). Then the 37 findings of round UNT-082 (AUD-076 to AUD-112), Medium first, and a review of
 every screen with the web-interface-review skill. Done when: those are built or ruled on, a design
 audit round closes the slice, and the version is 0.8.0.
