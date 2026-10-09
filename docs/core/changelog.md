@@ -26,6 +26,8 @@ design audit round UNT-104.
   100 ms); the shared helpers' storage rule is restored in AGENTS.md; slice 9 plans the open
   findings. [AUD-079](../fragments/AUD-079.md), [AUD-116](../fragments/AUD-116.md),
   [AUD-117](../fragments/AUD-117.md). 181 tests.
+- The live preview moved to 0.8.0 on 2026-10-09, with the owner's yes in chat ("Keep going until
+  you're done and the new slice is live").
 
 <a id="v0-7-13"></a>
 ## [0.7.13] - 2026-10-09

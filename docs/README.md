@@ -24,7 +24,7 @@ with slow shapes, which can keep playing while you use the rest of the app). Eve
 technology. Please do not rely on it yet. Version 1.0 will be the first release, after a full
 release audit; this page will then say how to install it.
 
-The preview serves **v0.7.3** (moved 2026-10-08 with the owner's yes). Each move of the preview is
+The preview serves **v0.8.0** (moved 2026-10-09 with the owner's yes). Each move of the preview is
 recorded in `docs/core/changelog.md` with the owner's yes, and this line names the version it serves.
 
 ## Research and standards
