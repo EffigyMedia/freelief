@@ -125,7 +125,7 @@ def test_every_shape_in_every_design_is_a_large_target_on_a_phone():
         for design in range(len(SETTINGS["designs"])):
             sizes = page.locator(".mandala-part").evaluate_all(
                 "els => els.map(e => { const b = e.getBoundingClientRect(); return Math.min(b.width, b.height); })")
-            assert min(sizes) >= 24, f"design {design}: smallest shape {min(sizes):.1f}px (WCAG 2.5.8)"
+            assert min(sizes) >= 44, f"design {design}: smallest shape {min(sizes):.1f}px (the stress checks: 44 px)"
             swatch = page.locator("input[name=mandala-color]").first.bounding_box()
             assert swatch["width"] >= 44 and swatch["height"] >= 44
             page.locator(".new-mandala").click()

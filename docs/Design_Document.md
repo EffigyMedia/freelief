@@ -842,7 +842,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   as in the colour sort. Every shape in every design is at least 24 px at a 360 px width (WCAG
   2.5.8); the swatches are 48 px. A tap replaces a fill; there is no eraser and no end. — Rejected:
   a canvas (the architecture rule); a fixed image (size, and no names). — 2026-10-07 (owner;
-  UNT-040)
+  UNT-040) *Amended 2026-10-09 (owner, RLG-047; UNT-107): every shape is now at least 44 px; see
+  the entry on mandala target size.*
 - **While urgent help is open, the page under it does not scroll.** — The owner reported that the
   app under the open dialog still took touches. Taps were already blocked by the modal dialog, but
   a swipe on the backdrop scrolled the page under it, and a scroll past the end of the help list
@@ -1165,6 +1166,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   on (AUD-114). Now only a choice on the Visualizer starts a sound (Off and Stop end it from
   anywhere), and a reset keeps the speaker's sound setting. — 2026-10-09 (owner chose to fix before
   0.8.0; UNT-105)
+- **Every mandala shape is at least 44 px on a phone.** — The interface review found parts of
+  about 37 to 40 px in the denser designs, under the stress checks' 44 px rule (RLG-047, AUD-125).
+  The owner chose to thin the dense rings rather than accept 24 px. Every design now has the same
+  three rings, each 28 units thick (about 46 px at a 360 px width), around a center of 16 units;
+  dots and bands get their size from that thickness. Petals and diamonds were widened, and rings
+  that were still too small were given fewer parts. The test now asks for 44 px in every design.
+  The designs are a little simpler. — Rejected: accept 24 px (WCAG 2.5.8). — 2026-10-09 (owner;
+  UNT-107)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

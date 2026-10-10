@@ -556,50 +556,50 @@
         },
         {
           "shape": "petal",
-          "count": 6,
+          "count": 4,
           "inner": 16,
-          "outer": 46,
-          "width": 0.75
+          "outer": 44,
+          "width": 0.9
         },
         {
           "shape": "band",
           "count": 12,
-          "inner": 46,
+          "inner": 44,
           "outer": 72
         },
         {
           "shape": "petal",
-          "count": 12,
+          "count": 10,
           "inner": 72,
           "outer": 100,
           "offset": 0.5,
-          "width": 0.5
+          "width": 0.9
         }
       ],
       [
         {
           "center": true,
           "count": 1,
-          "outer": 15
+          "outer": 16
         },
         {
           "shape": "band",
           "count": 8,
-          "inner": 15,
-          "outer": 42
+          "inner": 16,
+          "outer": 44
         },
         {
           "shape": "petal",
           "count": 8,
-          "inner": 42,
-          "outer": 70,
+          "inner": 44,
+          "outer": 72,
           "offset": 0.5,
-          "width": 0.5
+          "width": 0.9
         },
         {
           "shape": "band",
           "count": 16,
-          "inner": 70,
+          "inner": 72,
           "outer": 100
         }
       ],
@@ -607,45 +607,45 @@
         {
           "center": true,
           "count": 1,
-          "outer": 18
+          "outer": 16
         },
         {
           "shape": "petal",
-          "count": 8,
-          "inner": 18,
-          "outer": 52,
-          "width": 0.8
+          "count": 4,
+          "inner": 16,
+          "outer": 44,
+          "width": 0.9
         },
         {
           "shape": "dot",
           "count": 10,
-          "inner": 52,
-          "outer": 76
+          "inner": 44,
+          "outer": 72
         },
         {
           "shape": "petal",
           "count": 10,
-          "inner": 76,
+          "inner": 72,
           "outer": 100,
           "offset": 0.5,
-          "width": 0.5
+          "width": 0.8
         }
       ],
       [
         {
           "center": true,
           "count": 1,
-          "outer": 14
+          "outer": 16
         },
         {
           "shape": "scallop",
-          "count": 8,
-          "inner": 14,
+          "count": 6,
+          "inner": 16,
           "outer": 44
         },
         {
           "shape": "diamond",
-          "count": 8,
+          "count": 6,
           "inner": 44,
           "outer": 72,
           "offset": 0.5,
@@ -668,18 +668,18 @@
           "shape": "dot",
           "count": 6,
           "inner": 16,
-          "outer": 40
+          "outer": 44
         },
         {
           "shape": "band",
           "count": 12,
-          "inner": 40,
-          "outer": 64
+          "inner": 44,
+          "outer": 72
         },
         {
           "shape": "diamond",
-          "count": 12,
-          "inner": 64,
+          "count": 8,
+          "inner": 72,
           "outer": 100,
           "offset": 0.5,
           "width": 0.5
@@ -689,22 +689,22 @@
         {
           "center": true,
           "count": 1,
-          "outer": 14
+          "outer": 16
         },
         {
           "shape": "diamond",
-          "count": 6,
-          "inner": 14,
-          "outer": 46,
-          "width": 0.45
+          "count": 4,
+          "inner": 16,
+          "outer": 44,
+          "width": 0.5
         },
         {
           "shape": "petal",
-          "count": 12,
-          "inner": 46,
+          "count": 8,
+          "inner": 44,
           "outer": 72,
           "offset": 0.5,
-          "width": 0.5
+          "width": 0.9
         },
         {
           "shape": "scallop",
@@ -717,25 +717,25 @@
         {
           "center": true,
           "count": 1,
-          "outer": 18
+          "outer": 16
         },
         {
           "shape": "scallop",
           "count": 6,
-          "inner": 18,
-          "outer": 48
+          "inner": 16,
+          "outer": 44
         },
         {
           "shape": "dot",
           "count": 12,
-          "inner": 48,
-          "outer": 70,
+          "inner": 44,
+          "outer": 72,
           "offset": 0.5
         },
         {
           "shape": "band",
           "count": 12,
-          "inner": 70,
+          "inner": 72,
           "outer": 100
         }
       ],
@@ -743,26 +743,26 @@
         {
           "center": true,
           "count": 1,
-          "outer": 15
+          "outer": 16
         },
         {
           "shape": "petal",
-          "count": 10,
-          "inner": 15,
-          "outer": 48,
-          "width": 0.8
+          "count": 4,
+          "inner": 16,
+          "outer": 44,
+          "width": 0.9
         },
         {
           "shape": "band",
           "count": 10,
-          "inner": 48,
-          "outer": 70,
+          "inner": 44,
+          "outer": 72,
           "offset": 0.5
         },
         {
           "shape": "diamond",
-          "count": 20,
-          "inner": 70,
+          "count": 8,
+          "inner": 72,
           "outer": 100,
           "width": 0.5
         }

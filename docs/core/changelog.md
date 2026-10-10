@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-8-1"></a>
+## [0.8.1] - 2026-10-09
+- **Color a mandala**: every shape is now at least 44 px on a phone, so each one is easy to tap.
+  The designs have fewer, larger parts. [RLG-047](../fragments/RLG-047.md),
+  [AUD-125](../fragments/AUD-125.md). 181 tests.
+
 <a id="v0-8-0"></a>
 ## [0.8.0] - 2026-10-09
 **Slice 8 is complete.** Since 0.7.3: Unblock in place of Sort colors, ripples that interfere,
