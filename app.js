@@ -44,6 +44,8 @@ let backLink = null;
 let nav = null;
 let footer = null;
 let soundBar = null;
+// Opens urgent help. The shell owns how help opens; a screen asks through ctx.openHelp (AUD-151).
+let openHelp = () => {};
 
 // The sound bar's three buttons and their icons, drawn inline so no file ships (RLG-049).
 const SOUND_BUTTONS = [
@@ -237,7 +239,7 @@ function buildShell() {
   const { dialog, showRegion } = buildHelpDialog();
   // The phone's back gesture closes the dialog instead of leaving the app: opening it adds a
   // history entry, and going back closes it.
-  helpButton.addEventListener("click", () => {
+  openHelp = () => {
     showRegion(activeRegion(getSetting("helpRegion")));
     // Nothing plays over the crisis lines (AUD-074): sound waits until help closes, and the
     // background loops stop, so nothing queues up meanwhile (AUD-113).
@@ -248,7 +250,8 @@ function buildShell() {
     // the page under it (owner report). The page does not scroll while help is open.
     document.documentElement.classList.add("help-is-open");
     history.pushState({ freeliefHelp: true }, "");
-  });
+  };
+  helpButton.addEventListener("click", () => openHelp());
   window.addEventListener("popstate", () => { if (dialog.open) dialog.close(); });
   dialog.addEventListener("close", () => {
     document.documentElement.classList.remove("help-is-open");
@@ -309,7 +312,7 @@ async function show(name, { moveFocus }) {
   // A screen may load data first, so wait for it before focusing.
   try {
     await current.start(main, {
-      t, list, escape, config, motion, audio, haptic, keepAwake, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
+      t, list, escape, config, motion, audio, haptic, keepAwake, openHelp: () => openHelp(), rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
     });
   } catch (error) {
     // A screen that fails as it starts falls back to the menu, as a screen that cannot load does.

@@ -21,6 +21,10 @@ function deviceName(t) {
   return platform ? (mobile ? t("feedback.mobileDevice", { platform }) : platform) : null;
 }
 
+// The message as the person left it, kept while the app is open, so a volunteer can leave to check a
+// screen and come back to their words (AUD-153). It is never stored.
+let draft = null;
+
 export function start(container, ctx) {
   const { t, config } = ctx;
   const project = config.project;
@@ -90,8 +94,11 @@ export function start(container, ctx) {
   container.querySelectorAll("input[name=kind]").forEach((input) => input.addEventListener("change", () => {
     kind = input.value;
     fillTemplate();
+    keep();
   }));
   message.addEventListener("input", updateLinks);
+  const keep = () => { draft = { kind, text: message.value }; };
+  message.addEventListener("input", keep);
 
   // Copy the message. Where the browser refuses, select it, so the person can copy it themselves.
   const copyStatus = container.querySelector(".copy-status");
@@ -107,7 +114,15 @@ export function start(container, ctx) {
       copyStatus.textContent = t("feedback.copyFailed");
     }
   });
+  if (draft) {
+    kind = draft.kind;
+    container.querySelector(`input[name=kind][value="${kind}"]`).checked = true;
+  }
   fillTemplate();
+  if (draft && draft.text !== message.value) {
+    message.value = draft.text;
+    updateLinks();
+  }
 }
 
 export function stop() {}

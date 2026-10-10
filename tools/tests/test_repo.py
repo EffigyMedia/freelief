@@ -412,3 +412,10 @@ def test_a_crisis_check_date_in_the_future_is_invalid():
     import datetime
     stale = freelief.stale_crisis_checks(30, today=datetime.date(2000, 1, 1))
     assert stale and all("in the future" in item for item in stale), stale
+
+
+def test_no_screen_reaches_into_the_shell_for_urgent_help():
+    # AUD-151: the shell owns how help opens; a screen asks through ctx.openHelp.
+    hits = [p.relative_to(freelief.ROOT).as_posix() for folder in ("screens", "activities", "exercises")
+            for p in (freelief.ROOT / folder).glob("*.js") if "help-open" in p.read_text("utf-8")]
+    assert not hits, hits

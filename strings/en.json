@@ -179,7 +179,7 @@
   "feedback.copied": "Copied. Now open GitHub and paste it into the issue.",
   "feedback.copyFailed": "Could not copy. The message is selected: copy it yourself, then paste it into the issue.",
   "feedback.github": "Open on GitHub",
-  "feedback.githubNote": "Opens a new issue on GitHub. Paste your message there. GitHub issues are public: please do not include health or personal details. GitHub needs a free account.",
+  "feedback.githubNote": "Opens a new issue on GitHub. Paste your message there. GitHub issues are public: please do not include health or personal details. GitHub needs a free account and an internet connection.",
   "feedback.email": "Send by email",
   "feedback.emailNote": "Opens your email app with this message filled in.",
   "feedback.template.accessibility": "Freelief accessibility check\n\nVersion: {version}\nBrowser: {browser}\nDevice: {device}\nScreen reader (name and version): \nInput used (keyboard, touch, switch, other): \n\nWhat I checked:\n[ ] Menu (What would help right now?)\n[ ] Breathing\n[ ] Pop Bubbles\n[ ] Zen Garden\n[ ] Ripple Pond\n[ ] Color Mandalas\n[ ] Unblock\n[ ] Kaleidoscope, with its full screen and black screen\n[ ] Need urgent help\n[ ] Settings\n[ ] About, Feedback\n\nWhat worked well:\n\nWhat did not work:\n",

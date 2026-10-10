@@ -320,7 +320,10 @@ checklist for an accessibility check); the person edits it; they choose "Copy me
 pastes the message) or "Send by email" (a `mailto:` link with subject and body, opened by their own
 mail app). *(Changed 2026-10-08, AUD-055: the message no longer goes into the GitHub URL.)* Outcome: the person's own browser or mail app takes over; the app sends nothing.
 Edge: until the owner chooses a public email address, the email button is hidden and GitHub is the
-only route; REQ-030 makes the email route optional (changed 2026-10-08, AUD-020).
+only route; REQ-030 makes the email route optional (changed 2026-10-08, AUD-020). *Offline:* Copy
+message works; the GitHub note says it needs an internet connection (AUD-154). *Leaving and coming
+back:* the message and its kind are kept while the app is open, so a volunteer can check each screen
+and return to their words; nothing is stored (AUD-153).
 
 **Integrations.** None at run time. The only outbound links are ones the person chooses: phone,
 text, the crisis directory, GitHub and email. If GitHub is down, the issue page does not load. While
@@ -418,8 +421,8 @@ screen stays on, sound, vibration, the theme and the region for urgent help. A c
 service worker. Nothing is created, changed or deleted by the person except those Settings.
 
 **Contracts.** Each exercise and activity exports `start(container, ctx)` and `stop()`. `ctx`
-gives the text functions `t` and `list`, `config`, `motion`, `audio`, `haptic`, `keepAwake`, and the
-read-only setting values the screen needs (such as `rhythm` and `soundsOn`). No screen writes a
+gives the text functions `t`, `list` and `escape`, `config`, `motion`, `audio`, `haptic`, `keepAwake`,
+`openHelp` (the shell opens urgent help; AUD-151), and the read-only setting values the screen needs (such as `rhythm` and `soundsOn`). No screen writes a
 setting except Settings itself; the background sound belongs to the shell's sound bar (RLG-049). The shell owns which screen runs. `crisis.js` exports `linesFor(regionCode)`, which returns the curated lines and the fallback.
 
 **Tunables (`config.json`):** every tunable has its committed default there. The groups are:

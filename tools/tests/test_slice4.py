@@ -144,3 +144,25 @@ def test_feedback_says_issues_are_public_and_points_a_person_in_danger_to_help()
     for name in CONFIG["project"]["issueTemplates"].values():
         text = (ROOT / ".github" / "ISSUE_TEMPLATE" / name).read_text("utf-8")
         assert "issues are public" in text and "Need urgent help?" in text, name
+
+
+def test_the_feedback_message_is_kept_while_the_app_is_open():
+    # AUD-153: the checklist asks a volunteer to leave and check each screen, so the words they typed
+    # are kept while the app is open; nothing is stored.
+    with open_app(route="feedback") as (page, _, _):
+        page.locator("input[name=kind][value=problem]").check()
+        page.locator(".message").fill("My own words about the menu.")
+        page.evaluate("location.hash = 'menu'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 3000)
+        page.evaluate("location.hash = 'feedback'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'feedback'", 3000)
+        assert page.locator(".message").input_value() == "My own words about the menu."
+        assert page.locator("input[name=kind][value=problem]").is_checked()
+        assert "My own words" not in page.evaluate("JSON.stringify(localStorage)"), "the draft is not stored"
+
+
+def test_the_github_route_says_it_needs_an_internet_connection():
+    # AUD-154: like the crisis directory link, the GitHub route says it needs the internet.
+    import json
+    strings = json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
+    assert "internet connection" in strings["feedback.githubNote"]

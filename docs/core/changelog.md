@@ -12,6 +12,15 @@ audit.
 
 ---
 
+<a id="v0-8-21"></a>
+## [0.8.21] - 2026-10-10
+- **Feedback**: what you type is kept while Freelief is open, so you can check a screen and come
+  back to your words; the GitHub note says it needs an internet connection.
+- **Zen Garden**: a stone or plant added after a removal gets a name of its own.
+- The Kaleidoscope opens urgent help through the shell. [AUD-151](../fragments/AUD-151.md),
+  [AUD-153](../fragments/AUD-153.md), [AUD-154](../fragments/AUD-154.md),
+  [AUD-155](../fragments/AUD-155.md). 205 tests.
+
 <a id="v0-8-20"></a>
 ## [0.8.20] - 2026-10-10
 - **Settings**: two old settings that no version uses any more are removed from your device the

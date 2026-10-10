@@ -150,13 +150,16 @@ export function start(container, ctx) {
   }
 
   function add(kind, quiet = false) {
-    const count = current.items.filter((item) => item.kind === kind).length;
     if (current.items.length >= settings.maxItems) {
       status.textContent = t("garden.full");
       return;
     }
     const size = kind === "stone" ? settings.stoneSize : settings.plantSize;
-    const item = { kind, size, number: count + 1, ...freeSpot(size) };
+    // The lowest number not in use for this kind, so no two items share a name (AUD-155).
+    const used = new Set(current.items.filter((other) => other.kind === kind).map((other) => other.number));
+    let number = 1;
+    while (used.has(number)) number++;
+    const item = { kind, size, number, ...freeSpot(size) };
     const node = svg("g", { class: `garden-item ${kind}`, tabindex: "0", role: "button", "aria-pressed": "false" });
     // A round hit area under the drawing, so every item is a target at least as wide as it is long.
     node.append(svg("circle", { class: "hit", r: size }));

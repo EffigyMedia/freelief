@@ -133,3 +133,17 @@ def test_enter_and_space_choose_an_item_and_remove_takes_it_away():
         page.keyboard.press("Enter")
         assert page.locator(".garden-item").count() == before - 1
         assert not errors, errors
+
+
+def test_an_item_added_after_a_removal_gets_a_name_of_its_own():
+    # AUD-155: remove Stone 1, add a stone, and no two items share a name.
+    with open_app() as (page, errors, _):
+        go(page, "garden")
+        first = page.locator(".garden-item.stone").first
+        first.focus()
+        page.keyboard.press("Delete")
+        page.locator(".garden-add-stone, button.add-stone").first.click()
+        labels = page.locator(".garden-item").evaluate_all("items => items.map(i => i.getAttribute('aria-label'))")
+        names = [label.split(",")[0] for label in labels]
+        assert len(names) == len(set(names)), names
+        assert not errors, errors

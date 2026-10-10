@@ -193,7 +193,7 @@ export function start(container, ctx) {
   // The way to urgent help stays in full screen (AUD-075): it leaves full screen and opens help.
   container.querySelector(".calm-help").addEventListener("click", () => {
     leaveFull();
-    document.querySelector(".help-open").click();
+    ctx.openHelp();
   });
   stage.addEventListener("keydown", (event) => { if (event.key === "Escape") leaveFull(); });
   // The browser's own Escape leaves its full screen without a click on the button; the stage leaves too.
