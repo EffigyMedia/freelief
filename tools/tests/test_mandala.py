@@ -176,3 +176,27 @@ def test_every_ring_uses_a_known_shape_and_diamonds_do_not_overlap():
             assert ring["inner"] < ring["outer"], f"design {d}: {ring}"
             if ring["shape"] == "diamond":
                 assert ring.get("width", 0.45) <= 0.5, f"design {d}: diamonds overlap"
+
+
+def test_the_mandala_note_is_a_soft_short_pluck():
+    # RLG-062 (owner, 2026-10-10): softer and more plucky than the old bell. Whole-number partials (a
+    # string, not a bell), every one gone within a second, quieter than before, and no second strike.
+    chime = CONFIG["sounds"]["chime"]
+    assert chime["volume"] < 0.03, "softer than the bell of 0.03"
+    assert all(float(ratio).is_integer() for ratio, _, _ in chime["partials"]), "harmonic, so it plucks"
+    assert max(decay for _, _, decay in chime["partials"]) <= 1.0, "a pluck fades within a second"
+    probe = """
+window.__stops = [];
+const create = AudioContext.prototype.createOscillator;
+AudioContext.prototype.createOscillator = function () {
+  const node = create.call(this); const stop = node.stop.bind(node);
+  node.stop = (when) => { window.__stops.push(when - this.currentTime); return stop(when); }; return node; };"""
+    with open_app(init_script=probe) as (page, _, _):
+        page.locator(".guide").click()
+        go(page, "mandala")
+        page.wait_for_timeout(300)
+        page.evaluate("window.__stops = []")
+        page.locator(".mandala-part").first.click()
+        wait_until(page, "window.__stops.length > 0", 2000)
+        stops = page.evaluate("window.__stops")
+        assert max(stops) <= 1.2 and len(stops) == len(chime["partials"]), stops

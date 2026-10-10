@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-26"></a>
+## [0.8.26] - 2026-10-10
+- **Color Mandalas**: each color's note is now a soft, short pluck instead of a bell, and quieter.
+  [RLG-062](../fragments/RLG-062.md). 210 tests.
+
 <a id="v0-8-25"></a>
 ## [0.8.25] - 2026-10-10
 - **Zen Garden**: stones and plants no longer come with rings around them; you rake around them

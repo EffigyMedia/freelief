@@ -422,31 +422,36 @@ export function drop() {
   oscillator.stop(now + settings.seconds + 0.02);
 }
 
-// A rain chime for mandala coloring (owner, 2026-10-08): a small bell struck once. A few sine
-// partials at the inharmonic ratios of a struck rod, each fading at its own rate, and a quieter
-// second strike a moment later, like a chime touched by rain. `frequency` is the color's note.
+// The mandala's note (owner, 2026-10-08; softer and plucked, RLG-062): a soft pluck. A few sine
+// partials at whole-number ratios, so it sounds like a string, not a bell. They start fast and fade
+// within a second, through a low-pass filter that closes as the note fades, as a plucked string
+// loses its brightness. `frequency` is the color's note.
 export function chime(frequency) {
   if (!canPlay()) return;
   const ctx = ensureContext();
   if (!ctx) return;
   const settings = sounds.chime;
-  const strike = (delay, level) => {
-    const start = ctx.currentTime + delay;
-    for (const [ratio, partLevel, decay] of settings.partials) {
-      const oscillator = ctx.createOscillator();
-      const gain = ctx.createGain();
-      oscillator.type = "sine";
-      oscillator.frequency.value = frequency * ratio;
-      gain.gain.setValueAtTime(0, start);
-      gain.gain.linearRampToValueAtTime(settings.volume * level * partLevel, start + settings.attackSeconds);
-      gain.gain.exponentialRampToValueAtTime(0.0001, start + decay);
-      oscillator.connect(gain).connect(output);
-      oscillator.start(start);
-      oscillator.stop(start + decay + 0.05);
-    }
-  };
-  strike(0, 1);
-  strike(settings.echoSeconds, settings.echoLevel);
+  const start = ctx.currentTime;
+  const tone = ctx.createBiquadFilter();
+  tone.type = "lowpass";
+  tone.frequency.setValueAtTime(settings.cutoffHz, start);
+  tone.frequency.exponentialRampToValueAtTime(Math.max(frequency * 1.5, 200), start + settings.darkenSeconds);
+  tone.connect(output);
+  let longest = 0;
+  for (const [ratio, partLevel, decay] of settings.partials) {
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequency * ratio;
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(settings.volume * partLevel, start + settings.attackSeconds);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + decay);
+    oscillator.connect(gain).connect(tone);
+    oscillator.start(start);
+    oscillator.stop(start + decay + 0.05);
+    longest = Math.max(longest, decay);
+  }
+  setTimeout(() => tone.disconnect(), (longest + 0.2) * 1000);
 }
 
 // The background rain (owner: an atonal mode, "noise like rain"): looping noise, shaped by a

@@ -1070,7 +1070,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   rain (`sounds.chime`, `mandala.palette[].note`). The old step cue, now unused, is removed. The
   trace's crystal glass is 40% quieter (`sounds.glass.volume` 0.035 to 0.021). — 2026-10-08 (owner;
   UNT-084) *Superseded in part 2026-10-10 (owner, UNT-115): the trace and its glass sound are
-  removed; see "Zen Garden replaces Trace a shape". The mandala chime holds.*
+  removed; see "Zen Garden replaces Trace a shape". The mandala chime holds.* *Amended 2026-10-10
+  (owner, RLG-062; UNT-143): the note is now a soft pluck, not a bell; see that entry.*
 - **A sound that stops while sound is off, or while the off-fade runs, is cut off at once.** — The
   owner found that muting in the Visualizer, leaving it and unmuting played the music again and then
   faded it. Muting pauses the audio clock after its fade, so a sound's own fade-out froze partway
@@ -1356,6 +1357,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   (RLG-060): the repeated short brush sounded like a looping one-shot. Raking now starts one looping
   noise in the sand band; its level follows the stroke's speed and settles to silence when the rake
   stops, and it fades out when the person leaves. — 2026-10-10 (owner; UNT-141)
+- **The mandala's note is a soft pluck.** — Owner request (RLG-062): softer and more plucky than
+  the rain chime. Sine partials at 1, 2, 3 and 4 times the color's note (a string, not a bell) fade
+  within a second through a low-pass that closes from 2400 Hz, at a lower volume (0.018, from 0.03),
+  with no second strike. Each color keeps its own note. — 2026-10-10 (owner; UNT-143)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

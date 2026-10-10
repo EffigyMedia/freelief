@@ -252,7 +252,7 @@ The sounds:
 | `sandLoop()` | Zen Garden | One continuous sand sound for a rake: looping noise in a band centered on A5. `level(0..1)` glides its loudness (`glideSeconds`); the garden sets it from the rake's speed (`garden.rakeFullSpeed` units a second is full) and to 0 after `rakeStillMs` with no move. `stop()` fades it out. |
 | `pop()` | Bubbles | A short burst of band-passed noise over a falling thump. |
 | `drop()` | Ripple pond | A short sine whose pitch rises fast, through a low-pass filter. |
-| `chime(note)` | Mandala | A struck bell: inharmonic partials and a quieter second strike. |
+| `chime(note)` | Mandala | A soft pluck (RLG-062): sine partials at 1, 2, 3 and 4 times the note, fading within a second, through a low-pass that closes from `cutoffHz` as the note fades. |
 | `pads(level)` | Background (music) | Slow chords from `sounds.pads`: each note is two detuned triangle waves through one low-pass filter, with long swells. |
 | `rain(level)` | Background (nature) | Filtered looping noise that swells slowly, with soft drops pitched to C major notes. |
 | `waves(level)` | Background (nature) | Filtered looping noise. Each wave swells and opens the filter, then falls back, at uneven gaps and heights. |
