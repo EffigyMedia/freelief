@@ -34,7 +34,8 @@
     "enabledByDefault": true,
     "muteFadeSeconds": 0.6,
     "breath": {
-      "volume": 0.09,
+      "volume": 0.07,
+      "lowpassHz": 2200,
       "attackShare": 0.35,
       "releaseShare": 0.45,
       "minEdgeSeconds": 0.3,
@@ -51,7 +52,7 @@
       "tap": {
         "bandHz": 1046.5,
         "q": 3,
-        "volume": 0.06,
+        "volume": 0.05,
         "seconds": 0.07
       }
     },

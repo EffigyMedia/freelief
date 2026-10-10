@@ -165,7 +165,11 @@ export function cue(phaseKey, seconds) {
   const start = ctx.currentTime;
   const end = start + seconds;
   const master = ctx.createGain();
-  master.connect(output);
+  // A gentle high cut over the whole breath sound, so it stays soft (owner, 2026-10-10; RLG-059).
+  const soften = ctx.createBiquadFilter();
+  soften.type = "lowpass";
+  soften.frequency.value = breath.lowpassHz;
+  master.connect(soften).connect(output);
   const sources = [];
 
   if (phaseKey === "in" || phaseKey === "out") {
@@ -208,11 +212,12 @@ export function cue(phaseKey, seconds) {
     }
   }
 
+  const unplug = () => { master.disconnect(); soften.disconnect(); };
   return () => {
     const now = ctx.currentTime;
     const stopAll = (when) => sources.forEach((source) => { try { source.stop(when); } catch { /* already stopped */ } });
     if (paused(ctx)) {
-      master.disconnect();
+      unplug();
       stopAll();
       return;
     }
@@ -221,9 +226,9 @@ export function cue(phaseKey, seconds) {
     stopAll(now + 0.4);
     // A source already told to stop at the phase's end keeps that time, so the faded sound is
     // disconnected once the fade is over.
-    setTimeout(() => master.disconnect(), 450);
+    setTimeout(() => unplug(), 450);
     fadingUntil(() => {
-      master.disconnect();
+      unplug();
       stopAll();
     }, 0.4);
   };

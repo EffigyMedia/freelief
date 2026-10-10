@@ -65,6 +65,24 @@ def test_each_breath_is_soft_noise_that_lasts_its_whole_phase_and_no_tone():
         assert shape["out"]["toCutoffHz"] < shape["out"]["fromCutoffHz"], "the out-breath darkens"
 
 
+
+def test_the_breath_passes_through_a_soft_high_cut():
+    # RLG-059 (owner, 2026-10-10): the breath is softer, with a high cut and a lower volume.
+    probe = """
+window.__filters = [];
+const createFilter = AudioContext.prototype.createBiquadFilter;
+AudioContext.prototype.createBiquadFilter = function () {
+  const node = createFilter.call(this); window.__filters.push(node); return node; };
+"""
+    shape = CONFIG["sounds"]["breath"]
+    assert shape["lowpassHz"] <= 2500, "the high cut is gentle but real"
+    assert shape["volume"] <= 0.07 and shape["tap"]["volume"] <= 0.05, "the breath stays quiet"
+    with open_app(init_script=NOISE_PROBE + probe) as (page, _, _):
+        page.locator(".guide").click()
+        wait_until(page, f"{BREATHS}.length >= 1", 14000)
+        cuts = page.evaluate("window.__filters.filter(f => f.type === 'lowpass').map(f => f.frequency.value)")
+        assert shape["lowpassHz"] in [round(c) for c in cuts], f"no high cut on the breath: {cuts}"
+
 def test_pausing_stops_the_breath():
     with open_app(init_script=NOISE_PROBE) as (page, _, _):
         page.locator(".guide").click()

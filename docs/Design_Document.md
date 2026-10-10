@@ -1279,6 +1279,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   or drifts; only the slow cross-fade remains. Full screen and Black screen are unchanged, and
   nothing new is drawn under the black screen. — Rejected: a tiled woven pattern; bolder, faster
   motion. — 2026-10-10 (owner; UNT-116)
+- **The breath sound is softer: a gentle high cut and a lower volume.** — Owner request (RLG-059).
+  A low-pass filter at `sounds.breath.lowpassHz` (2200 Hz) follows the whole breath sound, and the
+  breath's volume goes from 0.09 to 0.07 and the hold tap's from 0.06 to 0.05. — 2026-10-10 (owner;
+  UNT-119)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
