@@ -8,6 +8,10 @@
 let key = "freelief.settings.v2";
 let values = {};
 let chosen = {};
+// Stored values this version cannot read: a setting from a newer version, or a value it does not
+// know. They are written back unchanged, so a rollback to an older version, and the move forward
+// again, loses no choice (AUD-121).
+let foreign = {};
 let defaults = {};
 const listeners = new Set();
 
@@ -76,8 +80,11 @@ export function initSettings(config) {
   }
   const stored = hasV2 ? read(key) : migrate(config, valid);
   chosen = {};
-  for (const [name, check] of Object.entries(valid)) {
-    if (Object.hasOwn(stored, name) && check(stored[name])) chosen[name] = stored[name];
+  foreign = {};
+  const record = stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};
+  for (const [name, value] of Object.entries(record)) {
+    if (Object.hasOwn(valid, name) && valid[name](value)) chosen[name] = value;
+    else foreign[name] = value;
   }
   values = { ...defaults, ...chosen };
 }
@@ -88,7 +95,7 @@ export function getSetting(name) {
 
 function save() {
   try {
-    localStorage.setItem(key, JSON.stringify(chosen));
+    localStorage.setItem(key, JSON.stringify({ ...foreign, ...chosen }));
   } catch {
     // Storage is blocked or full: the choice holds for this visit only.
   }
@@ -97,6 +104,7 @@ function save() {
 // A choice of the default value is not stored, so it follows a new default later (AUD-110).
 export function setSetting(name, value) {
   values[name] = value;
+  delete foreign[name];
   if (value === defaults[name]) delete chosen[name];
   else chosen[name] = value;
   save();
@@ -113,6 +121,7 @@ export function resetSettings() {
     .map((name) => [name, chosen[name]]));
   const changed = Object.keys(chosen).filter((name) => !Object.hasOwn(kept, name) && chosen[name] !== defaults[name]);
   chosen = kept;
+  foreign = {};
   values = { ...defaults, ...kept };
   save();
   changed.forEach((name) => listeners.forEach((listener) => listener(name, values[name])));

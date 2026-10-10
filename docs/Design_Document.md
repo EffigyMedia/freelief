@@ -365,7 +365,7 @@ met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), n
 | 4 | Persistence | `localStorage` for Settings only, behind one module, with every access in try/catch. | Settings are small and on-device; nothing else is stored. | IndexedDB (more than needed). |
 | 5 | External services | None at run time. | No network after install, no data sent. | Analytics, a feedback relay. |
 | 6 | Content and assets | Text in `strings/en.json`, owner-approved. Crisis lines in `data/crisis-lines.json`, curated and dated. Research sources in `docs/research/`. Tones generated with Web Audio at run time, so no audio files. The system font stack, so no font files. | Small, licence-free, offline. | Recorded audio; web fonts; image assets. |
-| 7 | Deployment | GitHub Pages serves the `live` branch of the public repository `EffigyMedia/freelief`. Pushing `main` deploys nothing; moving `live` is the deploy (before 1.0 with the owner's yes, from 1.0 only at a release that cleared the audit gate). Rollback moves `live` back to the previous release tag; see the incident rule in section 9. *(Changed 2026-10-07, AUD-003: it first served `main`.)* The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
+| 7 | Deployment | GitHub Pages serves the `live` branch of the public repository `EffigyMedia/freelief`. Pushing `main` deploys nothing; moving `live` is the deploy (before 1.0 with the owner's yes, from 1.0 only at a release that cleared the audit gate). Rollback moves `live` back to the previous tag (`preview-X.Y.Z` before 1.0, `vX.Y.Z` from 1.0); see the incident rule in section 9. *(Changed 2026-10-07, AUD-003: it first served `main`.)* The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
 | 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, from the `axe-playwright-python` package in the same venv, runs the automated accessibility check; nothing from it ships. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
 | 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright. `run`: `python -m http.server 8000`. `test`: the Playwright harnesses. `doctor`: check Python, the venv, Playwright, the manifest, the service worker and the JSON files. `build`: none — the repository is the distributable; `build` reports that and checks the size limit. `clean`: remove `output/`. `bench`: the launch-time and size benchmark. | Matches the environment's standard commands with the fewest tools. | A bundler. |
 | 10 | Version control | Git. The remote is public. Push `main` freely: it deploys nothing. Moving `live` is the deploy. Before 1.0, `live` moves only with the owner's yes, recorded in the changelog entry of the version it serves; from 1.0 on, it moves only at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tag. *(Changed 2026-10-08, AUD-003: it first said "feature commits stay local; push at a release or for an owner device test".)* | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
@@ -505,8 +505,12 @@ from a sibling path. The owner chose to stay on the shared origin (Decision Log,
 2026-10-08); an origin of its own (a custom domain or a dedicated account) removes this dependency.
 
 **Incidents (AUD-105, owner 2026-10-09).** A defect in the live release, such as a wrong crisis
-number or a broken start-up, is an incident. The owner may move `live` back to the previous release
-tag at once, with no audit round, and records the move and its reason the same day. Installed copies
+number or a broken start-up, is an incident. The owner may move `live` back to the previous tag at
+once, with no audit round, and records the move and its reason the same day. Before 1.0 every move
+of the preview is tagged `preview-X.Y.Z` (each earlier move was tagged on 2026-10-10), and from 1.0
+each release is tagged `vX.Y.Z`, so the target always has a name (AUD-121). A rollback keeps the
+person's settings: `settings.js` writes back every stored value that the running version cannot
+read, so the older version keeps a newer version's choices, and they apply again after the fix. Installed copies
 get the rollback at their next open, because the older `version.js` names another cache. A fix
 forward is a release whose round covers only the lenses the fix touches.
 
@@ -1283,6 +1287,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   A low-pass filter at `sounds.breath.lowpassHz` (2200 Hz) follows the whole breath sound, and the
   breath's volume goes from 0.09 to 0.07 and the hold tap's from 0.06 to 0.05. — 2026-10-10 (owner;
   UNT-119)
+- **Every move of the preview is tagged, and a rollback keeps newer settings.** — AUD-121: the
+  Incident rule named "the previous release tag", but the repository had no tag, and an older
+  version's save dropped the settings it could not read. Each move of `live` now tags its commit
+  `preview-X.Y.Z`; the twelve earlier moves were tagged from the remote's log. `settings.js` keeps
+  stored values it cannot read and writes them back, and a new choice of that setting replaces
+  them. The stale local `live` branch (at v0.5.0) is deleted. — Rejected: naming the target only in
+  the changelog (a hurried owner needs one command). — 2026-10-10 (UNT-121)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

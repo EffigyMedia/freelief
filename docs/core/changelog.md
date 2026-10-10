@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-8-12"></a>
+## [0.8.12] - 2026-10-10
+- **Settings**: a setting that this version cannot read is kept when you change another one, so
+  going back to an older version and forward again loses none of your choices. Every move of the
+  public preview now has a `preview-X.Y.Z` tag, so a rollback has a named target.
+  [AUD-121](../fragments/AUD-121.md). 184 tests.
+
 <a id="v0-8-11"></a>
 ## [0.8.11] - 2026-10-10
 - Hardening; nothing a person sees changes. Every value from the app's data that goes into a page

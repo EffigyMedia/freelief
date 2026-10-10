@@ -176,7 +176,7 @@ Summaries — the canonical procedures live in `<env-root>/Process/Development_P
 | **Track this: …** | `python <env-root>/Commands/fragment.py new --kind ruling --type feature --status requested --title "…"`; do not start it. |
 | **Resume** | Run `python <env-root>/Commands/thread.py show`. **Verify the working tree is clean.** Uncommitted work is an interrupted unit: ask, never silently commit or discard. Then run `doctor`. |
 | **Release** | Only when something ships, in this order. **1. Prepare:** re-check every crisis line and update its date; bump the version; commit. **2. Validate:** run the file audit (`python tools/freelief.py files`); purge `output/previews/`; run `bench` on a quiet machine (exit 2 means busy, not valid); run `build --release` (the size check, a clean tree, a version bump after the last shipped change, and every crisis line and the directory checked within `crisis.maxCheckAgeDays`); **verify `test` and `doctor` are green**. **3. Gate:** run audit rounds until `audit-gate.py` prints `GATE CLEAR`; a fix made for a round goes back to step 1. The tagged commit is the audited commit. **4. Tag** that commit; push the commit and the tag. **5. Deploy last:** `git push origin vX.Y.Z:live`. |
-| **Incident** | A defect in the live release (a wrong crisis number, a broken start-up). The owner may move `live` back to the previous release tag at once, with no round: `git push --force origin vPREVIOUS:live`. Record the move and its reason the same day (changelog and a fragment). A fix forward is a Release whose round covers only the lenses the fix touches (AUD-105). |
+| **Incident** | A defect in the live release (a wrong crisis number, a broken start-up). The owner may move `live` back to the previous tag at once, with no round: before 1.0 the previous `preview-X.Y.Z` tag (`git tag -l "preview-*" --sort=-v:refname`), from 1.0 the previous release tag: `git push --force origin <tag>:live`. Settings that a newer version wrote survive the rollback: a save keeps every value the running version cannot read (AUD-121). Record the move and its reason the same day (changelog and a fragment). A fix forward is a Release whose round covers only the lenses the fix touches (AUD-105). |
 | **Perform audit** | Run a round per `Audit_and_Testing.md`: four lenses, one finding to a fragment; change no code. |
 
 ## Commands
@@ -282,7 +282,9 @@ the Chrome already on the machine. Run from the repo root:
   owner's yes. GitHub Pages serves the **`live` branch, not `main`**, at
   `https://effigymedia.github.io/freelief/` (AUD-003). **Pushing `main` deploys nothing**, so push it
   freely. **Moving `live` is a deploy.** Before 1.0, `live` is a public *preview*: move it only with
-  the owner's yes for that move, and the README says it is a preview. From 1.0 on, `live` moves only
+  the owner's yes for that move, and the README says it is a preview. Each move tags the commit
+  `preview-X.Y.Z` and pushes the tag (`git push origin preview-X.Y.Z`), so a rollback has a target
+  (AUD-121). From 1.0 on, `live` moves only
   at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tagged commit:
   `git push origin vX.Y.Z:live`.
 - **Never commit** (see `.gitignore`): tokens, keys or passwords; `.venv/`; `output/`;

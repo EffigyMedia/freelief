@@ -29,6 +29,16 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-10
 
+### Tag every move of the live preview
+- **Instruction:** each move of `live` before 1.0 tags its commit `preview-X.Y.Z` and pushes the
+  tag. An incident rolls `live` back to the previous `preview-` tag before 1.0, and to the previous
+  release tag from 1.0.
+- **Why:** AUD-121. The Incident row named a release tag that did not exist, and a stale local
+  `live` branch pointed at v0.5.0, so a hurried rollback had no safe target.
+- **Encoded in:** `AGENTS.md` (the Incident row; Conventions, the remote); `docs/Design_Document.md`
+  (section 7 row 7; section 9, Incidents).
+- Agent, 2026-10-10.
+
 ### Retire an owner check when its screen is removed
 - **Instruction:** when a screen is removed, its owed checks in RLG-033 are retired or moved in the
   same unit, each by name with its successor.

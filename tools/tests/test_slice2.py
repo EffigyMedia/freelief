@@ -65,6 +65,29 @@ def test_the_header_is_three_centered_rows_on_every_screen():
         wait_until(page, "document.querySelector('main').dataset.shown === 'settings'", 2000)
 
 
+
+def test_a_save_keeps_the_settings_this_version_cannot_read():
+    # AUD-121: after a rollback, an older version must not erase a newer version's choices at its
+    # next save. A stored name it does not know, or a value it does not know, is written back.
+    key = CONFIG["settings"]["storageKey"]
+    seed = json.dumps({"fromNewerVersion": "kept", "awakeMinutes": 999, "rhythm": "slow"})
+    store = f"if (!localStorage.getItem('{key}')) localStorage.setItem('{key}', JSON.stringify({seed}));"
+    stored = f"JSON.parse(localStorage.getItem('{key}'))"
+    with open_app(init_script=store) as (page, _, _):
+        go(page, "settings")
+        assert page.locator("input[name=rhythm][value=slow]").is_checked(), "a known value is read"
+        page.locator("input[name=theme][value=light]").check()
+        saved = page.evaluate(stored)
+        assert saved["fromNewerVersion"] == "kept" and saved["awakeMinutes"] == 999, saved
+        assert saved["theme"] == "light" and saved["rhythm"] == "slow", saved
+        default = CONFIG["wakeLock"]["idleMinutesDefault"]
+        other = next(m for m in CONFIG["wakeLock"]["idleMinutesChoices"] if m != default)
+        page.locator(f"input[name=awakeMinutes][value='{other}']").check()
+        page.locator(f"input[name=awakeMinutes][value='{default}']").check()
+        saved = page.evaluate(stored)
+        assert "awakeMinutes" not in saved, f"a new choice replaces the unknown value: {saved}"
+        assert saved["fromNewerVersion"] == "kept", saved
+
 def test_settings_round_trip_through_a_reload():
     # AGENTS.md: settings round-trip in a test. Save, reload, read, assert the same values.
     with open_app() as (page, _, _):
