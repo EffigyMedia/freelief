@@ -79,13 +79,16 @@ def test_a_failed_screen_start_falls_back_to_the_menu_and_links_still_work():
     try:
         context.route("**/screens/about.js*", lambda route: route.fulfill(
             content_type="text/javascript",
-            body="export function start() { throw new Error('test'); } export function stop() {}"))
+            # AUD-165: the screen takes a wake lock, then fails; its stop() must still run.
+            body="let release; export function start(c, ctx) { release = ctx.keepAwake(); throw new Error('test'); } "
+                 "export function stop() { release?.(); window.__stopped = true; }"))
         page = context.new_page()
         page.goto(base_url() + "#about")
         page.wait_for_selector("html[data-ready='true']", timeout=5000)
         wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 5000)
         assert page.evaluate("location.hash") == "#menu"
         assert page.locator("main .page.about").count() == 0, "no half-drawn About screen"
+        assert page.evaluate("window.__stopped === true"), "the failed screen was not stopped"
         page.locator(".menu-item[href='#bubbles']").click()
         wait_until(page, "document.querySelector('main').dataset.shown === 'bubbles'", 3000)
         page.locator(".nav-back").click()

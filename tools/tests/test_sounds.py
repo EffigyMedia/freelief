@@ -247,3 +247,20 @@ AudioContext.prototype.createBiquadFilter = function () {
         wrong = [hz for hz in heard if not in_c_major(hz)]
         assert not wrong, f"rain drops out of key: {sorted(set(wrong))}"
         assert not errors, errors
+
+
+def test_coming_back_before_any_touch_creates_no_audio():
+    # AUD-166: a page that is hidden and shown again before the first touch makes no AudioContext,
+    # because only a gesture may start audio.
+    probe = """
+window.__made = 0; window.__vis = 'visible';
+const Real = window.AudioContext;
+window.AudioContext = class extends Real { constructor(...a) { super(...a); window.__made += 1; } };
+Object.defineProperty(document, 'visibilityState', { get: () => window.__vis });"""
+    with open_app(init_script=probe, route="menu") as (page, errors, _):
+        page.evaluate("window.__vis = 'hidden'; document.dispatchEvent(new Event('visibilitychange'))")
+        page.evaluate("window.__vis = 'visible'; document.dispatchEvent(new Event('visibilitychange'))")
+        page.wait_for_timeout(300)
+        assert page.evaluate("window.__made") == 0, "audio was made with no gesture"
+        assert not errors, errors
+

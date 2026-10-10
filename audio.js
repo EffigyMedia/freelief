@@ -46,14 +46,9 @@ function ensureContext() {
     bed.gain.value = ducked ? sounds.background.duckLevel : 1;
     bed.connect(output);
   }
-  if (context.state === "suspended" && !held) context.resume();
+  // WebKit gives the state "interrupted" during a phone call; it resumes like "suspended" (AUD-180).
+  if ((context.state === "suspended" || context.state === "interrupted") && !held) context.resume();
   return context;
-}
-
-// Call from a user gesture (turning sounds on), so the browser allows sound.
-export function unlockAudio() {
-  unlocked = true;
-  ensureContext();
 }
 
 // The header's sound button (owner, 2026-10-08). Off silences every sound at once, mid-note;
@@ -65,7 +60,10 @@ export function applySound(on) {
   clearTimeout(fadeTimer);
   held = !on;
   if (on) {
-    unlockAudio();
+    // Only after the first gesture has unlocked sound: a call from a page that comes back into view
+    // is no gesture, so it must not create the audio (AUD-166). The gesture listener above unlocks.
+    if (!unlocked) return;
+    ensureContext();
     if (!output) return;
     const now = context.currentTime;
     hold(output.gain, now);

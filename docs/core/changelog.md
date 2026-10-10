@@ -12,6 +12,13 @@ audit.
 
 ---
 
+<a id="v0-8-32"></a>
+## [0.8.32] - 2026-10-10
+- **Sound**: on iPhone, sound should come back after a call to a crisis line; Freelief never starts
+  its audio before your first tap; a screen that fails to start lets go of everything it took.
+  [AUD-165](../fragments/AUD-165.md), [AUD-166](../fragments/AUD-166.md),
+  [AUD-180](../fragments/AUD-180.md). 218 tests.
+
 <a id="v0-8-31"></a>
 ## [0.8.31] - 2026-10-10
 - **Update now** never waits for ever: after a minute it says the update did not work and frees the

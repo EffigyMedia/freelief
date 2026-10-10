@@ -318,6 +318,8 @@ async function show(name, { moveFocus }) {
     // A screen that fails as it starts falls back to the menu, as a screen that cannot load does.
     console.error(`Freelief could not start the ${name} screen:`, error);
     if (request !== showing) return;
+    // Stop what the screen started before it failed, such as a wake lock or a timer (AUD-165).
+    try { screen.stop?.(); } catch (stopError) { console.error(`Freelief could not stop the ${name} screen:`, stopError); }
     current = null;
     if (name !== DEFAULT_ROUTE) {
       history.replaceState(history.state, "", `#${DEFAULT_ROUTE}`);
