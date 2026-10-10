@@ -17,6 +17,8 @@ audit.
   Pause and "Stop the drifting" say only what a press does; Tab reaches the bubbles in the order
   you see them, and their focus ring is never cut off; the accessibility checklist in Feedback uses
   the current screen names. [RLG-047](../fragments/RLG-047.md). 190 tests.
+- The live preview moved to 0.8.14 on 2026-10-10, with the owner's yes by the question tool
+  ("Move live now"); tag `preview-0.8.14`.
 
 <a id="v0-8-13"></a>
 ## [0.8.13] - 2026-10-10
