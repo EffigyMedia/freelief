@@ -2,6 +2,14 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-10 — Live move to v0.8.22 (v0.8.22), NOT VALID: busy machine
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to first screen (the menu) | 154 ms | 256.2 ms | +66% | FLAG |
+| Response: Need urgent help? opens | 77 ms | 24.1 ms | -69% | OK |
+| Shipped size | 239.8 KB | 238.6 KB | -1% | OK |
+Notes: busiest CPU load 63.9%, baseline load 27.0%. Recorded for the live move (AUD-135). Since v0.8.15: the version-tagged screens, the refresh of Update now, the Feedback draft, the Unblock transform and the retired settings; 4.7 KB larger, with 11.4 KB left, so under the size plan the next slice that adds a feature takes a saving first. The launch FLAG is load: the same run is not valid, and the probe of AUD-131 showed no launch change.
+
 ## 2026-10-10 — Round UNT-124 health step (v0.8.14), recorded late (AUD-135)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|

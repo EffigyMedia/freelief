@@ -17,6 +17,8 @@ audit.
 - **Unblock**: blocks slide with a lighter animation, which is smoother on a slow phone; where they
   sit does not change. [RLG-047](../fragments/RLG-047.md), [AUD-125](../fragments/AUD-125.md).
   206 tests.
+- The live preview moved to 0.8.22 on 2026-10-10, with the owner's yes by the question tool
+  ("Move live now"); tag `preview-0.8.22`; bench logged (not valid: busy machine).
 
 <a id="v0-8-21"></a>
 ## [0.8.21] - 2026-10-10
