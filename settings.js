@@ -82,9 +82,11 @@ export function initSettings(config) {
   chosen = {};
   foreign = {};
   const record = stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};
+  // A setting that a version retired is dropped at the next save, not kept for a rollback (AUD-146).
+  const retired = new Set(config.settings.retired || []);
   for (const [name, value] of Object.entries(record)) {
     if (Object.hasOwn(valid, name) && valid[name](value)) chosen[name] = value;
-    else foreign[name] = value;
+    else if (!retired.has(name)) foreign[name] = value;
   }
   values = { ...defaults, ...chosen };
 }

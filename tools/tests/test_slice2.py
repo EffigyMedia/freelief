@@ -297,3 +297,18 @@ def test_the_browser_bar_color_follows_a_chosen_theme():
         assert len(set(light)) == 1 and light[0] in system, light
         page.locator("input[name=theme][value=system]").check()
         assert page.evaluate(colors) == system
+
+
+def test_a_retired_setting_is_gone_after_the_next_save():
+    # AUD-146: a stored setting that a version retired (config.json settings.retired) is dropped at
+    # the next save; an unknown one from a newer version is still kept (AUD-121).
+    key = CONFIG["settings"]["storageKey"]
+    retired = CONFIG["settings"]["retired"]
+    seed = json.dumps({**{name: "old" for name in retired}, "fromNewerVersion": "kept"})
+    store = f"if (!localStorage.getItem('{key}')) localStorage.setItem('{key}', JSON.stringify({seed}));"
+    with open_app(init_script=store) as (page, _, _):
+        go(page, "settings")
+        page.locator("input[name=theme][value=light]").check()
+        saved = page.evaluate(f"JSON.parse(localStorage.getItem('{key}'))")
+        assert not [name for name in retired if name in saved], saved
+        assert saved["fromNewerVersion"] == "kept", saved

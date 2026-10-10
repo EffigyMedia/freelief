@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-20"></a>
+## [0.8.20] - 2026-10-10
+- **Settings**: two old settings that no version uses any more are removed from your device the
+  next time you change a setting. [AUD-146](../fragments/AUD-146.md). 201 tests.
+
 <a id="v0-8-19"></a>
 ## [0.8.19] - 2026-10-10
 - **Settings**: the Keep the screen on hint names the Kaleidoscope. The volunteer's accessibility

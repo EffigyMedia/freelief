@@ -195,7 +195,10 @@ At boot, `initSettings()` does this:
    key.
 2. It uses a stored value only if it passes its check. A stored value it cannot read, such as a
    setting of a newer version or one this version retired, is kept apart and written back at each
-   save, so a rollback loses no choice (AUD-121); a new choice of that setting replaces it. A rhythm must exist in
+   save, so a rollback loses no choice (AUD-121); a new choice of that setting replaces it. A name
+   in `config.json` → `settings.retired` (`calmMode`, `natureSound`) is dropped instead, so a
+   retired setting does not stay stored forever (AUD-146). The unit that retires a setting adds its
+   name there. A rhythm must exist in
    `config.json`. A theme, an `openOn` or an `awakeMinutes` must be in its list of choices
    (`awakeMinutes` 0 means Always). `sounds` and
    `haptics` must be booleans. `helpRegion` must be `auto` or two capital letters. Checks use own

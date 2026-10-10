@@ -725,6 +725,10 @@
     "openOnChoices": [
       "menu",
       "breathe"
+    ],
+    "retired": [
+      "calmMode",
+      "natureSound"
     ]
   },
   "crisis": {
