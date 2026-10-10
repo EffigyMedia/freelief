@@ -220,8 +220,10 @@ visit only. Listeners (`onSettingChange`) let the shell act on a change at once.
 Theme: `system` removes `html[data-theme]`; `dark` or `light` sets it, and the CSS gives the
 attribute priority over `prefers-color-scheme`. A saved region that is no longer curated shows as
 Automatic in the Settings select. Under the version line, a line says whether this version is
-saved for use with no internet: the offline cache is written all at once, so it exists only when it
-is complete (AUD-112). The version line and Update now are in `app_shell_and_offline.md`.
+saved for use with no internet. The page asks the active worker (`"status"`), which answers whether
+its cache holds every `FILES` entry; while a worker installs, the line says it is saving, and it
+updates when the install ends. A cache name alone proves nothing: `caches.open()` creates it empty,
+so a failed install deletes its cache (AUD-112). The version line and Update now are in `app_shell_and_offline.md`.
 
 ## Sound (`audio.js`)
 Every sound is made with Web Audio, so no audio file ships. All tunables are in `config.json` →

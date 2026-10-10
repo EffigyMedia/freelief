@@ -198,6 +198,7 @@
   "settings.resetHint": "Puts every setting back to how Freelief comes.",
   "settings.resetDone": "Settings are back to how Freelief comes.",
   "settings.offlineReady": "This version is saved on this device and works with no internet.",
+  "settings.offlineSaving": "Saving this version for use with no internet. Keep Freelief open for a moment.",
   "settings.offlineNotReady": "This version is not saved for use with no internet yet. Open Freelief once while online.",
   "settings.resetQuestion": "Reset every setting, including your country for urgent help?",
   "settings.resetYes": "Yes, reset",

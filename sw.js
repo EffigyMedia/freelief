@@ -63,7 +63,19 @@ function compareVersions(a, b) {
 // an old file (AUD-013).
 function precache() {
   return caches.open(CACHE)
-    .then((cache) => cache.addAll(FILES.map((file) => new Request(file, { cache: "reload" }))));
+    .then((cache) => cache.addAll(FILES.map((file) => new Request(file, { cache: "reload" }))))
+    // A failed install leaves no empty cache behind, which could look like a saved copy (AUD-112).
+    .catch((error) => caches.delete(CACHE).then(() => { throw error; }));
+}
+
+// Whether this version's cache holds every file it needs (AUD-112). A cache can exist and be empty:
+// caches.open() creates it before anything is stored.
+function holdsEveryFile() {
+  return caches.has(CACHE)
+    .then((present) => present && caches.open(CACHE)
+      .then((cache) => Promise.all(FILES.map((file) => cache.match(file))))
+      .then((hits) => hits.every(Boolean)))
+    .catch(() => false);
 }
 
 // A new version installs into its own cache and then waits. The page lets it take over when that
@@ -127,6 +139,10 @@ self.addEventListener("message", (event) => {
           .then((response) => cache.put(request, response))))))
       .then(() => true, () => false)
       .then((ok) => caches.delete(temporary).then(() => event.source?.postMessage({ refresh: ok }))));
+    return;
+  }
+  if (event.data === "status") {
+    event.waitUntil(holdsEveryFile().then((ready) => event.source?.postMessage({ offline: ready })));
     return;
   }
   if (event.data !== "heal") return;

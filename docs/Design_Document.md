@@ -1180,7 +1180,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   end. Reset settings puts every setting back to its default, and choosing the default value again
   removes the stored value, so it follows a later default. Settings also says whether this version
   is saved for use with no internet (AUD-112): the offline copy is written all at once, so its cache
-  exists only when it is complete. — 2026-10-09 (UNT-099)
+  exists only when it is complete. — 2026-10-09 (UNT-099) *Corrected 2026-10-10 (AUD-112, round
+  UNT-139; UNT-140): a cache exists as soon as it is opened, even empty. The worker now answers
+  whether its cache holds every file; Settings says "Saving" while it installs, and a failed install
+  deletes its cache.*
 - **Doctor warns about stale crisis lines and outdated claims.** — AUD-104: freshness was checked
   only at a release. Doctor, which every Resume runs, now warns when a crisis line or the directory
   is older than `crisis.maxCheckAgeDays`, and when a verified standard is outdated. — 2026-10-09

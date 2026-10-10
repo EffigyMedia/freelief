@@ -12,6 +12,12 @@ audit.
 
 ---
 
+<a id="v0-8-23"></a>
+## [0.8.23] - 2026-10-10
+- **Settings**: the line about the offline copy now says it is saved only when every file is on the
+  device, says "Saving" while it downloads, and never says saved after a failed download.
+  [AUD-112](../fragments/AUD-112.md). 207 tests.
+
 <a id="v0-8-22"></a>
 ## [0.8.22] - 2026-10-10
 - **Unblock**: blocks slide with a lighter animation, which is smoother on a slow phone; where they

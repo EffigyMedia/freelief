@@ -267,7 +267,8 @@ def test_settings_says_whether_this_version_is_ready_offline():
     # AUD-112: a person who installs Freelief for a future crisis can see that it works offline.
     with open_app(route="settings", service_workers="allow") as (page, _, _):
         page.evaluate("navigator.serviceWorker.ready")
-        wait_until(page, "caches.has('freelief-' + self.FREELIEF_VERSION)", 8000)
+        # The worker is active only after every file is stored; a cache name alone proves nothing.
+        wait_until(page, "navigator.serviceWorker.getRegistration().then(r => r && r.active && r.active.state === 'activated')", 8000)
         page.reload()
         wait_until(page, "document.documentElement.dataset.ready === 'true'", 5000)
         wait_until(page, f"document.querySelector('.offline-state').textContent === {STRINGS['settings.offlineReady']!r}", 3000)
@@ -312,3 +313,26 @@ def test_a_retired_setting_is_gone_after_the_next_save():
         saved = page.evaluate(f"JSON.parse(localStorage.getItem('{key}'))")
         assert not [name for name in retired if name in saved], saved
         assert saved["fromNewerVersion"] == "kept", saved
+
+
+def test_a_failed_install_never_reads_as_saved_and_leaves_no_empty_cache():
+    # AUD-112, re-opened by round UNT-139: one file that cannot be fetched fails the install. Settings
+    # must not say the copy is saved, and no empty cache may stay behind to look like one.
+    import tempfile
+    from harness import browser, serve
+    from test_offline import _app_copy
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        (app / "icons" / "icon-512.png").unlink()
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = context.new_page()
+            page.goto(url + "#settings")
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            page.wait_for_timeout(3000)  # the install runs and fails
+            text = page.locator(".offline-state").inner_text()
+            assert text != STRINGS["settings.offlineReady"], text
+            assert page.evaluate("caches.has('freelief-' + self.FREELIEF_VERSION)") is False, "an empty cache stayed"
+        finally:
+            context.close()

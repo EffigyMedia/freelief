@@ -110,12 +110,14 @@ export function start(container, ctx) {
     container.querySelector(".reset-settings").focus();
     setTimeout(() => { container.querySelector(".reset-status").textContent = t("settings.resetDone"); }, 100);
   });
-  // Whether this version is saved for use with no network (AUD-112). The offline copy is written
-  // all at once, so its cache exists only when every file is in it.
+  // Whether this version is saved for use with no network (AUD-112). The worker checks that its
+  // cache holds every file; while it installs, the line says so, and it changes when that ends.
   const offline = container.querySelector(".offline-state");
-  Promise.resolve(self.caches?.has(`freelief-${self.FREELIEF_VERSION}`))
-    .catch(() => false)
-    .then((ready) => { offline.textContent = t(ready ? "settings.offlineReady" : "settings.offlineNotReady"); });
+  const showOffline = () => offlineState().then((state) => { offline.textContent = t(`settings.offline${state}`); });
+  showOffline();
+  navigator.serviceWorker?.getRegistration().then((registration) => {
+    registration?.installing?.addEventListener("statechange", showOffline);
+  }).catch(() => {});
   const status = container.querySelector(".update-status");
   const updateButton = container.querySelector(".update-now");
   updateButton.addEventListener("click", async () => {
@@ -128,6 +130,26 @@ export function start(container, ctx) {
       updateButton.removeAttribute("aria-disabled");
     }
   });
+}
+
+// "Ready", "Saving" or "NotReady": the active worker answers whether its cache holds every file.
+async function offlineState() {
+  const registration = await navigator.serviceWorker?.getRegistration().catch(() => null);
+  if (!registration) return "NotReady";
+  const busy = registration.installing ? "Saving" : "NotReady";
+  if (!registration.active) return busy;
+  const ready = await new Promise((resolve) => {
+    const heard = (event) => {
+      if (event.data && typeof event.data.offline === "boolean") {
+        navigator.serviceWorker.removeEventListener("message", heard);
+        resolve(event.data.offline);
+      }
+    };
+    navigator.serviceWorker.addEventListener("message", heard);
+    registration.active.postMessage("status");
+    setTimeout(() => resolve(false), 3000);
+  });
+  return ready ? "Ready" : busy;
 }
 
 // "Update now" (owner, 2026-10-07): get the newest version and restart. Nothing is removed until
