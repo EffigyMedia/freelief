@@ -210,10 +210,18 @@ window.fetch = async (input, init) => {
   const data = await response.json();
   const bad = '"><b class="injected">x</b>';
   if (/crisis-lines/.test(url)) {
-    const region = Object.values(data.regions || data).find((r) => r && r.country);
-    if (region) { region.country += bad; region.code += bad; }
+    // A region's code is its key, and its country is shown; both go into the Settings list.
+    const [code, region] = Object.entries(data.regions)[0];
+    data.regions[code + bad] = { ...region, country: region.country + bad };
   } else {
     data.mandala.palette[0].name += bad;
+    // Each list of choices that Settings writes as radio values (AUD-130).
+    const rhythm = data.breathing.rhythmOrder[0];
+    data.breathing.rhythms[rhythm + bad] = data.breathing.rhythms[rhythm];
+    data.breathing.rhythmOrder.push(rhythm + bad);
+    data.settings.openOnChoices.push("menu" + bad);
+    data.theme.choices.push("dark" + bad);
+    data.wakeLock.idleMinutesChoices.push(bad);
   }
   return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } });
 };
