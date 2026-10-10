@@ -261,7 +261,7 @@ def test_back_to_menu_is_at_the_top_of_every_screen_and_the_footer_does_not_ment
             return nav.compareDocumentPosition(document.querySelector('main')) & Node.DOCUMENT_POSITION_FOLLOWING; })()""")
         assert above, "Back to menu comes before the Settings screen"
         assert "circle" not in page.locator(".tagline").inner_text().lower()
-        for route in ["trace", "unblock", "about", "feedback"]:
+        for route in ["garden", "unblock", "about", "feedback"]:
             go(page, route)
             nav = page.locator(".screen-nav").bounding_box()
             screen = page.locator("main").bounding_box()
@@ -283,7 +283,7 @@ def test_lines_divide_the_header_and_the_footer_and_the_about_version_is_centred
 
 def test_activities_show_no_text_above_them_but_a_screen_reader_still_hears_how_to_use_them():
     with open_app() as (page, _, _):
-        for route in ["bubbles", "trace", "unblock", "calm"]:
+        for route in ["bubbles", "garden", "unblock", "calm"]:
             go(page, route)
             hidden = page.locator(f"main p.visually-hidden:text-is({json.dumps(STRINGS[route + '.intro'])})")
             assert hidden.count() == 1, route

@@ -1,4 +1,5 @@
-"""Slice 3 in a real browser: the bubble field and the shape trace (REQ-012, REQ-013)."""
+"""Slice 3 in a real browser: the bubble field (REQ-012). The shape trace was replaced by Zen Garden
+(RLG-055); its tests are in test_garden.py."""
 
 import json
 
@@ -59,80 +60,3 @@ def test_bubbles_are_still_under_reduced_motion():
         assert page.locator(".motion-toggle").is_hidden()
         page.locator("button.bubble").first.click()
         assert page.locator("button.bubble").count() == CONFIG["bubbles"]["count"] - 1
-
-
-def test_trace_moves_by_keyboard_and_notes_a_full_loop():
-    with open_app() as (page, _, _):
-        go(page, "trace")
-        slider = page.locator("[role=slider]")
-        slider.focus()
-        assert slider.get_attribute("aria-valuenow") == "0"
-        page.keyboard.press("ArrowRight", )
-        assert int(slider.get_attribute("aria-valuenow")) > 0
-        assert "percent around the loop" in slider.get_attribute("aria-valuetext")
-        page.keyboard.press("ArrowLeft")
-        assert slider.get_attribute("aria-valuenow") == "0"
-        for _ in range(100):
-            page.keyboard.press("ArrowRight")
-        assert page.locator(".trace-loops").inner_text() == STRINGS["trace.oneLoop"]
-
-
-def test_trace_follows_a_pointer_along_the_shape():
-    with open_app() as (page, _, _):
-        go(page, "trace")
-        marker = page.locator(".trace-marker")
-        start = marker.bounding_box()
-        x, y = start["x"] + start["width"] / 2, start["y"] + start["height"] / 2
-        page.mouse.move(x, y)
-        page.mouse.down()
-        # The loop starts at the right end of the eight and runs down and to the left first.
-        for i in range(1, 13):
-            page.mouse.move(x - i * 6, y + i * 3)
-        page.mouse.up()
-        assert int(page.locator("[role=slider]").get_attribute("aria-valuenow")) > 0
-
-
-def test_new_shape_moves_through_every_shape_and_each_can_be_traced():
-    shapes = CONFIG["trace"]["shapes"]
-    assert len(shapes) >= 10, "many shapes (owner, 2026-10-07)"
-    with open_app() as (page, errors, _):
-        go(page, "trace")
-        seen = []
-        for shape in shapes:
-            name = page.locator(".trace-name").inner_text()
-            assert name == f"Shape: {STRINGS['trace.shape.' + shape['id']]}"
-            d = page.locator(".trace-shape").get_attribute("d")
-            assert d.startswith("M") and "NaN" not in d, shape["id"]
-            seen.append(d)
-            slider = page.locator("[role=slider]")
-            slider.focus()
-            for _ in range(10):
-                page.keyboard.press("ArrowRight")
-            assert int(slider.get_attribute("aria-valuenow")) >= 9, shape["id"]
-            page.locator(".new-shape").click()
-        assert len(set(seen)) == len(shapes), "every shape is different"
-        assert page.locator(".trace-name").inner_text().endswith(STRINGS["trace.shape." + shapes[0]["id"]]), \
-            "after the last shape comes the first again"
-        assert not errors, errors
-
-def test_the_trail_runs_from_the_loop_start_and_clears_each_loop():
-    with open_app() as (page, _, _):
-        go(page, "trace")
-        page.locator("[role=slider]").focus()
-        dash = lambda: page.locator(".trace-done").evaluate("e => parseFloat(getComputedStyle(e).strokeDasharray)")
-        assert dash() == 0
-        for _ in range(50):
-            page.keyboard.press("ArrowRight")
-        half = dash()
-        assert half > 0
-        for _ in range(50):
-            page.keyboard.press("ArrowRight")
-        assert dash() < half, "the trail starts again after a full loop"
-
-def test_the_trace_marker_is_large_enough_for_shaky_hands():
-    # Design review, 2026-10-08: the marker was about 25 px across; now about 44 px on a phone.
-    with open_app(viewport={"width": 390, "height": 844}) as (page, _, _):
-        page.evaluate("location.hash = 'trace'")
-        wait_until(page, "document.querySelector('main').dataset.shown === 'trace'", 3000)
-        box = page.locator(".trace-marker").bounding_box()
-        assert min(box["width"], box["height"]) >= 40, box

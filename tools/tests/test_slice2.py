@@ -38,7 +38,7 @@ def test_the_menu_is_home_and_reaches_every_screen_by_keyboard():
     with open_app(route=None) as (page, errors, _):
         assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
         hrefs = page.locator(".menu-item").evaluate_all("els => els.map(e => e.getAttribute('href'))")
-        assert hrefs == ["#breathe", "#bubbles", "#trace", "#ripple", "#mandala", "#unblock", "#calm"]
+        assert hrefs == ["#breathe", "#bubbles", "#garden", "#ripple", "#mandala", "#unblock", "#calm"]
         page.locator(".menu-item").first.focus()
         page.keyboard.press("Enter")
         wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 2000)

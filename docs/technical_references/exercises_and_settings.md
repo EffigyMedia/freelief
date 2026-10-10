@@ -69,23 +69,21 @@ Drift is a CSS `drift` animation of `translate`. The "Stop the drifting" toggle 
 `.held`. Under reduced motion no bubble gets `.drifting`, and the toggle is hidden. **Playwright
 cannot click a drifting bubble normally** (it is never "stable"). Tests use `click(force=True)`.
 
-## Shape trace (`activities/trace.js`)
-Twelve closed shapes, each a formula of t from 0 to 1 in `SHAPES`. `config.json` → `trace.shapes`
-sets their order and the glass note of each one (C major pentatonic notes). A shape is sampled at
-`samples` points and scaled, with its proportions kept, into a 400 x 240 `viewBox`. The marker
-radius is `markerRadius`, large enough for shaky hands. `New shape` moves to the next shape and
-resets the position and the loop count. The shape's name is a polite live line.
-
-While the marker moves, `audio.glass(note)` sustains a singing-glass tone. It is louder with speed
-and fades when the marker stops. The whole SVG sits inside a `role="slider"` element with
-`aria-valuenow` as a percent and `aria-valuetext`. Arrow keys move by `keyStepPercent`. A pointer
-moves the marker to the nearest sample within `searchWindow` samples of its current place, so a
-crossing cannot make it jump to the other lobe.
-
-The trail is a second path, drawn with `stroke-dasharray` against `pathLength`. It runs from the
-place where this loop began up to the marker, and starts again at each loop. Each full forward loop
-plays the `loop` cue, vibrates once (`loop`) and updates a polite live line ("One loop..."). Nothing
-is counted as a score.
+## Zen Garden (`activities/garden.js`, route `#garden`)
+A tray of sand in SVG (400 by 300 units), with stones and plants (RLG-055, REQ-038).
+- **Raking.** A pointer drag across the sand adds one line per tine (`garden.tines`, `tineGap`
+  apart) for each move, across the direction of travel. The sand area is a focusable button: the
+  arrow keys move a rake dot `keyStep` units and draw as it moves. The oldest lines go when there are
+  more than `maxLines`. Smooth the sand removes every line. A sand sound (`audio.sand()`) plays at
+  most every `soundEveryMs` while raking.
+- **Stones and plants.** Each is a `role="button"` group with a name ("Stone 1, 40 percent across,
+  60 percent down") and a round hit area at least 44 px on a phone. A tap chooses it; a drag moves
+  it and does not choose; the arrow keys move a focused one; Delete, Backspace or Remove takes it
+  away. Add a stone and Add a plant place a new one where there is room, up to `maxItems`. Three
+  stones are there at the start.
+- **Rings.** Around each item the sand keeps `rings` circles, and a mask hides the raked lines
+  inside them, so the lines seem to flow around the item.
+- No score, no timer, no end. A polite live line says what happened.
 
 ## Unblock (`activities/unblock.js`)
 A calm sliding-block puzzle. It replaced the colour sort (`sort.js`) on 2026-10-09 (RLG-040,

@@ -36,7 +36,7 @@ def test_no_request_leaves_the_origin():
         page.wait_for_timeout(300)
         page.keyboard.press("Escape")
         page.wait_for_timeout(200)
-        for route in ("menu", "breathe", "bubbles", "trace", "unblock", "ripple", "mandala", "calm", "settings", "about", "feedback"):
+        for route in ("menu", "breathe", "bubbles", "garden", "unblock", "ripple", "mandala", "calm", "settings", "about", "feedback"):
             page.evaluate(f"location.hash = '{route}'")
             wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 5000)
         page.wait_for_timeout(300)
@@ -150,8 +150,8 @@ def test_an_inherited_name_in_the_hash_falls_back_to_the_menu():
             page.evaluate(f"location.hash = '{name}'")
             wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 3000)
             assert page.locator(".menu-item").first.is_visible(), name
-        page.evaluate("location.hash = 'trace'")
-        wait_until(page, "document.querySelector('main').dataset.shown === 'trace'", 3000)
+        page.evaluate("location.hash = 'garden'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'garden'", 3000)
         assert not [e for e in errors if "could not" in e], errors
 
 def test_a_region_saved_in_settings_opens_urgent_help_and_the_list_changes_it_for_this_visit():

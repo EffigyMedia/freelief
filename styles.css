@@ -620,43 +620,13 @@ main {
   to { translate: 10px -22px; } /* within config.json bubbles.driftX and driftY */
 }
 
-.trace-slider {
-  border-radius: var(--radius);
-  background: var(--accent-soft);
-  padding: 0.5rem;
-  touch-action: none;
-}
 
 /* The marker may reach past the drawing at a shape's edge; the panel's padding holds it. */
-.trace-field { display: block; width: 100%; height: auto; overflow: visible; }
 
-.trace-shape {
-  fill: none;
-  stroke: var(--muted);
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  /* At least 3 to 1 against the field, because this is the path the person follows (WCAG 1.4.11). */
-  opacity: 0.65;
-}
 
-.trace-done {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 10;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
 
-.trace-marker {
-  fill: var(--text);
-  stroke: var(--accent);
-  stroke-width: 4;
-}
 
-.trace-loops { margin: 0; min-height: 1.5em; color: var(--muted); }
 
-.trace-name { margin: 0; font-weight: 600; }
 /* Unblock (RLG-040): a 6 by 6 board of wooden blocks. The blue block leaves through the gap in the
    right edge. Blocks are placed by --row and --col; a short slide shows each move. */
 .unblock-board-name { margin: 0; text-align: center; color: var(--muted); }
@@ -945,4 +915,36 @@ h1, h2, h3 { text-wrap: balance; }
   border: 0.45rem solid transparent;
   border-left-color: hsl(210 45% 30%);
   transform: translateY(-50%);
+}
+
+/* Zen Garden (RLG-055): a tray of pale sand, raked lines, rings around stones and plants. */
+.garden-tray { width: 100%; }
+.garden-sand {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  background: hsl(40 35% 80%);
+  touch-action: none; /* a finger on the sand rakes it, not the page */
+}
+.garden-rake-area { fill: transparent; cursor: crosshair; }
+.garden-rake-area:focus { outline: none; }
+.garden-sand:has(.garden-rake-area:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+.garden-lines line { stroke: hsl(38 30% 62%); stroke-width: 1.6; stroke-linecap: round; }
+.garden-rings circle { fill: none; stroke: hsl(38 30% 64%); stroke-width: 1.6; }
+.garden-rake { fill: hsl(25 40% 40%); }
+.garden-item { cursor: grab; }
+.garden-item.stone ellipse { fill: hsl(220 6% 42%); }
+.garden-item.stone .shine { fill: hsl(220 8% 58%); }
+.garden-item.plant ellipse { fill: hsl(130 30% 38%); }
+.garden-item.plant .heart { fill: hsl(45 60% 60%); }
+.garden-item:focus { outline: none; }
+.garden-item .hit { fill: transparent; }
+.garden-item:focus-visible .hit, .garden-item[aria-pressed="true"] .hit { stroke: var(--focus); stroke-width: 3; }
+.garden-status { margin: 0; min-height: 3em; text-align: center; }
+/* Four actions: two to a row, so each label stays on one line on a phone. */
+.garden .exercise-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+@media (forced-colors: active) {
+  .garden-lines line, .garden-rings circle { stroke: CanvasText; }
 }

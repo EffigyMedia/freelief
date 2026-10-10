@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-8-7"></a>
+## [0.8.7] - 2026-10-10
+- **Zen Garden** replaces Trace a shape: rake the sand with a finger or the arrow keys, and add,
+  move or remove stones and plants. The raked lines flow around them.
+  [RLG-055](../fragments/RLG-055.md), [REQ-038](../fragments/REQ-038.md). The menu now has the
+  owner's full order. [RLG-058](../fragments/RLG-058.md). 180 tests.
+
 <a id="v0-8-6"></a>
 ## [0.8.6] - 2026-10-10
 - **Standards and research** is removed, with its footer link. The app makes no standards claim.

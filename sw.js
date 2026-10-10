@@ -30,7 +30,7 @@ const FILES = [
   "wakelock.js",
   "exercises/breathe.js",
   "activities/bubbles.js",
-  "activities/trace.js",
+  "activities/garden.js",
   "activities/unblock.js",
   "activities/ripple.js",
   "activities/mandala.js",

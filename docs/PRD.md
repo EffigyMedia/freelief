@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `9c6f8ad6ee36dc8d` · 37 requirement(s) recorded
+> Store stamp `fefd21b2ad3c32a8` · 38 requirement(s) recorded
 
 ## The problem
 
@@ -73,7 +73,6 @@ Not built (decided 2026-10-07):
 - **REQ-010** — When the device asks for reduced motion, Freelief replaces every animation with a still or gentle equivalent.
 - **REQ-011** — No exercise or activity requires the person to act within a time limit.
 - **REQ-012** — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
-- **REQ-013** — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
 - **REQ-015** — Freelief collects no personal data and sends nothing about the person. After install, the only network requests are the browser's check for a newer version of Freelief and the download of Freelief's own files to update or repair its offline copy, all from GitHub Pages, and they carry nothing about the person. Only the person's settings are stored, and only on the device.
 - **REQ-016** — Freelief meets WCAG 2.2 level AA in full, and level AAA wherever a criterion can be met.
 - **REQ-017** — All user-facing text lives in one strings file per language, so a translation can be added without a code change. English is the only language in the first version.
@@ -97,6 +96,7 @@ Not built (decided 2026-10-07):
 - **REQ-035** — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
 - **REQ-036** — Freelief offers the Visualizer, an activity with nothing to do: soft shapes fade in and out, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Background sound is chosen on every screen in the header's sound bar: a music note, a raindrop and a wave, each a toggle; rain and waves replace each other, music plays with either, and a tap while the speaker is off turns sound on. The sound keeps playing on every screen until its button is tapped again, breathing lowers it, it waits while urgent help is open, and nothing about it is stored.
 - **REQ-037** — Freelief keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, or always while it runs; 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
+- **REQ-038** — Freelief offers Zen Garden: the person rakes lines in a tray of sand with a finger, a mouse or the arrow keys, and adds, moves and removes a few stones and small plants, each named for a screen reader, with lines that flow around them and a way to smooth the sand, and with no score, no timer and no end.
 
 ### Could have
 
@@ -110,7 +110,7 @@ Not built (decided 2026-10-07):
 | Verified — shown to be met | 0 |
 | Agreed — specified, not yet shown | 31 |
 | Proposed — waiting on a decision | 0 |
-| Withdrawn — no longer required | 6 |
+| Withdrawn — no longer required | 7 |
 
 Of the 31 requirement(s) in the specification, 0 (0%) have had their verification carried out.
 
@@ -120,10 +120,11 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ## What we dropped
 
-6 requirement(s) were once required and are not any more. They are kept rather than deleted, so the argument for dropping them survives with them - the reason is in each record, beneath the requirement itself.
+7 requirement(s) were once required and are not any more. They are kept rather than deleted, so the argument for dropping them survives with them - the reason is in each record, beneath the requirement itself.
 
 - **REQ-002** — Freelief offers a 5-4-3-2-1 sensory grounding exercise that the person steps through at their own pace.
 - **REQ-003** — Freelief offers calming statements, shown one at a time, that the person advances at their own pace.
+- **REQ-013** — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
 - **REQ-014** — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
 - **REQ-020** — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-024** — Every technique in Freelief is one studied in published clinical research, and the Standards & research page cites at least one source for each technique.
@@ -131,4 +132,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-10T01:09:26-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-10T01:23:03-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

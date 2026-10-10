@@ -87,33 +87,6 @@ def test_box_breathing_taps_once_for_each_second_of_a_hold():
         assert all(l < 0.2 for l in lengths), f"a tap is short: {lengths}"
 
 
-def test_the_glass_sings_while_tracing_and_stops_on_leaving():
-    with open_app(init_script=PROBE) as (page, _, _):
-        go(page, "trace")
-        slider = page.locator("[role=slider]")
-        slider.focus()
-        for _ in range(5):
-            page.keyboard.press("ArrowRight")
-        glass = CONFIG["sounds"]["glass"]
-        partials = len(glass["partials"]) * 2
-        wait_until(page, f"window.__osc.length >= {partials}", 2000)
-        assert page.evaluate("window.__osc.every(o => o.stop === null)"), "the glass sustains while moving"
-        go(page, "breathe")
-        assert page.evaluate(f"window.__osc.slice(0, {partials}).every(o => o.stop !== null)"), \
-            "leaving the screen stops the glass"
-
-
-def test_sounds_off_means_no_glass():
-    with open_app(init_script=PROBE) as (page, _, _):
-        page.locator("button.sound-toggle").click()  # the header's sound button, off
-        go(page, "trace")
-        page.locator("[role=slider]").focus()
-        for _ in range(5):
-            page.keyboard.press("ArrowRight")
-        page.wait_for_timeout(300)
-        assert page.evaluate("window.__osc.length") == 0
-
-
 def test_the_header_sound_button_silences_at_once_and_brings_the_music_back():
     # Owner, 2026-10-08: the sound switch is a speaker in the header, crossed out when off.
     with open_app(init_script=PROBE) as (page, errors, _):
@@ -230,7 +203,7 @@ def pitches(node, path=""):
 
 def test_every_configured_pitch_is_in_c_major():
     found = list(pitches(CONFIG))
-    assert len(found) > 40, "the walk found the sound and mandala notes"
+    assert len(found) > 25, "the walk found the sound and mandala notes"
     assert any(path.startswith("sounds.rain.dropNotes") for path, _ in found)
     wrong = [(path, hz) for path, hz in found if not in_c_major(hz)]
     assert not wrong, f"not in C major: {wrong}"

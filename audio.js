@@ -294,66 +294,8 @@ export function pads(level = 1) {
   };
 }
 
-// The shape trace's "singing glass" (owner, 2026-10-07): a sustained, slightly beating tone, like a
-// wet finger on a crystal rim. It sounds only while the person moves, louder with speed, and
-// fades when they stop. Returns { move(speed), stop() }.
-export function glass(frequency) {
-  let voice = null;
-  let idle = 0;
-
-  function build(ctx) {
-    const settings = sounds.glass;
-    const master = ctx.createGain();
-    master.gain.value = 0;
-    master.connect(output);
-    const oscillators = [];
-    for (const [ratio, level] of settings.partials) {
-      for (const detune of [0, settings.beatHz]) {
-        const oscillator = ctx.createOscillator();
-        const partial = ctx.createGain();
-        oscillator.type = "sine";
-        oscillator.frequency.value = (frequency || settings.frequency) * ratio + detune;
-        partial.gain.value = level / 2;
-        oscillator.connect(partial).connect(master);
-        oscillator.start();
-        oscillators.push(oscillator);
-      }
-    }
-    return { ctx, master, oscillators, settings };
-  }
-
-  return {
-    move(speed) {
-      if (!canPlay()) return;
-      const ctx = ensureContext();
-      if (!ctx) return;
-      voice = voice || build(ctx);
-      // Louder with speed (owner, 2026-10-07): from a quiet floor when slow to full volume when fast.
-      const level = (voice.settings.minLevel + (1 - voice.settings.minLevel) * Math.min(1, speed)) * voice.settings.volume;
-      voice.master.gain.setTargetAtTime(level, ctx.currentTime, voice.settings.riseSeconds);
-      clearTimeout(idle);
-      idle = setTimeout(() => {
-        if (voice) voice.master.gain.setTargetAtTime(0, voice.ctx.currentTime, voice.settings.fallSeconds);
-      }, voice.settings.idleMs);
-    },
-    stop() {
-      clearTimeout(idle);
-      if (!voice) return;
-      const { ctx, master, oscillators } = voice;
-      if (paused(ctx)) {
-        master.disconnect();
-        oscillators.forEach((oscillator) => oscillator.stop());
-        voice = null;
-        return;
-      }
-      master.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
-      oscillators.forEach((oscillator) => oscillator.stop(ctx.currentTime + 0.6));
-      voice = null;
-    },
-  };
-}
-
-// A buffer of white noise, made once and reused by the pop and the rain.
+// Two seconds of white noise, made once and shared by every noise sound (the breath, the pop, the
+// rain, the waves, the sand).
 let noiseBuffer = null;
 function noise(ctx) {
   if (!noiseBuffer) {
@@ -364,6 +306,27 @@ function noise(ctx) {
   const source = ctx.createBufferSource();
   source.buffer = noiseBuffer;
   return source;
+}
+
+// The sound of raking sand (RLG-055): a short, soft brush of filtered noise. Noise has no pitch.
+export function sand() {
+  if (!canPlay()) return;
+  const ctx = ensureContext();
+  if (!ctx) return;
+  const settings = sounds.sand;
+  const now = ctx.currentTime;
+  const brush = noise(ctx);
+  const band = ctx.createBiquadFilter();
+  band.type = "bandpass";
+  band.frequency.value = settings.bandHz;
+  band.Q.value = settings.q;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(settings.volume, now + settings.seconds * 0.3);
+  gain.gain.linearRampToValueAtTime(0, now + settings.seconds);
+  brush.connect(band).connect(gain).connect(output);
+  brush.start(now, Math.random());
+  brush.stop(now + settings.seconds + 0.02);
 }
 
 // One note chosen at random from a list of C-major notes, so a pitched sound that plays with the

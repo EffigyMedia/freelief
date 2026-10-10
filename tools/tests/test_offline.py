@@ -47,7 +47,7 @@ def test_the_app_works_offline_after_one_visit():
         page.wait_for_timeout(200)
         # Screens other than breathing load on first visit (RLG-006); offline they come from the cache.
         # Every screen is checked (AUD-027); ROUTES in app.js is the list.
-        for route in ("menu", "breathe", "bubbles", "trace", "unblock", "ripple", "mandala", "calm", "settings", "about", "feedback"):
+        for route in ("menu", "breathe", "bubbles", "garden", "unblock", "ripple", "mandala", "calm", "settings", "about", "feedback"):
             page.evaluate(f"location.hash = '{route}'")
             wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 5000)
 

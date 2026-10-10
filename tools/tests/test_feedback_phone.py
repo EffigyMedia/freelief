@@ -4,7 +4,7 @@ which replaced "More ways to calm" the same day)."""
 
 from harness import open_app, wait_until
 
-EXERCISES = ["bubbles", "trace", "unblock", "ripple", "mandala", "calm"]
+EXERCISES = ["bubbles", "garden", "unblock", "ripple", "mandala", "calm"]
 
 
 def go(page, route):
@@ -27,12 +27,12 @@ def test_the_way_out_of_urgent_help_is_at_the_top_and_stays_visible():
 
 def test_the_phone_back_gesture_closes_urgent_help_and_stays_in_the_app():
     with open_app() as (page, _, _):
-        go(page, "trace")
+        go(page, "garden")
         page.locator(".help-open").click()
         assert page.locator("dialog.help").evaluate("d => d.open")
         page.go_back()
         wait_until(page, "!document.querySelector('dialog.help').open", 2000)
-        assert page.evaluate("document.querySelector('main').dataset.shown") == "trace"
+        assert page.evaluate("document.querySelector('main').dataset.shown") == "garden"
         # Closing by the Back button must not leave an extra history step behind.
         page.locator(".help-open").click()
         page.locator("dialog.help .help-back").click()

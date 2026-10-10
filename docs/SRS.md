@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `9c6f8ad6ee36dc8d` · 31 requirement(s) specified, 6 not yet
+> Store stamp `fefd21b2ad3c32a8` · 31 requirement(s) specified, 7 not yet
 
 ## 1. Introduction
 
@@ -30,7 +30,7 @@ Freelief is a progressive web app: plain HTML, CSS and JavaScript served from Gi
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 it shows the menu at once, with no account, question or notice before it. Breathe, a paced
 breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
-bubble field, a shape trace, the Unblock puzzle, a ripple pond and mandala coloring) and the Visualizer
+bubble field, Zen Garden, the Unblock puzzle, a ripple pond and mandala coloring) and the Visualizer
 (music, rain or waves with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
@@ -41,7 +41,7 @@ person's settings, on the device.
 
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, Unblock, the ripple pond, mandala coloring, or the Visualizer.
+  Zen Garden, Unblock, the ripple pond, mandala coloring, or the Visualizer.
 - **Background sound** — music, and rain or waves, chosen with the three buttons of the sound bar
   in the header; it keeps playing on every screen until the person taps its button again.
 - **Visualizer** — the activity with nothing to do: soft shapes, a full
@@ -80,7 +80,6 @@ person's settings, on the device.
 - **REQ-006** *(must)* — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
 - **REQ-007** *(should)* — Freelief plays subtle sounds: the soft sound of a breath that lasts each in and out phase, different for in and out, and a light tap for each second of a hold, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a soft tick and a rising phrase in Unblock, a water drop in the pond, a chime for each mandala color, and the background music, rain and waves). Every pitched sound that plays with the music is in its key, C major. Sounds are on by default; the speaker button in the header fades them all out over a fraction of a second and stops them. Nothing plays before the person's first tap or key press.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
-- **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
 - **REQ-018** *(must)* — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
 - **REQ-023** *(should)* — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
@@ -91,6 +90,7 @@ person's settings, on the device.
 - **REQ-035** *(should)* — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
 - **REQ-036** *(should)* — Freelief offers the Visualizer, an activity with nothing to do: soft shapes fade in and out, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Background sound is chosen on every screen in the header's sound bar: a music note, a raindrop and a wave, each a toggle; rain and waves replace each other, music plays with either, and a tap while the speaker is off turns sound on. The sound keeps playing on every screen until its button is tapped again, breathing lowers it, it waits while urgent help is open, and nothing about it is stored.
 - **REQ-037** *(should)* — Freelief keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, or always while it runs; 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
+- **REQ-038** *(should)* — Freelief offers Zen Garden: the person rakes lines in a tray of sand with a finger, a mouse or the arrow keys, and adds, moves and removes a few stones and small plants, each named for a screen reader, with lines that flow around them and a way to smooth the sand, and with no score, no timer and no end.
 
 ### 3.3 Usability requirements
 
@@ -134,7 +134,6 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-006 | 3.2 | inspection | agreed |
 | REQ-007 | 3.2 | test | agreed |
 | REQ-012 | 3.2 | test | agreed |
-| REQ-013 | 3.2 | test | agreed |
 | REQ-018 | 3.2 | test | agreed |
 | REQ-022 | 3.2 | inspection | agreed |
 | REQ-023 | 3.2 | test | agreed |
@@ -145,6 +144,7 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-035 | 3.2 | test | agreed |
 | REQ-036 | 3.2 | test | agreed |
 | REQ-037 | 3.2 | test | agreed |
+| REQ-038 | 3.2 | test | agreed |
 | REQ-009 | 3.3 | test | agreed |
 | REQ-010 | 3.3 | test | agreed |
 | REQ-011 | 3.3 | inspection | agreed |
@@ -190,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-10T01:09:24-04:00 by `Commands/srs.py` from 37 requirement record(s).
+Generated 2026-10-10T01:23:02-04:00 by `Commands/srs.py` from 38 requirement record(s).

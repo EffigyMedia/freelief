@@ -96,29 +96,6 @@
         "volume": 0.02
       }
     },
-    "glass": {
-      "frequency": 659.25,
-      "partials": [
-        [
-          1,
-          1.0
-        ],
-        [
-          2.01,
-          0.14
-        ],
-        [
-          3.03,
-          0.05
-        ]
-      ],
-      "beatHz": 1.4,
-      "volume": 0.021,
-      "riseSeconds": 0.12,
-      "fallSeconds": 0.45,
-      "idleMs": 180,
-      "minLevel": 0.08
-    },
     "pads": {
       "volume": 0.04,
       "cutoffHz": 900,
@@ -239,6 +216,12 @@
       "minSeconds": 6,
       "maxSeconds": 11,
       "riseShare": 0.4
+    },
+    "sand": {
+      "volume": 0.035,
+      "bandHz": 880.0,
+      "q": 0.7,
+      "seconds": 0.22
     }
   },
   "haptics": {
@@ -276,62 +259,19 @@
     "driftSecondsMin": 6,
     "driftSecondsMax": 11
   },
-  "trace": {
-    "samples": 400,
-    "keyStepPercent": 1,
-    "searchWindow": 40,
-    "markerRadius": 22,
-    "glassFullSpeedSteps": 6,
-    "shapes": [
-      {
-        "id": "eight",
-        "note": 523.25
-      },
-      {
-        "id": "circle",
-        "note": 587.33
-      },
-      {
-        "id": "wave",
-        "note": 659.25
-      },
-      {
-        "id": "flower",
-        "note": 783.99
-      },
-      {
-        "id": "star",
-        "note": 880.0
-      },
-      {
-        "id": "heart",
-        "note": 523.25
-      },
-      {
-        "id": "cardioid",
-        "note": 587.33
-      },
-      {
-        "id": "trefoil",
-        "note": 659.25
-      },
-      {
-        "id": "lissajous",
-        "note": 783.99
-      },
-      {
-        "id": "squircle",
-        "note": 880.0
-      },
-      {
-        "id": "egg",
-        "note": 523.25
-      },
-      {
-        "id": "clover",
-        "note": 587.33
-      }
-    ]
+  "garden": {
+    "tines": 5,
+    "tineGap": 4,
+    "maxLines": 2500,
+    "rings": 3,
+    "ringGap": 6,
+    "stoneSize": 28,
+    "plantSize": 27,
+    "maxItems": 6,
+    "startStones": 3,
+    "keyStep": 12,
+    "dragThreshold": 4,
+    "soundEveryMs": 260
   },
   "unblock": {
     "size": 6,

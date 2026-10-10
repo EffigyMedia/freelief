@@ -72,7 +72,7 @@ Freelief is a progressive web app: plain HTML, CSS and JavaScript served from Gi
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 it shows the menu at once, with no account, question or notice before it. Breathe, a paced
 breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
-bubble field, a shape trace, the Unblock puzzle, a ripple pond and mandala coloring) and the Visualizer
+bubble field, Zen Garden, the Unblock puzzle, a ripple pond and mandala coloring) and the Visualizer
 (music, rain or waves with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
 lines for the person's region. Supporting pages give the self-help disclaimer, the standards
 Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
@@ -177,7 +177,7 @@ Not built (decided 2026-10-07):
 | Term | Meaning |
 |---|---|
 | **Exercise** | A guided self-help technique: paced breathing. |
-| **Activity** | A distraction activity: the bubble field, the shape trace, Unblock, the ripple pond, mandala coloring, or the Visualizer. No score, no failure, no timer. |
+| **Activity** | A distraction activity: the bubble field, Zen Garden, Unblock, the ripple pond, mandala coloring, or the Visualizer. No score, no failure, no timer. |
 | **Visualizer** | The activity with nothing to do: soft shapes that fade in and out, a full screen and a black screen. It has no sound choice of its own; the sound bar plays sound on every screen. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
@@ -194,7 +194,7 @@ restarts on the device (REQ-023, REQ-015).
 <!-- BEGIN srs-definitions - written by the interview, read by the generators -->
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  the shape trace, Unblock, the ripple pond, mandala coloring, or the Visualizer.
+  Zen Garden, Unblock, the ripple pond, mandala coloring, or the Visualizer.
 - **Background sound** — music, and rain or waves, chosen with the three buttons of the sound bar
   in the header; it keeps playing on every screen until the person taps its button again.
 - **Visualizer** — the activity with nothing to do: soft shapes, a full
@@ -249,8 +249,10 @@ and the Decision Log.* Steps: one statement at a time; the person advances when 
 statements come from the strings file. Outcome: the person stops when they choose.
 
 **F5 — Distraction activities.** *Bubble field:* bubbles drift slowly; a tap or a key press pops the
-focused bubble with a soft visual (and a soft pop if sound is on). *Shape trace:* a looping shape;
-the person follows it with a finger or moves along it with the arrow keys. *Unblock (REQ-035,
+focused bubble with a soft visual (and a soft pop if sound is on). *Zen Garden (REQ-038,
+added 2026-10-10, replacing the shape trace, REQ-013):* a tray of sand to rake with a finger or
+the arrow keys, with a few stones and small plants to add, move and remove; the sand keeps rings
+around each, and the raked lines flow around them; Smooth the sand clears the lines. *Unblock (REQ-035,
 added 2026-10-09, replacing the colour sort, REQ-014):* wooden blocks on a 6 by 6 board, each
 sliding only along its length; the person slides them to let the blue block out through the gap in
 the right edge. A block moves by a drag, by the arrow keys on it, or by choosing it and pressing
@@ -1222,6 +1224,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   lead line; a standards line on About. — 2026-10-10 (owner; UNT-114) *This supersedes the entries
   on the Standards and research page, the verified-standard rule (AUD-102) and the research rewrite
   (RLG-044).*
+- **Zen Garden replaces Trace a shape.** — Owner request (RLG-055); the owner chose "Place stones and
+  rake" from three kinds. An SVG tray of sand: a drag rakes five parallel lines along its path; the
+  arrow keys move a rake and draw as it moves; stones and plants are named buttons that a drag or
+  the arrow keys move and Delete or Remove takes away; a mask hides the lines inside the rings
+  around each item, so the lines flow around it. It starts with three stones and has room for six
+  items. A soft sand sound, filtered noise centered on A5, plays while raking. The trace, its twelve
+  shapes and the crystal-glass sound are removed; REQ-013 is withdrawn and REQ-038 replaces it. —
+  Rejected: ripples that form around stones by themselves; raking only. — 2026-10-10 (owner;
+  UNT-115)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
