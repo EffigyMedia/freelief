@@ -40,8 +40,7 @@ is the sixth stop.
 - **The gear** is a link to `#settings` with an accessible name. Its icon is inline SVG, so no
   file ships.
 
-The footer holds the calm line, the self-help line, and the links to About, Standards and research,
-and Feedback. On the exercise and activity screens (`QUIET_FOOTER`), the footer shows only its calm
+The footer holds the calm line, the self-help line, and the links to About and Feedback. On the exercise and activity screens (`QUIET_FOOTER`), the footer shows only its calm
 line, so the activity has the room.
 
 ## Content Security Policy

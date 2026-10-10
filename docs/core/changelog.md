@@ -1,7 +1,9 @@
 # Changelog
 
 The append-only index of what shipped and when, keyed to version. One short dated entry per feature
-commit. Newest on top. **An entry is never edited after the fact.**
+commit. Newest on top. **An entry is never edited after the fact**, with one exception: a line that
+records a move of the live preview is added to the entry of the version that it serves, on the day of
+the move (AUD-149).
 
 Each entry links to the fragment that holds the full record. This project keeps no `tracker.md`:
 the fragment store is the tracker, so a link points at the fragment file itself:
@@ -9,6 +11,17 @@ the fragment store is the tracker, so a link points at the fragment file itself:
 audit.
 
 ---
+
+<a id="v0-8-19"></a>
+## [0.8.19] - 2026-10-10
+- **Settings**: the Keep the screen on hint names the Kaleidoscope. The volunteer's accessibility
+  checklist on GitHub now lists the same screens as the app. Records: the design, AGENTS.md, the
+  technical references and the README match the app again. [AUD-138](../fragments/AUD-138.md),
+  [AUD-139](../fragments/AUD-139.md), [AUD-140](../fragments/AUD-140.md),
+  [AUD-141](../fragments/AUD-141.md), [AUD-142](../fragments/AUD-142.md),
+  [AUD-143](../fragments/AUD-143.md), [AUD-144](../fragments/AUD-144.md),
+  [AUD-145](../fragments/AUD-145.md), [AUD-149](../fragments/AUD-149.md),
+  [AUD-150](../fragments/AUD-150.md). 197 tests.
 
 <a id="v0-8-18"></a>
 ## [0.8.18] - 2026-10-10

@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `8d4b60bba0a3ede9` · 31 requirement(s) specified, 7 not yet
+> Store stamp `192f08c12667940d` · 31 requirement(s) specified, 7 not yet
 
 ## 1. Introduction
 
@@ -29,23 +29,23 @@ lines; it does not call them. Its only stored data is the person's settings, on 
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 it shows the menu at once, with no account, question or notice before it. Breathe, a paced
-breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
-bubble field, Zen Garden, the Unblock puzzle, a ripple pond and mandala coloring) and the Visualizer
-(music, rain or waves with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
-lines for the person's region. Supporting pages give the self-help disclaimer, the standards
-Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
-GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
+breathing guide, is the first item; one tap or key press reaches it, the distraction activities
+(Pop Bubbles, Zen Garden, Ripple Pond, Color Mandalas and the Unblock puzzle) and the Kaleidoscope (slow
+soft shapes). Music, rain or waves can play on every screen from the sound bar in the header, and
+nothing about sound is stored. Every screen has a "Need urgent help?" control that shows crisis
+lines for the person's region. Supporting pages give the self-help disclaimer and a feedback page
+that opens a pre-filled GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
 person's settings, on the device.
 
 ### 1.4 Definitions
 
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  Zen Garden, Unblock, the ripple pond, mandala coloring, or the Visualizer.
+  Zen Garden, Unblock, the ripple pond, mandala coloring, or the Kaleidoscope.
 - **Background sound** — music, and rain or waves, chosen with the three buttons of the sound bar
   in the header; it keeps playing on every screen until the person taps its button again.
-- **Visualizer** — the activity with nothing to do: soft shapes, a full
-  screen and a black screen.
+- **Kaleidoscope** — the activity with nothing to do (first called the Visualizer): a slow
+  kaleidoscope of soft shapes, a full screen and a black screen.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
 - **Crisis line** — a service for a person in danger, with a region, a way to reach it, and a
@@ -54,8 +54,8 @@ person's settings, on the device.
 - **Settings** — the only data Freelief stores, and only the values the person changed: the
   breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, vibration
   on or off, the theme, and the region for urgent help, on the device only.
-- **Standard** — an external standard Freelief claims, with its level, check date and tester.
-- **Source** — a published research citation behind a technique.
+- **Source** — a published research citation behind a technique, kept as a record in
+  `docs/research/sources.md`. The app shows none and claims no standard (RLG-056).
 
 ## 2 References
 
@@ -89,7 +89,7 @@ person's settings, on the device.
 - **REQ-034** *(could)* — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a finished sort, a finished loop, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
 - **REQ-035** *(should)* — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
 - **REQ-036** *(should)* — Freelief offers the Kaleidoscope, an activity with nothing to do: a slow, full-width kaleidoscope of soft shapes and colors that turns, drifts in color and fades from one pattern to the next, with no flashing and no motion under reduced motion, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Background sound is chosen on every screen in the header's sound bar: a music note, a raindrop and a wave, each a toggle; rain and waves replace each other, music plays with either, and a tap while the speaker is off turns sound on. The sound keeps playing on every screen until its button is tapped again, breathing lowers it, it waits while urgent help is open, and nothing about it is stored.
-- **REQ-037** *(should)* — Freelief keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, or always while it runs; 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
+- **REQ-037** *(should)* — Freelief keeps the screen on while breathing or the Kaleidoscope runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, or always while it runs; 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
 - **REQ-038** *(should)* — Freelief offers Zen Garden: the person rakes lines in a tray of sand with a finger, a mouse or the arrow keys, and adds, moves and removes a few stones and small plants, each named for a screen reader, with lines that flow around them and a way to smooth the sand, and with no score, no timer and no end.
 
 ### 3.3 Usability requirements
@@ -190,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-10T09:28:33-04:00 by `Commands/srs.py` from 38 requirement record(s).
+Generated 2026-10-10T13:35:30-04:00 by `Commands/srs.py` from 38 requirement record(s).

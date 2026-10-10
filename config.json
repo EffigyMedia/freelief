@@ -57,16 +57,6 @@
       }
     },
     "cues": {
-      "loop": {
-        "notes": [
-          392.0,
-          523.25
-        ],
-        "gapSeconds": 0.22,
-        "attackSeconds": 0.12,
-        "releaseSeconds": 1.6,
-        "volume": 0.02
-      },
       "choose": {
         "notes": [
           329.63
@@ -242,7 +232,6 @@
         60,
         30
       ],
-      "loop": 15,
       "ripple": 8,
       "fill": 10
     }

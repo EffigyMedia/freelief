@@ -29,9 +29,6 @@ its run is still the current one.** Each module keeps a `run` object, and a call
 when the module's current run is a different object. Without this, a frame queued before `stop()`
 runs against a cleared state and throws.
 
-A screen may also export `soundChanged(on)`. The shell calls it when the sound button changes.
-Only the Visualizer uses it.
-
 ## Router
 `app.js` maps the URL hash to a module in `ROUTES`. It accepts only its own names
 (`Object.hasOwn`), so a hash such as `#constructor` is not a screen (AUD-005).
@@ -155,7 +152,7 @@ polite live line. The SVG is one tab stop (roving `tabindex`):
 - Home goes to the center, and End goes to the outer ring.
 - Enter or Space fills the part.
 
-## The Visualizer (`activities/calm.js`, route `#calm`)
+## The Kaleidoscope (`activities/calm.js`, route `#calm`)
 The Kaleidoscope (RLG-057): a slow kaleidoscope in SVG. `pattern()` mirrors one wedge of
 `calm.kaleidoscope.shapesPerCell` shapes into `folds` copies; the `.kaleido-turn` group turns once
 in `turnSeconds`, the field's hue drifts over `hueSeconds`, and every `patternSeconds` a new layer
@@ -163,10 +160,10 @@ cross-fades in over `fadeSeconds`. Under reduced motion the turn and the drift s
 (RLG-049). The sound bar in the header plays music, rain or waves on every screen, this one too;
 its hidden intro says so.
 
-**The shapes.** The field adds one SVG shape every `calm.shapeEveryMs`, up to `maxShapes`. Each
-shape lives `shapeLifeSeconds` in a CSS animation: `calm-come-and-go` (a fade, slow growth and a
-small turn). Under reduced motion, it uses `calm-fade` only. The global reduced-motion rule exempts
-`.calm-shape`, so the fade keeps its length.
+**The patterns.** `nextPattern()` appends a new layer to `.kaleido-turn` every `patternSeconds`;
+the CSS class `shown` fades it in over `fadeSeconds` (`--fade`) while the old layer fades out, and
+the old layer is removed after the fade. The turn (`--turn`) and the hue drift (`--hue`) are CSS
+animations. Under reduced motion the field has the class `still`, so only the cross-fade remains.
 
 **Full screen** fills the screen with the stage, through the browser's full screen where it exists
 and a CSS class everywhere. In full screen the stage shows its own "Need urgent help?" button
@@ -174,7 +171,8 @@ and a CSS class everywhere. In full screen the stage shows its own "Need urgent 
 screen.
 
 **Black screen** appends one full-screen black `<button>` to `body`. A click, Enter, Space or Escape
-removes it and returns focus. Under the cover, no new shape is added and the stage stops moving.
+removes it and returns focus. Under the cover, no new pattern is drawn and the stage stops moving
+(the class `asleep`).
 The sound keeps playing.
 
 The screen takes the wake lock while it runs. `stop()` clears the timers, releases the wake lock,
@@ -188,14 +186,16 @@ removes the cover and leaves full screen. It does not stop the sound.
 at each boot. Thus a setting that the person never touched follows the default of the version they
 run, and a new default reaches them. `setSetting()` writes only the chosen values, and a choice
 of the default value removes the stored value (AUD-110). `resetSettings()`, behind Reset settings,
-removes every stored value and tells the listeners each setting that changed.
+removes every stored value except `sounds` (the header speaker's, so a reset never starts sound;
+AUD-114) and tells the listeners each setting that changed.
 
 At boot, `initSettings()` does this:
 1. If no v2 store exists, it migrates the v1 store (`legacyStorageKey`). Only a value that differs
    from today's default carries over, and a stored `box` rhythm is dropped. Then it deletes the v1
    key.
-2. It keeps a stored value only if it passes its check, so a value that is no longer a setting
-   (`calmMode` and `natureSound`, removed in v0.8.2) is dropped. A rhythm must exist in
+2. It uses a stored value only if it passes its check. A stored value it cannot read, such as a
+   setting of a newer version or one this version retired, is kept apart and written back at each
+   save, so a rollback loses no choice (AUD-121); a new choice of that setting replaces it. A rhythm must exist in
    `config.json`. A theme, an `openOn` or an `awakeMinutes` must be in its list of choices
    (`awakeMinutes` 0 means Always). `sounds` and
    `haptics` must be booleans. `helpRegion` must be `auto` or two capital letters. Checks use own
@@ -243,8 +243,8 @@ The sounds:
 | Function | Used by | What it is |
 |---|---|---|
 | `cue(phase, seconds)` | Breathing | The sound of a breath (RLG-050): soft looping noise for the whole in or out phase, through a band filter that brightens on the in-breath and darkens on the out-breath (`sounds.breath.in` and `.out`); it swells in and fades out. A hold plays one light tap (a short burst of filtered noise, `sounds.breath.tap`) at each second. It returns a stop function. |
-| `play(name)` | Trace, Unblock | A named cue from `sounds.cues` (`loop`, `choose`, `swap`, `done`): one or more notes, a gap apart. |
-| `glass(note)` | Trace | A sustained singing-glass tone that follows the speed. |
+| `play(name)` | Zen Garden, Unblock | A named cue from `sounds.cues` (`choose`, `swap`, `done`): one or more notes, a gap apart. |
+| `sand()` | Zen Garden | A soft sand sound while raking: filtered noise centered on A5. |
 | `pop()` | Bubbles | A short burst of band-passed noise over a falling thump. |
 | `drop()` | Ripple pond | A short sine whose pitch rises fast, through a low-pass filter. |
 | `chime(note)` | Mandala | A struck bell: inharmonic partials and a quieter second strike. |
@@ -279,13 +279,13 @@ turns a sound on while the speaker is off also turns sound on.
 ## Vibration (`haptics.js`)
 One short vibration for a single triggered event in an activity (REQ-034), never for anything
 continuous. `pulse(name)` plays the pattern in `config.json` → `haptics.patterns`: `pop`, `choose`,
-`swap`, `done`, `loop`, `ripple` and `fill`. It does nothing when the `haptics` setting is off, or
+`swap`, `done`, `ripple` and `fill`. It does nothing when the `haptics` setting is off, or
 when the browser has no Vibration API (such as Safari on iPhone). A refused vibration is not an
-error. The breath, a drag trail and the trace tone never vibrate. `haptics.js` reads Settings only
+error. The breath, a drag trail and raking never vibrate. `haptics.js` reads Settings only
 through `getSetting()`.
 
 ## Screen wake lock (`wakelock.js`)
-Keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock
+Keeps the screen on while breathing or the Kaleidoscope runs, so the phone does not dim or lock
 mid-breath. `keepAwake()` asks for the Screen Wake Lock and returns a release function. Calls nest:
 the last release frees the lock. The browser drops the lock when the page is hidden, so the module
 asks again when the page becomes visible. A browser without the API, or one that refuses, lets the

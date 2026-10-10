@@ -8,7 +8,7 @@ narrative and the decisions. Code, records and this document must never disagree
 
 ## 0. Document Control
 
-- **Version:** 1.4, 2026-10-10. The Change Log (section 15) says what each version changed. This line
+- **Version:** 1.5, 2026-10-10. The Change Log (section 15) says what each version changed. This line
   does not name an app version, because the design changes in many units (AUD-095).
 - **Owner:** EffigyMedia.
 - **Status:** living. The owner signed off v1.0 on 2026-10-07, and Initialize was done the same
@@ -71,12 +71,12 @@ that starts at once, works for them as they are, and asks for nothing.
 Freelief is a progressive web app: plain HTML, CSS and JavaScript served from GitHub Pages. It
 installs to the home screen of a phone or a desktop and then works fully offline. When it opens,
 it shows the menu at once, with no account, question or notice before it. Breathe, a paced
-breathing guide, is the first item; one tap or key press reaches it, the distraction activities (a
-bubble field, Zen Garden, the Unblock puzzle, a ripple pond and mandala coloring) and the Visualizer
-(music, rain or waves with soft shapes). Every screen has a "Need urgent help?" control that shows crisis
-lines for the person's region. Supporting pages give the self-help disclaimer, the standards
-Freelief meets with the research behind each technique, and a feedback page that opens a pre-filled
-GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
+breathing guide, is the first item; one tap or key press reaches it, the distraction activities
+(Pop Bubbles, Zen Garden, Ripple Pond, Color Mandalas and the Unblock puzzle) and the Kaleidoscope (slow
+soft shapes). Music, rain or waves can play on every screen from the sound bar in the header, and
+nothing about sound is stored. Every screen has a "Need urgent help?" control that shows crisis
+lines for the person's region. Supporting pages give the self-help disclaimer and a feedback page
+that opens a pre-filled GitHub issue or email. Freelief has no server, no account and no analytics. It stores only the
 person's settings, on the device.
 <!-- END srs-product-overview -->
 
@@ -177,28 +177,28 @@ Not built (decided 2026-10-07):
 | Term | Meaning |
 |---|---|
 | **Exercise** | A guided self-help technique: paced breathing. |
-| **Activity** | A distraction activity: the bubble field, Zen Garden, Unblock, the ripple pond, mandala coloring, or the Visualizer. No score, no failure, no timer. |
-| **Visualizer** | The activity with nothing to do: soft shapes that fade in and out, a full screen and a black screen. It has no sound choice of its own; the sound bar plays sound on every screen. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
+| **Activity** | A distraction activity: the bubble field, Zen Garden, Unblock, the ripple pond, mandala coloring, or the Kaleidoscope. No score, no failure, no timer. |
+| **Kaleidoscope** | The activity with nothing to do (first called Calm, then the Visualizer): a slow kaleidoscope of soft shapes, a full screen and a black screen. It has no sound choice of its own; the sound bar plays sound on every screen. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
 | **Region** | The country taken from the device language and region setting. Never from location. |
 | **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, where Freelief opens (the menu or breathing), how long the screen stays on, sound on or off, vibration on or off, the light or dark theme, and the region for urgent help. What sound plays is not stored. On the device only. |
-| **Standard** | An external standard Freelief claims to meet, such as WCAG 2.2 AA. It has a level, a check date, and the tester of the manual check. |
-| **Source** | A published research citation behind a technique. |
+| ~~**Standard**~~ | *Withdrawn 2026-10-10 (RLG-056): Freelief claims no standard.* |
+| **Source** | A published research citation behind a technique, kept as a record in `docs/research/sources.md`; the app shows none (RLG-056). |
 
-Relations: each Exercise and Activity cites one or more Sources. A Region has zero or more Crisis
+Relations: each Exercise and Activity has one or more Sources in the record. A Region has zero or more Crisis
 lines; a Region with none falls back to the international directory. Settings persist across
 restarts on the device (REQ-023, REQ-015).
 
 <!-- BEGIN srs-definitions - written by the interview, read by the generators -->
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
-  Zen Garden, Unblock, the ripple pond, mandala coloring, or the Visualizer.
+  Zen Garden, Unblock, the ripple pond, mandala coloring, or the Kaleidoscope.
 - **Background sound** — music, and rain or waves, chosen with the three buttons of the sound bar
   in the header; it keeps playing on every screen until the person taps its button again.
-- **Visualizer** — the activity with nothing to do: soft shapes, a full
-  screen and a black screen.
+- **Kaleidoscope** — the activity with nothing to do (first called the Visualizer): a slow
+  kaleidoscope of soft shapes, a full screen and a black screen.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
 - **Crisis line** — a service for a person in danger, with a region, a way to reach it, and a
@@ -207,8 +207,8 @@ restarts on the device (REQ-023, REQ-015).
 - **Settings** — the only data Freelief stores, and only the values the person changed: the
   breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, vibration
   on or off, the theme, and the region for urgent help, on the device only.
-- **Standard** — an external standard Freelief claims, with its level, check date and tester.
-- **Source** — a published research citation behind a technique.
+- **Source** — a published research citation behind a technique, kept as a record in
+  `docs/research/sources.md`. The app shows none and claims no standard (RLG-056).
 <!-- END srs-definitions -->
 
 ---
@@ -270,19 +270,21 @@ each shape is named ("Ring 2, shape 3 of 12, blank"); New mandala starts the nex
 designs, blank, and after the last it starts the first again.
 States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
-and its action. *Visualizer (added 2026-10-07; named 2026-10-07, UNT-034):* nothing to do; the
-soft shapes fade in and out. Sound is not chosen here: the header's sound bar, on every screen,
+and its action. *Kaleidoscope (added 2026-10-07 as Calm; named the Visualizer 2026-10-07, UNT-034;
+the Kaleidoscope 2026-10-10, RLG-057):* nothing to do; a slow kaleidoscope of soft shapes turns,
+drifts in color and fades from one pattern to the next. Sound is not chosen here: the header's sound bar, on every screen,
 has a music note, a raindrop and a wave (RLG-049). A tap plays that sound and a second tap stops
 it; rain and waves replace each other, and music plays with either. A tap while the speaker is off
 turns sound on. The sound keeps playing on every screen; breathing lowers it under its tones, and
 it waits while urgent help is open. Nothing about it is stored, so each visit starts silent. Full
 screen fills the screen
 and keeps its own "Need urgent help?" button. Black screen covers everything in black while the
-sound plays; one tap or key brings the screen back. Under reduced motion the shapes only fade. The
+sound plays; one tap or key brings the screen back. Under reduced motion nothing turns or drifts;
+only the slow fade between patterns remains. The
 screen stays awake while it runs.
 
 **F6 — Need urgent help.** Trigger: the "Need urgent help?" control, present on every screen
-(the Visualizer's black screen is the one exception: one tap brings it back).
+(the Kaleidoscope's black screen is the one exception: one tap brings it back).
 Steps: the app takes the region saved in Settings, or else reads the device language and region;
 it shows a Country list set to that region; a line to call the region's emergency number if in
 immediate danger, with a Call button for each emergency number; then the crisis lines for that region, each with a tap-to-call or tap-to-text
@@ -298,7 +300,8 @@ region in Settings replace the other-countries list.)*
 **F7 — Settings.** Rhythm preset, where Freelief opens (the menu or breathing), how long the
 screen stays on (10, 30 or 60 minutes with no touch, or always while it runs), theme
 override, vibration on or off, and the region for urgent help; sound on or off is the speaker in
-the header; the Visualizer's sound choice is kept too. Reset settings puts every value back to its
+the header. What sound plays is chosen in the header's sound bar and is not stored (REQ-036). Reset
+settings puts every value back to its
 default. The screen also shows the version, whether it is saved for use with no internet, and
 Update now.
 Saved on the device at once. Only a setting the person changes is stored, so a setting they never
@@ -368,7 +371,7 @@ met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), n
 | 7 | Deployment | GitHub Pages serves the `live` branch of the public repository `EffigyMedia/freelief`. Pushing `main` deploys nothing; moving `live` is the deploy (before 1.0 with the owner's yes, from 1.0 only at a release that cleared the audit gate). Rollback moves `live` back to the previous tag (`preview-X.Y.Z` before 1.0, `vX.Y.Z` from 1.0); see the incident rule in section 9. *(Changed 2026-10-07, AUD-003: it first served `main`.)* The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
 | 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, from the `axe-playwright-python` package in the same venv, runs the automated accessibility check; nothing from it ships. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
 | 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright. `run`: `python -m http.server 8000`. `test`: the Playwright harnesses. `doctor`: check Python, the venv, Playwright, the manifest, the service worker and the JSON files. `build`: none — the repository is the distributable; `build` reports that and checks the size limit. `clean`: remove `output/`. `bench`: the launch-time and size benchmark. | Matches the environment's standard commands with the fewest tools. | A bundler. |
-| 10 | Version control | Git. The remote is public. Push `main` freely: it deploys nothing. Moving `live` is the deploy. Before 1.0, `live` moves only with the owner's yes, recorded in the changelog entry of the version it serves; from 1.0 on, it moves only at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tag. *(Changed 2026-10-08, AUD-003: it first said "feature commits stay local; push at a release or for an owner device test".)* | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
+| 10 | Version control | Git. The remote is public. Push `main` freely: it deploys nothing. Moving `live` is the deploy. Before 1.0, `live` moves only with the owner's yes, recorded in the changelog entry of the version it serves, tagged `preview-X.Y.Z`, with a bench run in the performance log; `docs/README.md` names no version, so it cannot go stale (AUD-144); from 1.0 on, it moves only at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tag. *(Changed 2026-10-08, AUD-003: it first said "feature commits stay local; push at a release or for an owner device test".)* | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
 | 11 | CI/CD | None in v1. The project commands are enough at this size. | Fewer moving parts. | GitHub Actions (reconsider if volunteers send pull requests). |
 
 **Never commit:** any token, key or password; `.venv/`; `output/`; the content of feedback emails
@@ -385,15 +388,16 @@ Each file below is one module with one responsibility.
 |---|---|---|
 | `index.html` + `app.js` (**shell**) | The page frame, the screen router, the footer, and the "Need urgent help?" control. | Contain exercise logic or text. |
 | `exercises/breathe.js` | The breathing exercise. *(`ground.js` and `statements.js` were removed 2026-10-07.)* | Read storage or the network; hold text. |
-| `activities/bubbles.js`, `trace.js`, `unblock.js`, `ripple.js`, `mandala.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
-| `background.js` | The background sound: what plays (off, music, nature, both) and which nature sound, started and stopped through `audio`. The shell tells it what to play. | Touch storage; start a sound by itself. |
-| `activities/calm.js` (**the Visualizer**) | The choice of background sound, saved and played by the shell, soft shapes that fade in and out, Full screen with its own "Need urgent help?" button, and the black screen. Its shape loop uses timers inside the module; the person sees none. | Show a countdown, an end or a score; read storage; add shapes or animate while the screen is black. |
+| `activities/bubbles.js`, `unblock.js`, `ripple.js`, `mandala.js` | One activity each. | Keep a score, a timer or a failure state; read storage. |
+| `activities/garden.js` (**Zen Garden**) | The sand tray: raking by drag or keys, and stones and plants added, moved, chosen and removed (REQ-038). *(It replaced `trace.js` on 2026-10-10.)* | Keep a score, a timer or a failure state; read storage; count raking or items as progress. |
+| `background.js` | The background sound: music, and rain or waves (which replace each other), started and stopped through `audio`. The shell's sound bar tells it what to play; nothing is stored. | Touch storage; start a sound by itself. |
+| `activities/calm.js` (**the Kaleidoscope**; route `#calm`) | The slow kaleidoscope of soft shapes, Full screen with its own "Need urgent help?" button, and the black screen. It has no sound choice of its own. Its pattern loop uses timers inside the module; the person sees none. | Show a countdown, an end or a score; read storage; add shapes or animate while the screen is black. |
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
 | `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
 | `crisis.js` + `data/crisis-lines.json` | The choice of crisis lines from the device region. | Ask for location. |
 | `audio.js` | Every sound, made with Web Audio: the breath sound and the hold taps, the activity cues and the background music, rain and waves, which share one volume that a screen can lower. Nothing plays before the first tap or key press. | Play anything while sound is off, while urgent help is open, or while the app is hidden; load an audio file; touch storage except by reading `settings.js` (AUD-117). |
-| `haptics.js` | One short vibration from `config.json` → `haptics.patterns` for a single triggered event in an activity. A device without the Vibration API gets nothing. | Vibrate for anything continuous (the breath, a drag trail, the trace tone); vibrate while vibration is off; touch storage except by reading `settings.js` (AUD-117). |
-| `wakelock.js` | The screen wake lock while breathing or the Visualizer runs, taken again when the page comes back. | Fail when the browser has no wake lock or refuses it; keep the lock after the last screen releases it; touch storage except by reading `settings.js` (AUD-117). |
+| `haptics.js` | One short vibration from `config.json` → `haptics.patterns` for a single triggered event in an activity. A device without the Vibration API gets nothing. | Vibrate for anything continuous (the breath, a drag trail, raking); vibrate while vibration is off; touch storage except by reading `settings.js` (AUD-117). |
+| `wakelock.js` | The screen wake lock while breathing or the Kaleidoscope runs, taken again when the page comes back. | Fail when the browser has no wake lock or refuses it; keep the lock after the last screen releases it; touch storage except by reading `settings.js` (AUD-117). |
 | `motion.js` | Reduced-motion detection; every animation asks it. | Touch storage except by reading `settings.js` (AUD-117). |
 | `fallback.js` | A classic script in `<head>`: it hides the static fallback in `index.html` while the app starts, and shows it if the app has not started in 2 s. The 2 s is a constant in the file. | Depend on `config.json`, a module or the network, because it must work when they fail. |
 | `config.json` | **Every tunable**, with its committed default. | — |
@@ -421,8 +425,8 @@ setting except Settings itself; the background sound belongs to the shell's soun
 **Tunables (`config.json`):** every tunable has its committed default there. The groups are:
 `breathing` (rhythms and the default, 4 in and 6 out); `sounds` (every note, level and fade, the
 background volume and ducking, the rain and the waves); `haptics`; `wakeLock` (the screen-on
-choices); `bubbles`, `trace`, `unblock` (the boards), `ripple` (with its `wave`), `mandala` and
-`calm` (the Visualizer and the background sound); `theme`; `settings`; `crisis` (the directory URL
+choices); `bubbles`, `garden`, `unblock` (the boards), `ripple` (with its `wave`), `mandala` and
+`calm` (the Kaleidoscope, and the mix and ducking of the background sound); `theme`; `settings`; `crisis` (the directory URL
 and the freshness window); and `project` (the feedback links, the email address, empty until
 decided).
 
@@ -610,13 +614,13 @@ research page is removed.)*
 |---|---|
 | A person in danger uses the app instead of getting help. | The "Need urgent help?" control is on every screen, and the self-help line is on the main screen. |
 | A crisis line in the list goes out of service. | Each line has a last-checked date; a release re-checks every line; the international directory is the fallback. |
-| A claim overstates the evidence and breaks health-claim rules. | REQ-025 fixes the wording; each technique cites its research (REQ-024); a test scans for forbidden words. |
+| A claim overstates the evidence and breaks health-claim rules. | REQ-025 fixes the wording; the app shows no research and claims no standard (RLG-056); a test scans for forbidden words. *(Changed 2026-10-10, AUD-139: it named REQ-024, now withdrawn.)* |
 | ~~A standard is promoted that the app does not meet.~~ | *Withdrawn 2026-10-10 (RLG-056): the app makes no standards claim, and REQ-029 is withdrawn.* |
 | No volunteer comes forward for the manual check. | The owner or a volunteer does it before 1.0 (RLG-033); the owner can ask in accessibility communities. *(Changed 2026-10-10, RLG-056.)* |
 | A movement or a sound makes a person feel worse. | Reduced motion is honoured (REQ-010); sounds are soft and on by default, and the speaker button in the header fades them out over 0.6 s and then stops them (REQ-007; Decision Log, UNT-053 and UNT-078); sound waits while urgent help is open; nothing is timed or scored. |
 | ~~The colour sort cannot be made fully accessible.~~ | *Withdrawn 2026-10-09: Unblock replaced the colour sort (REQ-014 withdrawn, REQ-035).* |
 | Unblock is hard to use without sight or with shaky hands. | Three ways to move: a drag, arrow keys on a focused block, and choose then Slide buttons; Undo takes back any move; no score, count or timer; tests solve every board by keyboard. The manual screen-reader check is owed in RLG-033. *(Added 2026-10-10, AUD-126.)* |
-| The background sound plays on after a person wants quiet, or surprises them on another screen. | The sound bar in the header shows it on every screen and turns it off in one tap; the speaker button holds every sound; a reset never starts it; only a choice on the Kaleidoscope starts it (REQ-036). *(Added 2026-10-10, AUD-126.)* |
+| The background sound plays on after a person wants quiet, or surprises them on another screen. | The sound bar in the header shows it on every screen and turns it off in one tap; the speaker button holds every sound; a reset never starts it; only a tap on a sound-bar button starts it, and nothing about it is stored (REQ-036). *(Added 2026-10-10, AUD-126.)* |
 | The shipped size reaches the 250 KB limit under release pressure. | The size plan in section 9 sets what each slice may spend and lists known savings; `build` fails over the limit (REQ-028). *(Added 2026-10-10, AUD-124.)* |
 | The offline cache serves an old version after an update. | The cache name carries the version; an update test covers it. |
 
@@ -1214,7 +1218,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   again on return. The round also found that Reset settings started the music and turned sound back
   on (AUD-114). Now only a choice on the Visualizer starts a sound (Off and Stop end it from
   anywhere), and a reset keeps the speaker's sound setting. — 2026-10-09 (owner chose to fix before
-  0.8.0; UNT-105)
+  0.8.0; UNT-105) *Superseded in part 2026-10-09 (owner, RLG-049; UNT-108): the Visualizer's sound
+  choice is gone; only a tap on a sound-bar button starts a sound, and nothing about it is stored. See
+  "The header is three centered rows, and the sound bar is three toggle buttons".*
 - **Every mandala shape is at least 44 px on a phone.** — The interface review found parts of
   about 37 to 40 px in the denser designs, under the stress checks' 44 px rule (RLG-047, AUD-125).
   The owner chose to thin the dense rings rather than accept 24 px. Every design now has the same
@@ -1600,3 +1606,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   AUD-124, AUD-126, AUD-128): superseded Decision Log entries annotated, section 5 no longer names a
   range, the risk table updated, the size plan added to section 9, and the clauses that still named
   the Standards page corrected.
+- **v1.5 — 2026-10-10** — Round UNT-124's fixes (app v0.8.15 to v0.8.19): the help dialog warmed
+  after the first paint; lazy screens asked for by version, and the previous version's cache kept;
+  Update now replaces a copy only when the new one is whole; axe on the states inside screens; and a
+  documentation sweep: the product overview, vocabulary, F5, F7, the module table (Zen Garden's row,
+  the Kaleidoscope's row), the tunables, the risk table and section 7 row 10 now match the code; the
+  Standard term is withdrawn; the UNT-105 entry is marked superseded.

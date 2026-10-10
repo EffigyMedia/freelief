@@ -328,3 +328,27 @@ def test_bench_reads_the_baseline_load_it_compares_against():
     import bench
     assert bench.BASELINE["load_percent"] is not None, "baseline.md has no 'Baseline load' line"
     assert bench.BASELINE["load_percent"] + bench.COMPARABLE_MARGIN_POINTS <= 40
+
+
+# AUD-142 and AUD-143: names the owner retired. A shipped string or an issue template that still
+# uses one points a person or a volunteer at a screen that is gone.
+RETIRED_NAMES = ["Visualizer", "Trace a shape", "Sort colors", "Standards and research", "colour sort"]
+
+
+def test_no_shipped_string_or_template_names_a_retired_screen():
+    texts = {"strings/en.json": (freelief.ROOT / "strings" / "en.json").read_text("utf-8")}
+    for template in (freelief.ROOT / ".github" / "ISSUE_TEMPLATE").glob("*.md"):
+        texts[template.relative_to(freelief.ROOT).as_posix()] = template.read_text("utf-8")
+    found = [f"{name} in {path}" for path, text in texts.items() for name in RETIRED_NAMES
+             if name.lower() in text.lower()]
+    assert not found, found
+
+
+def test_the_accessibility_template_lists_the_same_screens_as_the_app():
+    # AUD-143: the issue template and the in-app checklist are twins; they list the same screens.
+    import json
+    app = json.loads((freelief.ROOT / "strings" / "en.json").read_text("utf-8"))["feedback.template.accessibility"]
+    template = (freelief.ROOT / ".github" / "ISSUE_TEMPLATE" / "accessibility-check.md").read_text("utf-8")
+    in_app = re.findall(r"^\[ \] (.+)$", app, re.M)
+    on_github = re.findall(r"^- \[ \] (.+)$", template, re.M)
+    assert in_app and in_app == on_github, (in_app, on_github)

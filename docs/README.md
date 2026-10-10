@@ -3,9 +3,9 @@
 **Help through a panic attack or strong anxiety, right now.** Free, offline and private.
 
 Freelief opens on a short menu with nothing to fill in first. Breathe is first: a guide that helps
-you slow your breathing. One tap also reaches gentle activities (pop bubbles, trace a shape, the
-Unblock puzzle, a ripple pond and a mandala to color) and the Visualizer (slow shapes). Music, rain or waves play from the
-buttons at the top, on every screen. Every screen has a **"Need urgent help?"** button with crisis lines for your country.
+you slow your breathing. One tap also reaches gentle activities (Pop Bubbles, Zen Garden, Ripple
+Pond, Color Mandalas and the Unblock puzzle) and the Kaleidoscope (slow, soft shapes). Music, rain
+or waves play from the buttons at the top, on every screen. Every screen has a **"Need urgent help?"** button with crisis lines for your country.
 
 - **Free and open source** (MIT license). No account, no advertising, no analytics.
   The Effigy Media name and logo are not part of the MIT license; see `LICENSE`.
@@ -24,8 +24,8 @@ buttons at the top, on every screen. Every screen has a **"Need urgent help?"** 
 technology. Please do not rely on it yet. Version 1.0 will be the first release, after a full
 release audit; this page will then say how to install it.
 
-The preview serves **v0.8.8** (moved 2026-10-10 with the owner's yes). Each move of the preview is
-recorded in `docs/core/changelog.md` with the owner's yes, and this line names the version it serves.
+Each move of the preview is recorded in `docs/core/changelog.md` with the owner's yes, and the
+commit it serves is tagged `preview-X.Y.Z`; the newest such tag is the version the preview serves.
 
 ## Research and accessibility
 

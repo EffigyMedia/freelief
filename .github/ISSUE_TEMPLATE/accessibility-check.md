@@ -18,16 +18,16 @@ Input used (keyboard, touch, switch, other):
 
 What I checked:
 - [ ] Menu (What would help right now?)
-- [ ] Breathe
-- [ ] Pop bubbles
-- [ ] Trace a shape
-- [ ] Sort colors
-- [ ] Ripple pond
-- [ ] Color a mandala
-- [ ] Visualizer, with its full screen and black screen
+- [ ] Breathing
+- [ ] Pop Bubbles
+- [ ] Zen Garden
+- [ ] Ripple Pond
+- [ ] Color Mandalas
+- [ ] Unblock
+- [ ] Kaleidoscope, with its full screen and black screen
 - [ ] Need urgent help
 - [ ] Settings
-- [ ] About, Standards and research, Feedback
+- [ ] About, Feedback
 
 What worked well:
 

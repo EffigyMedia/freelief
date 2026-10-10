@@ -190,7 +190,7 @@
   "feedback.mobileDevice": "{platform} (phone or tablet)",
   "footer.selfHelp": "Freelief is a self-help tool. It is not medical care.",
   "settings.awake": "Keep the screen on",
-  "settings.awakeHint": "During breathing and the Visualizer, the screen stays on. After this long with no touch, it may turn off, and the exercise goes on. Always keeps it on, which uses more battery.",
+  "settings.awakeHint": "During breathing and the Kaleidoscope, the screen stays on. After this long with no touch, it may turn off, and the exercise goes on. Always keeps it on, which uses more battery.",
   "settings.awake.10": "For 10 minutes",
   "settings.awake.30": "For 30 minutes",
   "settings.awake.60": "For 60 minutes",

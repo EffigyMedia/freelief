@@ -1,16 +1,14 @@
 # Trust pages: About and Feedback
 
-The owning document for `screens/about.js`, `screens/standards.js`, `screens/feedback.js`,
-`data/research.json`, `data/standards.json` and `.github/ISSUE_TEMPLATE/`. Design:
-`docs/Design_Document.md` flows F8 and F9; REQ-006, REQ-020, REQ-024, REQ-025, REQ-029, REQ-030.
+The owning document for `screens/about.js`, `screens/feedback.js` and `.github/ISSUE_TEMPLATE/`.
+Design: `docs/Design_Document.md` flows F8 and F9; REQ-006, REQ-025, REQ-030.
 
 ## Reaching them
-Three footer links: `#about`, `#standards` and `#feedback`. The menu and these pages show the full
+Two footer links: `#about` and `#feedback`. The menu and these pages show the full
 footer. The exercise and activity screens show only the calm line, so the links are one step away
 there, through "Back to menu". They are ordinary routes. The router awaits a screen's `start()`
-(Standards loads its data first) and sets `main[data-shown]` when the screen is drawn. Tests wait
-on `data-shown`, not on `data-screen`. If Standards cannot load its data, `start()` rejects and the
-shell falls back to the menu (AUD-008).
+and sets `main[data-shown]` when the screen is drawn. Tests wait on `data-shown`, not on
+`data-screen`. A screen whose `start()` rejects falls back to the menu (AUD-008).
 
 ## About and disclaimer
 All text is in `strings/en.json` under `about.*`: the self-help statement, privacy, the open

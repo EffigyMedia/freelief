@@ -29,6 +29,27 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-10
 
+### Sweep a removed or renamed screen from every place that names it
+- **Instruction:** a removed or renamed screen is swept in the same unit from the design (module
+  table, tunables, F-flows, vocabulary, risk table), the technical references, the `config.json`
+  groups, the strings, the issue templates, `docs/README.md` and RLG-033. `test_repo.py` fails on a
+  retired screen name in a shipped string or a template, and when the GitHub accessibility template
+  and the in-app checklist differ.
+- **Why:** AUD-143 and the sweep findings of round UNT-124 (AUD-138 to AUD-145): the removals of
+  Sort colors, the trace, the Standards page and the Visualizer's name were each swept once and
+  missed clauses.
+- **Encoded in:** `AGENTS.md` (Architecture, beside the four-list rule); `tools/tests/test_repo.py`.
+- Agent, 2026-10-10.
+
+### The changelog allows one later addition: the line that records a live move
+- **Instruction:** a changelog entry is never edited after the fact, except that the line recording
+  a move of the live preview is added to the entry of the version it serves, on the day of the move.
+  `docs/README.md` names no version; the newest `preview-` tag says what the preview serves.
+- **Why:** AUD-149 and AUD-144: the move rule added lines to entries that the header said were never
+  edited, and the README's version went stale at every move.
+- **Encoded in:** `docs/core/changelog.md` (header); `docs/README.md`; design section 7 row 10.
+- Agent, 2026-10-10.
+
 ### Every live move runs bench; a run is valid only near the baseline's load
 - **Instruction:** each move of `live` runs `bench` and records the run in the performance log from
   `output/bench-log-draft.md`. A bench run is valid, and compared with the baseline, only when its
