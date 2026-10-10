@@ -113,3 +113,23 @@ AudioContext.prototype.createBufferSource = function () { window.__src += 1; ret
         text = page.locator("main").inner_text().lower()
         for word in ("score", "time", "level", "lose"):
             assert word not in text, word
+
+
+def test_enter_and_space_choose_an_item_and_remove_takes_it_away():
+    # AUD-152: an item is a toggle button, so Enter and Space choose it, as a click does; the Remove
+    # button then takes it away, all by keyboard.
+    with open_app() as (page, errors, _):
+        go(page, "garden")
+        stone = page.locator(".garden-item.stone").first
+        stone.focus()
+        page.keyboard.press("Enter")
+        assert stone.get_attribute("aria-pressed") == "true"
+        page.keyboard.press(" ")
+        assert stone.get_attribute("aria-pressed") == "false", "Space chooses it no more"
+        page.keyboard.press(" ")
+        assert stone.get_attribute("aria-pressed") == "true"
+        before = page.locator(".garden-item").count()
+        page.locator(".garden-remove, button.remove").first.focus()
+        page.keyboard.press("Enter")
+        assert page.locator(".garden-item").count() == before - 1
+        assert not errors, errors

@@ -239,6 +239,10 @@ export function start(container, ctx) {
       remove(item);
     } else if (event.key === "Escape") {
       choose(null);
+    } else if (event.key === "Enter" || event.key === " ") {
+      // An item is a toggle button, so Enter and Space choose it, as a click does (AUD-152).
+      event.preventDefault();
+      choose(current.chosen === item ? null : item);
     }
   }
 

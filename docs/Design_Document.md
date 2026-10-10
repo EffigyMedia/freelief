@@ -449,8 +449,12 @@ crisis lines usable.
 - *Smoke:* every page loads with a clean console.
 - *Offline:* after one visit, with the network off, every screen works; the network log shows no
   request to any other origin.
-- *Accessibility:* axe-core on every page and state, with zero A and AA violations; a keyboard-only
-  walk through every flow.
+- *Accessibility:* axe-core on every screen, on each state a person reaches inside one (the list is
+  `STATES` in `tools/tests/test_a11y.py`: a chosen block, a solved board, a chosen garden item, the
+  full screen, the black screen, the reset question, the problem report), and on the help dialog for
+  every region and "Another country", with zero A and AA violations; a keyboard-only walk through
+  every flow. *(Changed 2026-10-10, AUD-152: it said "every page and state" while only each screen's
+  first state was checked.)* A new state that a tap or key reveals is added to `STATES`.
 - *Reduced motion:* with the media feature set, no element animates.
 - *Settings round trip:* save, reload, read, and assert the same values; blocked storage falls back
   to the defaults.

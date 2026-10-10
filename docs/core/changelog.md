@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-8-18"></a>
+## [0.8.18] - 2026-10-10
+- **Zen Garden**: Enter and Space now choose a stone or a plant, so a keyboard user can remove it
+  with the Remove button. The accessibility check now covers the states you reach inside a screen
+  and the help dialog for every country. [AUD-152](../fragments/AUD-152.md). 195 tests.
+
 <a id="v0-8-17"></a>
 ## [0.8.17] - 2026-10-10
 - **Update now**: when you already have the newest version, it downloads every file again and
