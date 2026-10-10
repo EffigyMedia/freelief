@@ -320,3 +320,11 @@ def test_doctor_reports_a_broken_config_instead_of_crashing():
         assert result.returncode == 1
         assert "Traceback" not in result.stdout + result.stderr, result.stderr[-800:]
         assert "NOT READY" in result.stdout
+
+
+def test_bench_reads_the_baseline_load_it_compares_against():
+    # AUD-134: a run is compared with the baseline only near the baseline's own load, so the load
+    # must be recorded where bench reads it.
+    import bench
+    assert bench.BASELINE["load_percent"] is not None, "baseline.md has no 'Baseline load' line"
+    assert bench.BASELINE["load_percent"] + bench.COMPARABLE_MARGIN_POINTS <= 40

@@ -284,7 +284,9 @@ the Chrome already on the machine. Run from the repo root:
   freely. **Moving `live` is a deploy.** Before 1.0, `live` is a public *preview*: move it only with
   the owner's yes for that move, and the README says it is a preview. Each move tags the commit
   `preview-X.Y.Z` and pushes the tag (`git push origin preview-X.Y.Z`), so a rollback has a target
-  (AUD-121). From 1.0 on, `live` moves only
+  (AUD-121). Each move also runs `bench` and records the run in `docs/performance/log.md` from the
+  draft in `output/bench-log-draft.md`, valid or not, so a regression is found at the version that
+  caused it (AUD-135). From 1.0 on, `live` moves only
   at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tagged commit:
   `git push origin vX.Y.Z:live`.
 - **Never commit** (see `.gitignore`): tokens, keys or passwords; `.venv/`; `output/`;

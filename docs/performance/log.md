@@ -2,6 +2,18 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-10 — Round UNT-124 health step (v0.8.14), recorded late (AUD-135)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to first screen (the menu) | 154 ms | 206.2 to 211.8 ms | +34% to +38% | FLAG, under target |
+| Response: Need urgent help? opens (to after paint) | 77 ms | 100.1 to 102.9 ms | +30% to +34% | FAIL (AUD-131) |
+| Shipped size | 239.8 KB | 233.1 KB | -3% | OK |
+Notes: four valid runs of six at the 35% limit then in force (33.1%, 33.7%, 33.9%, 34.9% busiest
+load); two were BUSY (40.5%, 55.2%). Under the rule of AUD-134 (baseline load 27% plus 5 points) none
+of the four would be comparable. The response failure was not seen at the version that caused it,
+because no bench ran between v0.7.13 and this round; every live move now runs one (AUD-135). Fixed in
+v0.8.15 (AUD-131).
+
 ## 2026-10-10 — The help dialog is warmed after the first paint (v0.8.15), NOT VALID: busy machine
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|

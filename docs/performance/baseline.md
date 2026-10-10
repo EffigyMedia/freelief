@@ -19,6 +19,10 @@ so no run was valid. That probe started PowerShell for each sample and mostly me
 start-up. Since round UNT-104 it reads the kernel's CPU times over one second (`GetSystemTimes`),
 which agrees with the system counter, and the re-baseline below used runs at 22% to 27% load.
 
+**Baseline load:** busiest 27% (v0.7.13, 2026-10-09). A run is valid, and is compared with the
+baseline, only when its busiest load is at most this plus 5 points, and never over 35% (AUD-134).
+`bench.py` reads this line; a re-baseline updates it.
+
 ## Workload
 `tools/bench.py`, run by `python tools/freelief.py bench`. The app is installed (one online visit
 lets the service worker cache it), then the browser context goes offline. Each run opens a fresh

@@ -36,6 +36,8 @@ def read_baseline() -> dict:
     for key, req in rows.items():
         line = next(l for l in text.splitlines() if l.startswith("|") and f"({req})" in l)
         found[key] = float(re.search(r"([0-9.]+)\s*(?:ms|KB)", line.split("|")[3]).group(1))
+    load = re.search(r"\*\*Baseline load:\*\* busiest ([0-9.]+)%", text)
+    found["load_percent"] = float(load.group(1)) if load else None
     return found
 
 
@@ -44,6 +46,9 @@ TIMING_TOLERANCE = 0.25  # +25% for the two timings; any size growth is flagged
 # A quiet machine is a condition of the measurement (Performance_Testing.md section 2). Above this
 # CPU load, sampled before and after every run, the result is not valid (AUD-079).
 BUSY_LOAD_PERCENT = 35
+# A run is compared with the baseline only near the load the baseline was taken at, so load alone
+# cannot pass or fail it (AUD-134). The limit is the lower of the two.
+COMPARABLE_MARGIN_POINTS = 5
 
 # Response: from a click on "Need urgent help?" (on every screen) to the moment after the frame that
 # shows the dialog is painted. A requestAnimationFrame callback runs before that paint, so the probe
@@ -154,15 +159,42 @@ def main() -> int:
         print(f"[{status}] {label}: {value} {unit} (target {target:g} {unit}; "
               f"baseline {baseline:g} {unit}, {change:+.0%})")
     print("A FLAG does not fail: record it in docs/performance/log.md (AUD-058).")
+    baseline_load = BASELINE["load_percent"]
+    limit = BUSY_LOAD_PERCENT if baseline_load is None else min(BUSY_LOAD_PERCENT, baseline_load + COMPARABLE_MARGIN_POINTS)
     print(f"Response spread {result['response_spread_ms']} ms; worst {result['response_worst_ms']} ms; "
-          f"busiest CPU load {busiest if busiest is not None else 'unknown'}%.")
+          f"busiest CPU load {busiest if busiest is not None else 'unknown'}%; "
+          f"baseline load {baseline_load if baseline_load is not None else 'unknown'}%; limit {limit:g}%.")
+    valid = busiest is not None and busiest <= limit
+    write_log_draft(result, checks, valid, busiest, baseline_load)
     if busiest is None:
         print("[WARN] the CPU load could not be read, so the quiet-machine condition is not checked")
-    elif busiest > BUSY_LOAD_PERCENT:
-        print(f"[BUSY] the CPU load reached {busiest:g}%, over {BUSY_LOAD_PERCENT}%: this run is not valid, "
+    elif not valid:
+        print(f"[BUSY] the CPU load reached {busiest:g}%, over {limit:g}% (the baseline's load plus "
+              f"{COMPARABLE_MARGIN_POINTS} points, at most {BUSY_LOAD_PERCENT}%): this run is not valid, "
               "pass or fail. Close other work and run it again.")
         return 2
     return 1 if failed else 0
+
+
+def write_log_draft(result: dict, checks: list, valid: bool, busiest, baseline_load) -> None:
+    """A draft entry for docs/performance/log.md in output/, so every run can be recorded as it
+    happened (AUD-135). The session copies it into the log and writes the notes."""
+    import datetime
+    names = {"launch_ms": "Launch to first screen (the menu)", "response_ms": "Response: Need urgent help? opens",
+             "size_kb": "Shipped size"}
+    rows = []
+    for label, key, target, unit, tolerance in checks:
+        value, baseline = result[key], BASELINE[key]
+        change = (value - baseline) / baseline
+        verdict = "FAIL" if value > target else ("FLAG" if change > tolerance else "OK")
+        rows.append(f"| {names[key]} | {baseline:g} {unit} | {value} {unit} | {change:+.0%} | {verdict} |")
+    state = "" if valid else ", NOT VALID: busy machine"
+    lines = [f"## {datetime.date.today().isoformat()} — <why this run> (v{result['version']}){state}",
+             "| Metric | Baseline | Now | Δ | Verdict |", "|---|---|---|---|---|", *rows,
+             f"Notes: busiest CPU load {busiest}%, baseline load {baseline_load}%. <what changed and why>"]
+    text = "\n".join(lines) + "\n"
+    (ROOT / "output" / "bench-log-draft.md").write_text(text, "utf-8")
+    print("A draft log entry is in output/bench-log-draft.md.")
 
 
 if __name__ == "__main__":

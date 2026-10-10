@@ -29,6 +29,17 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-10
 
+### Every live move runs bench; a run is valid only near the baseline's load
+- **Instruction:** each move of `live` runs `bench` and records the run in the performance log from
+  `output/bench-log-draft.md`. A bench run is valid, and compared with the baseline, only when its
+  busiest CPU load is at most the baseline's load plus 5 points, and never over 35%.
+- **Why:** AUD-134 and AUD-135. The urgent-help response crossed its target with no bench run
+  between v0.7.13 and round UNT-124, and runs at 33% to 35% load were compared with a baseline taken
+  at 22% to 27%.
+- **Encoded in:** `AGENTS.md` (Conventions, the remote); `docs/performance/baseline.md` (Baseline
+  load); `tools/bench.py` (`COMPARABLE_MARGIN_POINTS`, `write_log_draft`).
+- Agent, 2026-10-10.
+
 ### Tag every move of the live preview
 - **Instruction:** each move of `live` before 1.0 tags its commit `preview-X.Y.Z` and pushes the
   tag. An incident rolls `live` back to the previous `preview-` tag before 1.0, and to the previous
