@@ -58,7 +58,9 @@ function precache() {
 // A new version installs into its own cache and then waits. The page lets it take over when that
 // is safe: on a fresh open, before the first touch, or when the person presses Update now. A
 // version never changes under a page the person is using, so an old page never loads new files
-// (AUD-057).
+// (AUD-057). A page knows only its own state, so the worker takes over only when the page that asks
+// is Freelief's only open window: a second window, such as the installed app beside a browser tab,
+// may be in use, and the new version then waits until every window is closed.
 self.addEventListener("install", (event) => {
   event.waitUntil(precache());
 });
@@ -73,19 +75,35 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// The network may already serve a newer version. A file is stored in this version's cache only
+// while the network still serves this version, so one cache never holds two versions (AUD-120).
+function thisVersionIsDeployed() {
+  return fetch(new Request("version.js", { cache: "reload" }))
+    .then((response) => (response.ok ? response.text() : ""))
+    .then((text) => text.includes(`"${self.FREELIEF_VERSION}"`))
+    .catch(() => false);
+}
+
 // A page asks for a repair on each online launch. Any file missing from the cache is fetched
 // again, so a cache that another app deleted, and that refilled only partly, becomes whole.
 // The reply says whether it worked.
 self.addEventListener("message", (event) => {
   if (event.data === "skip") {
-    self.skipWaiting();
+    event.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((windows) => {
+      const alone = windows.every((client) => client.id === event.source?.id);
+      if (alone) return self.skipWaiting();
+      event.source?.postMessage({ skip: false });
+      return undefined;
+    }));
     return;
   }
   if (event.data !== "heal") return;
   const reply = (ok) => event.source && event.source.postMessage({ heal: ok });
   event.waitUntil(
-    caches.open(CACHE)
-      .then((cache) => Promise.all(FILES.map((file) => cache.match(file).then((hit) => (hit ? null : file))))
+    thisVersionIsDeployed()
+      .then((same) => (same ? caches.open(CACHE) : null))
+      // A newer version is deployed: its own worker repairs its own cache, so nothing is stored.
+      .then((cache) => cache && Promise.all(FILES.map((file) => cache.match(file).then((hit) => (hit ? null : file))))
         .then((missing) => missing.filter(Boolean))
         .then((missing) => (missing.length
           ? cache.addAll(missing.map((file) => new Request(file, { cache: "reload" })))
@@ -107,7 +125,8 @@ self.addEventListener("fetch", (event) => {
         // Store what came from the network, so a cache that was deleted fills again with use.
         if (response.ok && response.type === "basic") {
           const copy = response.clone();
-          event.waitUntil(caches.open(CACHE).then((cache) => cache.put(event.request, copy)));
+          event.waitUntil(thisVersionIsDeployed()
+            .then((same) => same && caches.open(CACHE).then((cache) => cache.put(event.request, copy))));
         }
         return response;
       });

@@ -10,6 +10,13 @@ audit.
 
 ---
 
+<a id="v0-8-13"></a>
+## [0.8.13] - 2026-10-10
+- **Updates**: a new version no longer takes over while Freelief is open in another window or tab,
+  so a window you are using keeps working. If you press **Update now** while another window is open,
+  Settings asks you to close it first. The offline copy never mixes files from two versions.
+  [AUD-057](../fragments/AUD-057.md), [AUD-120](../fragments/AUD-120.md). 187 tests.
+
 <a id="v0-8-12"></a>
 ## [0.8.12] - 2026-10-10
 - **Settings**: a setting that this version cannot read is kept when you change another one, so

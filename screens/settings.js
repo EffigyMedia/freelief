@@ -154,18 +154,21 @@ async function updateNow(status, t) {
   }
   const incoming = registration.installing || registration.waiting;
   if (incoming) {
-    // The new version waits after it installs (sw.js); the person asked for it, so it takes over.
+    // The new version waits after it installs (sw.js); the person asked for it, so it takes over,
+    // unless Freelief is open in another window that may be in use (AUD-057).
     const settled = await new Promise((resolve) => {
       const check = () => {
         if (incoming.state === "installed") incoming.postMessage("skip");
         if (incoming.state === "activated") resolve(true);
         if (incoming.state === "redundant") resolve(false);
       };
+      const refused = (event) => { if (event.data && event.data.skip === false) resolve("others"); };
+      navigator.serviceWorker.addEventListener("message", refused);
       incoming.addEventListener("statechange", check);
       check();
     });
-    if (settled) location.reload();
-    else status.textContent = t("settings.updateFailed");
+    if (settled === true) location.reload();
+    else status.textContent = t(settled === "others" ? "settings.updateOtherWindows" : "settings.updateFailed");
     return;
   }
   try {

@@ -131,6 +131,7 @@
   "settings.updateOffline": "You need an internet connection to update.",
   "settings.updating": "Updating. Freelief will restart in a moment.",
   "settings.updateFailed": "Could not update. This version still works offline.",
+  "settings.updateOtherWindows": "Freelief is open in another window or tab. Close it there, then press Update now again.",
   "help.open": "Need urgent help?",
   "help.title": "Urgent help",
   "help.intro": "If you might act on thoughts of harming yourself, or you are not safe, reach out now. These people are there to listen.",

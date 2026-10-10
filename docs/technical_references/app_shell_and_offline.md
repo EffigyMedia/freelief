@@ -111,20 +111,25 @@ the audio, so a breathing tone cannot wake it in the background (AUD-082).
 ## Offline
 `sw.js` imports `version.js` and names its cache `freelief-<version>`. Install pre-caches the
 `FILES` list with `cache: "reload"`, past the browser's HTTP cache (AUD-013), and then **waits**. It
-calls `skipWaiting` only when a page posts `"skip"` (AUD-057). Activate deletes only caches whose
+calls `skipWaiting` only when a page posts `"skip"` and that page is Freelief's only open window
+(AUD-057). With another window open, it replies `{ skip: false }` and keeps waiting until every
+window is closed, because the other window may be in use. Activate deletes only caches whose
 name starts with `freelief-` and is not the current one. Then it claims the clients.
 
 Fetch answers same-origin GET requests from **this version's cache only** (`caches.open(CACHE)`).
 It never uses `caches.match()`, because that searches every cache and let an old version's files
-reach a new one. On a miss, it fetches from the network and stores a good response in the cache. If
+reach a new one. On a miss, it fetches from the network and stores a good response in the cache,
+but only while the network still serves this version: `thisVersionIsDeployed()` fetches
+`version.js` past the HTTP cache and compares the version (AUD-120). If
 the cache lookup itself fails, it falls back to the network (AUD-059). It ignores every other
 request.
 
 **The origin is shared.** `effigymedia.github.io` also serves other apps, so CacheStorage and
 `localStorage` are shared too (AUD-001). Another app's worker may delete Freelief's cache. The owner
 chose to stay on this origin with self-repair (2026-10-07). On each online launch, `app.js` posts
-`"heal"` to the active worker. The worker fetches any `FILES` entry missing from the cache and
-replies `{ heal }`. `app.js` logs a failed repair with `console.warn` (AUD-060). **Freelief must
+`"heal"` to the active worker. If the network still serves this version, the worker fetches any
+`FILES` entry missing from the cache; if a newer version is deployed, it stores nothing and leaves
+the repair to the new worker (AUD-120). It replies `{ heal }`. `app.js` logs a failed repair with `console.warn` (AUD-060). **Freelief must
 never delete a cache it does not own.**
 
 `test_offline.py` checks this layer:
@@ -168,7 +173,9 @@ Settings shows `Version X` and `Update now`. Update now works in this order:
 1. Offline, it says so and does nothing.
 2. It calls `registration.update()`. If that fails (dead link, captive portal), nothing is removed
    and it says so (AUD-056).
-3. If a new version installs, it tells that worker to skip waiting, and the page reloads.
+3. If a new version installs, it tells that worker to skip waiting, and the page reloads. If
+   Freelief is open in another window, the worker refuses, and Settings asks the person to close
+   that window and press Update now again (AUD-057).
 4. Only when the version is already current does it delete every `freelief-` cache, unregister
    the worker and reload.
 

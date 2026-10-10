@@ -264,6 +264,114 @@ def test_after_a_touch_a_new_version_waits_and_the_session_keeps_its_own_files()
             context.close()
 
 
+
+def _installed(context, url):
+    page = context.new_page()
+    page.goto(url + "#menu")
+    page.evaluate("navigator.serviceWorker.ready")
+    page.reload()
+    wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
+    page.wait_for_selector("html[data-ready='true']", timeout=5000)
+    return page
+
+
+def _deploy(app, version, broken_mandala=True):
+    (app / "version.js").write_text(f'self.FREELIEF_VERSION = "{version}";\n', "utf-8")
+    if broken_mandala:
+        mandala = app / "activities" / "mandala.js"
+        mandala.write_text(mandala.read_text("utf-8").replace("export function start", "export function start_renamed"), "utf-8")
+
+
+def test_a_second_window_does_not_take_the_version_from_a_window_in_use():
+    # AUD-057, re-checked in round UNT-082: page A is touched, a new version waits, and page B opens
+    # fresh. The new version must not take over while A is open, so A keeps its own cache and files.
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            a = _installed(context, url)
+            old = a.evaluate("self.FREELIEF_VERSION")
+            a.locator("h1").first.click()  # a touch that opens no screen
+            _deploy(app, "9.9.7")
+            a.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
+            wait_until(a, "navigator.serviceWorker.getRegistration().then(r => Boolean(r.waiting))", 10000)
+            b = context.new_page()  # a second window opens fresh
+            b.goto(url + "#menu")
+            b.wait_for_selector("html[data-ready='true']", timeout=5000)
+            # Under Playwright a takeover that the waiting worker allowed completes only once the
+            # worker runs again, so wake every worker before the check. Without this, the old
+            # worker's takeover never shows and the test cannot fail.
+            for worker in context.service_workers:
+                worker.evaluate("[self.registration.waiting && self.registration.waiting.state, self.registration.active && self.registration.active.state]")
+            b.wait_for_timeout(3000)
+            assert a.evaluate(f"caches.has('freelief-{old}')"), "the old cache was deleted under page A"
+            a.evaluate("location.hash = 'mandala'")
+            wait_until(a, "document.querySelector('main').dataset.shown === 'mandala'", 5000)
+            assert a.locator(".mandala-part").count() > 0, "page A loads its screens from its own version"
+            a.close()
+            b.close()
+            c = context.new_page()  # every window closed: the next open gets the new version
+            c.goto(url + "#menu")
+            wait_until(c, "self.FREELIEF_VERSION === '9.9.7'", 10000)
+        finally:
+            context.close()
+
+
+def test_update_now_beside_another_window_asks_to_close_it():
+    # AUD-057: the person asked, but another window may be in use, so Settings says what to do.
+    import json as _json
+    strings = _json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            a = _installed(context, url)
+            other = context.new_page()
+            other.goto(url + "#menu")
+            other.wait_for_selector("html[data-ready='true']", timeout=5000)
+            other.locator(".menu-item").first.click()
+            _deploy(app, "9.9.6", broken_mandala=False)
+            a.evaluate("location.hash = 'settings'")
+            wait_until(a, "document.querySelector('main').dataset.shown === 'settings'", 5000)
+            a.locator(".update-now").click()
+            wait_until(a, f"document.querySelector('.update-status').textContent === {_json.dumps(strings['settings.updateOtherWindows'])}", 10000)
+            assert other.evaluate("self.FREELIEF_VERSION") != "9.9.6"
+        finally:
+            context.close()
+
+
+def test_a_newer_deploy_is_never_stored_in_the_running_versions_cache():
+    # AUD-120: a cache miss or a repair fetches from the network. When a newer version is deployed,
+    # the old worker must not store the new files under its own cache name.
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = _installed(context, url)
+            page.locator(".menu-item").first.click()  # a touch, so no new version takes over
+            page.evaluate("location.hash = 'menu'")
+            old = page.evaluate("self.FREELIEF_VERSION")
+            has_calm = f"caches.open('freelief-{old}').then(c => c.match('activities/calm.js')).then(Boolean)"
+            page.evaluate(f"caches.open('freelief-{old}').then(c => c.delete('activities/calm.js'))")
+            assert not page.evaluate(has_calm)
+            _deploy(app, "9.9.8", broken_mandala=False)
+            page.evaluate("location.hash = 'calm'")  # a miss, fetched from the network
+            wait_until(page, "document.querySelector('main').dataset.shown === 'calm'", 5000)
+            page.evaluate("navigator.serviceWorker.controller.postMessage('heal')")
+            page.wait_for_timeout(1500)
+            assert not page.evaluate(has_calm), "a file of the newer deploy went into the old cache"
+            _deploy(app, old, broken_mandala=False)  # the network serves this version again
+            page.evaluate("navigator.serviceWorker.controller.postMessage('heal')")
+            wait_until(page, has_calm, 8000)
+        finally:
+            context.close()
+
 def test_a_screen_that_cannot_load_falls_back_and_fixes_the_address():
     import tempfile
     with tempfile.TemporaryDirectory() as temp:

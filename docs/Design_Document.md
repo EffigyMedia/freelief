@@ -1294,6 +1294,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   stored values it cannot read and writes them back, and a new choice of that setting replaces
   them. The stale local `live` branch (at v0.5.0) is deleted. — Rejected: naming the target only in
   the changelog (a hurried owner needs one command). — 2026-10-10 (UNT-121)
+- **A new version takes over only from Freelief's only window, and a worker stores only its own
+  version's files.** — AUD-057 (re-opened by round UNT-082): a fresh second window let a new version
+  take over under a window in use, which then loaded the new version's screens. The worker now
+  skips waiting only when the page that asks is the only window; otherwise the new version waits
+  until every window is closed, and Update now asks the person to close the other window. AUD-120:
+  a cache miss or a repair could store a newer deploy's files under the running version's cache;
+  the worker now stores a network file only while the network serves its own version. — Rejected:
+  serving each window from the cache of the version it loaded (it needs a record of each window
+  that outlives the worker). — 2026-10-10 (UNT-122)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
