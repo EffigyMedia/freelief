@@ -409,6 +409,8 @@ main {
 /* While help is open, the page under it does not scroll, and a scroll that reaches the end of the
    help list stops there instead of moving the page (owner report: the page "touched through"). */
 .help-is-open, .help-is-open body { overflow: hidden; }
+/* Laid out once, unseen, at start, so the first open is fast (AUD-131). */
+dialog.help.warming { display: block; visibility: hidden; position: fixed; }
 .help { overscroll-behavior: contain; }
 
 /* The header with the way out stays at the top while the content scrolls under it. */

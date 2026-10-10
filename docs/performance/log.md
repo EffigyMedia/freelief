@@ -2,6 +2,22 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-10 — The help dialog is warmed after the first paint (v0.8.15), NOT VALID: busy machine
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Launch to first screen (the menu) | 154 ms | 242.7 to 264.1 ms | +58% to +71% | FLAG, under target; not valid |
+| Response: Need urgent help? opens (to after paint) | 77 ms | 27.9 to 29.3 ms | -62% to -64% | OK; not valid |
+| Shipped size | 239.8 KB | 233.9 KB | -2% | OK |
+Notes: AUD-131. Round UNT-124 measured the response at 100.1 to 102.9 ms on valid runs (33% to
+35% load). A probe split it: the click handler took about 90 ms, and showModal() took 78 to 93 ms of
+that, because the first open styled and laid out the dialog's content from nothing. An empty dialog
+took 17 ms. app.js now lays the dialog out once, unseen, just after the first paint (warmHelp). In
+the same probe, at 4x CPU and before the bench, the response fell from 107.9 ms to 23.9 ms (median of
+7) and the launch was unchanged (230.7 and 232.7 ms). Warming before the ready mark was tried and
+rejected: it moved the launch to 409 ms. All four bench runs above had 81% to 96.5% load, so none is
+valid; the launch rise is load, as the same probe showed no change. A quiet re-baseline is owed
+(RLG-033, AUD-134).
+
 ## 2026-10-09 — Slice 8 close and re-baseline (v0.7.13)
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|

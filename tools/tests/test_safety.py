@@ -224,3 +224,16 @@ def test_data_values_in_page_markup_are_escaped():
     for route in ("settings", "mandala"):
         with open_app(init_script=HOSTILE_DATA, route=route) as (page, _, _):
             assert page.locator(".injected").count() == 0, f"data added markup on #{route}"
+
+
+def test_the_warmed_help_dialog_stays_closed_hidden_and_unfocused():
+    # AUD-131: the help dialog is laid out once, unseen, after the first paint. It must leave no trace:
+    # closed, not shown, nothing focused in it, and it still opens as a modal.
+    with open_app(route="menu") as (page, errors, _):
+        page.wait_for_timeout(300)
+        state = page.evaluate("""(() => { const d = document.querySelector('dialog.help');
+          return [d.open, d.classList.contains('warming'), getComputedStyle(d).display, d.contains(document.activeElement)]; })()""")
+        assert state == [False, False, "none", False], state
+        page.locator(".help-open").click()
+        assert page.locator("dialog.help").evaluate("d => d.open && d.matches(':modal')")
+        assert not errors, errors

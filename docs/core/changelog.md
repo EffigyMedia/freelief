@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-8-15"></a>
+## [0.8.15] - 2026-10-10
+- **Need urgent help?** opens much faster: on the slow-phone test it shows in about 25 ms, down from
+  about 100 ms. [AUD-131](../fragments/AUD-131.md). 191 tests.
+
 <a id="v0-8-14"></a>
 ## [0.8.14] - 2026-10-10
 - **Interface polish**: each screen names itself in the browser tab; the browser bar takes the

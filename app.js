@@ -340,6 +340,18 @@ async function show(name, { moveFocus }) {
 const themeColors = [...document.querySelectorAll('meta[name="theme-color"]')]
   .map((meta) => ({ meta, own: meta.content, scheme: /dark/.test(meta.media) ? "dark" : "light" }));
 
+// The first showModal() of the help dialog styled and laid out its content from nothing, and on a
+// slow phone that took most of the 100 ms that "Need urgent help?" may take (REQ-027, AUD-131).
+// Laying it out once, unseen, just after the first paint makes every later open fast. It is hidden and not in the
+// accessibility tree while this runs, and it is put back before anything is painted.
+function warmHelp() {
+  const dialog = document.querySelector("dialog.help");
+  if (!dialog || dialog.open) return;
+  dialog.classList.add("warming");
+  void dialog.offsetHeight;
+  dialog.classList.remove("warming");
+}
+
 function applyTheme(theme) {
   if (theme === "system") delete document.documentElement.dataset.theme;
   else document.documentElement.dataset.theme = theme;
@@ -377,6 +389,8 @@ async function boot() {
   });
   document.documentElement.dataset.ready = "true";
   performance.mark("freelief-ready");
+  // After the first screen is painted, so the launch does not wait for it.
+  requestAnimationFrame(() => setTimeout(warmHelp, 0));
   keepOfflineCopy();
 }
 
