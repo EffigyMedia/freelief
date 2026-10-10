@@ -489,7 +489,8 @@ are `styles.css` 26.8 KB, `icons/icon-512.png` 25.5 KB, `app.js` 22.5 KB, `audio
 Each slice records its size at its close in the changelog. When less than 15 KB is left, the next
 slice that adds a feature first takes a saving, and the owner chooses which. Known savings, in
 order of risk: (1) a smaller 512 px PNG icon, with fewer colors or a lossless re-encode, about
-10 to 15 KB; (2) config groups that only the tools read, moved out of the shipped `config.json`;
+10 to 15 KB *(taken 2026-10-10 by the owner's choice, UNT-149: both icons are 256-color palettes,
+11.5 KB saved, 234.3 KB shipped; `tools/png_palette.py`, run by `tools/make_icons.py`)*; (2) config groups that only the tools read, moved out of the shipped `config.json`;
 (3) unused CSS rules, removed after each screen is removed; (4) minified CSS and JavaScript, which
 needs a build step and so a change to REQ-019; it is the last choice.
 

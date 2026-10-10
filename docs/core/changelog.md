@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-30"></a>
+## [0.8.30] - 2026-10-10
+- The app icons are smaller files with no visible change, so Freelief downloads 11.5 KB less.
+  The size plan's first saving, chosen by the owner. [AUD-124](../fragments/AUD-124.md). 215 tests.
+
 <a id="v0-8-29"></a>
 ## [0.8.29] - 2026-10-10
 - **Landscape**: with the phone turned sideways, the header is one row and each exercise fits the

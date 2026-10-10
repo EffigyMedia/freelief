@@ -585,3 +585,15 @@ def test_an_update_found_while_breathing_runs_waits_for_the_next_open():
             assert page.evaluate("self.FREELIEF_VERSION") == old
         finally:
             context.close()
+
+
+def test_the_palette_icons_decode_at_their_full_size():
+    # AUD-124 size plan, saving 1: the icons are 256-color palette PNGs. The browser must still
+    # decode each one at the size the manifest names.
+    with open_app(route="menu") as (page, _, _):
+        for size in (192, 512):
+            dims = page.evaluate(f"""new Promise((resolve) => {{ const img = new Image();
+              img.onload = () => resolve([img.naturalWidth, img.naturalHeight]); img.onerror = () => resolve(null);
+              img.src = 'icons/icon-{size}.png'; }})""")
+            assert dims == [size, size], f"icon-{size}.png: {dims}"
+        assert (ROOT / "icons" / "icon-512.png").read_bytes()[25] == 3, "the 512 px icon is a palette PNG"

@@ -9,6 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "tests"))
 from harness import browser as test_browser  # noqa: E402  the same browser as the tests (AUD-012)
+from png_palette import to_palette  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SVG = (ROOT / "icons" / "icon.svg").read_text("utf-8")
@@ -20,8 +21,11 @@ def main() -> None:
         page = browser.new_page(viewport={"width": size, "height": size})
         page.set_content(f'<style>html,body{{margin:0}}svg{{display:block;width:{size}px;'
                          f'height:{size}px}}</style>{SVG}')
-        page.screenshot(path=str(ROOT / "icons" / f"icon-{size}.png"))
+        path = ROOT / "icons" / f"icon-{size}.png"
+        page.screenshot(path=str(path))
         page.close()
+        before, after = to_palette(path)  # the size plan's first saving (AUD-124)
+        print(f"icons/icon-{size}.png: {before / 1024:.1f} KB as RGB, {after / 1024:.1f} KB as a palette")
     print("[ OK ] icons/icon-192.png and icons/icon-512.png written")
 
 

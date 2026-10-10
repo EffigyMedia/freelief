@@ -2,6 +2,16 @@
 
 Append-only, newest on top. Format: `Performance_Testing.md` §7.
 
+## 2026-10-10 — Size saving 1: palette icons (v0.8.30)
+| Metric | Baseline | Now | Δ | Verdict |
+|---|---|---|---|---|
+| Shipped size | 239.8 KB | 234.3 KB | -2% | OK |
+Notes: v0.8.23 to v0.8.29 grew the app to 245.8 KB (the offline status check, the rake loop, the
+pluck, the thunder, the planted-cache guard and the landscape layout). The owner chose the size
+plan's first saving: icon-512.png 25.5 to 15.4 KB and icon-192.png 5.5 to 4.0 KB as 256-color
+palettes (1.5% of pixels changed, all on edges, by at most 19 of 255 in one channel). 15.7 KB are
+left. No timing was run for this change.
+
 ## 2026-10-10 — Live move to v0.8.22 (v0.8.22), NOT VALID: busy machine
 | Metric | Baseline | Now | Δ | Verdict |
 |---|---|---|---|---|
