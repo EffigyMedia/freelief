@@ -113,6 +113,22 @@ self.addEventListener("message", (event) => {
     }));
     return;
   }
+  // Update now, when the version is already current: fetch every file again into a separate cache,
+  // and copy it over this version's cache only when all of them arrived. One failed file leaves the
+  // working copy as it was (AUD-133). The temporary name does not start with PREFIX, so no cleanup
+  // reads it as a version.
+  if (event.data === "refresh") {
+    const temporary = `freelief~refresh-${self.FREELIEF_VERSION}`;
+    event.waitUntil(caches.delete(temporary)
+      .then(() => caches.open(temporary))
+      .then((fresh) => fresh.addAll(FILES.map((file) => new Request(file, { cache: "reload" })))
+        .then(() => Promise.all([fresh.keys(), caches.open(CACHE)]))
+        .then(([requests, cache]) => Promise.all(requests.map((request) => fresh.match(request)
+          .then((response) => cache.put(request, response))))))
+      .then(() => true, () => false)
+      .then((ok) => caches.delete(temporary).then(() => event.source?.postMessage({ refresh: ok }))));
+    return;
+  }
   if (event.data !== "heal") return;
   const reply = (ok) => event.source && event.source.postMessage({ heal: ok });
   event.waitUntil(

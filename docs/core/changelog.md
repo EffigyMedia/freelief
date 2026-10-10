@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-8-17"></a>
+## [0.8.17] - 2026-10-10
+- **Update now**: when you already have the newest version, it downloads every file again and
+  replaces your offline copy only if all of them arrive. If one fails, your copy stays as it was
+  and Settings says the update did not work. [AUD-133](../fragments/AUD-133.md). 193 tests.
+
 <a id="v0-8-16"></a>
 ## [0.8.16] - 2026-10-10
 - **Updates**: a screen you open always comes from the version you started with, even when a new

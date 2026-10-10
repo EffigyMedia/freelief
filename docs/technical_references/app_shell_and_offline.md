@@ -180,7 +180,10 @@ Settings shows `Version X` and `Update now`. Update now works in this order:
 3. If a new version installs, it tells that worker to skip waiting, and the page reloads. If
    Freelief is open in another window, the worker refuses, and Settings asks the person to close
    that window and press Update now again (AUD-057).
-4. Only when the version is already current does it delete every `freelief-` cache, unregister
-   the worker and reload.
+4. When the version is already current, it posts `"refresh"` to the worker. The worker fetches every
+   `FILES` entry into a temporary cache (`freelief~refresh-<version>`) and copies it over its cache
+   only when all of them arrived; it replies `{ refresh }`. On success the page reloads; on a
+   failure the working copy stays and Settings says the update failed. Nothing is unregistered
+   (AUD-133).
 
 Settings in `localStorage` are kept.

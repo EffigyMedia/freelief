@@ -961,7 +961,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   was gone until the device was online. Now `registration.update()` fetches the worker from the
   network first; if that fails, everything stays and the screen says "Could not update. This
   version still works offline." A new version installs in its own cache and takes over; only when
-  the version is already current is the copy refreshed in full. — 2026-10-08 (UNT-056)
+  the version is already current is the copy refreshed in full. — 2026-10-08 (UNT-056) *Amended
+  2026-10-10 (AUD-133, UNT-127): the refresh replaces the copy only when every file arrived; see
+  "Update now replaces a current copy only when the new one is whole".*
 - **A new version waits until it is safe to take over.** — The audit (AUD-057) found that after a
   touch, a new version took over mid-session and served its new screens to the old page. Now the
   worker installs and waits; the page lets it take over only before the first touch (and then
@@ -1294,6 +1296,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   stored values it cannot read and writes them back, and a new choice of that setting replaces
   them. The stale local `live` branch (at v0.5.0) is deleted. — Rejected: naming the target only in
   the changelog (a hurried owner needs one command). — 2026-10-10 (UNT-121)
+- **Update now replaces a current copy only when the new one is whole.** — AUD-133: with no new
+  version, Update now deleted every Freelief cache and unregistered the worker, and then the browser
+  had to download the copy again; one failed file left no offline copy and no message. The worker
+  now fetches every file into a temporary cache and copies it over only when all arrived; otherwise
+  the copy stays and Settings says so. — 2026-10-10 (UNT-127) *This amends the entry on Update now
+  of 2026-10-08 (AUD-056).*
 - **A page keeps its own version's screens through any takeover.** — AUD-057, re-opened by round
   UNT-124: a takeover that lands after the first touch, in the moment between the page's offer and
   the worker's activation, left a page in use under the new worker, which had deleted the page's

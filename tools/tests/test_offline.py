@@ -194,7 +194,36 @@ def test_settings_shows_the_version_and_update_now_refreshes_only_freelief():
         wait_until(page, f"caches.has('freelief-' + self.FREELIEF_VERSION)", 8000)
         keys = page.evaluate("caches.keys()")
         assert FOREIGN_CACHE in keys, "another app's cache survives"
-        assert "freelief-0.0.0-old" not in keys, keys
+        assert not [k for k in keys if k.startswith("freelief~refresh")], f"the temporary copy is gone: {keys}"
+
+
+
+def test_update_now_with_one_failed_file_keeps_the_offline_copy_and_says_so():
+    # AUD-133: with no new version, Update now refreshes every file. One file that fails to download
+    # must leave the working offline copy whole, and Settings says the update failed.
+    import json as _json
+    import tempfile
+    strings = _json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = _installed(context, url)
+            cache = "caches.open('freelief-' + self.FREELIEF_VERSION)"
+            whole = page.evaluate(f"{cache}.then(c => c.keys()).then(k => k.length)")
+            (app / "icons" / "icon-512.png").unlink()
+            page.evaluate("location.hash = 'settings'")
+            wait_until(page, "document.querySelector('main').dataset.shown === 'settings'", 5000)
+            page.locator(".update-now").click()
+            wait_until(page, f"document.querySelector('.update-status').textContent === {_json.dumps(strings['settings.updateFailed'])}", 10000)
+            assert page.evaluate(f"{cache}.then(c => c.keys()).then(k => k.length)") == whole, "the copy lost files"
+            assert page.evaluate("navigator.serviceWorker.controller !== null"), "the worker was removed"
+            context.set_offline(True)
+            page.reload()
+            page.wait_for_selector("html[data-ready='true']", timeout=8000)
+        finally:
+            context.close()
 
 
 def test_update_now_on_a_captive_connection_keeps_the_offline_copy():

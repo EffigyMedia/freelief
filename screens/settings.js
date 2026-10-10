@@ -133,8 +133,9 @@ export function start(container, ctx) {
 // "Update now" (owner, 2026-10-07): get the newest version and restart. Nothing is removed until
 // the network is shown to work (AUD-056): registration.update() fetches the worker from the
 // network and fails on a dead link or a captive portal, and then the current copy stays. A new
-// version installs in its own cache and takes over; the same version is refreshed in full. Only
-// Freelief's own caches are deleted; the origin is shared with other apps. Settings are kept.
+// version installs in its own cache and takes over; the same version is refreshed in full, and the
+// copy is replaced only when every file arrived. No cache of another app is touched; the origin is
+// shared. Settings are kept.
 async function updateNow(status, t) {
   if (!navigator.onLine) {
     status.textContent = t("settings.updateOffline");
@@ -171,13 +172,21 @@ async function updateNow(status, t) {
     else status.textContent = t(settled === "others" ? "settings.updateOtherWindows" : "settings.updateFailed");
     return;
   }
-  try {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter((key) => key.startsWith("freelief-")).map((key) => caches.delete(key)));
-    await registration.unregister();
-  } finally {
-    location.reload();
-  }
+  // The same version: the worker fetches every file again and replaces its copy only when all of
+  // them arrived (AUD-133). Until then, and on a failure, the working offline copy stays.
+  const refreshed = await new Promise((resolve) => {
+    const heard = (event) => {
+      if (event.data && typeof event.data.refresh === "boolean") {
+        navigator.serviceWorker.removeEventListener("message", heard);
+        resolve(event.data.refresh);
+      }
+    };
+    navigator.serviceWorker.addEventListener("message", heard);
+    if (registration.active) registration.active.postMessage("refresh");
+    else resolve(false);
+  });
+  if (refreshed) location.reload();
+  else status.textContent = t("settings.updateFailed");
 }
 
 export function stop() {}
