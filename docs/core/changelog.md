@@ -15,6 +15,8 @@ audit.
 - **Breathe**: the sound is now the soft sound of a breath, not a tone. The in-breath brightens and
   the out-breath darkens, so they sound different. Box breathing plays a light tap for each second
   of a hold. [RLG-050](../fragments/RLG-050.md). 181 tests.
+- The live preview moved to 0.8.4 on 2026-10-10, with the owner's yes in chat ("Do all that", in
+  answer to the offer to move it).
 
 <a id="v0-8-3"></a>
 ## [0.8.3] - 2026-10-09

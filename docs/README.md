@@ -24,7 +24,7 @@ buttons at the top, on every screen. Every screen has a **"Need urgent help?"** 
 technology. Please do not rely on it yet. Version 1.0 will be the first release, after a full
 release audit; this page will then say how to install it.
 
-The preview serves **v0.8.0** (moved 2026-10-09 with the owner's yes). Each move of the preview is
+The preview serves **v0.8.4** (moved 2026-10-10 with the owner's yes). Each move of the preview is
 recorded in `docs/core/changelog.md` with the owner's yes, and this line names the version it serves.
 
 ## Research and standards
