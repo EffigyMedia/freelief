@@ -14,6 +14,8 @@ audit.
 ## [0.8.10] - 2026-10-10
 - **Breathing**: the breath sound is softer. Its highest sounds are cut a little, and it is quieter;
   the box-breathing taps are quieter too. [RLG-059](../fragments/RLG-059.md). 182 tests.
+- The live preview moved to 0.8.10 on 2026-10-10, with the owner's yes by the question tool
+  ("Move live now").
 
 <a id="v0-8-9"></a>
 ## [0.8.9] - 2026-10-10
