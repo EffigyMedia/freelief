@@ -10,6 +10,17 @@ audit.
 
 ---
 
+<a id="v0-8-9"></a>
+## [0.8.9] - 2026-10-10
+- Records only; nothing a person sees changes. The design document is brought up to date: the
+  entries that later decisions replaced are marked, the Change Log has rows for design versions 1.3
+  and 1.4, the risk table names Unblock, the background sound and the size limit, a size plan is
+  added, and the text that still named the Standards page is corrected. Two code comments are
+  corrected. The owner's check list retires the checks on removed screens.
+  [AUD-045](../fragments/AUD-045.md), [AUD-093](../fragments/AUD-093.md),
+  [AUD-124](../fragments/AUD-124.md), [AUD-126](../fragments/AUD-126.md),
+  [AUD-127](../fragments/AUD-127.md), [AUD-128](../fragments/AUD-128.md).
+
 <a id="v0-8-8"></a>
 ## [0.8.8] - 2026-10-10
 - **Kaleidoscope** (the Visualizer): a slow, full-width kaleidoscope of soft shapes and colors that

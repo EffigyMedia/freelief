@@ -1,5 +1,6 @@
-// Settings: breathing rhythm, colors, vibration and the region for urgent help (REQ-023, REQ-007,
-// REQ-021, REQ-005). Every change is saved at once through settings.js, the only module that
+// Settings: breathing rhythm, colors, vibration, the region for urgent help, where Freelief opens,
+// how long the screen stays on, Reset, and the offline copy and its update (REQ-023, REQ-007,
+// REQ-021, REQ-005, REQ-037). Every change is saved at once through settings.js, the only module that
 // touches storage.
 
 import { getSetting, setSetting, resetSettings } from "../settings.js";

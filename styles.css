@@ -848,8 +848,8 @@ main {
   }
 }
 
-/* Windows High Contrast and other forced-color modes (AUD-050): the colour sort's shades, the
-   mandala's fills and its swatches ARE the content, so they keep their own colors; the outlines
+/* Windows High Contrast and other forced-color modes (AUD-050): the mandala's fills and its
+   swatches ARE the content, so they keep their own colors; the outlines
    still follow the system colors. */
 @media (forced-colors: active) {
   .mandala-part, .swatch input { forced-color-adjust: none; }

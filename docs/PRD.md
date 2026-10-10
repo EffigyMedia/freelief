@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `dcdbca973d01745b` · 38 requirement(s) recorded
+> Store stamp `8d4b60bba0a3ede9` · 38 requirement(s) recorded
 
 ## The problem
 
@@ -32,9 +32,9 @@ that starts at once, works for them as they are, and asks for nothing.
   network log shows no request to any origin (REQ-008, REQ-015).
 - The automated accessibility check reports zero WCAG 2.2 A and AA violations on every page, on
   every release.
-- At least one dated manual check with a screen reader and one with a keyboard alone, by a
-  volunteer, is recorded for the version on the Standards & research page before it shows WCAG
-  2.2 AA as met (REQ-029).
+- At least one dated manual check with a screen reader and one with a keyboard alone is recorded
+  in RLG-033 before 1.0. *(Changed 2026-10-10, RLG-056: the app shows no standards claim, so
+  REQ-029 is withdrawn; the manual checks stay a release condition.)*
 - Every crisis line in the app has a last-checked date no older than the release that ships it.
 - The whole app is under 250 KB (REQ-028).
 - No text in the app says Freelief is clinically proven, treats, cures or diagnoses (REQ-025).
@@ -132,4 +132,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-10T01:34:23-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-10T09:28:35-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

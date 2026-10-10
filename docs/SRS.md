@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `dcdbca973d01745b` · 31 requirement(s) specified, 7 not yet
+> Store stamp `8d4b60bba0a3ede9` · 31 requirement(s) specified, 7 not yet
 
 ## 1. Introduction
 
@@ -19,7 +19,7 @@ may be in danger. It is for anyone, at no cost, with no account, no network and 
 
 Freelief covers self-help for a panic attack or acute anxiety at the moment it happens: paced
 breathing, distraction activities, crisis lines by
-region, a self-help disclaimer, a Standards & research page, and a feedback page that hands a
+region, a self-help disclaimer, and a feedback page that hands a
 pre-filled report to GitHub or email. It runs in a browser and as an installed offline web app.
 The boundary: Freelief does not diagnose, treat, track, or contact anyone. It points to crisis
 lines; it does not call them. Its only stored data is the person's settings, on the device.
@@ -63,8 +63,8 @@ person's settings, on the device.
   accessibility target (AA in full, AAA where a criterion can be met).
 - W3C, *Web Application Manifest* and WHATWG *Service Workers* — the installable offline web app.
 - GitHub Pages documentation — the host.
-- The published research for each technique. The list lives on the Standards & research page and
-  in `docs/research/` (written in slice 2), one source or more per technique (REQ-024).
+- The published research for each technique, one source or more per technique, kept as a record in
+  `docs/research/sources.md`. The app shows no research page and makes no claim from it (RLG-056).
 
 ## 3. Specific requirements
 
@@ -166,8 +166,8 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 - The crisis lines in the curated list stay in service between checks. Each line carries a
   last-checked date, and a release re-checks them.
-- Community volunteers will do the manual accessibility checks. If none come forward, no
-  standard is shown as met (REQ-029), and the product still works.
+- The owner or community volunteers will do the manual accessibility checks before 1.0 (RLG-033).
+  The app makes no standards claim either way (RLG-056).
 - GitHub Pages stays free for a public repository and serves the app over HTTPS, which an
   installable offline web app needs.
 - A mid-range phone can show the menu within 1 second of a cold offline launch with a
@@ -190,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-10T01:34:22-04:00 by `Commands/srs.py` from 38 requirement record(s).
+Generated 2026-10-10T09:28:33-04:00 by `Commands/srs.py` from 38 requirement record(s).

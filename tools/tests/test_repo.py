@@ -121,6 +121,17 @@ def test_the_design_size_limit_equals_req_028():
     assert not wrong, f"design size figures {wrong} differ from REQ-028 ({limit.group(1)} KB)"
 
 
+
+def test_the_design_version_has_a_change_log_entry():
+    # AUD-045 and AUD-126: Document Control named version 1.3 while the Change Log ended at 1.2.
+    text = (freelief.ROOT / "docs" / "Design_Document.md").read_text("utf-8")
+    version = re.search(r"^- \*\*Version:\*\* (\d+\.\d+),", text, re.M)
+    assert version, "Document Control states no version"
+    log = text.split("\n## 15. Change Log\n", 1)
+    assert len(log) == 2, "the design has no Change Log"
+    assert f"- **v{version.group(1)} — " in log[1], (
+        f"the Change Log has no entry for design version {version.group(1)}")
+
 # AUD-067: the plain word in about.privacy2 for each setting that settings.js stores.
 PRIVACY_WORDS = {
     "rhythm": "rhythm",

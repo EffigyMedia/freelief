@@ -262,6 +262,8 @@ the Chrome already on the machine. Run from the repo root:
   sound, and how calm it is. A green test run does not verify them. Say so plainly.
 - **Pending owner checks live in `RLG-033`.** Add each new check the owner owes to it with
   `fragment.py append`, and record each result there; it closes only when the owner reports them all.
+  When a screen is removed, retire or move its owed checks in the same unit, each by name with its
+  successor (AUD-127).
 - **A screen reader and a keyboard are first-class input.** Every new control gets a test that
   reaches and uses it by keyboard, and an axe check of its page.
 - **Crisis-line data is safety-critical.** Every line carries a last-checked date. Never add or

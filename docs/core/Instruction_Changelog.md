@@ -29,6 +29,23 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-10
 
+### Retire an owner check when its screen is removed
+- **Instruction:** when a screen is removed, its owed checks in RLG-033 are retired or moved in the
+  same unit, each by name with its successor.
+- **Why:** AUD-127. RLG-033 held checks on Sort colors after it was removed, so under its own close
+  rule it could never close.
+- **Encoded in:** `AGENTS.md` (Conventions, the RLG-033 line); RLG-033 (the note of 2026-10-10).
+- Agent, 2026-10-10.
+
+### The design's version must have a Change Log entry
+- **Instruction:** Document Control's version has a row in the design's Change Log; `test_repo.py`
+  fails when it does not. The size plan in design section 9 sets what each slice may spend.
+- **Why:** AUD-045 and AUD-126 (the design named version 1.3 with no row, twice); AUD-124 (the size
+  was at 95% of the limit with no plan).
+- **Encoded in:** `docs/Design_Document.md` (sections 9 and 15);
+  `tools/tests/test_repo.py` (`test_the_design_version_has_a_change_log_entry`).
+- Agent, 2026-10-10.
+
 ### No standards claim and no research page
 - **Instruction:** the app shows no standards claim and no research page; REQ-020, REQ-024 and
   REQ-029 are withdrawn. The release build no longer checks verified standards.

@@ -8,7 +8,7 @@ narrative and the decisions. Code, records and this document must never disagree
 
 ## 0. Document Control
 
-- **Version:** 1.3, 2026-10-09. The Change Log (section 15) says what each version changed. This line
+- **Version:** 1.4, 2026-10-10. The Change Log (section 15) says what each version changed. This line
   does not name an app version, because the design changes in many units (AUD-095).
 - **Owner:** EffigyMedia.
 - **Status:** living. The owner signed off v1.0 on 2026-10-07, and Initialize was done the same
@@ -29,8 +29,8 @@ narrative and the decisions. Code, records and this document must never disagree
   accessibility target (AA in full, AAA where a criterion can be met).
 - W3C, *Web Application Manifest* and WHATWG *Service Workers* — the installable offline web app.
 - GitHub Pages documentation — the host.
-- The published research for each technique. The list lives on the Standards & research page and
-  in `docs/research/` (written in slice 2), one source or more per technique (REQ-024).
+- The published research for each technique, one source or more per technique, kept as a record in
+  `docs/research/sources.md`. The app shows no research page and makes no claim from it (RLG-056).
 <!-- END srs-references -->
 
 ---
@@ -110,9 +110,9 @@ Two secondary groups use the project, not the app in a crisis:
   network log shows no request to any origin (REQ-008, REQ-015).
 - The automated accessibility check reports zero WCAG 2.2 A and AA violations on every page, on
   every release.
-- At least one dated manual check with a screen reader and one with a keyboard alone, by a
-  volunteer, is recorded for the version on the Standards & research page before it shows WCAG
-  2.2 AA as met (REQ-029).
+- At least one dated manual check with a screen reader and one with a keyboard alone is recorded
+  in RLG-033 before 1.0. *(Changed 2026-10-10, RLG-056: the app shows no standards claim, so
+  REQ-029 is withdrawn; the manual checks stay a release condition.)*
 - Every crisis line in the app has a last-checked date no older than the release that ships it.
 - The whole app is under 250 KB (REQ-028).
 - No text in the app says Freelief is clinically proven, treats, cures or diagnoses (REQ-025).
@@ -147,7 +147,7 @@ dependency and no build step (REQ-019); one strings file per language (REQ-017);
 <!-- BEGIN srs-scope - written by the interview, read by the generators -->
 Freelief covers self-help for a panic attack or acute anxiety at the moment it happens: paced
 breathing, distraction activities, crisis lines by
-region, a self-help disclaimer, a Standards & research page, and a feedback page that hands a
+region, a self-help disclaimer, and a feedback page that hands a
 pre-filled report to GitHub or email. It runs in a browser and as an installed offline web app.
 The boundary: Freelief does not diagnose, treat, track, or contact anyone. It points to crisis
 lines; it does not call them. Its only stored data is the person's settings, on the device.
@@ -215,7 +215,8 @@ restarts on the device (REQ-023, REQ-015).
 
 ## 5. Functional Specification
 
-The requirements are the records `REQ-001` to `REQ-034`. Their priority is the feature list. The
+The requirements are every agreed `REQ-` record in `docs/fragments/`; `docs/SRS.md` lists them. Their
+priority is the feature list. The
 flows below are the structure.
 
 **F1 — Launch to the menu** *(changed 2026-10-07; it was launch to breathing)*. Trigger: the
@@ -304,9 +305,10 @@ Saved on the device at once. Only a setting the person changes is stored, so a s
 touched follows the default of the version they run; "a saved rhythm is kept" means a rhythm the
 person chose. Storage that fails is ignored and the defaults stand.
 
-**F8 — Disclaimer, Standards & research.** The footer links to the disclaimer page and to the
-Standards & research page. The Standards & research page shows each verified standard with its
-level, check date and tester, the sources for each technique, and a link to the feedback page.
+**F8 — Disclaimer.** The footer links to the disclaimer page (About), which says what Freelief is
+and is not, and that frequent attacks call for a doctor or a mental health professional. *(Changed
+2026-10-10, RLG-056: the Standards & research page is removed; the sources are a record in
+`docs/research/sources.md`.)*
 
 **F9 — Feedback.** Trigger: the feedback page. Steps: the person chooses "Accessibility check" or
 "Report a problem"; the page shows the pre-filled text (app version, browser, device type, and a
@@ -318,8 +320,10 @@ Edge: until the owner chooses a public email address, the email button is hidden
 only route; REQ-030 makes the email route optional (changed 2026-10-08, AUD-020).
 
 **Integrations.** None at run time. The only outbound links are ones the person chooses: phone,
-text, the crisis directory, GitHub and email. If GitHub is down, the issue page does not load and
-the email route remains.
+text, the crisis directory, GitHub and email. If GitHub is down, the issue page does not load. While
+the email route is hidden (F9), the page names no other route; the owner's choice of a public email
+address is the step that adds the fallback for a person with no GitHub account. *(Corrected
+2026-10-10, AUD-128: this sentence said the email route remains.)*
 
 **Permissions and auth.** N/A — no accounts and no roles. Anyone may use every part of the app.
 
@@ -396,7 +400,7 @@ Each file below is one module with one responsibility.
 | `sw.js` | The offline cache, versioned by the app version. | Fetch from any other origin. |
 | `manifest.webmanifest` | Installation: name, icons, colours. | — |
 | `screens/menu.js`, `screens/settings.js` | The menu ("What would help right now?"), the first screen, and the Settings screen. The Settings screen changes Settings only through `settings.js`. | Touch `localStorage` directly. |
-| `screens/about.js`, `standards.js`, `feedback.js` | The disclaimer (About), Standards & research, and Feedback pages. *(First planned as `pages/`; built as screens at slice 4, with the same contract and router.)* | Send data. |
+| `screens/about.js`, `feedback.js` | The disclaimer (About) and Feedback pages. *(First planned as `pages/`; built as screens at slice 4, with the same contract and router. `standards.js` was removed 2026-10-10, RLG-056.)* | Send data. |
 
 **Routing (added at slice 2; the default changed to the menu 2026-10-07).** Each screen has a URL
 hash (`#menu`, `#breathe`, `#settings` and one per activity and page); no hash means `#menu`. The
@@ -457,13 +461,26 @@ crisis lines usable.
 **Never break:** the menu at launch, with breathing one tap away; the "Need urgent help?" control on every screen;
 offline use; keyboard and screen-reader use.
 
-**Manual:** a dated volunteer check with a screen reader (NVDA, VoiceOver or TalkBack) and with a
-keyboard alone, before a standard is shown (REQ-029). Owner checks on a real phone for look and
-feel, which a test cannot see.
+**Manual:** a dated check by the owner or a volunteer with a screen reader (NVDA, VoiceOver or
+TalkBack) and with a keyboard alone, recorded in RLG-033 before 1.0. Owner checks on a real phone
+for look and feel, which a test cannot see. *(Changed 2026-10-10, RLG-056: no standard is shown.)*
 
 **Performance:** the targets are REQ-026 (1 s to the first screen, the menu), REQ-027 (100 ms response) and
 REQ-028 (250 KB). Workload: a cold launch of the installed app, offline, on a mid-range phone, or
 a Playwright run with CPU throttled 4x as its stand-in. `bench` records all three per release.
+
+**Size plan (AUD-124, 2026-10-10).** The limit is 250 KB (REQ-028). At v0.8.8 the app ships 229.1 KB
+in 32 files, so 20.9 KB is left. Slice 8 spent about 50 KB; slice 9 so far gave back about 10 KB, when
+the Standards page and its data were removed and Zen Garden replaced the trace. The largest files
+are `styles.css` 26.8 KB, `icons/icon-512.png` 25.5 KB, `app.js` 22.5 KB, `audio.js` 21.3 KB,
+`config.json` 14.0 KB and `strings/en.json` 12.8 KB. The rule: a new activity may spend up to
+15 KB (its script, its strings, its config and its styles), and a fix or polish unit up to 2 KB.
+Each slice records its size at its close in the changelog. When less than 15 KB is left, the next
+slice that adds a feature first takes a saving, and the owner chooses which. Known savings, in
+order of risk: (1) a smaller 512 px PNG icon, with fewer colors or a lossless re-encode, about
+10 to 15 KB; (2) config groups that only the tools read, moved out of the shipped `config.json`;
+(3) unused CSS rules, removed after each screen is removed; (4) minified CSS and JavaScript, which
+needs a build step and so a change to REQ-019; it is the last choice.
 
 **Security and privacy.** Nothing sensitive is stored or sent. The threats worth defending against
 are a supply-chain change (none: no third-party code ships), a tampered crisis line, and a
@@ -525,7 +542,7 @@ the research sources for each technique. *(Grounding and calming statements were
 **Slice 3 — distraction.** The bubble field and the shape trace.
 
 **Slice 4 — trust pages.** The disclaimer page, the Standards & research page, the feedback page,
-and the GitHub issue templates.
+and the GitHub issue templates. *(The Standards & research page was removed 2026-10-10, RLG-056.)*
 
 **Slice 5 — colour sort.** Built last, as the hardest to make accessible. It ships only if it passes.
 
@@ -573,7 +590,9 @@ AUD-040.)*
 
 **Release criteria for 1.0:** every "must" requirement is met; every success criterion in Stage 2
 holds; an audit round clears the gate (`audit-gate.py` prints `GATE CLEAR`); every crisis line is
-re-checked; the Standards & research page shows only what is verified.
+re-checked; the manual screen-reader and keyboard checks in RLG-033 are reported; the app makes no
+standards claim and no health claim (REQ-025). *(Changed 2026-10-10, RLG-056: the Standards &
+research page is removed.)*
 
 ---
 
@@ -584,17 +603,20 @@ re-checked; the Standards & research page shows only what is verified.
 | A person in danger uses the app instead of getting help. | The "Need urgent help?" control is on every screen, and the self-help line is on the main screen. |
 | A crisis line in the list goes out of service. | Each line has a last-checked date; a release re-checks every line; the international directory is the fallback. |
 | A claim overstates the evidence and breaks health-claim rules. | REQ-025 fixes the wording; each technique cites its research (REQ-024); a test scans for forbidden words. |
-| A standard is promoted that the app does not meet. | REQ-029: a standard is shown only with a dated automated and manual check for that version. |
-| No volunteer comes forward for the manual check. | No standard is shown as met; the app still works; the owner can ask in accessibility communities. |
+| ~~A standard is promoted that the app does not meet.~~ | *Withdrawn 2026-10-10 (RLG-056): the app makes no standards claim, and REQ-029 is withdrawn.* |
+| No volunteer comes forward for the manual check. | The owner or a volunteer does it before 1.0 (RLG-033); the owner can ask in accessibility communities. *(Changed 2026-10-10, RLG-056.)* |
 | A movement or a sound makes a person feel worse. | Reduced motion is honoured (REQ-010); sounds are soft and on by default, and the speaker button in the header fades them out over 0.6 s and then stops them (REQ-007; Decision Log, UNT-053 and UNT-078); sound waits while urgent help is open; nothing is timed or scored. |
-| The colour sort cannot be made fully accessible. | It is "should", not "must", and built last; it ships only when it passes. |
+| ~~The colour sort cannot be made fully accessible.~~ | *Withdrawn 2026-10-09: Unblock replaced the colour sort (REQ-014 withdrawn, REQ-035).* |
+| Unblock is hard to use without sight or with shaky hands. | Three ways to move: a drag, arrow keys on a focused block, and choose then Slide buttons; Undo takes back any move; no score, count or timer; tests solve every board by keyboard. The manual screen-reader check is owed in RLG-033. *(Added 2026-10-10, AUD-126.)* |
+| The background sound plays on after a person wants quiet, or surprises them on another screen. | The sound bar in the header shows it on every screen and turns it off in one tap; the speaker button holds every sound; a reset never starts it; only a choice on the Kaleidoscope starts it (REQ-036). *(Added 2026-10-10, AUD-126.)* |
+| The shipped size reaches the 250 KB limit under release pressure. | The size plan in section 9 sets what each slice may spend and lists known savings; `build` fails over the limit (REQ-028). *(Added 2026-10-10, AUD-124.)* |
 | The offline cache serves an old version after an update. | The cache name carries the version; an update test covers it. |
 
 <!-- BEGIN srs-assumptions - written by the interview, read by the generators -->
 - The crisis lines in the curated list stay in service between checks. Each line carries a
   last-checked date, and a release re-checks them.
-- Community volunteers will do the manual accessibility checks. If none come forward, no
-  standard is shown as met (REQ-029), and the product still works.
+- The owner or community volunteers will do the manual accessibility checks before 1.0 (RLG-033).
+  The app makes no standards claim either way (RLG-056).
 - GitHub Pages stays free for a public repository and serves the app over HTTPS, which an
   installable offline web app needs.
 - A mid-range phone can show the menu within 1 second of a cold offline launch with a
@@ -632,7 +654,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **The distraction activities are a bubble field, a shape trace and a colour sort.** — Each one
   has no score, no failure and no timer. — Rejected: a counting task. The colour sort is "should"
   and not "must", because a keyboard and screen-reader path for it is the hardest to build. —
-  2026-10-07
+  2026-10-07 *Superseded 2026-10-10 (AUD-093, UNT-118): the activities are now Pop Bubbles, Zen
+  Garden, Ripple Pond, Color Mandalas, Unblock and Kaleidoscope. Unblock replaced the colour sort
+  (2026-10-09, UNT-096) and Zen Garden replaced the shape trace (2026-10-10, UNT-115); see those
+  entries.*
 - **A "Need urgent help?" control on every screen opens crisis lines by region, chosen from the
   device language and region setting.** — A person who may be in danger must reach a human fast,
   and asking for location adds a prompt and a privacy cost. — Rejected: one fixed line; an
@@ -646,7 +671,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **A "Standards & research" page promotes every verified standard, with its level and the date of
   the last check, and cites research for each technique.** — The owner wants the standards used as
   a selling point. A claim that a check has not proven would mislead. — Rejected: a section of the
-  disclaimer page; a pop-up window, which is harder to make accessible. — 2026-10-07
+  disclaimer page; a pop-up window, which is harder to make accessible. — 2026-10-07 *Superseded
+  2026-10-10 (owner, UNT-114): see "No Standards and research page".*
 - **Only clinically researched techniques. Claims say "built on techniques studied in clinical
   research" and never "clinically proven", "treats" or "cures".** — In most markets a health claim
   for an app is regulated (FTC and FDA in the US, ASA and MHRA in the UK). Freelief itself has had
@@ -769,7 +795,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   RLG-005's rule, which requires the automated checks and a manual accessibility check. The
   automated checks passed, and the keyboard-only solve is an automated test; no person has done a
   manual screen-reader check. The owner kept Sort colors in the menu. The manual screen-reader and
-  keyboard check is owed before 1.0 and is listed in RLG-033.*
+  keyboard check is owed before 1.0 and is listed in RLG-033.* *Superseded 2026-10-09 (owner,
+  UNT-096): Unblock replaced the colour sort; see "Unblock replaces Sort colors". The owed manual
+  check moved to Unblock (RLG-033).*
 - **Drag is added to the colour sort beside choose-then-swap, not in place of it.** — Freelief is
   a mobile web app, and on a phone a person expects to drag a tile. Choose-then-swap stays, so the
   keyboard, the screen reader and a person with shaky hands keep one method that needs no fine
@@ -777,6 +805,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   line says the same words. A movement under `sort.dragThreshold` pixels is a tap, not a drag, and
   a drop off the tiles changes nothing. — Rejected: drag that inserts and shifts the other tiles (a
   second rule to learn); drag only (no path without sight). — 2026-10-07 (owner; UNT-029)
+  *Superseded 2026-10-09 (owner, UNT-096): Unblock replaced the colour sort, and its drag carries
+  over as a drag on a block; see "Unblock replaces Sort colors".*
 - **About credits the maker: "Made by", the Effigy Media logo (a 200 x 120 copy of the owner's own
   logo from Effigy Arcade, 26 KB) and a link to https://www.effigymedia.com.** — Owner request. The link
   is one the person chooses; the app still sends nothing. — 2026-10-07 (owner) *Amended 2026-10-07
@@ -818,7 +848,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   nothing to do. The route stays `#calm`, and code names (`calm.js`, `config.json` → `calm`, string
   keys such as `sort.newColours`) are unchanged, because a person never sees them. This document and
   the code comments keep their existing spelling; `test_repo.py` guards only the text a person
-  sees. — 2026-10-07 (owner; UNT-034)
+  sees. — 2026-10-07 (owner; UNT-034) *Amended 2026-10-10 (owner, RLG-057 and RLG-058): the
+  person now sees the name "Kaleidoscope"; the route stays `#calm`.*
 - **The Visualizer's rain is softer, and a third sound mode, Both, plays the music and the rain
   together.** — Owner request. The rain is quieter (volume 0.05 to 0.035), duller (low-pass 2600
   to 1800 Hz) and its drops are fainter, lower and rounder (volume 0.07 to 0.035, 2400 to 1700 Hz,
@@ -1021,7 +1052,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   sine partials that fade at their own rates, with a quieter second strike, like a chime touched by
   rain (`sounds.chime`, `mandala.palette[].note`). The old step cue, now unused, is removed. The
   trace's crystal glass is 40% quieter (`sounds.glass.volume` 0.035 to 0.021). — 2026-10-08 (owner;
-  UNT-084)
+  UNT-084) *Superseded in part 2026-10-10 (owner, UNT-115): the trace and its glass sound are
+  removed; see "Zen Garden replaces Trace a shape". The mandala chime holds.*
 - **A sound that stops while sound is off, or while the off-fade runs, is cut off at once.** — The
   owner found that muting in the Visualizer, leaving it and unmuting played the music again and then
   faded it. Muting pauses the audio clock after its fade, so a sound's own fade-out froze partway
@@ -1031,7 +1063,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **Sort colors shows the order with an arrow under the tiles.** — Owner request. A horizontal arrow
   points right, from "Light" under its left end to "Dark" under its right end, so a person who can
   see the tiles knows the task without reading. It is hidden from a screen reader, because the
-  intro already says the order. — 2026-10-08 (owner; UNT-086)
+  intro already says the order. — 2026-10-08 (owner; UNT-086) *Superseded 2026-10-09 (owner,
+  UNT-096): the arrow went with Sort colors; see "Unblock replaces Sort colors".*
 - **The mandala has eight designs and five shape kinds.** — Owner request (RLG-042): more designs.
   Five designs are added to the three, and two shape kinds are added to petal, band and dot: a
   scallop (a sector with a rounded outer edge) and a diamond (four straight sides, widest at the
@@ -1095,6 +1128,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   notes stay in `docs/research/sources.md`. The Visualizer adds a meta-analysis of natural sounds
   (buxton2021) and says its rain and waves are imitations. Every DOI was checked on Crossref in the
   session, and the two new abstracts were read on PubMed. — 2026-10-09 (owner request; UNT-097)
+  *Superseded 2026-10-10 (owner, UNT-114): the Standards and research page is removed; the sources
+  stay in `docs/research/sources.md`. See "No Standards and research page".*
 - **The screen may sleep after a time with no touch, chosen in Settings.** — AUD-103: a person who
   falls asleep on Breathe or the Visualizer left the screen on for hours. The owner chose a default
   of 30 minutes and a setting of 10, 30 or 60 minutes ("Keep the screen on", `awakeMinutes`,
@@ -1120,6 +1155,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   fail on an outdated entry, and doctor warns. REQ-029 is changed with its history. — Rejected:
   record the entry in the same commit as the checked version. — 2026-10-09 (owner; UNT-099)
   *This supersedes the AUD-023 rule that a claim holds only for the exact running version.*
+  *Superseded 2026-10-10 (owner, UNT-114): there is no standards claim and no `claim_outdated()`;
+  see "No Standards and research page".*
 - **Settings can be reset, and a default choice is not stored.** — AUD-110: a stored value had no
   end. Reset settings puts every setting back to its default, and choosing the default value again
   removes the stored value, so it follows a later default. Settings also says whether this version
@@ -1266,7 +1303,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   `version` and `issue`, the page shows an entry only while its version is the running one, and the
   trust pages reference states the four steps from an axe pass and a manual check to an entry. —
   2026-10-08 (UNT-076) *Superseded in part 2026-10-09 (owner, AUD-102; UNT-099): an entry now shows
-  in its version and later ones until the interface changes; see that entry.*
+  in its version and later ones until the interface changes; see that entry.* *Superseded
+  2026-10-10 (owner, UNT-114): `data/standards.json` is removed; see "No Standards and research
+  page".*
 - **The shared origin is a known trust dependency, and the design says what the CSP protects.** —
   The audit (AUD-004) showed that a page on a sibling site of `effigymedia.github.io` can write
   Freelief's Cache Storage and `localStorage`, and that the design claimed a CSP that "allows only
@@ -1327,11 +1366,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   everything in black; one tap or key brings the screen back, and the music keeps playing. Under reduced
   motion the shapes only fade.** — The owner asked for a zen sound mode with musical pads, shapes that
   come and go like a screen saver, and a black screen. The black screen is one large button, so touch,
-  keyboard and screen readers can all leave it. — 2026-10-07 (owner)
+  keyboard and screen readers can all leave it. — 2026-10-07 (owner) *Superseded 2026-10-10
+  (AUD-093, UNT-118): Calm became the Visualizer with a Both mode (UNT-035), its sound became the
+  background sound and the three-button sound bar (2026-10-09), and its shapes became the
+  Kaleidoscope (2026-10-10, UNT-116). The black screen holds. See those entries.*
 - **The shape trace offers twelve shapes (figure eight, circle, ripple, flower, star, heart, petal,
   trefoil knot, weave, soft square, egg, clover), one at a time, with a `New shape` control; each shape
   sings on its own note of a C major pentatonic scale.** — The owner asked for many more shapes. The
-  shapes are drawn from formulas, so no asset ships. — 2026-10-07 (owner)
+  shapes are drawn from formulas, so no asset ships. — 2026-10-07 (owner) *Superseded 2026-10-10
+  (owner, UNT-115): Zen Garden replaced the shape trace; see "Zen Garden replaces Trace a shape".*
 - **Sounds are on by default, with one Sounds switch in Settings. A soft tone lasts each breathing
   phase; the activities have short cues; the shape trace sounds like a singing crystal glass while the
   person moves. Nothing plays before the first tap or key press. No spoken voice.** *(Amended
@@ -1375,11 +1418,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   About and disclaimer, Standards and research, Feedback.** — One router and one contract for
   everything; the pages work offline like the rest. — Rejected: separate HTML files under
   `pages/`, which would need their own shell and cache entries. — 2026-10-07 (slice 4,
-  implementer)
+  implementer) *Amended 2026-10-10 (owner, UNT-114): the Standards and research link and page are
+  removed; the footer links to About and Feedback.*
 - **With no verified standard, the Standards page says what Freelief is built to and that no
   standard is claimed yet.** — REQ-029 forbids a claim before a manual check; the owner still wants
   the standards work visible. Verified standards come from `data/standards.json`, which stays empty
-  until a volunteer check is recorded. — 2026-10-07 (slice 4, implementer)
+  until a volunteer check is recorded. — 2026-10-07 (slice 4, implementer) *Superseded 2026-10-10
+  (owner, UNT-114): there is no Standards page; see "No Standards and research page".*
 - **The claim-wording test exempts exactly one string (the disclaimer's "does not diagnose or
   treat") and the research citations file, and a second test fails if an exempt string stops
   denying.** — The disclaimer must name what Freelief does not do, and paper titles are quoted as
@@ -1399,11 +1444,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   arrow keys move it. A pointer is matched to the shape only near the marker, so the crossing in
   the middle cannot make it jump. — 2026-10-07 (slice 3, implementer) *Superseded in part:
   the figure eight became one of twelve shapes, chosen in turn; see the shape-trace entries below.*
+  *Superseded 2026-10-10 (owner, UNT-115): Zen Garden replaced the shape trace.*
 - **Distraction is offered for the moment, never as a way to overcome panic.** — Research on safety
   behaviours (Helbig-Lang & Petermann 2010) says escape behaviours, which can include distraction,
   may keep an anxiety disorder going. Freelief's activity text says "there is nothing to win" and
   makes no claim. The Standards & research page (slice 4) must say that frequent attacks call for
-  treatment. — 2026-10-07 (slice 3, implementer; a design concern for the owner to read)
+  treatment. — 2026-10-07 (slice 3, implementer; a design concern for the owner to read) *Amended
+  2026-10-10 (UNT-118): the Standards page is removed (UNT-114); About says it
+  (`about.selfHelp2`).*
 - **Screens are addressed by URL hash, and the menu and Settings live in `screens/`.** — The
   browser Back button works with no extra code, and the exercises stay free of storage: the
   Settings screen is not an exercise, and it writes only through `settings.js`. — Rejected: a
@@ -1483,3 +1531,17 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   --release`, versioned standards entries, and corrections to sections 7, 8 and 9 (the deploy
   model, the CSS plan, the shared-origin trust dependency, the crisis-line control and the update
   check in the privacy text).
+- **v1.3 — 2026-10-09** — Slice 8 (app v0.7.4 to v0.8.0): Unblock replaced Sort colors (REQ-014
+  withdrawn, REQ-035); the ripples interfere; eight mandala designs; the background sound, music and
+  nature (rain or waves), plays on every screen until it is turned off; every sound is in C major;
+  Settings gained Reset and Keep the screen on; REQ-036 (the Visualizer and the background sound)
+  and REQ-037 (the wake lock) were added; the fixes of round UNT-082 and the interface review; and
+  slice 9 was planned. *(Entry added 2026-10-10, AUD-045 and AUD-126: version 1.3 had no entry.)*
+- **v1.4 — 2026-10-10** — Slice 9 so far (app v0.8.1 to v0.8.8): the mandala's 44 px parts; the
+  three-row header and the three-button sound bar; breathing that sounds like breath; the owner's
+  menu order and names; the Standards and research page and the standards claim removed (REQ-020,
+  REQ-024 and REQ-029 withdrawn); Zen Garden replaced Trace a shape (REQ-013 withdrawn, REQ-038);
+  the Visualizer redrawn as the Kaleidoscope. Then the documentation findings (AUD-045, AUD-093,
+  AUD-124, AUD-126, AUD-128): superseded Decision Log entries annotated, section 5 no longer names a
+  range, the risk table updated, the size plan added to section 9, and the clauses that still named
+  the Standards page corrected.
