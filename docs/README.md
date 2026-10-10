@@ -27,12 +27,11 @@ release audit; this page will then say how to install it.
 The preview serves **v0.8.4** (moved 2026-10-10 with the owner's yes). Each move of the preview is
 recorded in `docs/core/changelog.md` with the owner's yes, and this line names the version it serves.
 
-## Research and standards
+## Research and accessibility
 
-Each technique is built on published research, and the app's **Standards and research** page
-lists every source, with an honest note on how strong the evidence is. Freelief is built to meet
-WCAG 2.2 level AA, and AAA where it can. It claims a standard only after people have checked it
-with a screen reader and a keyboard.
+Slow breathing has good evidence; the activities are gentle distractions, and the evidence for them
+is limited. The sources are recorded in `docs/research/sources.md`. Freelief is built to meet WCAG
+2.2 level AA, and AAA where it can, and it makes no standards claim in the app.
 
 ## Help check it
 

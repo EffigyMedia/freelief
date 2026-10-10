@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "tests"))
 from harness import ROOT, open_app, wait_until  # noqa: E402
 
 OUT = ROOT / "output" / "previews"
-SCREENS = ["breathe", "menu", "bubbles", "trace", "unblock", "ripple", "mandala", "calm", "settings", "about", "standards", "feedback"]
+SCREENS = ["breathe", "menu", "bubbles", "trace", "unblock", "ripple", "mandala", "calm", "settings", "about", "feedback"]
 
 
 def main() -> None:

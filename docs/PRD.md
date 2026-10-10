@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `727f1da4f535113f` · 37 requirement(s) recorded
+> Store stamp `9c6f8ad6ee36dc8d` · 37 requirement(s) recorded
 
 ## The problem
 
@@ -79,15 +79,12 @@ Not built (decided 2026-10-07):
 - **REQ-017** — All user-facing text lives in one strings file per language, so a translation can be added without a code change. English is the only language in the first version.
 - **REQ-018** — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-019** — Freelief is plain HTML, CSS and JavaScript with no framework, no third-party dependency and no build step.
-- **REQ-020** — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-021** — Freelief uses a dark, calm theme by default and follows the device light or dark setting. All text meets WCAG AAA contrast (7:1, or 4.5:1 for large text).
 - **REQ-022** — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
-- **REQ-024** — Every technique in Freelief is one studied in published clinical research, and the Standards & research page cites at least one source for each technique.
 - **REQ-025** — Freelief makes no claim that it is clinically proven, treats, cures or diagnoses anything. It may say only that its techniques are studied in clinical research, and may claim a review or certification only after it is granted.
 - **REQ-026** — On a mid-range phone, installed and offline, the first screen (the menu) is visible within 1 second of a cold launch.
 - **REQ-027** — Every tap or key press gets a visible response within 100 milliseconds on a mid-range phone.
 - **REQ-028** — The whole app, with every file the offline cache stores, is under 250 KB.
-- **REQ-029** — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown or for an earlier version whose interface (its screens, styles, text and shell) is unchanged since. The manual check may come from community volunteers.
 - **REQ-030** — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report). Once the owner chooses a public project email address, the page also offers, as a second choice, a pre-filled email to that address; until then GitHub is the only route. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
 - **REQ-031** — Freelief's source code is published under the MIT license.
 
@@ -111,11 +108,11 @@ Not built (decided 2026-10-07):
 | | Count |
 |---|---|
 | Verified — shown to be met | 0 |
-| Agreed — specified, not yet shown | 34 |
+| Agreed — specified, not yet shown | 31 |
 | Proposed — waiting on a decision | 0 |
-| Withdrawn — no longer required | 3 |
+| Withdrawn — no longer required | 6 |
 
-Of the 34 requirement(s) in the specification, 0 (0%) have had their verification carried out.
+Of the 31 requirement(s) in the specification, 0 (0%) have had their verification carried out.
 
 ## What has to land before what
 
@@ -123,12 +120,15 @@ Of the 34 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ## What we dropped
 
-3 requirement(s) were once required and are not any more. They are kept rather than deleted, so the argument for dropping them survives with them - the reason is in each record, beneath the requirement itself.
+6 requirement(s) were once required and are not any more. They are kept rather than deleted, so the argument for dropping them survives with them - the reason is in each record, beneath the requirement itself.
 
 - **REQ-002** — Freelief offers a 5-4-3-2-1 sensory grounding exercise that the person steps through at their own pace.
 - **REQ-003** — Freelief offers calming statements, shown one at a time, that the person advances at their own pace.
 - **REQ-014** — Freelief offers a colour sort: the person puts calm colours into order from lightest to darkest by choosing a tile and then the tile to swap it with, by touch, mouse or keyboard, or by dragging a tile onto another tile by touch or mouse, with no score and no failure.
+- **REQ-020** — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
+- **REQ-024** — Every technique in Freelief is one studied in published clinical research, and the Standards & research page cites at least one source for each technique.
+- **REQ-029** — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown or for an earlier version whose interface (its screens, styles, text and shell) is unchanged since. The manual check may come from community volunteers.
 
 ---
 
-Generated 2026-10-09T23:58:29-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-10T01:09:26-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

@@ -1,4 +1,4 @@
-# Trust pages: About, Standards and research, Feedback
+# Trust pages: About and Feedback
 
 The owning document for `screens/about.js`, `screens/standards.js`, `screens/feedback.js`,
 `data/research.json`, `data/standards.json` and `.github/ISSUE_TEMPLATE/`. Design:
@@ -19,37 +19,9 @@ licence and "Made by". The version comes from `self.FREELIEF_VERSION`. The sourc
 logo is inline SVG with an accessible name. Every value from `config.json` that goes into HTML is
 escaped (AUD-033).
 
-## Standards and research
-- **Standards.** `data/standards.json` → `verified` is a list of
-  `{name, level, version, checked, tester, issue}`, where `version` is the version checked. The
-  page shows an entry when `version` is the running version or an earlier one (AUD-102, owner
-  2026-10-09). A check holds until a release changes the interface: a screen, the styles, the text
-  or the shell (`INTERFACE` in `tools/freelief.py`). `claim_outdated()` finds the commit that
-  introduced the checked version and looks for an interface change since. Then
-  `test_a_verified_standard_holds_until_the_interface_changes` and `build --release` fail, doctor
-  warns, and the entry must be removed until people check again. With no entry to show, the page
-  shows `standards.none`. That text says what Freelief is built to, and that no standard is claimed
-  yet.
-- **How a check becomes a recorded standard (AUD-054).** Add an entry only under REQ-029:
-  1. The automated axe test (`tools/tests/test_a11y.py`) passes on every screen in both themes for
-     the exact version, in a `test` run on a clean tree.
-  2. A person checks every screen of that version with a screen reader and with a keyboard alone,
-     with the accessibility checklist, and posts it as a GitHub issue from the Feedback page. The
-     issue names the version, the browser, the device, the screen reader and its version, and the
-     input used, and ticks every screen.
-  3. The owner reads the issue. If every screen passed, the owner adds the entry with `version`
-     (the checked version), `checked` (the issue's date), `tester` (as the tester asks to be
-     named) and `issue` (the issue URL). This is its own unit, with the version bump, and it cites
-     the test run. The entry ships in the next version and shows there, because a version bump and
-     the standards file are not interface changes.
-  4. A failed screen is a finding, not an entry.
-- **Research.** `data/research.json` lists the techniques, each with its source ids, and each
-  source's citation, URL and checked date. The page shows one section per technique: breathing,
-  each activity, and distraction in general. The evidence summaries are translatable text in
-  `strings/en.json` (`standards.technique.*` and `standards.evidence.*`). The full notes, with the
-  strength of each source, are in `docs/research/sources.md`. Keep the three in step:
-  `test_repo.py` fails when a source in `research.json` is not in `sources.md` (AUD-063). Citations
-  are quoted as published, so `research.json` is exempt from the claim-wording scan.
+## Standards and research (removed)
+The page was removed on 2026-10-10 (owner, RLG-056), with its route, footer link, data files and
+claim tooling. The app makes no standards claim. The sources stay in `docs/research/sources.md`.
 
 ## Feedback
 The page has two kinds: "Accessibility check" and "Report a problem". It fills a textarea from

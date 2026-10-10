@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `727f1da4f535113f` · 34 requirement(s) specified, 3 not yet
+> Store stamp `9c6f8ad6ee36dc8d` · 31 requirement(s) specified, 6 not yet
 
 ## 1. Introduction
 
@@ -82,10 +82,8 @@ person's settings, on the device.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-013** *(must)* — Freelief offers a shape trace: the person slowly follows a looping shape with a finger or the arrow keys.
 - **REQ-018** *(must)* — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
-- **REQ-020** *(must)* — A "Standards & research" page, linked from the footer and the disclaimer page, promotes every standard Freelief meets, such as WCAG 2.2 AA, with its level and the date it was last verified. It lists only standards that a check has verified.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
 - **REQ-023** *(should)* — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
-- **REQ-024** *(must)* — Every technique in Freelief is one studied in published clinical research, and the Standards & research page cites at least one source for each technique.
 - **REQ-030** *(must)* — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report). Once the owner chooses a public project email address, the page also offers, as a second choice, a pre-filled email to that address; until then GitHub is the only route. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
 - **REQ-032** *(should)* — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** *(should)* — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
@@ -123,7 +121,6 @@ person's settings, on the device.
 ### 3.7 Software system attributes
 
 - **REQ-015** *(must)* — Freelief collects no personal data and sends nothing about the person. After install, the only network requests are the browser's check for a newer version of Freelief and the download of Freelief's own files to update or repair its offline copy, all from GitHub Pages, and they carry nothing about the person. Only the person's settings are stored, and only on the device.
-- **REQ-029** *(must)* — A standard is shown as met only when an automated check of every page passes and a manual check with a screen reader and with a keyboard alone is recorded, with its date and tester, for the version shown or for an earlier version whose interface (its screens, styles, text and shell) is unchanged since. The manual check may come from community volunteers.
 
 ## 4. Verification
 
@@ -139,10 +136,8 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-012 | 3.2 | test | agreed |
 | REQ-013 | 3.2 | test | agreed |
 | REQ-018 | 3.2 | test | agreed |
-| REQ-020 | 3.2 | inspection | agreed |
 | REQ-022 | 3.2 | inspection | agreed |
 | REQ-023 | 3.2 | test | agreed |
-| REQ-024 | 3.2 | inspection | agreed |
 | REQ-030 | 3.2 | test | agreed |
 | REQ-032 | 3.2 | test | agreed |
 | REQ-033 | 3.2 | test | agreed |
@@ -164,7 +159,6 @@ How each requirement above is shown to be met. The method is recorded on the req
 | REQ-025 | 3.6 | inspection | agreed |
 | REQ-031 | 3.6 | inspection | agreed |
 | REQ-015 | 3.7 | inspection | agreed |
-| REQ-029 | 3.7 | inspection | agreed |
 
 ## 5. Appendices
 
@@ -196,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-09T23:58:28-04:00 by `Commands/srs.py` from 37 requirement record(s).
+Generated 2026-10-10T01:09:24-04:00 by `Commands/srs.py` from 37 requirement record(s).

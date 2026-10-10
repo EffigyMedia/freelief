@@ -29,6 +29,13 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-10
 
+### No standards claim and no research page
+- **Instruction:** the app shows no standards claim and no research page; REQ-020, REQ-024 and
+  REQ-029 are withdrawn. The release build no longer checks verified standards.
+- **Why:** the owner's ruling, 2026-10-10 (RLG-056): most of the research is limited or indirect.
+- **Encoded in:** `AGENTS.md` (What this is; Architecture; Release); `tools/freelief.py`.
+- Owner, 2026-10-10.
+
 ### The config rule covers the shipped app; tool limits stay in the tools
 - **Instruction:** every tunable of the shipped app lives in `config.json`. A development tool keeps
   its limits as named constants at the top of its file; the bench baseline is read from

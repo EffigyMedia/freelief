@@ -1,4 +1,5 @@
-"""Slice 4 in a real browser: About and disclaimer, Standards and research, Feedback."""
+"""Slice 4 in a real browser: About and disclaimer, and Feedback. Standards and research was removed
+on 2026-10-10 (owner, RLG-056)."""
 
 import json
 import re
@@ -7,7 +8,6 @@ from urllib.parse import parse_qs, urlparse
 from harness import ROOT, base_url, open_app, wait_until
 
 STRINGS = json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
-RESEARCH = json.loads((ROOT / "data" / "research.json").read_text("utf-8"))
 CONFIG = json.loads((ROOT / "config.json").read_text("utf-8"))
 VERSION = (ROOT / "version.js").read_text("utf-8").split('"')[1]
 
@@ -21,9 +21,9 @@ def test_footer_links_reach_every_page_from_every_screen():
     with open_app() as (page, errors, _):
         # Owner, 2026-10-08: the full footer is on the menu and the info pages; an exercise shows only
         # the calm line, and the links are one tap away through Back to menu.
-        for screen in ("menu", "settings", "about", "standards", "feedback"):
+        for screen in ("menu", "settings", "about", "feedback"):
             go(page, screen)
-            assert page.locator(".footer-link").evaluate_all("els => els.map(e => e.getAttribute('href'))")                 == ["#about", "#standards", "#feedback"], screen
+            assert page.locator(".footer-link").evaluate_all("els => els.map(e => e.getAttribute('href'))")                 == ["#about", "#feedback"], screen
             assert page.locator(".footer-link").first.is_visible() and page.locator(".self-help").is_visible(), screen
         for screen in ("breathe", "bubbles", "trace", "unblock", "ripple", "mandala", "calm"):
             go(page, screen)
@@ -43,51 +43,6 @@ def test_about_states_self_help_privacy_and_version():
         for key in ("about.selfHelp1", "about.selfHelp3", "about.privacy1", "about.open1"):
             assert STRINGS[key] in text, key
         assert f"Version {VERSION}" in text
-
-
-def test_standards_claims_nothing_until_verified():
-    # REQ-029: with no verified check, no standard is shown as met.
-    with open_app() as (page, _, _):
-        go(page, "standards")
-        assert page.locator(".standards-none").inner_text() == STRINGS["standards.none"]
-        assert page.locator(".standards-list").count() == 0
-
-
-def test_a_verified_standard_is_listed_with_date_and_tester():
-    fake = {"verified": [
-        {"name": "WCAG 2.2", "level": "AA", "version": VERSION, "checked": "2027-01-15",
-         "tester": "a volunteer using NVDA", "issue": "https://github.com/EffigyMedia/freelief/issues/1"},
-        {"name": "WCAG 2.2", "level": "AAA", "version": "0.0.1", "checked": "2026-01-01",
-         "tester": "an earlier check", "issue": "https://github.com/EffigyMedia/freelief/issues/0"}]}
-    with open_app(service_workers="block") as (page, _, _):
-        page.route("**/data/standards.json", lambda route: route.fulfill(json=fake))
-        go(page, "standards")
-        items = page.locator(".standards-list li").all_inner_texts()
-        # AUD-102: a check covers its version and later ones; the build refuses one the interface
-        # has outdated, so the page shows both.
-        assert items == ["WCAG 2.2, level AA, checked 2027-01-15 by a volunteer using NVDA",
-                         "WCAG 2.2, level AAA, checked 2026-01-01 by an earlier check"]
-        assert page.locator(".standards-none").count() == 0
-    newer = {"verified": [dict(fake["verified"][0], version="99.0.0")]}
-    with open_app(service_workers="block") as (page, _, _):
-        page.route("**/data/standards.json", lambda route: route.fulfill(json=newer))
-        go(page, "standards")
-        assert page.locator(".standards-list li").count() == 0
-        assert page.locator(".standards-none").is_visible(), "a check of a newer version claims nothing here"
-
-
-def test_every_technique_cites_dated_sources():
-    # REQ-024: every technique cites at least one source.
-    with open_app() as (page, _, _):
-        go(page, "standards")
-        sections = page.locator("section.technique")
-        assert sections.count() == len(RESEARCH["techniques"])
-        for technique in RESEARCH["techniques"]:
-            section = page.locator(f"section.technique[data-technique='{technique['id']}']")
-            links = section.locator(".sources a")
-            assert links.count() == len(technique["sources"]) >= 1
-            for i, source_id in enumerate(technique["sources"]):
-                assert links.nth(i).get_attribute("href") == RESEARCH["sources"][source_id]["url"]
 
 
 def _link_query(page):
@@ -165,25 +120,6 @@ def test_the_logo_is_soft_white_on_dark_and_soft_black_on_light():
             go(page, "about")
             fills[scheme] = page.locator("svg.maker-logo").evaluate("e => getComputedStyle(e).fill")
     assert fills == {"dark": "rgb(230, 236, 245)", "light": "rgb(29, 36, 51)"}, fills
-
-
-def test_every_activity_has_its_own_research_section():
-    # Owner, 2026-10-08: sources for every activity, each in its own section.
-    menu = (ROOT / "screens" / "menu.js").read_text("utf-8")
-    routes = set(re.findall(r'route: "(\w+)"', menu))
-    techniques = [t["id"] for t in RESEARCH["techniques"]]
-    expected = (routes - {"breathe"}) | {"breathing"}
-    assert expected <= set(techniques), f"no research section for: {sorted(expected - set(techniques))}"
-    for technique in RESEARCH["techniques"]:
-        for source_id in technique["sources"]:
-            source = RESEARCH["sources"][source_id]
-            assert source["url"].startswith("https://doi.org/"), source_id
-            assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", source["checked"]), source_id
-    with open_app() as (page, _, _):
-        go(page, "standards")
-        for technique in techniques:
-            section = page.locator(f"section.technique[data-technique='{technique}']")
-            assert section.locator("h3").inner_text().strip(), technique
 
 
 def test_when_copying_is_refused_the_message_is_selected_to_copy_by_hand():

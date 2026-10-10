@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-8-6"></a>
+## [0.8.6] - 2026-10-10
+- **Standards and research** is removed, with its footer link. The app makes no standards claim.
+  [RLG-056](../fragments/RLG-056.md). 182 tests.
+
 <a id="v0-8-5"></a>
 ## [0.8.5] - 2026-10-10
 - **Menu**: a new order and new names: Breathing, Pop Bubbles, Trace a shape (Zen Garden comes

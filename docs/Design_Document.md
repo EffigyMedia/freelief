@@ -1213,6 +1213,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   and the volume jumped back up. Every stop now holds the current value first (`hold()` in
   audio.js, RLG-053). The exhale's band is a whole step lower (802 to 339 Hz), as the owner asked.
   — 2026-10-10 (owner; UNT-113)
+- **No Standards and research page, and no standards claim.** — The owner asked whether the page
+  should stay when most of its research is limited or indirect, and chose to remove it, and with it
+  the standards claim (RLG-056). `screens/standards.js`, the `#standards` route, the footer link,
+  `data/research.json`, `data/standards.json` and the claim tooling (`claim_outdated`) are removed.
+  REQ-020, REQ-024 and REQ-029 are withdrawn. The sources stay in `docs/research/sources.md` as the
+  record, and REQ-025 (no health claim) still holds. — Rejected: a shorter page with one honest
+  lead line; a standards line on About. — 2026-10-10 (owner; UNT-114) *This supersedes the entries
+  on the Standards and research page, the verified-standard rule (AUD-102) and the research rewrite
+  (RLG-044).*
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

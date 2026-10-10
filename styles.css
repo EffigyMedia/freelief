@@ -779,7 +779,7 @@ main {
 
 .black-cover:focus-visible { outline: none; }
 
-/* ---- about, standards and research, feedback ---- */
+/* ---- about, feedback ---- */
 
 .page {
   width: min(100%, 40rem);

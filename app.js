@@ -26,7 +26,6 @@ const ROUTES = {
   calm: () => import("./activities/calm.js"),
   settings: () => import("./screens/settings.js"),
   about: () => import("./screens/about.js"),
-  standards: () => import("./screens/standards.js"),
   feedback: () => import("./screens/feedback.js"),
 };
 const DEFAULT_ROUTE = "menu";
@@ -217,7 +216,7 @@ function buildShell() {
   backLink = element("a", { class: "button nav-link nav-back", href: "#menu", text: t("nav.backMenu") });
   nav = element("nav", { class: "screen-nav", "aria-label": t("nav.label") }, [backLink]);
   const footerLinks = element("ul", { class: "footer-links" }, [
-    ["#about", "footer.about"], ["#standards", "footer.standards"], ["#feedback", "footer.feedback"],
+    ["#about", "footer.about"], ["#feedback", "footer.feedback"],
   ].map(([href, key]) => element("li", {}, [element("a", { class: "footer-link", href, text: t(key) })])));
   footer = element("footer", { class: "bottom" }, [
     element("p", { class: "tagline", text: t("app.tagline") }),
@@ -296,7 +295,7 @@ async function show(name, { moveFocus }) {
   current = screen;
   // The old screen goes first, so a slow or failed start never leaves a frozen copy of it (AUD-008).
   main.replaceChildren();
-  // A screen may load data first (Standards and research), so wait for it before focusing.
+  // A screen may load data first, so wait for it before focusing.
   try {
     await current.start(main, {
       t, list, config, motion, audio, haptic, keepAwake, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),

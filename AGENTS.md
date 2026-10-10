@@ -116,7 +116,8 @@ and the download of Freelief's own files to update or repair it (REQ-015). Keybo
 Effigy Arcade.
 
 **Claims are only what is verified.** Freelief never says it is clinically proven, treats, cures or
-diagnoses (REQ-025). A standard is shown as met only with a dated check for that version (REQ-029).
+diagnoses (REQ-025). The app makes no standards claim and has no research page (owner, 2026-10-10,
+RLG-056); the sources stay in `docs/research/sources.md`.
 
 This project runs a documentation-driven **development process**, read in place from the shared
 process docs (never copied here):
@@ -174,7 +175,7 @@ Summaries — the canonical procedures live in `<env-root>/Process/Development_P
 | *(normal work)* | Feature loop: implement → `test` → mark the `RLG-` item built → changelog → **patch** bump in `version.js` → commit. One feature = one commit = one patch = one changelog entry = one tracker item to built. A finished slice is a **minor** bump. |
 | **Track this: …** | `python <env-root>/Commands/fragment.py new --kind ruling --type feature --status requested --title "…"`; do not start it. |
 | **Resume** | Run `python <env-root>/Commands/thread.py show`. **Verify the working tree is clean.** Uncommitted work is an interrupted unit: ask, never silently commit or discard. Then run `doctor`. |
-| **Release** | Only when something ships, in this order. **1. Prepare:** re-check every crisis line and update its date; bump the version; commit. **2. Validate:** run the file audit (`python tools/freelief.py files`); purge `output/previews/`; run `bench` on a quiet machine (exit 2 means busy, not valid); run `build --release` (the size check, a clean tree, a version bump after the last shipped change, every crisis line and the directory checked within `crisis.maxCheckAgeDays`, and no outdated verified standard); **verify `test` and `doctor` are green**. **3. Gate:** run audit rounds until `audit-gate.py` prints `GATE CLEAR`; a fix made for a round goes back to step 1. The tagged commit is the audited commit. **4. Tag** that commit; push the commit and the tag. **5. Deploy last:** `git push origin vX.Y.Z:live`. |
+| **Release** | Only when something ships, in this order. **1. Prepare:** re-check every crisis line and update its date; bump the version; commit. **2. Validate:** run the file audit (`python tools/freelief.py files`); purge `output/previews/`; run `bench` on a quiet machine (exit 2 means busy, not valid); run `build --release` (the size check, a clean tree, a version bump after the last shipped change, and every crisis line and the directory checked within `crisis.maxCheckAgeDays`); **verify `test` and `doctor` are green**. **3. Gate:** run audit rounds until `audit-gate.py` prints `GATE CLEAR`; a fix made for a round goes back to step 1. The tagged commit is the audited commit. **4. Tag** that commit; push the commit and the tag. **5. Deploy last:** `git push origin vX.Y.Z:live`. |
 | **Incident** | A defect in the live release (a wrong crisis number, a broken start-up). The owner may move `live` back to the previous release tag at once, with no round: `git push --force origin vPREVIOUS:live`. Record the move and its reason the same day (changelog and a fragment). A fix forward is a Release whose round covers only the lenses the fix touches (AUD-105). |
 | **Perform audit** | Run a round per `Audit_and_Testing.md`: four lenses, one finding to a fragment; change no code. |
 
@@ -215,7 +216,7 @@ the Chrome already on the machine. Run from the repo root:
 - **Exercises** (`exercises/*.js`) and **activities** (`activities/*.js`) — one file each, exporting
   `start(container, ctx)` and `stop()`; **must not** touch storage, the network or literal text.
   Activities use DOM elements, never a canvas, and have no score, timer or failure state.
-- **Screens** (`screens/*.js`) — the menu, Settings, About, Standards and research, and Feedback,
+- **Screens** (`screens/*.js`) — the menu, Settings, About and Feedback,
   same contract. Routing is by URL hash (`#menu` is the default, and a screen that cannot load falls
   back to it); a new screen is added to four lists: `ROUTES` in `app.js`, `FILES` in `sw.js`, and,
   for an exercise or activity, `ITEMS` in `screens/menu.js` and `QUIET_FOOTER` in `app.js` (AUD-100;
