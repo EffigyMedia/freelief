@@ -1294,6 +1294,17 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   stored values it cannot read and writes them back, and a new choice of that setting replaces
   them. The stale local `live` branch (at v0.5.0) is deleted. — Rejected: naming the target only in
   the changelog (a hurried owner needs one command). — 2026-10-10 (UNT-121)
+- **The interface review's low items are fixed or accepted.** — RLG-047. Fixed: a screen title per
+  screen (`app.screenTitle`); the `theme-color` meta follows a forced theme; the checked date reads
+  as words in the page's language; Pause and the bubbles' drift control change their label and no
+  longer carry `aria-pressed`, so a screen reader never says "Resume, pressed"; bubbles sit in the
+  page in slot order, and their focus ring is drawn inside; the Feedback checklist names the
+  current screens; two strings use curly quotes. Accepted, with the reason: Unblock's blocks still
+  move with `left` and `top`, because the board's cell is a percentage of the board, which
+  `translate` cannot use (a 0.12 s slide of a few blocks); the sound bar's toggle buttons announce
+  their state through `aria-pressed`, so it needs no live region; the black cover shows no focus
+  ring by design. No longer apply: the trace slider and the old Visualizer animations (removed).
+  — 2026-10-10 (UNT-123)
 - **A new version takes over only from Freelief's only window, and a worker stores only its own
   version's files.** — AUD-057 (re-opened by round UNT-082): a fresh second window let a new version
   take over under a window in use, which then loaded the new version's screens. The worker now

@@ -68,6 +68,13 @@ function element(tag, attributes = {}, children = []) {
 
 const dial = (number) => number.replace(/[^\d+]/g, "");
 
+// A date such as 2026-10-07 reads as "October 7, 2026" in the page's language (RLG-047).
+function longDate(iso) {
+  const date = new Date(`${iso}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleDateString(document.documentElement.lang, { year: "numeric", month: "long", day: "numeric" });
+}
+
 function lineCard(line) {
   const actions = element("div", { class: "line-actions" });
   if (line.call) actions.append(element("a", { class: "button", href: `tel:${dial(line.call)}`, text: t("help.call", { number: line.call }) }));
@@ -80,7 +87,7 @@ function lineCard(line) {
     element("p", { class: "line-hours", text: line.hours }),
     actions,
     webNote,
-    element("p", { class: "line-checked", text: t("help.checked", { date: line.checked }) }),
+    element("p", { class: "line-checked", text: t("help.checked", { date: longDate(line.checked) }) }),
   ]);
 }
 
@@ -313,6 +320,9 @@ async function show(name, { moveFocus }) {
   }
   if (request !== showing) return;
   main.dataset.shown = name;
+  // Each screen names itself in the tab and the window list (RLG-047); the menu is Freelief itself.
+  const title = main.querySelector("h1")?.textContent.trim();
+  document.title = name === DEFAULT_ROUTE || !title ? t("app.name") : t("app.screenTitle", { screen: title });
   nav.hidden = name === "menu";
   footer.classList.toggle("quiet", QUIET_FOOTER.has(name));
   if (moveFocus) {
@@ -325,9 +335,16 @@ async function show(name, { moveFocus }) {
   }
 }
 
+// The browser bar takes the color of the chosen theme, not only the system's (RLG-047). Each
+// theme's color is the one its meta tag in index.html names for that scheme.
+const themeColors = [...document.querySelectorAll('meta[name="theme-color"]')]
+  .map((meta) => ({ meta, own: meta.content, scheme: /dark/.test(meta.media) ? "dark" : "light" }));
+
 function applyTheme(theme) {
   if (theme === "system") delete document.documentElement.dataset.theme;
   else document.documentElement.dataset.theme = theme;
+  const forced = themeColors.find((entry) => entry.scheme === theme);
+  themeColors.forEach((entry) => { entry.meta.content = forced ? forced.own : entry.own; });
 }
 
 // If config.json, the strings or a module cannot load, the static fallback in index.html stays on

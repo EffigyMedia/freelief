@@ -44,7 +44,7 @@ def by_keyboard(browser):
         assert not page.locator("dialog.help").evaluate("d => d.open")
         page.locator(".pause").focus()
         page.keyboard.press("Enter")
-        assert page.locator(".pause").get_attribute("aria-pressed") == "true"
+        assert page.locator(".pause").inner_text() == "Resume"
         assert not errors, errors
 
 

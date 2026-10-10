@@ -72,10 +72,12 @@ def test_pause_and_resume_by_keyboard():
         assert page.evaluate("document.activeElement.classList.contains('pause')")
         page.keyboard.press("Space")
         pause = page.locator(".pause")
-        assert pause.get_attribute("aria-pressed") == "true"
+        # RLG-047: the label says what a press does; no pressed state, so a screen reader never
+        # hears "Resume, pressed".
+        assert pause.get_attribute("aria-pressed") is None
         assert pause.inner_text() == "Resume"
         page.keyboard.press("Space")
-        assert pause.get_attribute("aria-pressed") == "false"
+        assert pause.inner_text() == "Pause"
 
 
 def _help_region(locale):
@@ -116,7 +118,8 @@ def test_every_crisis_line_is_dated_and_dialable():
             assert lines.count() >= 1, code
             for i in range(lines.count()):
                 line = lines.nth(i)
-                assert re.search(r"Last checked \d{4}-\d{2}-\d{2}", line.inner_text())
+                # RLG-047: the date reads as words, such as "Last checked October 7, 2026".
+                assert re.search(r"Last checked [A-Z][a-z]+ \d{1,2}, \d{4}", line.inner_text())
                 assert line.locator("a[href^='tel:']").count() == 1
 
 

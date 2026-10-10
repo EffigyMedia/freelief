@@ -73,7 +73,6 @@ export function start(container, ctx) {
   function setPaused(paused) {
     run.paused = paused;
     pauseButton.textContent = t(paused ? "breathe.resume" : "breathe.pause");
-    pauseButton.setAttribute("aria-pressed", String(paused));
     clearTimers();
     if (paused) {
       run.stopTone();
@@ -96,7 +95,6 @@ export function start(container, ctx) {
   circle.style.transition = "none";
   circle.style.transform = `scale(${breathing.guideMinScale})`;
   pauseButton.textContent = t("breathe.pause");
-  pauseButton.setAttribute("aria-pressed", "false");
   run.frame = requestAnimationFrame(() => { run.frame = requestAnimationFrame(runPhase); });
 }
 

@@ -518,6 +518,8 @@ main {
 }
 
 .bubble.drifting { animation: drift ease-in-out infinite alternate; }
+/* The ring sits inside the bubble, so the field's edge never clips it (RLG-047). */
+.bubble:focus-visible { outline-offset: -5px; }
 .bubble.held { animation-play-state: paused; }
 .bubble.popping { transform: scale(1.35); opacity: 0; animation: none; }
 

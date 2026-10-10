@@ -17,7 +17,7 @@ export function start(container, ctx) {
       <p class="visually-hidden">${t("bubbles.intro")}</p>
       <ul class="bubble-field" aria-label="${t("bubbles.fieldLabel")}"></ul>
       <div class="exercise-actions">
-        <button type="button" class="button motion-toggle" aria-pressed="false"
+        <button type="button" class="button motion-toggle"
                 ${still ? "hidden" : ""}>${t("bubbles.pauseMotion")}</button>
       </div>
     </section>`;
@@ -76,7 +76,10 @@ export function start(container, ctx) {
     }
     bubble.addEventListener("click", () => pop(item, bubble));
     item.append(bubble);
-    field.append(item);
+    // The bubbles sit in slot order in the page, so Tab moves left to right and top to bottom, as a
+    // person sees them (RLG-047).
+    const next = [...field.children].find((other) => Number(other.dataset.slot) > slot);
+    field.insertBefore(item, next || null);
   }
 
   function pop(item, bubble) {
@@ -101,7 +104,6 @@ export function start(container, ctx) {
 
   toggle.addEventListener("click", () => {
     current.paused = !current.paused;
-    toggle.setAttribute("aria-pressed", String(current.paused));
     toggle.textContent = t(current.paused ? "bubbles.resumeMotion" : "bubbles.pauseMotion");
     field.querySelectorAll(".bubble").forEach((b) => b.classList.toggle("held", current.paused));
   });

@@ -273,3 +273,27 @@ def test_settings_says_whether_this_version_is_ready_offline():
         wait_until(page, f"document.querySelector('.offline-state').textContent === {STRINGS['settings.offlineReady']!r}", 3000)
     with open_app(route="settings") as (page, _, _):
         wait_until(page, f"document.querySelector('.offline-state').textContent === {STRINGS['settings.offlineNotReady']!r}", 3000)
+
+
+def test_each_screen_names_itself_in_the_title():
+    # RLG-047: the tab and the window list say which screen is open; the menu is Freelief itself.
+    with open_app(route="menu") as (page, _, _):
+        assert page.title() == STRINGS["app.name"]
+        go(page, "settings")
+        assert page.title() == STRINGS["app.screenTitle"].replace("{screen}", STRINGS["settings.title"])
+        go(page, "bubbles")
+        assert page.title() == STRINGS["app.screenTitle"].replace("{screen}", STRINGS["bubbles.title"])
+
+
+def test_the_browser_bar_color_follows_a_chosen_theme():
+    # RLG-047: a forced theme also colors the browser bar, whatever the system scheme is.
+    colors = "[...document.querySelectorAll('meta[name=theme-color]')].map(m => m.content)"
+    with open_app(color_scheme="dark") as (page, _, _):
+        system = page.evaluate(colors)
+        assert len(set(system)) == 2, system
+        go(page, "settings")
+        page.locator("input[name=theme][value=light]").check()
+        light = page.evaluate(colors)
+        assert len(set(light)) == 1 and light[0] in system, light
+        page.locator("input[name=theme][value=system]").check()
+        assert page.evaluate(colors) == system
