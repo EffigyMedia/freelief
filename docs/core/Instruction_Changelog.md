@@ -29,6 +29,16 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-10
 
+### A fixed finding is in-flight until a round confirms it
+- **Instruction:** a unit that fixes an `AUD-` finding sets its status to `in-flight`. Only a
+  round's re-check moves it to `built`, or back to `requested`. Tracker items (`RLG-`) still go to
+  `built` when they are built.
+- **Why:** AUD-160, owner's ruling by the question tool. Fixing units marked their own findings
+  built, so a fix left the work queue unconfirmed; round UNT-139 re-opened four such fixes. The 18
+  findings fixed this session and not yet re-checked were moved to `in-flight`.
+- **Encoded in:** `AGENTS.md` (the Perform audit row).
+- Owner, 2026-10-10.
+
 ### Sweep a removed or renamed screen from every place that names it
 - **Instruction:** a removed or renamed screen is swept in the same unit from the design (module
   table, tunables, F-flows, vocabulary, risk table), the technical references, the `config.json`
