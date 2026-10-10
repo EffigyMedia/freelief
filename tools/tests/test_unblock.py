@@ -341,3 +341,28 @@ def test_previous_board_goes_back_and_from_the_first_to_the_last():
         page.locator(".unblock-previous").click()
         assert page.locator(".unblock-board-name").inner_text() == name(total), "from the first to the last"
         assert status(page) == name(total)
+
+
+def test_every_block_sits_on_its_cells_and_slides_with_transform():
+    # RLG-047 (owner, 2026-10-10): a slide animates transform, not left and top, and every block
+    # still sits exactly on its own cells.
+    with open_app() as (page, errors, _):
+        go(page, "unblock")
+        page.wait_for_timeout(300)
+        result = page.evaluate("""(() => {
+          const el = document.querySelector('.unblock-board');
+          const outer = el.getBoundingClientRect();
+          // Measured from inside the board's border, where the cells are.
+          const board = { left: outer.left + el.clientLeft, top: outer.top + el.clientTop };
+          const size = Number(getComputedStyle(el).getPropertyValue('--size'));
+          const cell = el.clientWidth / size;
+          return [...document.querySelectorAll('.unblock-block')].map((b) => {
+            const r = b.getBoundingClientRect(), s = getComputedStyle(b);
+            return { col: Number(s.getPropertyValue('--col')), row: Number(s.getPropertyValue('--row')),
+                     dx: (r.left - board.left) / cell, dy: (r.top - board.top) / cell, transition: s.transitionProperty };
+          });
+        })()""")
+        for b in result:
+            assert abs(b["dx"] - b["col"]) < 0.05 and abs(b["dy"] - b["row"]) < 0.05, b
+            assert "left" not in b["transition"] and "top" not in b["transition"], b
+        assert not errors, errors

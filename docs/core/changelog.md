@@ -12,6 +12,12 @@ audit.
 
 ---
 
+<a id="v0-8-22"></a>
+## [0.8.22] - 2026-10-10
+- **Unblock**: blocks slide with a lighter animation, which is smoother on a slow phone; where they
+  sit does not change. [RLG-047](../fragments/RLG-047.md), [AUD-125](../fragments/AUD-125.md).
+  206 tests.
+
 <a id="v0-8-21"></a>
 ## [0.8.21] - 2026-10-10
 - **Feedback**: what you type is kept while Freelief is open, so you can check a screen and come

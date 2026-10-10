@@ -1334,7 +1334,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   move with `left` and `top`, because the board's cell is a percentage of the board, which
   `translate` cannot use (a 0.12 s slide of a few blocks); the sound bar's toggle buttons announce
   their state through `aria-pressed`, so it needs no live region; the black cover shows no focus
-  ring by design. No longer apply: the trace slider and the old Visualizer animations (removed).
+  ring by design. *Amended 2026-10-10 (owner, by the question tool; AUD-125, UNT-137): the owner
+  ruled each accepted item. The sound bar and the black cover stay as they are. Unblock is fixed:
+  a block slides with `translate`, and its own length is divided out of the percentage, because a
+  translate percentage is of the block.* No longer apply: the trace slider and the old Visualizer animations (removed).
   — 2026-10-10 (UNT-123)
 - **A new version takes over only from Freelief's only window, and a worker stores only its own
   version's files.** — AUD-057 (re-opened by round UNT-082): a fresh second window let a new version

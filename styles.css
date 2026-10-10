@@ -668,18 +668,29 @@ dialog.help.warming { display: block; visibility: hidden; position: fixed; }
 }
 .unblock-block {
   position: absolute;
-  left: calc(var(--col) * var(--cell));
-  top: calc(var(--row) * var(--cell));
+  /* A slide moves the block with transform, so it does not re-run layout (owner, RLG-047). The cell
+     is a percentage of the board, but a translate percentage is of the block itself, and a block is
+     --length cells long, so its own length is divided out below. */
+  left: 0;
+  top: 0;
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: 0.75rem;
   background: transparent;
   cursor: grab;
-  transition: left 0.12s ease-out, top 0.12s ease-out, transform 0.4s ease-in, opacity 0.4s ease-in;
+  transition: transform 0.12s ease-out, opacity 0.4s ease-in;
 }
-.unblock-block.across { width: calc(var(--length) * var(--cell)); height: var(--cell); }
-.unblock-block.down { width: var(--cell); height: calc(var(--length) * var(--cell)); }
+.unblock-block.across {
+  width: calc(var(--length) * var(--cell));
+  height: var(--cell);
+  transform: translate(calc(var(--col) * 100% / var(--length)), calc(var(--row) * 100%));
+}
+.unblock-block.down {
+  width: var(--cell);
+  height: calc(var(--length) * var(--cell));
+  transform: translate(calc(var(--col) * 100%), calc(var(--row) * 100% / var(--length)));
+}
 /* The wood is drawn a little inside the button, so a line of the board shows between blocks. */
 .unblock-block::before {
   content: "";
@@ -693,7 +704,11 @@ dialog.help.warming { display: block; visibility: hidden; position: fixed; }
 .unblock-block.key::before { background: hsl(205 60% 66%); border-color: hsl(210 45% 38%); box-shadow: inset 0 -3px 0 hsl(210 45% 50%); }
 .unblock-block[aria-pressed="true"]::before { box-shadow: 0 0 0 3px var(--focus); }
 .unblock-block:focus-visible { outline: 3px solid var(--focus); outline-offset: -1px; }
-.unblock-block.free { transform: translateX(150%); opacity: 0; }
+.unblock-block.across.free {
+  transform: translate(calc(var(--col) * 100% / var(--length) + 150%), calc(var(--row) * 100%));
+  opacity: 0;
+  transition: transform 0.4s ease-in, opacity 0.4s ease-in;
+}
 .unblock-board.still .unblock-block { transition: none; }
 .unblock-slide { display: flex; justify-content: center; gap: 0.75rem; }
 .unblock-slide[hidden] { display: none; }
