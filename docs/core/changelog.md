@@ -15,6 +15,7 @@ audit.
 - **Kaleidoscope** (the Visualizer): a slow, full-width kaleidoscope of soft shapes and colors that
   turns, drifts in color and fades from one pattern to the next. Nothing flashes, and it is still
   under reduced motion. [RLG-057](../fragments/RLG-057.md). 180 tests.
+- The live preview moved to 0.8.8 on 2026-10-10, with the owner's yes in chat ("Push to live").
 
 <a id="v0-8-7"></a>
 ## [0.8.7] - 2026-10-10
