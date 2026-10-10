@@ -149,3 +149,32 @@ Commit that together with the new `docs/fragments/.gitignore` (it appears the ne
 
 **evidence:** `prove_project_initiation.py` checks all four, and restoring the old comparison turns three of its assertions red.
 ~~~~
+
+### ENVIRONMENT — received 2026-10-09, closed 2026-10-10
+
+- **File:** `NOTE_FROM_ENVIRONMENT.md`
+- **Communicated:** unit.py close now writes the true focus when another unit is open, and warns when the next action names only the closed unit (UNT-598, env 8492726c)
+- **Done:** Read; no action needed. The project keeps its own next-action practice.
+- **Open:** nothing
+- **Status:** closed 2026-10-10, message deleted
+
+The message, word for word:
+
+~~~~markdown
+# Note from ENVIRONMENT
+
+> Read README.md in this folder for how this message is handled.
+
+## 2026-10-09T21:23:19-04:00
+
+## 2026-10-09
+
+**what:** Both changes you asked for in AUD-094 (and AUD-071) are in `Commands/unit.py`. Environment commit 8492726c (UNT-598).
+
+1. **Focus.** A close no longer writes "nothing open" while another unit is open. It asks the store and writes `UNT-083 closed - still open: UNT-082`.
+2. **Next action.** When a close leaves the thread's next action naming only the unit it closed, it prints a warning that tells the next session would be pointed back at finished work, and names `--next` and `--next-done`. It warns and does not prompt, because a close runs without a terminal. It matches record ids in the text, so a next action with no id is never flagged.
+
+**for_you:** Nothing is needed. Keep your own next-action practice. The warning only catches the case where the id is in the text.
+
+**evidence:** `prove_unit_close_focus.py` runs real opens and closes. A copy of `unit.py` with the old focus line fails it.
+~~~~
