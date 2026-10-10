@@ -1361,6 +1361,12 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   the rain chime. Sine partials at 1, 2, 3 and 4 times the color's note (a string, not a bell) fade
   within a second through a low-pass that closes from 2400 Hz, at a lower volume (0.018, from 0.03),
   with no second strike. Each color keeps its own note. — 2026-10-10 (owner; UNT-143)
+- **The rain has soft, distant thunder.** — Owner request (RLG-063): low-end thunder strikes in the
+  rain. A roll is low-passed noise under 160 Hz, with no crack; it swells in over 0.9 s, rolls in two
+  or three softer swells and fades over 6 to 9 s, every 40 to 90 s (the first after 20 s). The slow
+  rise is deliberate: nothing in Freelief may start suddenly and startle a person in panic. Phone
+  speakers carry little under 100 Hz, so it is heard best with headphones. — 2026-10-10 (owner;
+  UNT-144)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

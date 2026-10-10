@@ -153,7 +153,17 @@
       "dropVolume": 0.035,
       "dropEveryMs": 300,
       "dropSeconds": 0.09,
-      "dropQ": 4
+      "dropQ": 4,
+      "thunder": {
+        "cutoffHz": 160,
+        "level": 3.0,
+        "riseSeconds": 0.9,
+        "secondsMin": 6,
+        "secondsMax": 9,
+        "firstAfterSeconds": 20,
+        "everySecondsMin": 40,
+        "everySecondsMax": 90
+      }
     },
     "drop": {
       "startHz": 360,

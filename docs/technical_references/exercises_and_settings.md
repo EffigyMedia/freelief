@@ -254,7 +254,7 @@ The sounds:
 | `drop()` | Ripple pond | A short sine whose pitch rises fast, through a low-pass filter. |
 | `chime(note)` | Mandala | A soft pluck (RLG-062): sine partials at 1, 2, 3 and 4 times the note, fading within a second, through a low-pass that closes from `cutoffHz` as the note fades. |
 | `pads(level)` | Background (music) | Slow chords from `sounds.pads`: each note is two detuned triangle waves through one low-pass filter, with long swells. |
-| `rain(level)` | Background (nature) | Filtered looping noise that swells slowly, with soft drops pitched to C major notes. |
+| `rain(level)` | Background (nature) | Filtered looping noise that swells slowly, with soft drops pitched to C major notes, and distant thunder (RLG-063): every `thunder.everySecondsMin` to `everySecondsMax` seconds, low-passed noise under `cutoffHz` swells in over `riseSeconds`, rolls in two or three softer swells and fades over 6 to 9 s. No crack. |
 | `waves(level)` | Background (nature) | Filtered looping noise. Each wave swells and opens the filter, then falls back, at uneven gaps and heights. |
 
 Pitched sounds that can play with the music stay in C major (RLG-046). The pop and the water drop

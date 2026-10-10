@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-27"></a>
+## [0.8.27] - 2026-10-10
+- **Rain**: now and then, soft, distant thunder rolls under the rain. It swells in slowly and never
+  cracks. [RLG-063](../fragments/RLG-063.md). 211 tests.
+
 <a id="v0-8-26"></a>
 ## [0.8.26] - 2026-10-10
 - **Color Mandalas**: each color's note is now a soft, short pluck instead of a bell, and quieter.

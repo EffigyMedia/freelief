@@ -504,16 +504,54 @@ export function rain(level = 1) {
   }
   drop();
 
+  // Distant thunder now and then (owner, RLG-063): low noise only, under a low-pass, so it is a
+  // rumble with no crack. It swells in slowly and rolls away over several seconds, so it never
+  // starts suddenly; a person in panic must not be startled.
+  const thunder = settings.thunder;
+  const rolls = new Set();
+  let thunderTimer = 0;
+  function roll() {
+    const now = ctx.currentTime;
+    const rumble = noise(ctx);
+    rumble.loop = true;
+    const low = ctx.createBiquadFilter();
+    low.type = "lowpass";
+    low.frequency.value = thunder.cutoffHz;
+    low.Q.value = 0.7;
+    const gain = ctx.createGain();
+    const peak = thunder.level * (0.6 + Math.random() * 0.4);
+    const length = thunder.secondsMin + Math.random() * (thunder.secondsMax - thunder.secondsMin);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(peak, now + thunder.riseSeconds);
+    // Two or three softer swells as it rolls, then a long fade.
+    let at = now + thunder.riseSeconds;
+    for (let i = 0; i < 2 + Math.floor(Math.random() * 2); i++) {
+      at += 0.6 + Math.random() * 0.9;
+      gain.gain.linearRampToValueAtTime(peak * (0.45 + Math.random() * 0.4), at);
+    }
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + length);
+    rumble.connect(low).connect(gain).connect(master);
+    rumble.start(now, Math.random());
+    rumble.stop(now + length + 0.1);
+    rolls.add(rumble);
+    rumble.onended = () => rolls.delete(rumble);
+    thunderTimer = setTimeout(roll, 1000 * (thunder.everySecondsMin + Math.random() * (thunder.everySecondsMax - thunder.everySecondsMin)));
+  }
+  thunderTimer = setTimeout(roll, 1000 * thunder.firstAfterSeconds);
+
   return {
     stop() {
       clearTimeout(timer);
+      clearTimeout(thunderTimer);
       const now = ctx.currentTime;
       if (paused(ctx)) {
         master.disconnect();
         hiss.stop();
         lfo.stop();
+        rolls.forEach((rumble) => rumble.stop());
         return;
       }
+      rolls.forEach((rumble) => rumble.stop(now + 2));
       hold(master.gain, now);
       master.gain.setTargetAtTime(0, now, 0.4);
       hiss.stop(now + 2);

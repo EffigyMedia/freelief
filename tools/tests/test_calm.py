@@ -400,3 +400,27 @@ def test_a_new_visit_starts_silent():
         page.locator(".guide").click()
         page.wait_for_timeout(500)
         assert page.evaluate("window.__osc.filter(o => o.node.type === 'triangle').length") == 0
+
+def test_the_rain_brings_soft_low_thunder_that_never_starts_suddenly():
+    # RLG-063 (owner, 2026-10-10): low thunder in the rain, a rumble with no crack, that swells in
+    # slowly and comes rarely. The probe shortens the wait for the first roll.
+    thunder = CONFIG["sounds"]["rain"]["thunder"]
+    assert thunder["cutoffHz"] <= 200, "low end only, no crack"
+    assert thunder["riseSeconds"] >= 0.5, "it swells in; it never starts suddenly"
+    assert thunder["everySecondsMin"] >= 30, "rare"
+    probe = """
+const realFetch = window.fetch;
+window.fetch = async (input, init) => {
+  const response = await realFetch(input, init);
+  if (!/config\.json/.test(String(input.url || input))) return response;
+  const data = await response.json();
+  data.sounds.rain.thunder.firstAfterSeconds = 0.3;
+  return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } });
+};
+window.__low = [];
+const createFilter = AudioContext.prototype.createBiquadFilter;
+AudioContext.prototype.createBiquadFilter = function () {
+  const node = createFilter.call(this); setTimeout(() => window.__low.push([node.type, node.frequency.value]), 0); return node; };"""
+    with open_app(init_script=probe, route="menu") as (page, _, _):
+        page.locator(".sound-choice[data-sound=rain]").click()
+        wait_until(page, f"window.__low.some(([type, hz]) => type === 'lowpass' && Math.abs(hz - {thunder['cutoffHz']}) < 1)", 4000)
