@@ -12,6 +12,12 @@ audit.
 
 ---
 
+<a id="v0-8-28"></a>
+## [0.8.28] - 2026-10-10
+- Security hardening; nothing a person sees changes. A copy of the app that another site on the
+  shared address plants can no longer be opened, and it is deleted at the next update.
+  [AUD-157](../fragments/AUD-157.md). 212 tests.
+
 <a id="v0-8-27"></a>
 ## [0.8.27] - 2026-10-10
 - **Rain**: now and then, soft, distant thunder rolls under the rain. It swells in slowly and never

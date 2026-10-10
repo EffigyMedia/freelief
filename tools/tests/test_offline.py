@@ -391,6 +391,34 @@ def test_a_takeover_that_lands_after_a_touch_still_serves_the_page_its_own_scree
         finally:
             context.close()
 
+
+def test_a_cache_another_site_plants_is_never_served_and_goes_at_the_next_update():
+    # AUD-157: the origin is shared, so another site can make a cache named like a Freelief version.
+    # An address with ?v= must not reach it, and the next update deletes it.
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = _installed(context, url)
+            page.evaluate("""caches.open('freelief-999.0.0').then(c => Promise.all([
+              c.put(new Request('./'), new Response('<title>PLANTED</title>', { headers: { 'Content-Type': 'text/html' } })),
+              c.put(new Request('index.html'), new Response('<title>PLANTED</title>', { headers: { 'Content-Type': 'text/html' } })),
+              c.put(new Request('app.js'), new Response('document.title = "PLANTED";', { headers: { 'Content-Type': 'text/javascript' } }))]))""")
+            page.goto(url + "?v=999.0.0#menu")
+            page.wait_for_selector("html[data-ready='true']", timeout=5000)
+            assert page.title() != "PLANTED", "a planted cache was served"
+            _deploy(app, "9.9.4", broken_mandala=False)
+            try:
+                page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
+            except Exception:
+                pass  # the takeover reloads the page
+            wait_until(page, "caches.has('freelief-9.9.4')", 8000)
+            wait_until(page, "caches.has('freelief-999.0.0').then(present => !present)", 8000)
+        finally:
+            context.close()
+
 def test_update_now_beside_another_window_asks_to_close_it():
     # AUD-057: the person asked, but another window may be in use, so Settings says what to do.
     import json as _json

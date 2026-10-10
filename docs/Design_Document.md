@@ -511,7 +511,10 @@ GitHub Pages sites (Effigy Arcade, Tiny Arcade and Drinax Ref Console on 2026-10
 and `localStorage` belong to the origin, not to the path, so a page on any of those sites can read
 and write Freelief's offline cache and its settings. A defect or a compromise in a sibling site can
 therefore replace a cached file, such as `index.html` or `data/crisis-lines.json`, until the next
-version replaces the cache. For the CSP, `'self'` is that shared origin, so it also allows a script
+version replaces the cache. That bound holds for the version tag too (AUD-157): the worker reads
+`?v=` only on a script request and only as a version name, and each activation keeps only the cache
+of the version it replaced (recorded in `freelief~state`), so a cache another site plants under a
+version's name is never served by address and is deleted at the next update. For the CSP, `'self'` is that shared origin, so it also allows a script
 from a sibling path. The owner chose to stay on the shared origin (Decision Log, 2026-10-07 and
 2026-10-08); an origin of its own (a custom domain or a dedicated account) removes this dependency.
 
@@ -1329,7 +1332,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   with its own version (`?v=`), the worker answers from that version's cache, and activation keeps
   the highest other version's cache until the next update. — Rejected: a 'stay' message from the
   page (it cannot stop an activation already under way); a reload after the touch (it interrupts the
-  person). — 2026-10-10 (UNT-126)
+  person). — 2026-10-10 (UNT-126) *Amended 2026-10-10 (AUD-157, UNT-145): "the highest other
+  version" let a planted cache stay reachable. The kept cache is now the version this worker
+  replaced, as recorded by the last activation, and `?v=` is read only on script requests and only
+  as a version name.*
 - **The interface review's low items are fixed or accepted.** — RLG-047. Fixed: a screen title per
   screen (`app.screenTitle`); the `theme-color` meta follows a forced theme; the checked date reads
   as words in the page's language; Pause and the bubbles' drift control change their label and no

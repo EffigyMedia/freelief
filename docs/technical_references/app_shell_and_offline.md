@@ -113,12 +113,14 @@ the audio, so a breathing tone cannot wake it in the background (AUD-082).
 calls `skipWaiting` only when a page posts `"skip"` and that page is Freelief's only open window
 (AUD-057). With another window open, it replies `{ skip: false }` and keeps waiting until every
 window is closed, because the other window may be in use. Activate deletes only caches whose
-name starts with `freelief-`, and it keeps the current one and the highest other version, so a page
-that version opened can still load its screens (AUD-057). Then it claims the clients.
+name starts with `freelief-`, and it keeps the current one and the version it replaced, so a page
+that version opened can still load its screens (AUD-057). The replaced version is the one the last
+activation recorded in the `freelief~state` cache; before any record, the highest valid version is
+kept. A name that is not a version is always deleted (AUD-157). Then it claims the clients.
 
 Fetch answers same-origin GET requests from **one version's cache only**. A lazy screen is asked for
 as `file.js?v=<page version>`, and the worker answers it from that version's cache while the cache
-exists, so a page keeps its own version's screens even after a new version takes over (AUD-057).
+exists, but only for a script request whose `v` is a version name (AUD-157), so a page keeps its own version's screens even after a new version takes over (AUD-057).
 Every other request is answered from this version's cache (`caches.open(CACHE)`).
 It never uses `caches.match()`, because that searches every cache and let an old version's files
 reach a new one. On a miss, it fetches from the network and stores a good response in the cache,

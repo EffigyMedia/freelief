@@ -49,6 +49,12 @@ const FILES = [
 ];
 
 // Orders "0.8.9" before "0.8.10": numbers, part by part.
+// A version name: three numbers. A cache or a ?v= that is not one is never trusted (AUD-157).
+const VERSION_NAME = /^\d+\.\d+\.\d+$/;
+// Where each worker records, at activation, the version it made active, so the next one knows which
+// version it replaced. Its name does not start with PREFIX, so no cleanup reads it as a version.
+const STATE = "freelief~state";
+
 function compareVersions(a, b) {
   const x = a.split(".").map(Number);
   const y = b.split(".").map(Number);
@@ -57,6 +63,21 @@ function compareVersions(a, b) {
     if (d) return d;
   }
   return 0;
+}
+
+// The version the last active worker recorded, or null.
+function replacedVersion() {
+  return caches.open(STATE)
+    .then((state) => state.match("active"))
+    .then((entry) => (entry ? entry.text() : null))
+    .then((version) => (version && VERSION_NAME.test(version) && version !== self.FREELIEF_VERSION ? version : null))
+    .catch(() => null);
+}
+
+function recordActive() {
+  return caches.open(STATE)
+    .then((state) => state.put("active", new Response(self.FREELIEF_VERSION)))
+    .catch(() => {});
 }
 
 // Fill the cache from the network, past the browser's HTTP cache, so a new version never stores
@@ -90,15 +111,19 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys()
+    Promise.all([caches.keys(), replacedVersion()])
       // One other version's cache is kept until the next update: a page that version opened may
-      // still be in use, and it asks for its screens by its version (AUD-057). It is the highest
-      // other version: the one this update replaces, or, after a rollback, the one rolled back from.
-      .then((keys) => {
-        const others = keys.filter((key) => key.startsWith(PREFIX) && key !== CACHE)
+      // still be in use, and it asks for its screens by its version (AUD-057). It is the version this
+      // worker replaced, as the last worker recorded it (AUD-157), so a cache another site planted
+      // under a higher name is deleted, not kept. Before any record exists, the highest is kept.
+      .then(([keys, replaced]) => {
+        const others = keys.filter((key) => key.startsWith(PREFIX) && key !== CACHE);
+        const valid = others.filter((key) => VERSION_NAME.test(key.slice(PREFIX.length)))
           .sort((a, b) => compareVersions(a.slice(PREFIX.length), b.slice(PREFIX.length)));
-        return Promise.all(others.slice(0, -1).map((key) => caches.delete(key)));
+        const keep = replaced ? `${PREFIX}${replaced}` : valid.at(-1);
+        return Promise.all(others.filter((key) => key !== keep).map((key) => caches.delete(key)));
       })
+      .then(() => recordActive())
       .then(() => self.clients.claim()),
   );
 });
@@ -168,8 +193,10 @@ self.addEventListener("fetch", (event) => {
   // both, and the app may not start (owner, 2026-10-07: "Can't load").
   // A lazy screen names the version of the page that asks for it (?v=). It is answered from that
   // version's cache while the cache exists, so a page keeps its own version's files (AUD-057).
-  const asked = url.searchParams.get("v");
-  const own = asked && asked !== self.FREELIEF_VERSION ? `${PREFIX}${asked}` : CACHE;
+  // Only a script, never a page, and only a real version name (AUD-157): a cache another site
+  // planted must not be reachable by an address.
+  const asked = event.request.destination === "script" ? url.searchParams.get("v") : null;
+  const own = asked && VERSION_NAME.test(asked) && asked !== self.FREELIEF_VERSION ? `${PREFIX}${asked}` : CACHE;
   event.respondWith(
     caches.has(own).then((kept) => caches.open(kept ? own : CACHE))
       .then((cache) => cache.match(event.request, { ignoreSearch: true })).then((cached) => {
