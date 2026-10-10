@@ -107,6 +107,7 @@ def test_an_update_keeps_other_apps_caches_and_drops_only_old_freelief_ones():
             old = page.evaluate("'freelief-' + self.FREELIEF_VERSION")
             page.evaluate(f"caches.open('{FOREIGN_CACHE}')")
             page.evaluate("caches.open('freelief-0.0.1')")  # an older version, made last on purpose
+            page.evaluate("caches.open('freelief~refresh-0.0.1')")  # an interrupted refresh (AUD-164)
             (app / "version.js").write_text('self.FREELIEF_VERSION = "9.9.9";\n', "utf-8")
             try:
                 page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
@@ -114,6 +115,7 @@ def test_an_update_keeps_other_apps_caches_and_drops_only_old_freelief_ones():
                 pass  # the takeover reloads the page; that is expected
             wait_until(page, "caches.has('freelief-9.9.9')", 8000)
             wait_until(page, "caches.has('freelief-0.0.1').then(present => !present)", 8000)
+            wait_until(page, "caches.has('freelief~refresh-0.0.1').then(present => !present)", 8000)
             wait_until(page, "document.readyState === 'complete'", 5000)
             keys = page.evaluate("caches.keys()")
             assert FOREIGN_CACHE in keys, keys
@@ -467,6 +469,12 @@ def test_a_newer_deploy_is_never_stored_in_the_running_versions_cache():
             page.evaluate("navigator.serviceWorker.controller.postMessage('heal')")
             page.wait_for_timeout(1500)
             assert not page.evaluate(has_calm), "a file of the newer deploy went into the old cache"
+            # AUD-163: Update now's refresh refuses too while a newer version is deployed.
+            reply = page.evaluate("""new Promise((resolve) => {
+              navigator.serviceWorker.addEventListener('message', (e) => { if ('refresh' in e.data) resolve(e.data.refresh); });
+              navigator.serviceWorker.controller.postMessage('refresh'); })""")
+            assert reply is False, "the refresh copied a newer deploy"
+            assert not page.evaluate(has_calm), "a file of the newer deploy went into the old cache by refresh"
             _deploy(app, old, broken_mandala=False)  # the network serves this version again
             page.evaluate("navigator.serviceWorker.controller.postMessage('heal')")
             wait_until(page, has_calm, 8000)
@@ -597,3 +605,27 @@ def test_the_palette_icons_decode_at_their_full_size():
               img.src = 'icons/icon-{size}.png'; }})""")
             assert dims == [size, size], f"icon-{size}.png: {dims}"
         assert (ROOT / "icons" / "icon-512.png").read_bytes()[25] == 3, "the 512 px icon is a palette PNG"
+
+
+def test_update_now_gives_up_after_its_wait_and_frees_the_button():
+    # AUD-179: a worker that never answers must not leave Settings at "Updating" for ever.
+    import json as _json
+    strings = _json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
+    probe = r"""
+const realFetch = window.fetch;
+window.fetch = async (input, init) => {
+  const response = await realFetch(input, init);
+  if (!/config\.json/.test(String(input.url || input))) return response;
+  const data = await response.json();
+  data.settings.updateWaitSeconds = 1;
+  return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } });
+};
+Object.defineProperty(navigator, 'serviceWorker', { value: Object.assign(new EventTarget(), {
+  controller: null, ready: new Promise(() => {}), register: () => Promise.resolve(null),
+  getRegistration: () => Promise.resolve({ update: () => Promise.resolve(), installing: null, waiting: null,
+    active: { postMessage() {} } }) }) });"""
+    with open_app(init_script=probe, route="settings") as (page, _, _):
+        page.locator(".update-now").click()
+        wait_until(page, f"document.querySelector('.update-status').textContent === {_json.dumps(strings['settings.updateFailed'])}", 5000)
+        assert page.locator(".update-now").get_attribute("aria-disabled") is None, "the button is free again"
+

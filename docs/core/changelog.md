@@ -12,6 +12,13 @@ audit.
 
 ---
 
+<a id="v0-8-31"></a>
+## [0.8.31] - 2026-10-10
+- **Update now** never waits for ever: after a minute it says the update did not work and frees the
+  button. It also never copies in a newer version by mistake, and an interrupted update leaves
+  nothing behind. [AUD-163](../fragments/AUD-163.md), [AUD-164](../fragments/AUD-164.md),
+  [AUD-179](../fragments/AUD-179.md). 217 tests.
+
 <a id="v0-8-30"></a>
 ## [0.8.30] - 2026-10-10
 - The app icons are smaller files with no visible change, so Freelief downloads 11.5 KB less.

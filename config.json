@@ -739,7 +739,8 @@
     "retired": [
       "calmMode",
       "natureSound"
-    ]
+    ],
+    "updateWaitSeconds": 60
   },
   "crisis": {
     "directoryUrl": "https://findahelpline.com/",

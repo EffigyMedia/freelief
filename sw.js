@@ -117,7 +117,9 @@ self.addEventListener("activate", (event) => {
       // worker replaced, as the last worker recorded it (AUD-157), so a cache another site planted
       // under a higher name is deleted, not kept. Before any record exists, the highest is kept.
       .then(([keys, replaced]) => {
-        const others = keys.filter((key) => key.startsWith(PREFIX) && key !== CACHE);
+        // A refresh that was interrupted leaves its temporary cache; it goes here (AUD-164).
+        const leftovers = keys.filter((key) => key.startsWith("freelief~refresh-"));
+        const others = keys.filter((key) => key.startsWith(PREFIX) && key !== CACHE).concat(leftovers);
         const valid = others.filter((key) => VERSION_NAME.test(key.slice(PREFIX.length)))
           .sort((a, b) => compareVersions(a.slice(PREFIX.length), b.slice(PREFIX.length)));
         const keep = replaced ? `${PREFIX}${replaced}` : valid.at(-1);
@@ -156,7 +158,10 @@ self.addEventListener("message", (event) => {
   // reads it as a version.
   if (event.data === "refresh") {
     const temporary = `freelief~refresh-${self.FREELIEF_VERSION}`;
-    event.waitUntil(caches.delete(temporary)
+    // Only while the network still serves this version: a newer deploy is never copied in (AUD-163).
+    event.waitUntil(thisVersionIsDeployed()
+      .then((same) => { if (!same) throw new Error("a newer version is deployed"); })
+      .then(() => caches.delete(temporary))
       .then(() => caches.open(temporary))
       .then((fresh) => fresh.addAll(FILES.map((file) => new Request(file, { cache: "reload" })))
         .then(() => Promise.all([fresh.keys(), caches.open(CACHE)]))

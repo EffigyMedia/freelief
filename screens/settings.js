@@ -125,7 +125,7 @@ export function start(container, ctx) {
     if (updateButton.getAttribute("aria-disabled") === "true") return;
     updateButton.setAttribute("aria-disabled", "true");
     try {
-      await updateNow(status, t);
+      await updateNow(status, t, config.settings.updateWaitSeconds);
     } finally {
       updateButton.removeAttribute("aria-disabled");
     }
@@ -158,7 +158,18 @@ async function offlineState() {
 // version installs in its own cache and takes over; the same version is refreshed in full, and the
 // copy is replaced only when every file arrived. No cache of another app is touched; the origin is
 // shared. Settings are kept.
-async function updateNow(status, t) {
+// A wait for the worker that ends after `seconds` with "timeout", so Update now never hangs at
+// "Updating" with its button disabled (AUD-179). `listen` gets a resolve function and returns the
+// clean-up, which always runs.
+function bounded(listen, seconds) {
+  let cleanUp = () => {};
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve("timeout"), seconds * 1000);
+    cleanUp = listen((value) => { clearTimeout(timer); resolve(value); });
+  }).finally(() => cleanUp());
+}
+
+async function updateNow(status, t, waitSeconds) {
   if (!navigator.onLine) {
     status.textContent = t("settings.updateOffline");
     return;
@@ -179,7 +190,7 @@ async function updateNow(status, t) {
   if (incoming) {
     // The new version waits after it installs (sw.js); the person asked for it, so it takes over,
     // unless Freelief is open in another window that may be in use (AUD-057).
-    const settled = await new Promise((resolve) => {
+    const settled = await bounded((resolve) => {
       const check = () => {
         if (incoming.state === "installed") incoming.postMessage("skip");
         if (incoming.state === "activated") resolve(true);
@@ -189,25 +200,27 @@ async function updateNow(status, t) {
       navigator.serviceWorker.addEventListener("message", refused);
       incoming.addEventListener("statechange", check);
       check();
-    });
+      return () => {
+        navigator.serviceWorker.removeEventListener("message", refused);
+        incoming.removeEventListener("statechange", check);
+      };
+    }, waitSeconds);
     if (settled === true) location.reload();
     else status.textContent = t(settled === "others" ? "settings.updateOtherWindows" : "settings.updateFailed");
     return;
   }
   // The same version: the worker fetches every file again and replaces its copy only when all of
   // them arrived (AUD-133). Until then, and on a failure, the working offline copy stays.
-  const refreshed = await new Promise((resolve) => {
+  const refreshed = await bounded((resolve) => {
     const heard = (event) => {
-      if (event.data && typeof event.data.refresh === "boolean") {
-        navigator.serviceWorker.removeEventListener("message", heard);
-        resolve(event.data.refresh);
-      }
+      if (event.data && typeof event.data.refresh === "boolean") resolve(event.data.refresh);
     };
     navigator.serviceWorker.addEventListener("message", heard);
     if (registration.active) registration.active.postMessage("refresh");
     else resolve(false);
-  });
-  if (refreshed) location.reload();
+    return () => navigator.serviceWorker.removeEventListener("message", heard);
+  }, waitSeconds);
+  if (refreshed === true) location.reload();
   else status.textContent = t("settings.updateFailed");
 }
 
