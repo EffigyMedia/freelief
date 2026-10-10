@@ -34,25 +34,57 @@ def go(page, route):
     wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 3000)
 
 
-def test_a_breathing_tone_lasts_its_whole_phase():
-    with open_app(init_script=PROBE) as (page, _, _):
-        page.locator(".guide").click()  # unlock sound; the tone starts with the next phase
-        wait_until(page, "window.__osc.length >= 2", 12000)
-        lengths = page.evaluate("window.__osc.slice(0, 2).map(o => o.stop - o.start)")
-        phase = page.evaluate("document.querySelector('.phase').textContent")
-        expected = RHYTHM["out"] if phase == "Breathe out" else RHYTHM["in"]
-        for length in lengths:
-            assert abs(length - expected) < 0.2, f"tone lasts {length:.2f} s, phase lasts {expected} s"
+# Records every buffer source (the breath and the taps): when it starts, when it is told to stop,
+# and whether it loops.
+NOISE_PROBE = """
+window.__src = [];
+const createSource = AudioContext.prototype.createBufferSource;
+AudioContext.prototype.createBufferSource = function () {
+  const node = createSource.call(this);
+  const record = { node, start: null, stops: [], ctx: this };
+  window.__src.push(record);
+  const start = node.start.bind(node), stop = node.stop.bind(node);
+  node.start = (when, offset) => { record.start = when ?? this.currentTime; return start(when, offset); };
+  node.stop = (when) => { record.stops.push(when ?? this.currentTime); return stop(when); };
+  return node;
+};
+"""
+BREATHS = "window.__src.filter(s => s.node.loop)"
 
 
-def test_pausing_stops_the_breathing_tone():
-    with open_app(init_script=PROBE) as (page, _, _):
+def test_each_breath_is_soft_noise_that_lasts_its_whole_phase_and_no_tone():
+    # RLG-050 (owner, 2026-10-09): breath noise, not a tone; in and out sound different.
+    with open_app(init_script=NOISE_PROBE + PROBE) as (page, _, _):
+        page.locator(".guide").click()  # unlock sound; the breath starts with the next phase
+        wait_until(page, f"{BREATHS}.length >= 2", 14000)
+        lengths = page.evaluate(f"{BREATHS}.slice(0, 2).map(s => s.stops[0] - s.start)")
+        assert sorted(round(l) for l in lengths) == sorted([RHYTHM["in"], RHYTHM["out"]]), lengths
+        assert page.evaluate("window.__osc.filter(o => o.freq() < 400).length") == 0, "no breathing tone"
+        shape = CONFIG["sounds"]["breath"]
+        assert shape["in"]["toCutoffHz"] > shape["in"]["fromCutoffHz"], "the in-breath brightens"
+        assert shape["out"]["toCutoffHz"] < shape["out"]["fromCutoffHz"], "the out-breath darkens"
+
+
+def test_pausing_stops_the_breath():
+    with open_app(init_script=NOISE_PROBE) as (page, _, _):
         page.locator(".guide").click()
-        wait_until(page, "window.__osc.length >= 2", 12000)
+        wait_until(page, f"{BREATHS}.length >= 1", 14000)
         page.locator(".pause").click()
-        early = page.evaluate("""window.__osc.slice(0, 2)
-            .map(o => o.stop - o.ctx.currentTime)""")
-        assert all(left < 1.0 for left in early), f"tone keeps going after Pause: {early}"
+        left = page.evaluate(f"(() => {{ const s = {BREATHS}.at(-1); return s.stops.at(-1) - s.ctx.currentTime; }})()")
+        assert left < 1.0, f"the breath keeps going after Pause: {left}"
+
+
+def test_box_breathing_taps_once_for_each_second_of_a_hold():
+    store = "localStorage.setItem('freelief.settings.v2', JSON.stringify({ rhythm: 'box' }));"
+    hold = CONFIG["breathing"]["rhythms"]["box"]["holdIn"]
+    with open_app(init_script=NOISE_PROBE + store) as (page, _, _):
+        page.locator(".guide").click()
+        wait_until(page, "window.__src.filter(s => !s.node.loop).length >= " + str(hold), 20000)
+        starts = page.evaluate("window.__src.filter(s => !s.node.loop).slice(0, %d).map(s => s.start)" % hold)
+        gaps = [round(b - a, 2) for a, b in zip(starts, starts[1:])]
+        assert gaps == [1.0] * (hold - 1), f"one tap a second: {gaps}"
+        lengths = page.evaluate("window.__src.filter(s => !s.node.loop).slice(0, 2).map(s => s.stops[0] - s.start)")
+        assert all(l < 0.2 for l in lengths), f"a tap is short: {lengths}"
 
 
 def test_the_glass_sings_while_tracing_and_stops_on_leaving():
@@ -163,7 +195,9 @@ AudioContext.prototype.createGain = function () {
 # RLG-046 (owner, 2026-10-09): every sound is diatonic to the music's key, C major (C D E F G A B).
 C_MAJOR = {0, 2, 4, 5, 7, 9, 11}  # semitones above C
 # Filter corners, a swell rate and a beat rate shape a sound; they are not notes.
-UNPITCHED = {"noiseHz", "cutoffHz", "lowpassHz", "highpassHz", "swellHz", "beatHz", "troughHz", "crestHz"}
+# The breath's band moves over a wide, soft band of noise (Q under 1), so it has no pitch.
+UNPITCHED = {"noiseHz", "cutoffHz", "lowpassHz", "highpassHz", "swellHz", "beatHz", "troughHz", "crestHz",
+             "fromCutoffHz", "toCutoffHz"}
 # The bubble pop and the ripple's water drop are natural sounds, so their pitch stays random
 # (owner, 2026-10-09).
 NATURAL = {"sounds.pop", "sounds.drop"}

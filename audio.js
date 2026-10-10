@@ -142,49 +142,79 @@ export function play(name) {
 
 const SILENT = () => {};
 
-// A soft tone that lasts the whole breathing phase (owner, 2026-10-07): it swells in, holds, and
-// fades out as the phase ends. A quiet octave above the note warms it. Returns a function that
-// stops the tone at once (pause, or leaving the screen).
+// The breathing sound (owner, 2026-10-09; RLG-050): the sound of a breath, not a tone. Each in and
+// out phase is soft noise that swells and fades over the whole phase, through a band filter that
+// moves: it brightens as the person breathes in and darkens as they breathe out, so the two differ.
+// A hold (box breathing) plays one light tap at each second, so the person can count it. Returns a
+// function that stops the sound at once (pause, or leaving the screen).
 export function cue(phaseKey, seconds) {
   if (!canPlay()) return SILENT;
-  const breath = sounds.breath;
-  const frequency = breath.frequencies[phaseKey];
-  const ctx = frequency && ensureContext();
+  const ctx = ensureContext();
   if (!ctx) return SILENT;
+  const breath = sounds.breath;
   const start = ctx.currentTime;
   const end = start + seconds;
-  const attack = Math.min(breath.attackSeconds, seconds * 0.3);
-  const release = Math.min(breath.releaseSeconds, seconds * 0.4);
-  const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0, start);
-  gain.gain.linearRampToValueAtTime(breath.volume, start + attack);
-  gain.gain.setValueAtTime(breath.volume, end - release);
-  gain.gain.linearRampToValueAtTime(0, end);
-  gain.connect(output);
-  const voices = [[frequency, 1], [frequency * 2, breath.octaveLevel]].map(([hz, level]) => {
-    const oscillator = ctx.createOscillator();
-    const voice = ctx.createGain();
-    oscillator.type = "sine";
-    oscillator.frequency.value = hz;
-    voice.gain.value = level;
-    oscillator.connect(voice).connect(gain);
-    oscillator.start(start);
-    oscillator.stop(end + 0.05);
-    return oscillator;
-  });
+  const master = ctx.createGain();
+  master.connect(output);
+  const sources = [];
+
+  if (phaseKey === "in" || phaseKey === "out") {
+    const shape = breath[phaseKey];
+    const air = noise(ctx);
+    air.loop = true;
+    const band = ctx.createBiquadFilter();
+    band.type = "bandpass";
+    band.Q.value = shape.q;
+    band.frequency.setValueAtTime(shape.fromCutoffHz, start);
+    band.frequency.exponentialRampToValueAtTime(shape.toCutoffHz, end);
+    const attack = Math.max(breath.minEdgeSeconds, seconds * breath.attackShare);
+    const release = Math.max(breath.minEdgeSeconds, seconds * breath.releaseShare);
+    master.gain.setValueAtTime(0, start);
+    master.gain.linearRampToValueAtTime(breath.volume, start + attack);
+    master.gain.setValueAtTime(breath.volume, Math.max(start + attack, end - release));
+    master.gain.linearRampToValueAtTime(0, end);
+    air.connect(band).connect(master);
+    air.start(start, Math.random());
+    air.stop(end + 0.05);
+    sources.push(air);
+  } else {
+    // A hold: one light tap at the start of each second.
+    const tap = breath.tap;
+    for (let second = 0; second < Math.round(seconds); second++) {
+      const at = start + second;
+      const click = noise(ctx);
+      const band = ctx.createBiquadFilter();
+      band.type = "bandpass";
+      band.frequency.value = tap.bandHz;
+      band.Q.value = tap.q;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, at);
+      gain.gain.linearRampToValueAtTime(tap.volume, at + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.0001, at + tap.seconds);
+      click.connect(band).connect(gain).connect(master);
+      click.start(at, Math.random());
+      click.stop(at + tap.seconds + 0.02);
+      sources.push(click);
+    }
+  }
+
   return () => {
     const now = ctx.currentTime;
+    const stopAll = (when) => sources.forEach((source) => { try { source.stop(when); } catch { /* already stopped */ } });
     if (paused(ctx)) {
-      gain.disconnect();
-      voices.forEach((oscillator) => { try { oscillator.stop(); } catch { /* already stopped */ } });
+      master.disconnect();
+      stopAll();
       return;
     }
-    gain.gain.cancelScheduledValues(now);
-    gain.gain.setTargetAtTime(0, now, 0.08);
-    voices.forEach((oscillator) => { try { oscillator.stop(now + 0.4); } catch { /* already stopped */ } });
+    master.gain.cancelScheduledValues(now);
+    master.gain.setTargetAtTime(0, now, 0.08);
+    stopAll(now + 0.4);
+    // A source already told to stop at the phase's end keeps that time, so the faded sound is
+    // disconnected once the fade is over.
+    setTimeout(() => master.disconnect(), 450);
     fadingUntil(() => {
-      gain.disconnect();
-      voices.forEach((oscillator) => { try { oscillator.stop(); } catch { /* already stopped */ } });
+      master.disconnect();
+      stopAll();
     }, 0.4);
   };
 }

@@ -9,13 +9,16 @@ CONFIG = json.loads((ROOT / "config.json").read_text("utf-8"))
 STRINGS = json.loads((ROOT / "strings" / "en.json").read_text("utf-8"))
 
 # Counts AudioContext oscillators, so a test can see that a tone was asked for without hearing it.
+# Counts every sound made: a tone (oscillator) or noise (the breath since RLG-050, a pop, a tap).
 TONE_PROBE = """
 window.__tones = 0;
-const original = AudioContext.prototype.createOscillator;
-AudioContext.prototype.createOscillator = function () {
-  window.__tones += 1;
-  return original.call(this);
-};
+for (const name of ["createOscillator", "createBufferSource"]) {
+  const original = AudioContext.prototype[name];
+  AudioContext.prototype[name] = function () {
+    window.__tones += 1;
+    return original.call(this);
+  };
+}
 """
 
 BLOCKED_STORAGE = """

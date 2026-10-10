@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-8-4"></a>
+## [0.8.4] - 2026-10-09
+- **Breathe**: the sound is now the soft sound of a breath, not a tone. The in-breath brightens and
+  the out-breath darkens, so they sound different. Box breathing plays a light tap for each second
+  of a hold. [RLG-050](../fragments/RLG-050.md). 181 tests.
+
 <a id="v0-8-3"></a>
 ## [0.8.3] - 2026-10-09
 - **Footer**: the line is now "You are safe right now." ("Take your time" is removed).

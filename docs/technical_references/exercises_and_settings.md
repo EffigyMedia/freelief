@@ -224,8 +224,8 @@ Every sound is made with Web Audio, so no audio file ships. All tunables are in 
 `sounds`.
 
 **Before the first gesture, nothing is created.** A browser allows sound only after the first tap
-or key press. The first gesture anywhere in the app unlocks sound. The breathing tones then begin
-at the next phase.
+or key press. The first gesture anywhere in the app unlocks sound. The breath sound then begins at
+the next phase.
 
 **One master volume.** Every sound goes through one gain node (`output`). The background sound goes
 through a second gain node (`bed`) first, so a screen can lower it.
@@ -241,7 +241,7 @@ The sounds:
 
 | Function | Used by | What it is |
 |---|---|---|
-| `cue(phase, seconds)` | Breathing | A sine tone for the whole phase, with a quiet octave above it: it swells in, holds and fades out. It returns a stop function. |
+| `cue(phase, seconds)` | Breathing | The sound of a breath (RLG-050): soft looping noise for the whole in or out phase, through a band filter that brightens on the in-breath and darkens on the out-breath (`sounds.breath.in` and `.out`); it swells in and fades out. A hold plays one light tap (a short burst of filtered noise, `sounds.breath.tap`) at each second. It returns a stop function. |
 | `play(name)` | Trace, Unblock | A named cue from `sounds.cues` (`loop`, `choose`, `swap`, `done`): one or more notes, a gap apart. |
 | `glass(note)` | Trace | A sustained singing-glass tone that follows the speed. |
 | `pop()` | Bubbles | A short burst of band-passed noise over a falling thump. |
@@ -268,7 +268,7 @@ never starts a sound by itself, so each visit starts silent.
 
 **Ducking.** On each route change, the shell calls `audio.duck()`. On a route in
 `calm.duckRoutes` (breathing), the `bed` volume falls to `sounds.background.duckLevel` over
-`duckSeconds`, so the background sits under the breathing tones. On other routes it comes back up.
+`duckSeconds`, so the background sits under the breath sound. On other routes it comes back up.
 
 **The sound bar** (RLG-049) is three round toggle buttons in the header's middle row, on every
 screen: a music note, a raindrop and a wave, in a `role="group"` named "Background sound". Each has

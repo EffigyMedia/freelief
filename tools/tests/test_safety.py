@@ -8,13 +8,16 @@ from harness import ROOT, open_app, wait_until
 
 CONFIG = json.loads((ROOT / "config.json").read_text("utf-8"))
 
+# Records each audio context that makes a sound: a tone (oscillator) or noise (the breath, a tap).
 OSC_PROBE = """
 window.__ctx = [];
-const create = AudioContext.prototype.createOscillator;
-AudioContext.prototype.createOscillator = function () {
-  if (!window.__ctx.includes(this)) window.__ctx.push(this);
-  return create.call(this);
-};
+for (const name of ["createOscillator", "createBufferSource"]) {
+  const create = AudioContext.prototype[name];
+  AudioContext.prototype[name] = function () {
+    if (!window.__ctx.includes(this)) window.__ctx.push(this);
+    return create.call(this);
+  };
+}
 """
 
 WAKE_PROBE = """

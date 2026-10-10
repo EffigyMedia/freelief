@@ -385,7 +385,7 @@ Each file below is one module with one responsibility.
 | `settings.js` | **The single source of truth for Settings.** The only module that touches `localStorage`. | Hold defaults (those are in `config.json`). |
 | `strings.js` + `strings/en.json` | **The single source of all user-facing text.** | Contain logic. |
 | `crisis.js` + `data/crisis-lines.json` | The choice of crisis lines from the device region. | Ask for location. |
-| `audio.js` | Every sound, made with Web Audio: the breathing tones, the activity cues and the background music, rain and waves, which share one volume that a screen can lower. Nothing plays before the first tap or key press. | Play anything while sound is off, while urgent help is open, or while the app is hidden; load an audio file; touch storage except by reading `settings.js` (AUD-117). |
+| `audio.js` | Every sound, made with Web Audio: the breath sound and the hold taps, the activity cues and the background music, rain and waves, which share one volume that a screen can lower. Nothing plays before the first tap or key press. | Play anything while sound is off, while urgent help is open, or while the app is hidden; load an audio file; touch storage except by reading `settings.js` (AUD-117). |
 | `haptics.js` | One short vibration from `config.json` → `haptics.patterns` for a single triggered event in an activity. A device without the Vibration API gets nothing. | Vibrate for anything continuous (the breath, a drag trail, the trace tone); vibrate while vibration is off; touch storage except by reading `settings.js` (AUD-117). |
 | `wakelock.js` | The screen wake lock while breathing or the Visualizer runs, taken again when the page comes back. | Fail when the browser has no wake lock or refuses it; keep the lock after the last screen releases it; touch storage except by reading `settings.js` (AUD-117). |
 | `motion.js` | Reduced-motion detection; every animation asks it. | Touch storage except by reading `settings.js` (AUD-117). |
@@ -1195,6 +1195,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   the person chooses Always; its hint says it uses more battery. — 2026-10-09 (owner; UNT-108)
 - **The footer line is "You are safe right now."** — Owner request (RLG-051): "Take your time" is
   removed from the footer; the owner kept the first sentence. — 2026-10-09 (owner; UNT-109)
+- **Breathing sounds like breath, and box breathing taps the seconds of a hold.** — Owner request
+  (RLG-050): breath noise in place of the tone, sounding different for in and out, and light
+  percussive taps for the seconds of a hold. Each in or out phase is soft looping noise that swells
+  and fades over the whole phase, through a band filter that rises (in-breath, 700 to 1,500 Hz) or
+  falls (out-breath, 900 to 380 Hz). A hold plays one short tap of filtered noise at each second,
+  centered on C6, so it stays in the music's key (RLG-046). The calm and slower rhythms have no
+  holds, so only box breathing taps. — Rejected: keep the sine tone (the owner's request). —
+  2026-10-09 (owner; UNT-110)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
@@ -1287,7 +1295,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   shapes are drawn from formulas, so no asset ships. — 2026-10-07 (owner)
 - **Sounds are on by default, with one Sounds switch in Settings. A soft tone lasts each breathing
   phase; the activities have short cues; the shape trace sounds like a singing crystal glass while the
-  person moves. Nothing plays before the first tap or key press. No spoken voice.** — The owner asked
+  person moves. Nothing plays before the first tap or key press. No spoken voice.** *(Amended
+  2026-10-09 (owner, RLG-050): the breathing tone became a breath sound; see that entry.)* — The owner asked
   for more, subtle sounds, on by default (REQ-007 changed). Browsers block sound before a gesture,
   and creating audio early would log a warning, so the first gesture unlocks it. — Rejected: tones off
   by default (the first decision). — 2026-10-07 (owner) *Amended 2026-10-08 (owner, UNT-053): the
