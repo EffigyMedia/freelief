@@ -10,6 +10,11 @@ audit.
 
 ---
 
+<a id="v0-8-3"></a>
+## [0.8.3] - 2026-10-09
+- **Footer**: the line is now "You are safe right now." ("Take your time" is removed).
+  [RLG-051](../fragments/RLG-051.md). 180 tests.
+
 <a id="v0-8-2"></a>
 ## [0.8.2] - 2026-10-09
 - **Header**: three centered lines: the name; then music, rain and waves, the speaker and Settings;

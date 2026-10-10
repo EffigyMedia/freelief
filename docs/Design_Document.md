@@ -944,7 +944,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **On an exercise or activity, the footer shows only its calm line.** — The design review found
   that the full footer (the calm line, the self-help line and three links) took about a quarter of a
   phone screen under the exercise. On Breathe and the six activities only "You are safe right now.
-  Take your time." shows; the menu and the info pages keep the full footer. The self-help line
+  Take your time." shows; the menu and the info pages keep the full footer. *(Amended 2026-10-09
+  (owner, RLG-051): the line is now "You are safe right now."; "Take your time" is removed.)* The self-help line
   stays on the main screen, the menu (REQ-006), and the links stay one tap away through Back to
   menu. — 2026-10-08 (owner; UNT-062)
 - **The trace marker is about 44 px across on a phone.** — The design review found it about 25 px,
@@ -1192,6 +1193,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   minutes, "Always, while it runs" keeps the screen on for as long as breathing or the Visualizer
   runs (stored as 0 minutes). The default stays 30 minutes, so the AUD-103 protection holds unless
   the person chooses Always; its hint says it uses more battery. — 2026-10-09 (owner; UNT-108)
+- **The footer line is "You are safe right now."** — Owner request (RLG-051): "Take your time" is
+  removed from the footer; the owner kept the first sentence. — 2026-10-09 (owner; UNT-109)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
