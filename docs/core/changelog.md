@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-24"></a>
+## [0.8.24] - 2026-10-10
+- **Zen Garden**: raking makes one smooth, continuous sand sound that gets louder with a faster
+  stroke and fades away when you stop. [RLG-060](../fragments/RLG-060.md). 208 tests.
+
 <a id="v0-8-23"></a>
 ## [0.8.23] - 2026-10-10
 - **Settings**: the line about the offline copy now says it is saved only when every file is on the

@@ -1351,6 +1351,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   the worker now stores a network file only while the network serves its own version. — Rejected:
   serving each window from the cache of the version it loaded (it needs a record of each window
   that outlives the worker). — 2026-10-10 (UNT-122)
+- **The rake sound is one continuous loop that follows the rake's speed.** — Owner request
+  (RLG-060): the repeated short brush sounded like a looping one-shot. Raking now starts one looping
+  noise in the sand band; its level follows the stroke's speed and settles to silence when the rake
+  stops, and it fades out when the person leaves. — 2026-10-10 (owner; UNT-141)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

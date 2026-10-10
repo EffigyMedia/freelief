@@ -147,3 +147,37 @@ def test_an_item_added_after_a_removal_gets_a_name_of_its_own():
         names = [label.split(",")[0] for label in labels]
         assert len(names) == len(set(names)), names
         assert not errors, errors
+
+
+def test_raking_plays_one_continuous_sound_that_follows_the_speed():
+    # RLG-060 (owner, 2026-10-10): one looping sound for the whole rake, not a repeated one-shot; its
+    # level rises with a fast stroke and falls to silence when the rake stops.
+    probe = """
+window.__loops = []; window.__gains = [];
+const createSource = AudioContext.prototype.createBufferSource;
+AudioContext.prototype.createBufferSource = function () {
+  const node = createSource.call(this); const record = { node, ctx: this };
+  Object.defineProperty(record, 'loop', { get: () => node.loop }); window.__loops.push(record); return node; };
+const setTarget = AudioParam.prototype.setTargetAtTime;
+AudioParam.prototype.setTargetAtTime = function (value, when, constant) { window.__gains.push(value); return setTarget.call(this, value, when, constant); };"""
+    with open_app(init_script=probe) as (page, _, _):
+        page.locator(".guide").click()  # the first gesture unlocks sound
+        page.wait_for_timeout(300)
+        go(page, "garden")
+        before = page.evaluate("window.__loops.length")
+        sand = page.locator(".garden-sand")
+        sand.scroll_into_view_if_needed()
+        box = sand.bounding_box()
+        page.mouse.move(box["x"] + 20, box["y"] + box["height"] / 2)
+        page.mouse.down()
+        for i in range(1, 25):
+            page.mouse.move(box["x"] + 20 + i * 10, box["y"] + box["height"] / 2)
+        wait_until(page, f"window.__loops.slice({before}).some(r => r.loop)", 2000)
+        made = page.evaluate(f"window.__loops.slice({before}).filter(r => r.loop).length")
+        assert made == 1, f"one looping sound for the stroke, not {made}"
+        assert max(page.evaluate("window.__gains")) > 0, "the stroke is heard"
+        page.mouse.up()
+        page.wait_for_timeout(CONFIG["garden"]["rakeStillMs"] + 200)
+        assert page.evaluate("window.__gains.at(-1)") == 0, "the sound settles to silence when the rake stops"
+        assert page.evaluate(f"window.__loops.slice({before}).length") == 1, "no one-shot per move"
+

@@ -24,7 +24,7 @@ export function start(container, ctx) {
   stop();
   const { t, config, audio } = ctx;
   const settings = config.garden;
-  const current = { strokes: [], items: [], chosen: null, last: null, rake: { x: W / 2, y: H / 2 }, sound: 0 };
+  const current = { strokes: [], items: [], chosen: null, last: null, rake: { x: W / 2, y: H / 2 }, sand: null, soundAt: 0, still: 0 };
   run = current;
 
   container.innerHTML = `
@@ -71,12 +71,17 @@ export function start(container, ctx) {
   }
   const clamp = (p) => ({ x: Math.min(W, Math.max(0, p.x)), y: Math.min(H, Math.max(0, p.y)) });
 
-  // A soft brush of sand, at most once every few hundred milliseconds while raking.
-  function sandSound() {
+  // One continuous sand sound while raking (owner, RLG-060). Its loudness follows the rake's speed:
+  // a fast stroke is louder, a slow one softer, and it settles to silence when the rake stops.
+  function sandSound(distance) {
     const now = performance.now();
-    if (now - current.sound < settings.soundEveryMs) return;
-    current.sound = now;
-    audio.sand();
+    const seconds = Math.max(0.016, (now - (current.soundAt || now - 16)) / 1000);
+    current.soundAt = now;
+    // A silent loop (sound was off, or not yet unlocked) is made again, so sound turned on later is heard.
+    if (!current.sand?.live) current.sand = audio.sandLoop();
+    current.sand.level(distance / seconds / settings.rakeFullSpeed);
+    clearTimeout(current.still);
+    current.still = setTimeout(() => current.sand?.level(0), settings.rakeStillMs);
   }
 
   // One rake stroke is a set of parallel lines, the tines, offset across the direction of travel.
@@ -100,7 +105,7 @@ export function start(container, ctx) {
     }
     // The oldest lines go first, so the garden never grows without end.
     while (lines.childElementCount > settings.maxLines) lines.firstElementChild.remove();
-    sandSound();
+    sandSound(length);
   }
 
   // ---- stones and plants -------------------------------------------------------------------
@@ -261,7 +266,11 @@ export function start(container, ctx) {
     if (!current.last) return;
     rakeTo(clamp(local(event)));
   });
-  const endRake = () => { current.last = null; };
+  const endRake = () => {
+    current.last = null;
+    current.soundAt = 0;
+    current.sand?.level(0);
+  };
   area.addEventListener("pointerup", endRake);
   area.addEventListener("pointercancel", endRake);
 
@@ -297,5 +306,7 @@ export function start(container, ctx) {
 }
 
 export function stop() {
+  clearTimeout(run?.still);
+  run?.sand?.stop();
   run = null;
 }

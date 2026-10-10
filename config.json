@@ -212,7 +212,7 @@
       "volume": 0.035,
       "bandHz": 880.0,
       "q": 0.7,
-      "seconds": 0.22
+      "glideSeconds": 0.08
     }
   },
   "haptics": {
@@ -261,7 +261,8 @@
     "startStones": 3,
     "keyStep": 12,
     "dragThreshold": 4,
-    "soundEveryMs": 260
+    "rakeFullSpeed": 600,
+    "rakeStillMs": 120
   },
   "unblock": {
     "size": 6,

@@ -313,25 +313,49 @@ function noise(ctx) {
   return source;
 }
 
-// The sound of raking sand (RLG-055): a short, soft brush of filtered noise. Noise has no pitch.
-export function sand() {
-  if (!canPlay()) return;
+// The sound of raking sand (RLG-055, RLG-060): one continuous loop of filtered noise, started when
+// raking starts. Its loudness follows the rake's speed and falls to silence when the rake stops.
+// Noise has no pitch.
+export function sandLoop() {
+  const silent = { live: false, level() {}, stop() {} };
+  if (!canPlay()) return silent;
   const ctx = ensureContext();
-  if (!ctx) return;
+  if (!ctx) return silent;
   const settings = sounds.sand;
-  const now = ctx.currentTime;
   const brush = noise(ctx);
+  brush.loop = true;
   const band = ctx.createBiquadFilter();
   band.type = "bandpass";
   band.frequency.value = settings.bandHz;
   band.Q.value = settings.q;
   const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(settings.volume, now + settings.seconds * 0.3);
-  gain.gain.linearRampToValueAtTime(0, now + settings.seconds);
+  gain.gain.setValueAtTime(0, ctx.currentTime);
   brush.connect(band).connect(gain).connect(output);
-  brush.start(now, Math.random());
-  brush.stop(now + settings.seconds + 0.02);
+  brush.start(ctx.currentTime, Math.random());
+  let stopped = false;
+  return {
+    live: true,
+    // 0 is still, 1 is a fast stroke. The level glides, so a stroke swells and settles with no step.
+    level(amount) {
+      if (stopped) return;
+      const target = settings.volume * Math.max(0, Math.min(1, amount));
+      gain.gain.setTargetAtTime(target, ctx.currentTime, settings.glideSeconds);
+    },
+    stop() {
+      if (stopped) return;
+      stopped = true;
+      const now = ctx.currentTime;
+      if (paused(ctx)) {
+        gain.disconnect();
+        brush.stop();
+        return;
+      }
+      hold(gain.gain, now);
+      gain.gain.setTargetAtTime(0, now, settings.glideSeconds);
+      brush.stop(now + settings.glideSeconds * 6);
+      fadingUntil(() => { gain.disconnect(); try { brush.stop(); } catch { /* already stopped */ } }, settings.glideSeconds * 6);
+    },
+  };
 }
 
 // One note chosen at random from a list of C-major notes, so a pitched sound that plays with the

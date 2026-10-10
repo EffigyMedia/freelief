@@ -249,7 +249,7 @@ The sounds:
 |---|---|---|
 | `cue(phase, seconds)` | Breathing | The sound of a breath (RLG-050): soft looping noise for the whole in or out phase, through a band filter that brightens on the in-breath and darkens on the out-breath (`sounds.breath.in` and `.out`); it swells in and fades out. A hold plays one light tap (a short burst of filtered noise, `sounds.breath.tap`) at each second. It returns a stop function. |
 | `play(name)` | Zen Garden, Unblock | A named cue from `sounds.cues` (`choose`, `swap`, `done`): one or more notes, a gap apart. |
-| `sand()` | Zen Garden | A soft sand sound while raking: filtered noise centered on A5. |
+| `sandLoop()` | Zen Garden | One continuous sand sound for a rake: looping noise in a band centered on A5. `level(0..1)` glides its loudness (`glideSeconds`); the garden sets it from the rake's speed (`garden.rakeFullSpeed` units a second is full) and to 0 after `rakeStillMs` with no move. `stop()` fades it out. |
 | `pop()` | Bubbles | A short burst of band-passed noise over a falling thump. |
 | `drop()` | Ripple pond | A short sine whose pitch rises fast, through a low-pass filter. |
 | `chime(note)` | Mandala | A struck bell: inharmonic partials and a quieter second strike. |
