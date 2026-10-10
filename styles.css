@@ -904,7 +904,7 @@ h1, h2, h3 { text-wrap: balance; }
   transform: translateY(-50%);
 }
 
-/* Zen Garden (RLG-055): a tray of pale sand, raked lines, rings around stones and plants. */
+/* Zen Garden (RLG-055): a tray of pale sand, raked lines, stones and plants. */
 .garden-tray { width: 100%; }
 .garden-sand {
   display: block;
@@ -919,7 +919,6 @@ h1, h2, h3 { text-wrap: balance; }
 .garden-rake-area:focus { outline: none; }
 .garden-sand:has(.garden-rake-area:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
 .garden-lines line { stroke: hsl(38 30% 62%); stroke-width: 1.6; stroke-linecap: round; }
-.garden-rings circle { fill: none; stroke: hsl(38 30% 64%); stroke-width: 1.6; }
 .garden-rake { fill: hsl(25 40% 40%); }
 .garden-item { cursor: grab; }
 .garden-item.stone ellipse { fill: hsl(220 6% 42%); }
@@ -933,5 +932,5 @@ h1, h2, h3 { text-wrap: balance; }
 /* Four actions: two to a row, so each label stays on one line on a phone. */
 .garden .exercise-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
 @media (forced-colors: active) {
-  .garden-lines line, .garden-rings circle { stroke: CanvasText; }
+  .garden-lines line { stroke: CanvasText; }
 }

@@ -253,8 +253,6 @@
     "tines": 5,
     "tineGap": 4,
     "maxLines": 2500,
-    "rings": 3,
-    "ringGap": 6,
     "stoneSize": 28,
     "plantSize": 27,
     "maxItems": 6,
@@ -262,7 +260,8 @@
     "keyStep": 12,
     "dragThreshold": 4,
     "rakeFullSpeed": 600,
-    "rakeStillMs": 120
+    "rakeStillMs": 120,
+    "itemGap": 18
   },
   "unblock": {
     "size": 6,

@@ -252,8 +252,8 @@ statements come from the strings file. Outcome: the person stops when they choos
 **F5 — Distraction activities.** *Bubble field:* bubbles drift slowly; a tap or a key press pops the
 focused bubble with a soft visual (and a soft pop if sound is on). *Zen Garden (REQ-038,
 added 2026-10-10, replacing the shape trace, REQ-013):* a tray of sand to rake with a finger or
-the arrow keys, with a few stones and small plants to add, move and remove; the sand keeps rings
-around each, and the raked lines flow around them; Smooth the sand clears the lines. *Unblock (REQ-035,
+the arrow keys, with a few stones and small plants to add, move and remove; nothing is drawn around
+them, and the raked lines stop at their edges (owner, RLG-061); Smooth the sand clears the lines. *Unblock (REQ-035,
 added 2026-10-09, replacing the colour sort, REQ-014):* wooden blocks on a 6 by 6 board, each
 sliding only along its length; the person slides them to let the blue block out through the gap in
 the right edge. A block moves by a drag, by the arrow keys on it, or by choosing it and pressing
@@ -1289,7 +1289,8 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   rake" from three kinds. An SVG tray of sand: a drag rakes five parallel lines along its path; the
   arrow keys move a rake and draw as it moves; stones and plants are named buttons that a drag or
   the arrow keys move and Delete or Remove takes away; a mask hides the lines inside the rings
-  around each item, so the lines flow around it. It starts with three stones and has room for six
+  around each item, so the lines flow around it *(amended 2026-10-10, owner, RLG-061: no rings; the
+  mask hides lines only under the item)*. It starts with three stones and has room for six
   items. A soft sand sound, filtered noise centered on A5, plays while raking. The trace, its twelve
   shapes and the crystal-glass sound are removed; REQ-013 is withdrawn and REQ-038 replaces it. —
   Rejected: ripples that form around stones by themselves; raking only. — 2026-10-10 (owner;

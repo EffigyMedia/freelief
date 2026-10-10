@@ -78,8 +78,8 @@ A tray of sand in SVG (400 by 300 units), with stones and plants (RLG-055, REQ-0
   it and does not choose; the arrow keys move a focused one; Delete, Backspace or Remove takes it
   away. Add a stone and Add a plant place a new one where there is room, up to `maxItems`. Three
   stones are there at the start.
-- **Rings.** Around each item the sand keeps `rings` circles, and a mask hides the raked lines
-  inside them, so the lines seem to flow around the item.
+- **No rings** (owner, RLG-061). Nothing is drawn around an item; a mask hides the raked lines
+  only under the item itself. Items keep `itemGap` units apart when one is added.
 - No score, no timer, no end. A polite live line says what happened.
 
 ## Unblock (`activities/unblock.js`)

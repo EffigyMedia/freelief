@@ -1,9 +1,8 @@
 // Zen Garden (RLG-055, owner 2026-10-10): a tray of sand to rake, with a few stones and a small plant
 // to place, move and remove. It replaces Trace a shape. No score, no failure, no timer and no end.
 //
-// A finger or a mouse drawn across the sand rakes a set of parallel lines along its path. Around each
-// stone and plant the sand keeps a few rings, as in a raked garden, so the lines seem to flow around
-// them. The sand is one focusable control: the arrow keys move a rake and draw as it moves, so the
+// A finger or a mouse drawn across the sand rakes a set of parallel lines along its path. Nothing is
+// drawn around a stone or a plant: the person rakes around them (owner, RLG-061). The sand is one focusable control: the arrow keys move a rake and draw as it moves, so the
 // task works with a keyboard alone. Each stone and plant is a button with a name; the arrow keys move
 // a chosen one, and Remove takes it away. Smooth the sand clears the lines and keeps the stones.
 // Everything is SVG; no canvas is used, by the architecture rule.
@@ -40,7 +39,6 @@ export function start(container, ctx) {
             <rect x="0" y="0" width="${W}" height="${H}" fill="white"></rect><g class="garden-holes"></g>
           </mask></defs>
           <g class="garden-lines" mask="url(#garden-mask)" aria-hidden="true"></g>
-          <g class="garden-rings" aria-hidden="true"></g>
           <g class="garden-items"></g>
           <circle class="garden-rake" r="5" aria-hidden="true" visibility="hidden"></circle>
         </svg>
@@ -57,7 +55,6 @@ export function start(container, ctx) {
   const sand = container.querySelector(".garden-sand");
   const area = container.querySelector(".garden-rake-area");
   const lines = container.querySelector(".garden-lines");
-  const rings = container.querySelector(".garden-rings");
   const holes = container.querySelector(".garden-holes");
   const itemsLayer = container.querySelector(".garden-items");
   const rakeDot = container.querySelector(".garden-rake");
@@ -110,16 +107,12 @@ export function start(container, ctx) {
 
   // ---- stones and plants -------------------------------------------------------------------
 
-  // Inside the rings around a stone or a plant the raked lines do not show, so the lines seem to
-  // flow around it, as in a raked garden.
-  function drawRings() {
+  // Under a stone or a plant the raked lines do not show, so they stop at its edge. No rings are drawn
+  // around it (owner, RLG-061).
+  function drawHoles() {
     holes.replaceChildren(...current.items.map((item) => svg("circle", {
-      cx: item.x, cy: item.y, r: item.size + settings.ringGap * (settings.rings + 0.5), fill: "black",
+      cx: item.x, cy: item.y, r: item.size, fill: "black",
     })));
-    rings.replaceChildren(...current.items.flatMap((item) =>
-      [...Array(settings.rings).keys()].map((i) => svg("circle", {
-        cx: item.x, cy: item.y, r: item.size + settings.ringGap * (i + 1),
-      }))));
   }
 
   function itemName(item) {
@@ -130,7 +123,7 @@ export function start(container, ctx) {
   function place(item) {
     item.node.setAttribute("transform", `translate(${item.x.toFixed(1)} ${item.y.toFixed(1)})`);
     item.node.setAttribute("aria-label", itemName(item));
-    drawRings();
+    drawHoles();
   }
 
   function choose(item) {
@@ -147,7 +140,7 @@ export function start(container, ctx) {
   function freeSpot(size) {
     for (let tries = 0; tries < 40; tries++) {
       const spot = { x: size + Math.random() * (W - 2 * size), y: size + Math.random() * (H - 2 * size) };
-      if (current.items.every((other) => Math.hypot(other.x - spot.x, other.y - spot.y) > other.size + size + settings.ringGap * settings.rings)) {
+      if (current.items.every((other) => Math.hypot(other.x - spot.x, other.y - spot.y) > other.size + size + settings.itemGap)) {
         return spot;
       }
     }
@@ -196,7 +189,7 @@ export function start(container, ctx) {
     if (!item) return;
     item.node.remove();
     current.items = current.items.filter((other) => other !== item);
-    drawRings();
+    drawHoles();
     choose(null);
     status.textContent = t("garden.removed");
     area.focus();

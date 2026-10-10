@@ -181,3 +181,14 @@ AudioParam.prototype.setTargetAtTime = function (value, when, constant) { window
         assert page.evaluate("window.__gains.at(-1)") == 0, "the sound settles to silence when the rake stops"
         assert page.evaluate(f"window.__loops.slice({before}).length") == 1, "no one-shot per move"
 
+
+
+def test_no_rings_are_drawn_around_stones_and_plants():
+    # RLG-061 (owner, 2026-10-10): stones and plants do not get rings around them by themselves.
+    with open_app() as (page, _, _):
+        go(page, "garden")
+        page.locator(".garden-add-plant").click()
+        assert page.locator(".garden-rings, .garden-rings circle").count() == 0
+        sizes = page.evaluate("[...document.querySelectorAll('.garden-holes circle')].map(c => Number(c.getAttribute('r')))")
+        biggest = max(CONFIG["garden"]["stoneSize"], CONFIG["garden"]["plantSize"])
+        assert sizes and max(sizes) <= biggest, f"the lines are hidden only under an item: {sizes}"
