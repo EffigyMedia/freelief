@@ -50,7 +50,7 @@ function ringPaths(ring) {
 
 export function start(container, ctx) {
   stop();
-  const { t, config, audio } = ctx;
+  const { t, escape, config, audio } = ctx;
   const settings = config.mandala;
   const current = { design: -1, color: settings.palette[0].name, fills: [], rings: [], focus: [0, 0] };
   run = current;
@@ -62,7 +62,7 @@ export function start(container, ctx) {
       <fieldset class="mandala-palette">
         <legend>${t("mandala.colorLegend")}</legend>
         ${settings.palette.map((swatch, i) => `<label class="swatch">
-          <input type="radio" name="mandala-color" value="${swatch.name}" ${i === 0 ? "checked" : ""}>
+          <input type="radio" name="mandala-color" value="${escape(swatch.name)}" ${i === 0 ? "checked" : ""}>
           <span class="visually-hidden">${t(`mandala.color.${swatch.name}`)}</span></label>`).join("")}
       </fieldset>
       <svg class="mandala-art" viewBox="-102 -102 204 204" role="group"

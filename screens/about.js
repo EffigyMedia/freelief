@@ -1,12 +1,7 @@
 // About and disclaimer (REQ-006): the full self-help statement, privacy, and the open license.
 
-// Every data value written into HTML is escaped, even committed config (AUD-033).
-function escape(text) {
-  return String(text).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-}
-
 export function start(container, ctx) {
-  const { t, config } = ctx;
+  const { t, escape, config } = ctx;
   const paragraph = (key) => `<p>${t(key)}</p>`;
   container.innerHTML = `
     <section class="page about">

@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-8-11"></a>
+## [0.8.11] - 2026-10-10
+- Hardening; nothing a person sees changes. Every value from the app's data that goes into a page
+  is escaped, so a bad edit to the data cannot add markup. [AUD-033](../fragments/AUD-033.md).
+  183 tests.
+
 <a id="v0-8-10"></a>
 ## [0.8.10] - 2026-10-10
 - **Breathing**: the breath sound is softer. Its highest sounds are cut a little, and it is quieter;

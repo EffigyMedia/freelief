@@ -7,13 +7,13 @@ import { getSetting, setSetting, resetSettings } from "../settings.js";
 import { regionList } from "../crisis.js";
 
 export function start(container, ctx) {
-  const { t, config } = ctx;
+  const { t, escape, config } = ctx;
   const rhythms = config.breathing.rhythmOrder;
   const themes = config.theme.choices;
 
   const radios = (name, choices, current, labelPrefix) => choices.map((choice) => `
     <label class="choice">
-      <input type="radio" name="${name}" value="${choice}" ${choice === current ? "checked" : ""}>
+      <input type="radio" name="${name}" value="${escape(choice)}" ${choice === current ? "checked" : ""}>
       <span>${t(`${labelPrefix}.${choice}`)}</span>
     </label>`).join("");
 
@@ -32,7 +32,7 @@ export function start(container, ctx) {
         <legend>${t("settings.awake")}</legend>
         ${config.wakeLock.idleMinutesChoices.map((minutes) => `
         <label class="choice">
-          <input type="radio" name="awakeMinutes" value="${minutes}" ${minutes === getSetting("awakeMinutes") ? "checked" : ""}>
+          <input type="radio" name="awakeMinutes" value="${escape(minutes)}" ${minutes === getSetting("awakeMinutes") ? "checked" : ""}>
           <span>${t(`settings.awake.${minutes}`)}</span>
         </label>`).join("")}
         <p id="awake-hint" class="hint small-hint">${t("settings.awakeHint")}</p>
@@ -53,7 +53,7 @@ export function start(container, ctx) {
         <label class="field-label" for="help-region">${t("settings.region")}</label>
         <select id="help-region" class="country-select" aria-describedby="region-hint">
           <option value="auto">${t("settings.region.auto")}</option>
-          ${regionList().map((region) => `<option value="${region.code}">${region.country}</option>`).join("")}
+          ${regionList().map((region) => `<option value="${escape(region.code)}">${escape(region.country)}</option>`).join("")}
         </select>
         <p id="region-hint" class="hint">${t("settings.regionHint")}</p>
       </div>

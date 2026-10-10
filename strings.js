@@ -15,11 +15,17 @@ export function list(key) {
   return Array.isArray(value) ? value : [];
 }
 
+// Every data value written into HTML goes through this, even committed config and data (AUD-033).
+export function escape(text) {
+  return String(text).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+}
+
 export function t(key, values = {}) {
   const text = table[key];
   if (text === undefined) {
     console.warn(`missing string: ${key}`);
-    return key;
+    // A key can hold a data value, such as a color name, so it is escaped like data (AUD-033).
+    return escape(key);
   }
   return text.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? `{${name}}`);
 }

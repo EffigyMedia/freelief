@@ -197,3 +197,30 @@ def test_always_keeps_the_screen_on_with_no_idle_end():
         assert page.evaluate("window.__wake.held") == 1
         go(page, "settings")
         assert page.locator("input[name=awakeMinutes][value='0']").is_checked()
+
+
+# AUD-033: a bad edit to the data must not add markup to a page. The probe rewrites the crisis data
+# and the config as they load, so a country name, a region code and a mandala color carry markup.
+HOSTILE_DATA = """
+const realFetch = window.fetch;
+window.fetch = async (input, init) => {
+  const response = await realFetch(input, init);
+  const url = String(input.url || input);
+  if (!/crisis-lines\.json|config\.json/.test(url)) return response;
+  const data = await response.json();
+  const bad = '"><b class="injected">x</b>';
+  if (/crisis-lines/.test(url)) {
+    const region = Object.values(data.regions || data).find((r) => r && r.country);
+    if (region) { region.country += bad; region.code += bad; }
+  } else {
+    data.mandala.palette[0].name += bad;
+  }
+  return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } });
+};
+"""
+
+
+def test_data_values_in_page_markup_are_escaped():
+    for route in ("settings", "mandala"):
+        with open_app(init_script=HOSTILE_DATA, route=route) as (page, _, _):
+            assert page.locator(".injected").count() == 0, f"data added markup on #{route}"

@@ -1,7 +1,7 @@
 // The shell: the page frame, the screen router, the footer and the "Need urgent help?" control.
 // It holds no exercise logic and no literal text (AGENTS.md, Architecture).
 
-import { loadStrings, t, list } from "./strings.js";
+import { loadStrings, t, list, escape } from "./strings.js";
 import { loadCrisisLines, activeRegion, linesFor, regionList } from "./crisis.js";
 import { initSettings, getSetting, setSetting, onSettingChange } from "./settings.js";
 import { initHaptics, pulse as haptic } from "./haptics.js";
@@ -298,7 +298,7 @@ async function show(name, { moveFocus }) {
   // A screen may load data first, so wait for it before focusing.
   try {
     await current.start(main, {
-      t, list, config, motion, audio, haptic, keepAwake, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
+      t, list, escape, config, motion, audio, haptic, keepAwake, rhythm: getSetting("rhythm"), soundsOn: getSetting("sounds"),
     });
   } catch (error) {
     // A screen that fails as it starts falls back to the menu, as a screen that cannot load does.
