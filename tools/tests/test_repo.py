@@ -372,3 +372,43 @@ def test_the_test_server_serves_only_shipped_files_and_only_to_this_machine():
     assert get("/") == 200 and get("/app.js") == 200 and get("/activities/calm.js?v=1") == 200
     assert get("/.git/HEAD") == 404 and get("/.venv/pyvenv.cfg") == 404 and get("/AGENTS.md") == 404
     assert get("/app.js", host="evil.example") == 403, "a foreign Host is refused"
+
+
+def test_a_comment_in_version_js_is_no_bump_and_a_release_needs_a_higher_version():
+    # AUD-136: the bump is a change to the FREELIEF_VERSION line, and a release needs a version
+    # higher than the one at the last tag. Shown on a small repository of its own.
+    import subprocess
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        repo = Path(temp)
+
+        def run(*args):
+            subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", "-c", "commit.gpgsign=false",
+                            *args], cwd=repo, check=True, capture_output=True)
+
+        def write(name, text):
+            (repo / name).write_text(text, "utf-8")
+            run("add", name)
+
+        run("init", "-q")
+        write("version.js", 'self.FREELIEF_VERSION = "0.1.0";\n')
+        write("app.js", "// one\n")
+        run("commit", "-q", "-m", "start")
+        run("tag", "preview-0.1.0")
+        write("version.js", '// a comment only\nself.FREELIEF_VERSION = "0.1.0";\n')
+        run("commit", "-q", "-m", "comment")
+        write("app.js", "// two\n")
+        run("commit", "-q", "-m", "a shipped change")
+        assert sorted(freelief.changed_since_version_bump(cwd=repo)) == ["app.js", "version.js"], "a comment counted as a bump"
+        assert freelief.version_not_raised(cwd=repo), "the same version passed as a release"
+        write("version.js", '// a comment only\nself.FREELIEF_VERSION = "0.1.1";\n')
+        run("commit", "-q", "-m", "bump")
+        assert freelief.changed_since_version_bump(cwd=repo) == []
+        assert freelief.version_not_raised(cwd=repo) == []
+
+
+def test_a_crisis_check_date_in_the_future_is_invalid():
+    # AUD-137: a date after today is a typing error and would pass every age check.
+    import datetime
+    stale = freelief.stale_crisis_checks(30, today=datetime.date(2000, 1, 1))
+    assert stale and all("in the future" in item for item in stale), stale

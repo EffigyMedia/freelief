@@ -57,8 +57,8 @@ def read_version() -> str | None:
     return match.group(1) if match else None
 
 
-def git(*args: str) -> str:
-    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=True).stdout
+def git(*args: str, cwd: Path = ROOT) -> str:
+    return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True, check=True).stdout
 
 
 def is_shipped(path: str) -> bool:
@@ -78,13 +78,42 @@ def uncommitted_shipped() -> list[str]:
     return [line[3:] for line in lines if is_shipped(line[3:])]
 
 
-def changed_since_version_bump() -> list[str]:
-    """Shipped files committed after the last commit that changed version.js (AUD-010). An installed
-    app keeps its cache until the version changes, so such a file would never reach it."""
-    bump = git("log", "-1", "--format=%H", "--", "version.js").strip()
+VERSION_LINE = r'FREELIEF_VERSION\s*=\s*"(\d+\.\d+\.\d+)"'
+
+
+def changed_since_version_bump(cwd: Path = ROOT) -> list[str]:
+    """Shipped files committed after the last commit that changed the version number (AUD-010). An
+    installed app keeps its cache until the version changes, so such a file would never reach it. The
+    bump is the last commit whose diff touches the FREELIEF_VERSION line, so a change to a comment in
+    version.js is not a bump (AUD-136)."""
+    bump = git("log", "-1", "--format=%H", "-G", r"FREELIEF_VERSION\s*=", "--", "version.js", cwd=cwd).strip()
     if not bump:
         return []
-    return [p for p in git("diff", "--name-only", bump, "HEAD").split("\n") if is_shipped(p)]
+    return [p for p in git("diff", "--name-only", bump, "HEAD", cwd=cwd).split("\n") if is_shipped(p)]
+
+
+def version_key(version: str) -> tuple[int, ...]:
+    return tuple(int(part) for part in version.split("."))
+
+
+def version_not_raised(cwd: Path = ROOT) -> list[str]:
+    """A problem when HEAD's version is not higher than the version at the last preview or release
+    tag (AUD-136). HEAD at the tagged commit itself is no new release, so it passes."""
+    try:
+        tag = git("describe", "--tags", "--abbrev=0", "--match", "preview-*", "--match", "v*", cwd=cwd).strip()
+    except subprocess.CalledProcessError:
+        return []
+    if git("rev-list", "-n", "1", tag, cwd=cwd).strip() == git("rev-parse", "HEAD", cwd=cwd).strip():
+        return []
+
+    def at(ref: str) -> str | None:
+        match = re.search(VERSION_LINE, git("show", f"{ref}:version.js", cwd=cwd))
+        return match.group(1) if match else None
+
+    tagged, head = at(tag), at("HEAD")
+    if tagged and head and version_key(head) <= version_key(tagged):
+        return [f"version {head} is not higher than {tagged} at {tag}"]
+    return []
 
 
 def stale_crisis_checks(max_age_days: int, today=None) -> list[str]:
@@ -103,7 +132,10 @@ def stale_crisis_checks(max_age_days: int, today=None) -> list[str]:
         except (TypeError, ValueError):
             stale.append(f"{name} (no valid date)")
             continue
-        if age > max_age_days:
+        if age < 0:
+            # A date after today is a typing error, and it would pass every age check (AUD-137).
+            stale.append(f"{name} (checked {checked}, in the future)")
+        elif age > max_age_days:
             stale.append(f"{name} (checked {checked}, {age} days ago)")
     return stale
 
@@ -336,11 +368,11 @@ def cmd_build(args: argparse.Namespace) -> int:
     if failed:
         print("[FAIL] over the size limit")
     dirty = uncommitted_shipped()
-    late = changed_since_version_bump()
+    late = changed_since_version_bump() + version_not_raised()
     config = json.loads((ROOT / "config.json").read_text("utf-8"))
     stale = stale_crisis_checks(config["crisis"]["maxCheckAgeDays"])
     for problem, items in (("not committed, so not what Pages deploys", dirty),
-                           ("changed after the last version bump", late),
+                           ("changed after the last version bump, or the version not raised", late),
                            (f"crisis data checked more than {config['crisis']['maxCheckAgeDays']} days ago", stale)):
         if not items:
             continue
