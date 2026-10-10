@@ -224,7 +224,8 @@ the Chrome already on the machine. Run from the repo root:
   for an exercise or activity, `ITEMS` in `screens/menu.js` and `QUIET_FOOTER` in `app.js` (AUD-100;
   `test_repo.py` and `test_offline.py` check them). **A removed or renamed screen is swept in the
   same unit** from every place that names it: the design (the module table, the tunables, the
-  F-flows, the vocabulary, the risk table), the technical references, the `config.json` groups, the
+  F-flows, the vocabulary, the risk table), the agreed `REQ-` records (with a history line), the
+  technical references, the `config.json` groups, the
   strings, the issue templates in `.github/`, `docs/README.md`, and the owed checks in RLG-033
   (AUD-143). `test_repo.py` fails on a retired screen name in a shipped string or a template.
 - **The Kaleidoscope** (`activities/calm.js`, route `#calm`; first called the Visualizer) — a slow

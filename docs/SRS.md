@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `192f08c12667940d` · 31 requirement(s) specified, 7 not yet
+> Store stamp `5583cda4cf8cafdd` · 31 requirement(s) specified, 7 not yet
 
 ## 1. Introduction
 
@@ -78,7 +78,7 @@ person's settings, on the device.
 - **REQ-004** *(must)* — Freelief offers interactive calming activities whose purpose is to distract the person from panic.
 - **REQ-005** *(must)* — Every screen shows a 'Need urgent help?' control that opens the crisis lines of one region, chosen from a region saved in Settings or else from the device language and region setting, with a country list to show another region, without a request for location.
 - **REQ-006** *(must)* — The main screen shows one short line that says Freelief is self-help and not medical care, and the About page gives the full statement. Neither blocks access to an exercise.
-- **REQ-007** *(should)* — Freelief plays subtle sounds: the soft sound of a breath that lasts each in and out phase, different for in and out, and a light tap for each second of a hold, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a soft tick and a rising phrase in Unblock, a water drop in the pond, a chime for each mandala color, and the background music, rain and waves). Every pitched sound that plays with the music is in its key, C major. Sounds are on by default; the speaker button in the header fades them all out over a fraction of a second and stops them. Nothing plays before the person's first tap or key press.
+- **REQ-007** *(should)* — Freelief plays subtle sounds: the soft sound of a breath that lasts each in and out phase, different for in and out, and a light tap for each second of a hold, and short cues for the activities (a bubble pop, a soft sand sound that follows the rake in Zen Garden, a soft tick and a rising phrase in Unblock, a water drop in the pond, a soft pluck for each mandala color, and the background music, rain with distant thunder, and waves). Every pitched sound that plays with the music is in its key, C major. Sounds are on by default; the speaker button in the header fades them all out over a fraction of a second and stops them. Nothing plays before the person's first tap or key press.
 - **REQ-012** *(must)* — Freelief offers a bubble field: the person pops slow, soft bubbles by touch or by key, with no score, no failure and no timer.
 - **REQ-018** *(must)* — When Freelief opens, it shows the menu of exercises and activities at once, with no account, sign-up, notice or question before it; the person can choose in Settings to open on breathing instead. Breathing is the first item, one tap away, and every screen has a Back to menu control.
 - **REQ-022** *(must)* — Freelief ships a curated list of national crisis lines, each with a last-checked date, and a link to an international directory for every other region.
@@ -86,7 +86,7 @@ person's settings, on the device.
 - **REQ-030** *(must)* — A feedback page opens a pre-filled GitHub issue (accessibility check or problem report). Once the owner chooses a public project email address, the page also offers, as a second choice, a pre-filled email to that address; until then GitHub is the only route. The pre-filled text holds only the app version, browser and device type, and the person sees and can edit all of it before they send. The app itself sends nothing.
 - **REQ-032** *(should)* — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** *(should)* — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
-- **REQ-034** *(could)* — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a finished sort, a finished loop, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
+- **REQ-034** *(could)* — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a freed block, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
 - **REQ-035** *(should)* — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
 - **REQ-036** *(should)* — Freelief offers the Kaleidoscope, an activity with nothing to do: a slow, full-width kaleidoscope of soft shapes and colors that turns, drifts in color and fades from one pattern to the next, with no flashing and no motion under reduced motion, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Background sound is chosen on every screen in the header's sound bar: a music note, a raindrop and a wave, each a toggle; rain and waves replace each other, music plays with either, and a tap while the speaker is off turns sound on. The sound keeps playing on every screen until its button is tapped again, breathing lowers it, it waits while urgent help is open, and nothing about it is stored.
 - **REQ-037** *(should)* — Freelief keeps the screen on while breathing or the Kaleidoscope runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, or always while it runs; 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
@@ -190,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-10T13:35:30-04:00 by `Commands/srs.py` from 38 requirement record(s).
+Generated 2026-10-10T17:32:47-04:00 by `Commands/srs.py` from 38 requirement record(s).

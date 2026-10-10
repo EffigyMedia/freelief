@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `192f08c12667940d` · 38 requirement(s) recorded
+> Store stamp `5583cda4cf8cafdd` · 38 requirement(s) recorded
 
 ## The problem
 
@@ -89,7 +89,7 @@ Not built (decided 2026-10-07):
 
 ### Should have
 
-- **REQ-007** — Freelief plays subtle sounds: the soft sound of a breath that lasts each in and out phase, different for in and out, and a light tap for each second of a hold, and short cues for the activities (a bubble pop, a singing-glass tone while tracing, a soft tick and a rising phrase in Unblock, a water drop in the pond, a chime for each mandala color, and the background music, rain and waves). Every pitched sound that plays with the music is in its key, C major. Sounds are on by default; the speaker button in the header fades them all out over a fraction of a second and stops them. Nothing plays before the person's first tap or key press.
+- **REQ-007** — Freelief plays subtle sounds: the soft sound of a breath that lasts each in and out phase, different for in and out, and a light tap for each second of a hold, and short cues for the activities (a bubble pop, a soft sand sound that follows the rake in Zen Garden, a soft tick and a rising phrase in Unblock, a water drop in the pond, a soft pluck for each mandala color, and the background music, rain with distant thunder, and waves). Every pitched sound that plays with the music is in its key, C major. Sounds are on by default; the speaker button in the header fades them all out over a fraction of a second and stops them. Nothing plays before the person's first tap or key press.
 - **REQ-023** — The person can choose a breathing rhythm from presets (4-in 6-out by default, a slower rhythm, and box breathing), and the choice is remembered on the device.
 - **REQ-032** — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
@@ -100,7 +100,7 @@ Not built (decided 2026-10-07):
 
 ### Could have
 
-- **REQ-034** — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a finished sort, a finished loop, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
+- **REQ-034** — Freelief gives a short vibration on a single triggered event in an activity (a pop, a choice, a swap, a freed block, a ripple, a fill), never for anything continuous, where the device supports it; a Settings switch turns it off, and it is on by default.
 
 
 ## Where it stands
@@ -132,4 +132,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-10T13:35:31-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-10T17:32:48-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

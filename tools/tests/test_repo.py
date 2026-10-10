@@ -344,6 +344,20 @@ def test_no_shipped_string_or_template_names_a_retired_screen():
     assert not found, found
 
 
+
+def test_no_agreed_requirement_names_a_retired_screen():
+    # AUD-161: an agreed REQ- record states what Freelief does now. Its history may name old screens;
+    # its requirement may not.
+    retired = RETIRED_NAMES + ["tracing", "finished sort", "finished loop", "singing-glass"]
+    found = []
+    for path in sorted((freelief.ROOT / "docs" / "fragments").glob("REQ-*.md")):
+        text = path.read_text("utf-8")
+        if 'status            = "agreed"' not in text:
+            continue
+        heading = re.search(r"^### REQ-\d+ .*$", text, re.M).group(0)
+        found += [f"{path.stem}: {name}" for name in retired if name.lower() in heading.lower()]
+    assert not found, found
+
 def test_the_accessibility_template_lists_the_same_screens_as_the_app():
     # AUD-143: the issue template and the in-app checklist are twins; they list the same screens.
     import json

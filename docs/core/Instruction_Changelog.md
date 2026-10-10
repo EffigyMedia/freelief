@@ -29,6 +29,15 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-10
 
+### The sweep of a removed screen includes the agreed requirements
+- **Instruction:** when a screen is removed or renamed, its agreed `REQ-` records are edited in the
+  same unit, with a history line. `test_repo.py` fails when an agreed requirement names a retired
+  screen.
+- **Why:** AUD-161: REQ-007 and REQ-034 still named the trace and the colour sort after both were
+  removed.
+- **Encoded in:** `AGENTS.md` (Architecture, the sweep rule); `tools/tests/test_repo.py`.
+- Agent, 2026-10-10.
+
 ### A fixed finding is in-flight until a round confirms it
 - **Instruction:** a unit that fixes an `AUD-` finding sets its status to `in-flight`. Only a
   round's re-check moves it to `built`, or back to `requested`. Tracker items (`RLG-`) still go to
