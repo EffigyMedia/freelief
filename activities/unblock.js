@@ -57,6 +57,7 @@ export function start(container, ctx) {
       <div class="exercise-actions">
         <button type="button" class="button unblock-undo">${t("unblock.undo")}</button>
         <button type="button" class="button unblock-restart">${t("unblock.restart")}</button>
+        <button type="button" class="button unblock-previous">${t("unblock.previous")}</button>
         <button type="button" class="button unblock-next">${t("unblock.next")}</button>
       </div>
     </section>`;
@@ -277,6 +278,11 @@ export function start(container, ctx) {
   container.querySelector(".unblock-restart").addEventListener("click", () => {
     load(boardIndex);
     status.textContent = t("unblock.restarted");
+  });
+  // Back to the board before, and from the first to the last (owner, RLG-052).
+  container.querySelector(".unblock-previous").addEventListener("click", () => {
+    load(boardIndex - 1 + settings.boards.length);
+    status.textContent = boardName.textContent;
   });
   container.querySelector(".unblock-next").addEventListener("click", () => {
     load(boardIndex + 1);

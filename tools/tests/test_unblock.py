@@ -326,3 +326,18 @@ def test_the_freed_block_leaves_the_tab_order_and_the_page_does_not_scroll_sidew
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "no sideways scroll"
         page.locator(".unblock-undo").click()
         assert not block(page, "A").evaluate("e => e.inert")
+
+
+def test_previous_board_goes_back_and_from_the_first_to_the_last():
+    # RLG-052 (owner, 2026-10-10): there was no way back to an earlier board.
+    total = len(SETTINGS["boards"])
+    name = lambda n: STRINGS["unblock.boardName"].format(
+        number=n, total=total, level=STRINGS["unblock.level." + SETTINGS["boards"][n - 1]["level"]])
+    with open_app() as (page, _, _):
+        go(page, "unblock")
+        page.locator(".unblock-next").click()
+        page.locator(".unblock-previous").click()
+        assert page.locator(".unblock-board-name").inner_text() == name(1)
+        page.locator(".unblock-previous").click()
+        assert page.locator(".unblock-board-name").inner_text() == name(total), "from the first to the last"
+        assert status(page) == name(total)

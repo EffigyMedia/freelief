@@ -68,15 +68,13 @@ export function applySound(on) {
     unlockAudio();
     if (!output) return;
     const now = context.currentTime;
-    output.gain.cancelScheduledValues(now);
-    output.gain.setValueAtTime(output.gain.value, now);
+    hold(output.gain, now);
     output.gain.linearRampToValueAtTime(1, now + fade);
     return;
   }
   if (!context || context.state !== "running") return;
   const now = context.currentTime;
-  output.gain.cancelScheduledValues(now);
-  output.gain.setValueAtTime(output.gain.value, now);
+  hold(output.gain, now);
   output.gain.linearRampToValueAtTime(0, now + fade);
   fadeTimer = setTimeout(() => {
     fading.forEach((cut) => cut());
@@ -85,14 +83,26 @@ export function applySound(on) {
   }, fade * 1000 + 50);
 }
 
+// Stop a parameter's planned changes and hold the value it has now. cancelScheduledValues alone
+// drops a ramp that is still running, and the value then jumps back to where the ramp started: at
+// the end of an out-breath that was a sharp click (owner report, RLG-053).
+function hold(param, now) {
+  if (param.cancelAndHoldAtTime) {
+    param.cancelAndHoldAtTime(now);
+    return;
+  }
+  const value = param.value;
+  param.cancelScheduledValues(now);
+  param.setValueAtTime(value, now);
+}
+
 // Lower the background sound under a screen's own tones, or bring it back (RLG-045). The change is a
 // slow ramp, so it is not heard as a step.
 export function duck(on) {
   ducked = on;
   if (!bed) return;
   const now = context.currentTime;
-  bed.gain.cancelScheduledValues(now);
-  bed.gain.setValueAtTime(bed.gain.value, now);
+  hold(bed.gain, now);
   bed.gain.linearRampToValueAtTime(on ? sounds.background.duckLevel : 1, now + sounds.background.duckSeconds);
 }
 
@@ -206,7 +216,7 @@ export function cue(phaseKey, seconds) {
       stopAll();
       return;
     }
-    master.gain.cancelScheduledValues(now);
+    hold(master.gain, now);
     master.gain.setTargetAtTime(0, now, 0.08);
     stopAll(now + 0.4);
     // A source already told to stop at the phase's end keeps that time, so the faded sound is
@@ -507,7 +517,7 @@ export function rain(level = 1) {
         lfo.stop();
         return;
       }
-      master.gain.cancelScheduledValues(now);
+      hold(master.gain, now);
       master.gain.setTargetAtTime(0, now, 0.4);
       hiss.stop(now + 2);
       lfo.stop(now + 2);
@@ -553,12 +563,10 @@ export function waves(level = 1) {
     const seconds = between(settings.minSeconds, settings.maxSeconds);
     const crest = now + seconds * settings.riseShare;
     const height = between(settings.minPeak, 1);
-    swell.gain.cancelScheduledValues(now);
-    swell.gain.setValueAtTime(swell.gain.value, now);
+    hold(swell.gain, now);
     swell.gain.linearRampToValueAtTime(height, crest);
     swell.gain.exponentialRampToValueAtTime(settings.troughLevel, now + seconds);
-    low.frequency.cancelScheduledValues(now);
-    low.frequency.setValueAtTime(low.frequency.value, now);
+    hold(low.frequency, now);
     low.frequency.exponentialRampToValueAtTime(settings.troughHz + (settings.crestHz - settings.troughHz) * height, crest);
     low.frequency.exponentialRampToValueAtTime(settings.troughHz, now + seconds);
     timer = setTimeout(wave, seconds * 1000);
@@ -574,7 +582,7 @@ export function waves(level = 1) {
         surf.stop();
         return;
       }
-      master.gain.cancelScheduledValues(now);
+      hold(master.gain, now);
       master.gain.setTargetAtTime(0, now, 0.4);
       surf.stop(now + 2);
       fadingUntil(() => {

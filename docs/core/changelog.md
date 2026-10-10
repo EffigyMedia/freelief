@@ -10,6 +10,16 @@ audit.
 
 ---
 
+<a id="v0-8-5"></a>
+## [0.8.5] - 2026-10-10
+- **Menu**: a new order and new names: Breathing, Pop Bubbles, Trace a shape (Zen Garden comes
+  next), Ripple Pond, Color Mandalas, Unblock and Kaleidoscope (the Visualizer).
+  [RLG-058](../fragments/RLG-058.md).
+- **Ripple Pond**: ripples fade out instead of vanishing. [RLG-054](../fragments/RLG-054.md).
+- **Unblock**: a **Previous board** button. [RLG-052](../fragments/RLG-052.md).
+- **Breathing**: fixed a click at the start of the in-breath; the out-breath is a whole step lower.
+  [RLG-053](../fragments/RLG-053.md). 188 tests.
+
 <a id="v0-8-4"></a>
 ## [0.8.4] - 2026-10-09
 - **Breathe**: the sound is now the soft sound of a breath, not a tone. The in-breath brightens and

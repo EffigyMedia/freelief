@@ -1203,6 +1203,16 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   centered on C6, so it stays in the music's key (RLG-046). The calm and slower rhythms have no
   holds, so only box breathing taps. — Rejected: keep the sine tone (the owner's request). —
   2026-10-09 (owner; UNT-110)
+- **Owner fixes of 2026-10-10: names and order, a fading ripple, a way back in Unblock, no click.**
+  — The menu order and names are the owner's (RLG-058): Breathing, Pop Bubbles, Zen Garden (Trace
+  a shape holds its place until it is built, RLG-055), Ripple Pond, Color Mandalas, Unblock and
+  Kaleidoscope (the Visualizer's new name, RLG-057); each screen's title matches. A ripple now fades
+  to nothing over its last `ripple.wave.endFadeSeconds` (RLG-054). Unblock has Previous board,
+  which wraps from the first to the last (RLG-052). The click at the start of an in-breath came from
+  stopping the out-breath while its fade-out ramp still ran: cancelScheduledValues dropped the ramp
+  and the volume jumped back up. Every stop now holds the current value first (`hold()` in
+  audio.js, RLG-053). The exhale's band is a whole step lower (802 to 339 Hz), as the owner asked.
+  — 2026-10-10 (owner; UNT-113)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

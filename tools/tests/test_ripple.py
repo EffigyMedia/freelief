@@ -207,3 +207,30 @@ def test_a_slow_drag_is_never_followed_by_a_stray_random_ripple():
         page.locator(".pond").focus()
         page.keyboard.press("Enter")
         assert page.locator(".ripple-set").count() == 3, "a key press after a drag still makes a ripple"
+
+
+def test_a_ripple_fades_out_smoothly_at_the_end_of_its_life():
+    # RLG-054 (owner, 2026-10-10): ripples vanished abruptly. Near its end a ripple is almost flat.
+    with open_app() as (page, _, _):
+        go(page, "ripple")
+        result = page.evaluate("""(async () => {
+            const { waveHeight } = await import('./activities/ripple.js');
+            const wave = (await (await fetch('config.json')).json()).ripple.wave;
+            const life = 4.75, source = { x: 0, y: 0, born: 0, life };
+            // The largest height along the ring at a given age.
+            const peak = (age) => Math.max(...[...Array(200).keys()].map((i) =>
+                Math.abs(waveHeight([source], wave.speed * age + (i - 100) * 0.5, 0, age, wave))));
+            return { before: peak(life - wave.endFadeSeconds), late: peak(life - 0.1), end: peak(life) };
+        })()""")
+        assert result["end"] == 0, result
+        assert result["late"] < 0.05 * result["before"], f"it fades to almost nothing first: {result}"
+
+
+def test_no_sound_stop_can_jump_its_volume():
+    # RLG-053: cancelScheduledValues alone dropped a running ramp, and the volume jumped back up.
+    source = (ROOT / "audio.js").read_text("utf-8")
+    body = source.split("function hold(param, now) {", 1)
+    assert len(body) == 2, "audio.js has a hold() helper"
+    outside = body[0] + body[1].split("\n}\n", 1)[1]
+    code = " ".join(line for line in outside.splitlines() if not line.strip().startswith("//"))
+    assert "cancelScheduledValues" not in code, "every stop goes through hold()"

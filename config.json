@@ -44,8 +44,8 @@
         "q": 0.6
       },
       "out": {
-        "fromCutoffHz": 900,
-        "toCutoffHz": 380,
+        "fromCutoffHz": 802,
+        "toCutoffHz": 339,
         "q": 0.5
       },
       "tap": {
@@ -521,7 +521,8 @@
       "amplitude": 1.1,
       "restLevel": 0.03,
       "dotSpacing": 10,
-      "dotRadius": 2.6
+      "dotRadius": 2.6,
+      "endFadeSeconds": 1.5
     }
   },
   "mandala": {

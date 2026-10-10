@@ -25,7 +25,10 @@ export function waveHeight(sources, x, y, now, wave) {
     const offset = r - wave.speed * age;
     const envelope = Math.exp(-(offset * offset) / (2 * wave.packetWidth * wave.packetWidth));
     if (envelope < 0.01) continue;
-    const fade = Math.exp(-age / wave.fadeSeconds) / (1 + r / wave.spreadFalloff);
+    // Over its last seconds a ripple fades smoothly to nothing, so it never vanishes at once (RLG-054).
+    const left = (source.life ?? Infinity) - age;
+    const ending = Math.min(1, Math.max(0, left / wave.endFadeSeconds));
+    const fade = (Math.exp(-age / wave.fadeSeconds) / (1 + r / wave.spreadFalloff)) * ending * ending;
     height += wave.amplitude * fade * envelope * Math.cos(k * offset);
   }
   return height;
@@ -127,7 +130,7 @@ export function start(container, ctx) {
         set.append(ring);
       }
     } else {
-      current.sources.push({ x, y, born: clock() });
+      current.sources.push({ x, y, born: clock(), life: settings.lifeSeconds + settings.rings * settings.ringGapSeconds });
       if (!current.frame) current.frame = requestAnimationFrame(draw);
     }
     pond.append(set);
