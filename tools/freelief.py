@@ -116,6 +116,18 @@ def version_not_raised(cwd: Path = ROOT) -> list[str]:
     return []
 
 
+def valid_bench_logged(version: str, log: Path = ROOT / "docs" / "performance" / "log.md") -> bool:
+    """Whether the performance log holds a valid bench run of this version (AUD-159): an entry whose
+    heading names the version and is not marked NOT VALID, with the urgent-help response in its table.
+    A release waits for one; the owner runs bench on a quiet machine (owner, 2026-10-10)."""
+    text = log.read_text("utf-8") if log.is_file() else ""
+    for entry in re.split(r"^## ", text, flags=re.M)[1:]:
+        heading = entry.split("\n", 1)[0]
+        if f"(v{version})" in heading and "NOT VALID" not in heading and "Response: Need urgent help?" in entry:
+            return True
+    return False
+
+
 def stale_crisis_checks(max_age_days: int, today=None) -> list[str]:
     """Crisis lines and the directory last checked longer ago than the window (AUD-024)."""
     import datetime
@@ -369,11 +381,14 @@ def cmd_build(args: argparse.Namespace) -> int:
         print("[FAIL] over the size limit")
     dirty = uncommitted_shipped()
     late = changed_since_version_bump() + version_not_raised()
+    version = read_version()
+    unmeasured = [] if version and valid_bench_logged(version) else [f"v{version} has no valid bench run in docs/performance/log.md"]
     config = json.loads((ROOT / "config.json").read_text("utf-8"))
     stale = stale_crisis_checks(config["crisis"]["maxCheckAgeDays"])
     for problem, items in (("not committed, so not what Pages deploys", dirty),
                            ("changed after the last version bump, or the version not raised", late),
-                           (f"crisis data checked more than {config['crisis']['maxCheckAgeDays']} days ago", stale)):
+                           (f"crisis data checked more than {config['crisis']['maxCheckAgeDays']} days ago", stale),
+                           ("not measured on a quiet machine (run bench there and log it; AUD-159)", unmeasured)):
         if not items:
             continue
         if args.release:

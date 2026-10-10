@@ -433,3 +433,19 @@ def test_no_screen_reaches_into_the_shell_for_urgent_help():
     hits = [p.relative_to(freelief.ROOT).as_posix() for folder in ("screens", "activities", "exercises")
             for p in (freelief.ROOT / folder).glob("*.js") if "help-open" in p.read_text("utf-8")]
     assert not hits, hits
+
+
+def test_a_release_needs_a_valid_bench_run_of_its_version_in_the_log():
+    # AUD-159 (owner, 2026-10-10): a release waits for one valid bench run, made on a quiet machine.
+    import tempfile
+    nl = chr(10)
+    row = "| Response: Need urgent help? opens | 77 ms | 24 ms | -69% | OK |"
+    busy = ["# Log", "", "## 2026-10-10 — busy (v1.2.3), NOT VALID: busy machine", row, "",
+            "## 2026-10-10 — size only (v1.2.3)", "| Shipped size | 1 KB | 1 KB | 0% | OK |", ""]
+    with tempfile.TemporaryDirectory() as temp:
+        log = Path(temp) / "log.md"
+        log.write_text(nl.join(busy), "utf-8")
+        assert not freelief.valid_bench_logged("1.2.3", log), "a busy or a size-only entry is no bench run"
+        log.write_text(nl.join(busy + ["## 2026-10-11 — quiet run (v1.2.3)", row, ""]), "utf-8")
+        assert freelief.valid_bench_logged("1.2.3", log)
+        assert not freelief.valid_bench_logged("1.2.4", log), "the run must be of this version"

@@ -29,6 +29,15 @@ this log is only for changes to *how we work* (process/instructions).
 
 ## 2026-10-10
 
+### A release waits for one valid bench run, made by the owner on a quiet machine
+- **Instruction:** before a release the owner closes other work and runs `bench`; the valid run is
+  logged in `docs/performance/log.md`. `build --release` fails until the log holds a valid run of the
+  version being released (an entry naming it, not marked NOT VALID, with the urgent-help response).
+- **Why:** AUD-158 and AUD-159, owner's ruling by the question tool: this machine stayed at 38% to
+  96% load, so no run was valid after v0.7.13, and nothing made a release wait for one.
+- **Encoded in:** `AGENTS.md` (the Release row); `tools/freelief.py` (`valid_bench_logged`).
+- Owner, 2026-10-10.
+
 ### The sweep of a removed screen includes the agreed requirements
 - **Instruction:** when a screen is removed or renamed, its agreed `REQ-` records are edited in the
   same unit, with a history line. `test_repo.py` fails when an agreed requirement names a retired
