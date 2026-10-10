@@ -15,18 +15,22 @@ import * as menu from "./screens/menu.js";
 // the owner 2026-10-07), so it loads with the shell. Every other screen loads on its first visit
 // (RLG-006): the browser then parses only what the first screen needs before it draws. The service
 // worker caches them all, so a later visit works offline.
+// Each lazy screen is asked for with the version of this page. A new version may take over while
+// this page is open; the worker then answers from this version's cache, which it keeps, so the page
+// never loads a screen from another version (AUD-057).
+const VERSION = self.FREELIEF_VERSION;
 const ROUTES = {
   menu: () => Promise.resolve(menu),
-  breathe: () => import("./exercises/breathe.js"),
-  bubbles: () => import("./activities/bubbles.js"),
-  garden: () => import("./activities/garden.js"),
-  unblock: () => import("./activities/unblock.js"),
-  ripple: () => import("./activities/ripple.js"),
-  mandala: () => import("./activities/mandala.js"),
-  calm: () => import("./activities/calm.js"),
-  settings: () => import("./screens/settings.js"),
-  about: () => import("./screens/about.js"),
-  feedback: () => import("./screens/feedback.js"),
+  breathe: () => import(`./exercises/breathe.js?v=${VERSION}`),
+  bubbles: () => import(`./activities/bubbles.js?v=${VERSION}`),
+  garden: () => import(`./activities/garden.js?v=${VERSION}`),
+  unblock: () => import(`./activities/unblock.js?v=${VERSION}`),
+  ripple: () => import(`./activities/ripple.js?v=${VERSION}`),
+  mandala: () => import(`./activities/mandala.js?v=${VERSION}`),
+  calm: () => import(`./activities/calm.js?v=${VERSION}`),
+  settings: () => import(`./screens/settings.js?v=${VERSION}`),
+  about: () => import(`./screens/about.js?v=${VERSION}`),
+  feedback: () => import(`./screens/feedback.js?v=${VERSION}`),
 };
 const DEFAULT_ROUTE = "menu";
 // On these screens the footer shows only its calm line, so the exercise has the room (design review,

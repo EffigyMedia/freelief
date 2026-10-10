@@ -48,6 +48,17 @@ const FILES = [
   "icons/icon-512.png",
 ];
 
+// Orders "0.8.9" before "0.8.10": numbers, part by part.
+function compareVersions(a, b) {
+  const x = a.split(".").map(Number);
+  const y = b.split(".").map(Number);
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    const d = (x[i] || 0) - (y[i] || 0);
+    if (d) return d;
+  }
+  return 0;
+}
+
 // Fill the cache from the network, past the browser's HTTP cache, so a new version never stores
 // an old file (AUD-013).
 function precache() {
@@ -68,9 +79,14 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys
-        .filter((key) => key.startsWith(PREFIX) && key !== CACHE)
-        .map((key) => caches.delete(key))))
+      // One other version's cache is kept until the next update: a page that version opened may
+      // still be in use, and it asks for its screens by its version (AUD-057). It is the highest
+      // other version: the one this update replaces, or, after a rollback, the one rolled back from.
+      .then((keys) => {
+        const others = keys.filter((key) => key.startsWith(PREFIX) && key !== CACHE)
+          .sort((a, b) => compareVersions(a.slice(PREFIX.length), b.slice(PREFIX.length)));
+        return Promise.all(others.slice(0, -1).map((key) => caches.delete(key)));
+      })
       .then(() => self.clients.claim()),
   );
 });
@@ -115,11 +131,16 @@ self.addEventListener("message", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== "GET" || url.origin !== self.location.origin) return;
-  // Answer only from THIS version's cache. caches.match() searches every cache, so while an old
-  // version's cache still exists it can serve old files to a new version, or a mix of both, and
-  // the app may not start (owner, 2026-10-07: "Can't load").
+  // Answer from ONE version's cache, never from all of them. caches.match() searches every cache, so
+  // while an old version's cache still exists it can serve old files to a new version, or a mix of
+  // both, and the app may not start (owner, 2026-10-07: "Can't load").
+  // A lazy screen names the version of the page that asks for it (?v=). It is answered from that
+  // version's cache while the cache exists, so a page keeps its own version's files (AUD-057).
+  const asked = url.searchParams.get("v");
+  const own = asked && asked !== self.FREELIEF_VERSION ? `${PREFIX}${asked}` : CACHE;
   event.respondWith(
-    caches.open(CACHE).then((cache) => cache.match(event.request, { ignoreSearch: true })).then((cached) => {
+    caches.has(own).then((kept) => caches.open(kept ? own : CACHE))
+      .then((cache) => cache.match(event.request, { ignoreSearch: true })).then((cached) => {
       if (cached) return cached;
       return fetch(event.request).then((response) => {
         // Store what came from the network, so a cache that was deleted fills again with use.

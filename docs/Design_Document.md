@@ -1294,6 +1294,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   stored values it cannot read and writes them back, and a new choice of that setting replaces
   them. The stale local `live` branch (at v0.5.0) is deleted. — Rejected: naming the target only in
   the changelog (a hurried owner needs one command). — 2026-10-10 (UNT-121)
+- **A page keeps its own version's screens through any takeover.** — AUD-057, re-opened by round
+  UNT-124: a takeover that lands after the first touch, in the moment between the page's offer and
+  the worker's activation, left a page in use under the new worker, which had deleted the page's
+  cache. A page cannot withdraw a takeover that has begun, so the page now asks for each lazy screen
+  with its own version (`?v=`), the worker answers from that version's cache, and activation keeps
+  the highest other version's cache until the next update. — Rejected: a 'stay' message from the
+  page (it cannot stop an activation already under way); a reload after the touch (it interrupts the
+  person). — 2026-10-10 (UNT-126)
 - **The interface review's low items are fixed or accepted.** — RLG-047. Fixed: a screen title per
   screen (`app.screenTitle`); the `theme-color` meta follows a forced theme; the checked date reads
   as words in the page's language; Pause and the bubbles' drift control change their label and no

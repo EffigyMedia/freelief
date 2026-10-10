@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-8-16"></a>
+## [0.8.16] - 2026-10-10
+- **Updates**: a screen you open always comes from the version you started with, even when a new
+  version arrives at the moment you first tap. The previous version's offline copy is kept until
+  the next update. [AUD-057](../fragments/AUD-057.md). 192 tests.
+
 <a id="v0-8-15"></a>
 ## [0.8.15] - 2026-10-10
 - **Need urgent help?** opens much faster: on the slow-phone test it shows in about 25 ms, down from

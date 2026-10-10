@@ -248,7 +248,7 @@ def test_every_activity_is_on_the_menu_and_has_the_quiet_footer():
     # AUD-100: a new screen goes into four lists. The router and the worker are tested elsewhere.
     app = (freelief.ROOT / "app.js").read_text("utf-8")
     menu = (freelief.ROOT / "screens" / "menu.js").read_text("utf-8")
-    routes = re.findall(r'^  (\w+): \(\) => import\("\./(?:exercises|activities)/', app, re.M)
+    routes = re.findall(r'^  (\w+): \(\) => import\([`"]\./(?:exercises|activities)/', app, re.M)
     assert routes, "app.js ROUTES lists no exercise or activity"
     quiet = re.search(r"QUIET_FOOTER = new Set\(\[([^\]]*)\]\)", app).group(1)
     items = re.findall(r'route: "(\w+)"', menu)

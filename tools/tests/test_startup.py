@@ -77,7 +77,7 @@ def test_a_failed_screen_start_falls_back_to_the_menu_and_links_still_work():
     # frozen screen; the person lands on the menu, and every link works. About is made to fail.
     context = browser().new_context(viewport={"width": 390, "height": 844}, service_workers="block")
     try:
-        context.route("**/screens/about.js", lambda route: route.fulfill(
+        context.route("**/screens/about.js*", lambda route: route.fulfill(
             content_type="text/javascript",
             body="export function start() { throw new Error('test'); } export function stop() {}"))
         page = context.new_page()

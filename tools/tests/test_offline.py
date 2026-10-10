@@ -86,8 +86,9 @@ def test_a_deleted_cache_repairs_itself_and_works_offline_again():
 
 
 def test_an_update_keeps_other_apps_caches_and_drops_only_old_freelief_ones():
-    # AUD-014 and the design's update test: a new version replaces Freelief's cache, deletes the old
-    # Freelief cache, and never touches another app's cache on the shared origin.
+    # AUD-014 and the design's update test: a new version replaces Freelief's cache and never touches
+    # another app's cache on the shared origin. The highest other version's cache is kept until the
+    # next update, for a page that version opened (AUD-057); every older one is deleted.
     import shutil
     import tempfile
     with tempfile.TemporaryDirectory() as temp:
@@ -104,17 +105,26 @@ def test_an_update_keeps_other_apps_caches_and_drops_only_old_freelief_ones():
             wait_until(page, "navigator.serviceWorker.controller !== null", 5000)
             old = page.evaluate("'freelief-' + self.FREELIEF_VERSION")
             page.evaluate(f"caches.open('{FOREIGN_CACHE}')")
+            page.evaluate("caches.open('freelief-0.0.1')")  # an older version, made last on purpose
             (app / "version.js").write_text('self.FREELIEF_VERSION = "9.9.9";\n', "utf-8")
             try:
                 page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
             except Exception:
                 pass  # the takeover reloads the page; that is expected
             wait_until(page, "caches.has('freelief-9.9.9')", 8000)
-            wait_until(page, f"caches.has('{old}').then(present => !present)", 8000)
+            wait_until(page, "caches.has('freelief-0.0.1').then(present => !present)", 8000)
             wait_until(page, "document.readyState === 'complete'", 5000)
             keys = page.evaluate("caches.keys()")
             assert FOREIGN_CACHE in keys, keys
-            assert "freelief-9.9.9" in keys and old not in keys, keys
+            assert "freelief-9.9.9" in keys and old in keys, f"the replaced version is kept: {keys}"
+            (app / "version.js").write_text('self.FREELIEF_VERSION = "9.9.10";' + chr(10), "utf-8")
+            try:
+                page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
+            except Exception:
+                pass
+            wait_until(page, f"caches.has('{old}').then(present => !present)", 8000)
+            keys = page.evaluate("caches.keys()")
+            assert {"freelief-9.9.10", "freelief-9.9.9", FOREIGN_CACHE} <= set(keys), keys
         finally:
             context.close()
 
@@ -318,6 +328,39 @@ def test_a_second_window_does_not_take_the_version_from_a_window_in_use():
         finally:
             context.close()
 
+
+
+def test_a_takeover_that_lands_after_a_touch_still_serves_the_page_its_own_screens():
+    # AUD-057, re-opened by round UNT-124 (AUD-132): the page offers the takeover before the person
+    # touches it, and the new version takes over just after the touch. The page keeps its version,
+    # and a screen it opens next still comes from its own version's cache.
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        app = _app_copy(temp)
+        url = serve(app)
+        context = browser().new_context(service_workers="allow")
+        try:
+            page = _installed(context, url)
+            old = page.evaluate("self.FREELIEF_VERSION")
+            page.locator("h1").first.click()  # the touch
+            _deploy(app, "9.9.5")
+            page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
+            wait_until(page, "navigator.serviceWorker.getRegistration().then(r => Boolean(r.waiting))", 10000)
+            # The skip the page posted before its touch arrives now.
+            page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.waiting.postMessage('skip'))")
+            for worker in context.service_workers:  # under Playwright a takeover completes only once a worker runs
+                try:
+                    worker.evaluate("self.FREELIEF_VERSION")
+                except Exception:
+                    pass  # a worker already replaced cannot be woken, and needs no wake
+            wait_until(page, "navigator.serviceWorker.getRegistration().then(r => !r.waiting)", 10000)
+            assert page.evaluate("self.FREELIEF_VERSION") == old, "the page was reloaded under the person"
+            assert page.evaluate(f"caches.has('freelief-{old}')"), "the page's own cache was deleted"
+            page.evaluate("location.hash = 'mandala'")
+            wait_until(page, "document.querySelector('main').dataset.shown === 'mandala'", 5000)
+            assert page.locator(".mandala-part").count() > 0, "the page loaded a screen of the new version"
+        finally:
+            context.close()
 
 def test_update_now_beside_another_window_asks_to_close_it():
     # AUD-057: the person asked, but another window may be in use, so Settings says what to do.
