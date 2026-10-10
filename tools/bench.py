@@ -27,7 +27,19 @@ RESPONSE_TARGET_MS = 100
 # The recorded baseline (docs/performance/baseline.md) and its tolerance. Over tolerance prints FLAG
 # but does not fail: a flagged metric goes into docs/performance/log.md, and only a missed target
 # fails (AUD-058). Keep these in step with baseline.md when it is re-baselined.
-BASELINE = {"launch_ms": 154, "response_ms": 77, "size_kb": 239.8}
+def read_baseline() -> dict:
+    """The baseline figures from docs/performance/baseline.md, its one source (AUD-123)."""
+    import re
+    text = (ROOT / "docs" / "performance" / "baseline.md").read_text("utf-8")
+    rows = {"launch_ms": "REQ-026", "response_ms": "REQ-027", "size_kb": "REQ-028"}
+    found = {}
+    for key, req in rows.items():
+        line = next(l for l in text.splitlines() if l.startswith("|") and f"({req})" in l)
+        found[key] = float(re.search(r"([0-9.]+)\s*(?:ms|KB)", line.split("|")[3]).group(1))
+    return found
+
+
+BASELINE = read_baseline()
 TIMING_TOLERANCE = 0.25  # +25% for the two timings; any size growth is flagged
 # A quiet machine is a condition of the measurement (Performance_Testing.md section 2). Above this
 # CPU load, sampled before and after every run, the result is not valid (AUD-079).

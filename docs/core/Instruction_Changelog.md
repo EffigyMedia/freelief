@@ -27,6 +27,17 @@ this log is only for changes to *how we work* (process/instructions).
 
 -->
 
+## 2026-10-10
+
+### The config rule covers the shipped app; tool limits stay in the tools
+- **Instruction:** every tunable of the shipped app lives in `config.json`. A development tool keeps
+  its limits as named constants at the top of its file; the bench baseline is read from
+  `docs/performance/baseline.md`, so it has one source.
+- **Why:** AUD-123. The rule read as covering the tools too, and bench's baseline was a second copy
+  kept in step by hand.
+- **Encoded in:** `AGENTS.md` (Conventions); `tools/bench.py` (`read_baseline`).
+- Agent, 2026-10-10.
+
 ## 2026-10-09
 
 ### The shared helpers' storage rule is restored, and background.js is a helper

@@ -6,6 +6,11 @@
 # When this project stops needing a tool, move it to `retired`. Never delete the line, and nothing
 # is ever uninstalled: another project on this machine may still need it.
 
+# Freelief's tests need Python packages and a browser, and neither is a tool in the machine
+# registry: the packages are pinned in tools/freelief.py (PIP_PACKAGES) and installed into the
+# project's own .venv by `setup`; the browser is the Chrome already on the machine, or Playwright's
+# own Chromium and WebKit (AUD-032). icons/icon.svg is rendered by the test browser
+# (tools/make_icons.py), not by Inkscape.
 required = []
 optional = []
 retired  = []

@@ -33,7 +33,9 @@ NOT_SHIPPED = ("docs/", "tools/", "input/", ".claude/", ".github/", ".gitignore"
                "AGENTS.md", "CLAUDE.md", "config.toml", "tools.toml", "LICENSE", ".nojekyll")
 
 # Pinned, so a test run means the same thing on every machine (AUD-032). Raise them on purpose.
-PIP_PACKAGES = ("playwright==1.63.0", "axe-playwright-python==0.1.8")
+# The packages they pull in are pinned as well, so every machine installs the same set (AUD-032).
+PIP_PACKAGES = ("playwright==1.63.0", "axe-playwright-python==0.1.8",
+                "greenlet==3.5.6", "pyee==13.0.1", "typing-extensions==4.16.0")
 
 
 def uv() -> str | None:
@@ -162,6 +164,16 @@ def cmd_doctor(_: argparse.Namespace) -> int:
                                capture_output=True, text=True)
         check(probe.returncode == 0, "Playwright and axe import in .venv",
               "run: python tools/freelief.py setup")
+        # Every package is the pinned version (AUD-032).
+        listed = subprocess.run([str(VENV_PY), "-c",
+                                 "import importlib.metadata as m; print('\\n'.join(f'{d.metadata[\"Name\"].lower()}=={d.version}' for d in m.distributions()))"],
+                                capture_output=True, text=True).stdout.split()
+        # Package names compare with "_" and "-" as the same, as pip does.
+        norm = lambda text: text.lower().replace("_", "-")
+        installed = {norm(line.split("==")[0]): norm(line) for line in listed}
+        wrong = [pin for pin in PIP_PACKAGES if installed.get(norm(pin.split("==")[0])) != norm(pin)]
+        check(not wrong, f"the {len(PIP_PACKAGES)} test packages are the pinned versions",
+              "differs: " + ", ".join(wrong) + "; run: python tools/freelief.py setup")
         # The browser the tests, bench and icon tool drive: the installed Chrome, or Playwright's
         # own Chromium (AUD-012). Launched once, so a missing browser shows here, not mid-suite.
         launch = subprocess.run([str(VENV_PY), "-c",
@@ -221,12 +233,19 @@ def cmd_doctor(_: argparse.Namespace) -> int:
           "; ".join(broken) or "no test files")
     # Things a release would refuse, seen at every Resume and not only at a release (AUD-104,
     # AUD-102). They warn: the tree works, but the owner has a duty to do.
-    config = json.loads((ROOT / "config.json").read_text("utf-8"))
-    window = config["crisis"]["maxCheckAgeDays"]
-    for line in stale_crisis_checks(window):
-        print(f"[WARN] crisis data checked more than {window} days ago, re-check it: {line}")
-    for claim in outdated_claims():
-        print(f"[WARN] a verified standard no longer covers the interface, remove it: {claim}")
+    # A broken data file was reported above; these warnings then cannot run, and say so (AUD-119).
+    try:
+        config = json.loads((ROOT / "config.json").read_text("utf-8"))
+        window = config["crisis"]["maxCheckAgeDays"]
+        for line in stale_crisis_checks(window):
+            print(f"[WARN] crisis data checked more than {window} days ago, re-check it: {line}")
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        print(f"[WARN] the crisis-line freshness check could not run: {error}")
+    try:
+        for claim in outdated_claims():
+            print(f"[WARN] a verified standard no longer covers the interface, remove it: {claim}")
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        print(f"[WARN] the verified-standards check could not run: {error}")
     print(f"\n{'READY' if not problems else f'NOT READY: {len(problems)} problem(s)'}")
     return 0 if not problems else 1
 
@@ -275,14 +294,62 @@ def cmd_test(args: argparse.Namespace) -> int:
                     traceback.print_exc()
                 failed += 1
     print(f"\n{passed} passed, {failed} failed")
+    # Firefox is a supported browser, so a run without it says so plainly (AUD-028).
+    if not firefox_starts():
+        print("[WARN] Firefox did not run: its engine cannot start on this machine (see RLG-033)")
     return 0 if failed == 0 else 1
 
 
+def firefox_starts() -> bool:
+    probe = subprocess.run([str(VENV_PY), "-c", "import sys; sys.path.insert(0, 'tools/tests'); import harness; "
+                            "harness.engine('firefox')"], cwd=ROOT, capture_output=True, text=True)
+    return probe.returncode == 0
+
+
+def run_handler(shipped: set[str]):
+    """A request handler that serves only the shipped files, and only to a page on this machine.
+
+    The folder holds more than the app (.git, input/excluded, docs), so a path that does not ship is
+    refused (AUD-118). A Host header other than localhost or 127.0.0.1 is refused too, so a web page
+    open in the same browser cannot reach the server by DNS rebinding."""
+    import http.server
+    hosts = {f"localhost:{PORT}", f"127.0.0.1:{PORT}", "localhost", "127.0.0.1"}
+
+    class Handler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory=str(ROOT), **kwargs)
+
+        def send_head(self):
+            if self.headers.get("Host", "") not in hosts:
+                self.send_error(403, "This server answers only this machine")
+                return None
+            path = self.path.split("?", 1)[0].split("#", 1)[0].lstrip("/")
+            from urllib.parse import unquote
+            path = unquote(path) or "index.html"
+            if path not in shipped:
+                self.send_error(404, "Not a shipped file")
+                return None
+            return super().send_head()
+
+        def log_message(self, *args):
+            pass
+
+    return Handler
+
+
 def cmd_run(_: argparse.Namespace) -> int:
-    # This machine only: the folder holds more than the app (AUD-029).
-    print(f"Serving {ROOT} at http://localhost:{PORT}  (this machine only; Ctrl+C stops it)")
-    return subprocess.run([sys.executable, "-m", "http.server", str(PORT), "--bind", "127.0.0.1"],
-                          cwd=ROOT).returncode
+    # In this process, so stopping it stops the server; there is no child left on the port (AUD-122).
+    import http.server
+    shipped = {p.relative_to(ROOT).as_posix() for p in shipped_files()}
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", PORT), run_handler(shipped))
+    print(f"Serving the {len(shipped)} shipped files at http://localhost:{PORT}  (this machine only; Ctrl+C stops it)")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
+    return 0
 
 
 def cmd_build(args: argparse.Namespace) -> int:

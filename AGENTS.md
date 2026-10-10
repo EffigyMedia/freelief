@@ -251,7 +251,10 @@ the Chrome already on the machine. Run from the repo root:
   change to a rule, a flow or an architectural decision updates its prose **and** adds a dated
   Decision Log entry (annotate superseded entries; do not delete). A changed requirement is edited
   in its own `REQ-` record with its history beneath it; a dropped one becomes `withdrawn`.
-- **Every tunable lives in `config.json` with a committed default — never an in-code constant.**
+- **Every tunable of the shipped app lives in `config.json` with a committed default — never an
+  in-code constant.** The development tools keep their own limits as named constants at the top of
+  their file (the size limit, the bench's busy-machine threshold); the bench baseline is read from
+  `docs/performance/baseline.md` (AUD-123).
 - **Nothing ships that loads from another origin**, and no word in a shipped file makes a health
   claim. `test_repo.py` enforces both; keep it passing.
 - **Changes the tests cannot observe need the owner to check on a phone** — look, feel, motion,

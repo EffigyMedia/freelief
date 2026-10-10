@@ -292,3 +292,46 @@ def test_agents_md_repeats_no_line():
     repeated = sorted({b for a, b in zip(lines, lines[1:]) if a.startswith(b)}
                       | {l for l in lines if lines.count(l) > 1})
     assert not repeated, f"AGENTS.md repeats a line: {repeated[:3]}"
+
+
+def test_run_serves_only_shipped_files_and_only_to_this_machine():
+    # AUD-118: the folder holds .git and input/excluded; a page on another host name must not reach it.
+    import http.client
+    import http.server
+    import threading
+    shipped = {p.relative_to(freelief.ROOT).as_posix() for p in freelief.shipped_files()}
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), freelief.run_handler(shipped))
+    port = server.server_address[1]
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+
+    def get(path, host=f"localhost:{freelief.PORT}"):
+        connection = http.client.HTTPConnection("127.0.0.1", port, timeout=5)
+        connection.request("GET", path, headers={"Host": host})
+        status = connection.getresponse().status
+        connection.close()
+        return status
+
+    try:
+        assert get("/") == 200 and get("/app.js") == 200 and get("/config.json?x=1") == 200
+        assert get("/.git/HEAD") == 404, "git metadata is not served"
+        assert get("/input/") == 404 and get("/docs/Design_Document.md") == 404 and get("/AGENTS.md") == 404
+        assert get("/app.js", host="evil.example:8000") == 403, "a foreign Host is refused"
+    finally:
+        server.shutdown()
+        server.server_close()
+
+
+def test_doctor_reports_a_broken_config_instead_of_crashing():
+    # AUD-119: a malformed config.json gives NOT READY and exit 1, not a traceback.
+    import shutil
+    import subprocess
+    import tempfile
+    with tempfile.TemporaryDirectory() as temp:
+        copy = Path(temp) / "app"
+        shutil.copytree(freelief.ROOT, copy, ignore=shutil.ignore_patterns(".venv", "output", "input", ".git"))
+        (copy / "config.json").write_text("{ not json", "utf-8")
+        result = subprocess.run([sys.executable, str(copy / "tools" / "freelief.py"), "doctor"],
+                                cwd=copy, capture_output=True, text=True)
+        assert result.returncode == 1
+        assert "Traceback" not in result.stdout + result.stderr, result.stderr[-800:]
+        assert "NOT READY" in result.stdout
