@@ -1233,6 +1233,15 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   shapes and the crystal-glass sound are removed; REQ-013 is withdrawn and REQ-038 replaces it. —
   Rejected: ripples that form around stones by themselves; raking only. — 2026-10-10 (owner;
   UNT-115)
+- **The Visualizer is the Kaleidoscope: a slow, full-width kaleidoscope.** — Owner request
+  (RLG-057): "more trippy, a full-screen geometric evolving tapestry"; the owner chose a slow
+  kaleidoscope with no flashing, and the name Kaleidoscope (RLG-058). One wedge of 18 random soft
+  shapes is copied 12 times around the center, every other copy mirrored; the pattern turns once in
+  240 s, its colors drift through the hues in 150 s, and every 20 s a new pattern cross-fades in over
+  7 s. No brightness changes faster than that fade (WCAG 2.3.1). Under reduced motion nothing turns
+  or drifts; only the slow cross-fade remains. Full screen and Black screen are unchanged, and
+  nothing new is drawn under the black screen. — Rejected: a tiled woven pattern; bolder, faster
+  motion. — 2026-10-10 (owner; UNT-116)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

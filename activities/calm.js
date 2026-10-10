@@ -1,5 +1,7 @@
-// The Visualizer (owner, 2026-10-07): simple geometric shapes that fade in and out like a screen
-// saver. "Black screen" covers everything in black; one tap or key brings the screen back, and any
+// The Kaleidoscope (owner, 2026-10-07; redrawn 2026-10-10, RLG-057): a slow, full-width kaleidoscope
+// of soft shapes and colors. One wedge of shapes is mirrored around the center into a full circle;
+// the whole turns very slowly and its colors drift, and every so often a new pattern fades in over
+// the old one. Nothing flashes: no brightness changes faster than a slow fade. "Black screen" covers everything in black; one tap or key brings the screen back, and any
 // sound keeps playing. Nothing to do, nothing to win. Sound is chosen in the sound bar of the
 // header, on every screen (RLG-049); this screen has no sound choice of its own.
 // Under reduced motion the shapes do not move or grow; they only fade.
@@ -24,20 +26,56 @@ function inertAround(keep) {
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
-// Each shape is drawn inside a 100 x 100 box, as an SVG element name and its attributes.
-const FORMS = [
-  ["circle", { cx: 50, cy: 50, r: 40 }],
-  ["polygon", { points: "50,8 92,84 8,84" }],
-  ["rect", { x: 14, y: 14, width: 72, height: 72, rx: 6 }],
-  ["polygon", { points: "50,6 89,28 89,72 50,94 11,72 11,28" }],
-  ["polygon", { points: "50,6 94,50 50,94 6,50" }],
-  ["circle", { cx: 50, cy: 50, r: 24 }],
-];
+// One wedge of a kaleidoscope, mirrored into a circle: the wedge is copied `folds` times, every other
+// copy flipped, so the pattern is symmetric like a real kaleidoscope.
+function pattern(settings) {
+  const step = 360 / settings.folds;
+  const random = (min, max) => min + Math.random() * (max - min);
+  const hueBase = random(0, 360);
+  const cell = document.createElementNS(SVG_NS, "g");
+  for (let i = 0; i < settings.shapesPerCell; i++) {
+    // Out to the corners of the square (the corners are about 141 units from the center).
+    const r = random(6, 145);
+    const a = (random(4, step - 4) * Math.PI) / 180;
+    const x = r * Math.cos(a);
+    const y = r * Math.sin(a);
+    const size = random(6, 20);
+    const kind = Math.floor(random(0, 4));
+    const color = `hsl(${((hueBase + random(-60, 60)) % 360 + 360) % 360} ${Math.round(random(40, 70))}% ${Math.round(random(55, 72))}%)`;
+    let shape;
+    if (kind === 0) {
+      shape = document.createElementNS(SVG_NS, "circle");
+      shape.setAttribute("r", size.toFixed(1));
+    } else if (kind === 1) {
+      shape = document.createElementNS(SVG_NS, "ellipse");
+      shape.setAttribute("rx", (size * 0.45).toFixed(1));
+      shape.setAttribute("ry", (size * 1.3).toFixed(1));
+    } else {
+      const corners = kind === 2 ? 3 : 4;
+      shape = document.createElementNS(SVG_NS, "polygon");
+      shape.setAttribute("points", [...Array(corners).keys()].map((k) => {
+        const t = (k / corners) * Math.PI * 2;
+        return `${(size * Math.cos(t)).toFixed(1)},${(size * Math.sin(t)).toFixed(1)}`;
+      }).join(" "));
+    }
+    shape.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${Math.round(random(0, 180))})`);
+    shape.setAttribute("fill", color);
+    cell.append(shape);
+  }
+  const layer = document.createElementNS(SVG_NS, "g");
+  layer.setAttribute("class", "kaleido-layer");
+  for (let i = 0; i < settings.folds; i++) {
+    const copy = cell.cloneNode(true);
+    copy.setAttribute("transform", i % 2 ? `rotate(${(i + 1) * step}) scale(1 -1)` : `rotate(${i * step})`);
+    layer.append(copy);
+  }
+  return layer;
+}
 
 export function start(container, ctx) {
   stop();
   const { t, config, motion } = ctx;
-  const settings = config.calm;
+  const settings = config.calm.kaleidoscope;
   const still = motion.reducedMotion();
 
   container.innerHTML = `
@@ -45,7 +83,9 @@ export function start(container, ctx) {
       <h1>${t("calm.title")}</h1>
       <p class="visually-hidden">${t("calm.intro")}</p>
       <div class="calm-stage">
-        <svg class="calm-field" viewBox="0 0 400 300" aria-hidden="true" focusable="false"></svg>
+        <svg class="calm-field" viewBox="-100 -100 200 200" aria-hidden="true" focusable="false">
+          <g class="kaleido-turn"></g>
+        </svg>
         <div class="calm-stage-actions" hidden>
           <button type="button" class="button calm-help">${t("help.open")}</button>
           <button type="button" class="button calm-exit">${t("calm.exitFullScreen")}</button>
@@ -64,7 +104,6 @@ export function start(container, ctx) {
   const current = { timers: [], cover: null, wake: ctx.keepAwake() };
   run = current;
 
-  const random = (min, max) => min + Math.random() * (max - min);
   // A timer drops its own id when it fires, so the list holds only pending timers (AUD-038, AUD-083).
   function later(callback, ms) {
     const id = setTimeout(() => {
@@ -74,27 +113,27 @@ export function start(container, ctx) {
     current.timers.push(id);
   }
 
-  function addShape() {
+  // A new pattern fades in over the old one, and the old one goes when the fade is over. Under the
+  // black screen nothing new is drawn, which saves power (owner, 2026-10-08).
+  const turn = field.querySelector(".kaleido-turn");
+  if (still) field.classList.add("still");
+  field.style.setProperty("--turn", `${settings.turnSeconds}s`);
+  field.style.setProperty("--hue", `${settings.hueSeconds}s`);
+  field.style.setProperty("--fade", `${settings.fadeSeconds}s`);
+  function nextPattern() {
     if (run !== current) return;
-    // Under the black screen nothing new is drawn, which saves power (owner, 2026-10-08).
-    if (!current.cover && field.childElementCount < settings.maxShapes) {
-      const [tag, attributes] = FORMS[Math.floor(Math.random() * FORMS.length)];
-      const size = random(settings.minSize, settings.maxSize);
-      const group = document.createElementNS(SVG_NS, "g");
-      const x = random(0, 400 - size), y = random(0, 300 - size);
-      group.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(size / 100).toFixed(3)})`);
-      const inner = document.createElementNS(SVG_NS, "g");
-      inner.setAttribute("class", still ? "calm-shape still" : "calm-shape");
-      inner.style.animationDuration = `${settings.shapeLifeSeconds}s`;
-      inner.style.setProperty("--spin", `${random(-25, 25).toFixed(0)}deg`);
-      const shape = document.createElementNS(SVG_NS, tag);
-      for (const [name, value] of Object.entries(attributes)) shape.setAttribute(name, value);
-      inner.append(shape);
-      group.append(inner);
-      field.append(group);
-      later(() => group.remove(), settings.shapeLifeSeconds * 1000);
+    if (!current.cover) {
+      const layer = pattern(settings);
+      turn.append(layer);
+      const old = [...turn.children].slice(0, -1);
+      // The new pattern fades in while the old one fades out, so the change is one slow cross-fade.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        layer.classList.add("shown");
+        old.forEach((g) => g.classList.remove("shown"));
+      }));
+      later(() => old.forEach((g) => g.remove()), settings.fadeSeconds * 1000 + 100);
     }
-    later(addShape, settings.shapeEveryMs);
+    later(nextPattern, settings.patternSeconds * 1000);
   }
 
   // The black screen is one large button over everything, so a tap or any key brings the screen
@@ -165,7 +204,7 @@ export function start(container, ctx) {
   current.leaveFull = () => { if (stage.classList.contains("full")) leaveFull(); };
 
   blackButton.addEventListener("click", blackOut);
-  addShape();
+  nextPattern();
 }
 
 export function stop() {

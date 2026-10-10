@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `fefd21b2ad3c32a8` · 38 requirement(s) recorded
+> Store stamp `dcdbca973d01745b` · 38 requirement(s) recorded
 
 ## The problem
 
@@ -94,7 +94,7 @@ Not built (decided 2026-10-07):
 - **REQ-032** — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
 - **REQ-035** — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
-- **REQ-036** — Freelief offers the Visualizer, an activity with nothing to do: soft shapes fade in and out, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Background sound is chosen on every screen in the header's sound bar: a music note, a raindrop and a wave, each a toggle; rain and waves replace each other, music plays with either, and a tap while the speaker is off turns sound on. The sound keeps playing on every screen until its button is tapped again, breathing lowers it, it waits while urgent help is open, and nothing about it is stored.
+- **REQ-036** — Freelief offers the Kaleidoscope, an activity with nothing to do: a slow, full-width kaleidoscope of soft shapes and colors that turns, drifts in color and fades from one pattern to the next, with no flashing and no motion under reduced motion, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Background sound is chosen on every screen in the header's sound bar: a music note, a raindrop and a wave, each a toggle; rain and waves replace each other, music plays with either, and a tap while the speaker is off turns sound on. The sound keeps playing on every screen until its button is tapped again, breathing lowers it, it waits while urgent help is open, and nothing about it is stored.
 - **REQ-037** — Freelief keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, or always while it runs; 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
 - **REQ-038** — Freelief offers Zen Garden: the person rakes lines in a tray of sand with a finger, a mouse or the arrow keys, and adds, moves and removes a few stones and small plants, each named for a screen reader, with lines that flow around them and a way to smooth the sand, and with no score, no timer and no end.
 
@@ -132,4 +132,4 @@ Of the 31 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-10T01:23:03-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-10T01:34:23-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

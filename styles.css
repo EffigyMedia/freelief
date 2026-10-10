@@ -700,39 +700,24 @@ main {
 /* An activity's own controls sit centred under it (owner, 2026-10-07). */
 .activity .exercise-actions { justify-content: center; }
 
+/* The Kaleidoscope (RLG-057): as wide as the screen allows, square, on deep blue. The pattern turns
+   once in --turn and its colors drift through the hues in --hue; a new pattern fades in over --fade.
+   No brightness changes faster than that fade, so nothing flashes. */
 .calm-field {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 1;
   border-radius: var(--radius);
-  background: var(--accent-soft);
+  background: radial-gradient(circle, #1d2747 0%, #0b1022 75%);
+  animation: kaleido-hue var(--hue, 150s) linear infinite;
 }
-
-.calm-shape {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 2.5;
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation-name: calm-come-and-go;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: forwards;
-}
-
-/* Under reduced motion the shapes only fade; they do not grow or turn. */
-.calm-shape.still { animation-name: calm-fade; }
-
-@keyframes calm-come-and-go {
-  0% { opacity: 0; transform: scale(0.85) rotate(0deg); }
-  35%, 65% { opacity: 0.75; }
-  100% { opacity: 0; transform: scale(1.1) rotate(var(--spin)); }
-}
-
-@keyframes calm-fade {
-  0%, 100% { opacity: 0; }
-  35%, 65% { opacity: 0.75; }
-}
+.kaleido-turn { animation: kaleido-turn var(--turn, 240s) linear infinite; transform-origin: 0 0; }
+.kaleido-layer { opacity: 0; transition: opacity var(--fade, 7s) ease-in-out; }
+.kaleido-layer.shown { opacity: 0.85; }
+.calm-field.still, .calm-field.still .kaleido-turn { animation: none; }
+@keyframes kaleido-turn { to { transform: rotate(360deg); } }
+@keyframes kaleido-hue { to { filter: hue-rotate(360deg); } }
 
 /* Black screen: one large button over everything, in pure black. */
 .black-cover {
@@ -831,7 +816,6 @@ main {
 
 /* Calm: the stage, full screen, and slowly evolving soft colours (owner, 2026-10-07). */
 .calm-stage { position: relative; }
-.calm-field { animation: calm-sky 120s ease-in-out infinite alternate; }
 .calm-stage.full {
   position: fixed;
   inset: 0;
@@ -840,7 +824,7 @@ main {
   place-items: center;
   background: #05070d;
 }
-.calm-stage.full .calm-field { width: 100vw; height: 100vh; border-radius: 0; }
+.calm-stage.full .calm-field { width: min(100vw, 100vh); height: auto; border-radius: 0; }
 /* In full screen: the way to urgent help and the way out, at the top right. */
 .calm-stage-actions {
   position: absolute;
@@ -855,26 +839,10 @@ main {
 .calm-help { border-color: var(--text); }
 /* Under the black screen the stage stops moving, so nothing unseen is drawn. */
 .calm-stage.asleep .calm-field { visibility: hidden; animation-play-state: paused; }
-.calm-stage.asleep .calm-shape { animation-play-state: paused; }
-.calm-shape > * { animation: calm-pulse 9s ease-in-out infinite alternate; }
-
-@keyframes calm-sky {
-  0%   { background-color: rgba(70, 110, 170, 0.22); }
-  25%  { background-color: rgba(120, 90, 170, 0.22); }
-  50%  { background-color: rgba(60, 140, 140, 0.22); }
-  75%  { background-color: rgba(170, 110, 140, 0.20); }
-  100% { background-color: rgba(80, 120, 180, 0.22); }
-}
-
-@keyframes calm-pulse {
-  0%   { stroke: #8fb8de; }
-  33%  { stroke: #c4a8e6; }
-  66%  { stroke: #9fd8c6; }
-  100% { stroke: #e8b9c9; }
-}
+.calm-stage.asleep .kaleido-turn { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
-  *:not(.calm-shape):not(.ripple-ring), *::before, *::after {
+  *:not(.kaleido-layer):not(.ripple-ring), *::before, *::after {
     transition-duration: 0s !important;
     animation-duration: 0s !important;
   }

@@ -156,7 +156,10 @@ polite live line. The SVG is one tab stop (roving `tabindex`):
 - Enter or Space fills the part.
 
 ## The Visualizer (`activities/calm.js`, route `#calm`)
-The activity with nothing to do: soft shapes fade in and out. It has no sound choice of its own
+The Kaleidoscope (RLG-057): a slow kaleidoscope in SVG. `pattern()` mirrors one wedge of
+`calm.kaleidoscope.shapesPerCell` shapes into `folds` copies; the `.kaleido-turn` group turns once
+in `turnSeconds`, the field's hue drifts over `hueSeconds`, and every `patternSeconds` a new layer
+cross-fades in over `fadeSeconds`. Under reduced motion the turn and the drift stop. It has no sound choice of its own
 (RLG-049). The sound bar in the header plays music, rain or waves on every screen, this one too;
 its hidden intro says so.
 

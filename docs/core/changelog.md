@@ -10,6 +10,12 @@ audit.
 
 ---
 
+<a id="v0-8-8"></a>
+## [0.8.8] - 2026-10-10
+- **Kaleidoscope** (the Visualizer): a slow, full-width kaleidoscope of soft shapes and colors that
+  turns, drifts in color and fades from one pattern to the next. Nothing flashes, and it is still
+  under reduced motion. [RLG-057](../fragments/RLG-057.md). 180 tests.
+
 <a id="v0-8-7"></a>
 ## [0.8.7] - 2026-10-10
 - **Zen Garden** replaces Trace a shape: rake the sand with a finger or the arrow keys, and add,

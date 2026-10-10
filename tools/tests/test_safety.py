@@ -102,16 +102,21 @@ def test_full_screen_keeps_a_way_to_urgent_help():
 
 
 def test_nothing_is_drawn_under_the_black_screen_and_one_tap_brings_help_back():
-    fast = CONFIG["calm"]["shapeEveryMs"]
-    with open_app() as (page, _, _):
+    fast = 300  # the probe shortens the time between patterns to this
+    probe = """
+const realTimeout = window.setTimeout.bind(window);
+window.setTimeout = (callback, ms, ...rest) => realTimeout(callback, ms >= 15000 ? 300 : ms, ...rest);
+"""
+    with open_app(init_script=probe) as (page, _, _):
         go(page, "calm")
         page.locator(".black-screen").click()
         assert "asleep" in page.locator(".calm-stage").get_attribute("class")
         assert page.locator(".calm-field").evaluate("e => getComputedStyle(e).visibility") == "hidden"
-        before = page.evaluate("document.querySelector('.calm-field').childElementCount")
-        page.wait_for_timeout(int(fast * 2.5))
-        after = page.evaluate("document.querySelector('.calm-field').childElementCount")
-        assert after <= before, "no new shape is added while the screen is black"
+        page.wait_for_timeout(500)
+        before = page.evaluate("document.querySelectorAll('.kaleido-layer').length")
+        page.wait_for_timeout(int(fast * 4))
+        after = page.evaluate("document.querySelectorAll('.kaleido-layer').length")
+        assert after <= before, "no new pattern is drawn while the screen is black"
         page.locator(".black-cover").click()
         assert "asleep" not in page.locator(".calm-stage").get_attribute("class")
         assert page.locator(".help-open").is_visible(), "one tap from black, help is in reach again"

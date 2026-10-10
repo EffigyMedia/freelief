@@ -99,24 +99,40 @@ AudioContext.prototype.createGain = function () { const n = createGain.call(this
 
 
 
-def test_shapes_come_and_go():
-    with open_app() as (page, errors, _):
+KALEIDO = CONFIG["calm"]["kaleidoscope"]
+# Shortens the time between patterns to a moment, so a test sees a new one fade in.
+FAST_PATTERNS = """
+const realTimeout = window.setTimeout.bind(window);
+window.setTimeout = (callback, ms, ...rest) => realTimeout(callback, ms >= 15000 ? 300 : ms, ...rest);
+"""
+
+
+def test_the_kaleidoscope_is_a_mirrored_pattern_that_turns_and_changes():
+    # RLG-057 (owner, 2026-10-10): a slow full-screen kaleidoscope, no flashing.
+    with open_app(init_script=FAST_PATTERNS) as (page, errors, _):
         go(page, "calm")
-        wait_until(page, "document.querySelectorAll('.calm-field > g').length >= 2", 6000)
-        count = page.evaluate("document.querySelectorAll('.calm-field > g').length")
-        assert count <= CONFIG["calm"]["maxShapes"]
-        assert page.evaluate("getComputedStyle(document.querySelector('.calm-shape')).animationName") \
-            == "calm-come-and-go"
+        wait_until(page, "document.querySelectorAll('.kaleido-layer').length >= 1", 3000)
+        copies = page.evaluate("document.querySelector('.kaleido-layer').children.length")
+        assert copies == KALEIDO["folds"]
+        flipped = page.evaluate("[...document.querySelector('.kaleido-layer').children].filter(g => g.getAttribute('transform').includes('scale(1 -1)')).length")
+        assert flipped == KALEIDO["folds"] // 2, "every other copy is mirrored"
+        first = page.evaluate("document.querySelector('.kaleido-layer')")
+        wait_until(page, "document.querySelectorAll('.kaleido-layer').length >= 2", 3000)
+        assert page.evaluate("getComputedStyle(document.querySelector('.kaleido-turn')).animationName") == "kaleido-turn"
+        assert page.evaluate("getComputedStyle(document.querySelector('.kaleido-layer')).transitionDuration") == f"{KALEIDO['fadeSeconds']}s", \
+            "a new pattern fades in slowly, so nothing flashes"
+        assert KALEIDO["fadeSeconds"] >= 3 and KALEIDO["turnSeconds"] >= 60
+        box = page.locator(".calm-field").bounding_box()
+        assert abs(box["width"] - box["height"]) < 2, "square"
         assert not errors, errors
 
 
-def test_shapes_only_fade_under_reduced_motion():
+def test_the_kaleidoscope_is_still_under_reduced_motion():
     with open_app(reduced_motion="reduce") as (page, _, _):
         go(page, "calm")
-        wait_until(page, "document.querySelectorAll('.calm-shape').length >= 1", 4000)
-        style = page.evaluate("""(() => { const s = getComputedStyle(document.querySelector('.calm-shape'));
-            return [s.animationName, s.animationDuration]; })()""")
-        assert style[0] == "calm-fade" and style[1] != "0s", style
+        wait_until(page, "document.querySelectorAll('.kaleido-layer').length >= 1", 3000)
+        assert page.evaluate("getComputedStyle(document.querySelector('.kaleido-turn')).animationName") == "none"
+        assert page.evaluate("getComputedStyle(document.querySelector('.calm-field')).animationName") == "none"
 
 
 def test_black_screen_covers_everything_and_one_tap_brings_it_back():

@@ -753,11 +753,14 @@
     "makerUrl": "https://www.effigymedia.com"
   },
   "calm": {
-    "shapeEveryMs": 2600,
-    "shapeLifeSeconds": 13,
-    "maxShapes": 6,
-    "minSize": 50,
-    "maxSize": 130,
+    "kaleidoscope": {
+      "folds": 12,
+      "shapesPerCell": 18,
+      "patternSeconds": 20,
+      "fadeSeconds": 7,
+      "turnSeconds": 240,
+      "hueSeconds": 150
+    },
     "bothMix": {
       "music": 0.9,
       "nature": 0.6
