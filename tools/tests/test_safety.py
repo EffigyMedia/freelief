@@ -201,7 +201,7 @@ def test_always_keeps_the_screen_on_with_no_idle_end():
 
 # AUD-033: a bad edit to the data must not add markup to a page. The probe rewrites the crisis data
 # and the config as they load, so a country name, a region code and a mandala color carry markup.
-HOSTILE_DATA = """
+HOSTILE_DATA = r"""
 const realFetch = window.fetch;
 window.fetch = async (input, init) => {
   const response = await realFetch(input, init);
