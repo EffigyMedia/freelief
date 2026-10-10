@@ -48,10 +48,35 @@ class _QuietHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", self.cache_control)
         super().end_headers()
 
+    # The same two refusals as `run` (AUD-118, AUD-129): a request for another host name is refused,
+    # so a web page in the test browser cannot reach the server by DNS rebinding; and when the server
+    # serves the repository, a path that does not ship (.git, .venv, input/excluded, docs) is refused.
+    # A temporary copy of the app holds only the app, so it sets no list.
+    shipped: set[str] | None = None
+
+    def send_head(self):
+        port = self.server.server_address[1]
+        if self.headers.get("Host", "") not in {f"localhost:{port}", f"127.0.0.1:{port}"}:
+            self.send_error(403, "This server answers only this machine")
+            return None
+        if self.shipped is not None:
+            from urllib.parse import unquote
+            path = unquote(self.path.split("?", 1)[0].split("#", 1)[0].lstrip("/")) or "index.html"
+            if path not in self.shipped:
+                self.send_error(404, "Not a shipped file")
+                return None
+        return super().send_head()
+
 
 def serve(directory: Path, cache_control: str = "no-store") -> str:
     """Serve a directory on a new free localhost port; return its URL."""
-    handler_class = type("_Handler", (_QuietHandler,), {"cache_control": cache_control})
+    shipped = None
+    if directory.resolve() == ROOT:
+        import sys
+        sys.path.insert(0, str(ROOT / "tools"))
+        import freelief
+        shipped = {p.relative_to(ROOT).as_posix() for p in freelief.shipped_files()}
+    handler_class = type("_Handler", (_QuietHandler,), {"cache_control": cache_control, "shipped": shipped})
     handler = functools.partial(handler_class, directory=str(directory))
     server = _Server(("127.0.0.1", 0), handler)
     # A browser that closes a page mid-download aborts the socket; that is not a test failure.

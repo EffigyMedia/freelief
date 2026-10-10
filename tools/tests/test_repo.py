@@ -352,3 +352,23 @@ def test_the_accessibility_template_lists_the_same_screens_as_the_app():
     in_app = re.findall(r"^\[ \] (.+)$", app, re.M)
     on_github = re.findall(r"^- \[ \] (.+)$", template, re.M)
     assert in_app and in_app == on_github, (in_app, on_github)
+
+
+def test_the_test_server_serves_only_shipped_files_and_only_to_this_machine():
+    # AUD-129: harness.serve(ROOT), which every browser test and the bench use, has the same two
+    # refusals as `run`.
+    import http.client
+    from harness import serve
+    url = serve(freelief.ROOT)
+    port = int(url.rstrip("/").rsplit(":", 1)[1])
+
+    def get(path, host=f"localhost:{port}"):
+        connection = http.client.HTTPConnection("127.0.0.1", port, timeout=5)
+        connection.request("GET", path, headers={"Host": host})
+        status = connection.getresponse().status
+        connection.close()
+        return status
+
+    assert get("/") == 200 and get("/app.js") == 200 and get("/activities/calm.js?v=1") == 200
+    assert get("/.git/HEAD") == 404 and get("/.venv/pyvenv.cfg") == 404 and get("/AGENTS.md") == 404
+    assert get("/app.js", host="evil.example") == 403, "a foreign Host is refused"
