@@ -124,6 +124,20 @@ def engine(name: str):
     return _engines[name]
 
 
+class NotRun(Exception):
+    """A test that cannot run on this machine. The runner reports it by name as not run, never as a
+    pass, so a missing browser stays visible (AUD-028)."""
+
+
+def engine_or_not_run(name: str):
+    """The engine, or NotRun with the reason when it cannot start here."""
+    try:
+        return engine(name)
+    except Exception as error:
+        first = str(error).strip().splitlines()[0] if str(error).strip() else type(error).__name__
+        raise NotRun(f"{name} cannot start on this machine (see RLG-033): {first[:120]}") from error
+
+
 @contextmanager
 def open_app(locale="en-US", color_scheme="dark", reduced_motion="no-preference",
              viewport=None, service_workers="block", init_script=None, route="breathe", on=None):

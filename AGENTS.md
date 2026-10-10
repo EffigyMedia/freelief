@@ -192,8 +192,9 @@ the Chrome already on the machine. Run from the repo root:
   `version.js` and lists only files that exist, and that every test file compiles. **Resume runs this.**
 - `python tools/freelief.py test [name…]` — run every `test_*` function in `tools/tests/`. The
   supported browsers are Chrome, Safari and Firefox; `test_engines.py` also runs the never-break paths
-  in WebKit, from `playwright install webkit`. It fails
-  on a file it cannot load or that holds no test.
+  in WebKit, from `playwright install webkit`, and in Firefox. A test whose engine cannot start here
+  is reported by name as not run, never as passed (AUD-028). It fails on a file it cannot load or that
+  holds no test.
 - `python tools/freelief.py run` — serve the folder at `http://localhost:8000`. A desktop browser is
   a convenience, not an on-target check: the owner checks look and feel on a phone.
 - `python tools/freelief.py build` — no build step; reports the shipped size against 250 KB

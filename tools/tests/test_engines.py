@@ -1,9 +1,9 @@
 """The supported browsers (AUD-028, owner 2026-10-08): Chrome, Safari and Firefox. The rest of the
 suite runs in Chrome; the never-break paths (by pointer, by keyboard, and offline) also run in
-WebKit, Safari's engine. Firefox joins when
-its engine can start on this machine (see RLG-033)."""
+WebKit, Safari's engine, and in Firefox. Where Firefox cannot start (it needs the Microsoft Visual
+C++ runtime on Windows; RLG-033), its tests are reported by name as not run, never as passed."""
 
-from harness import engine, open_app, wait_until
+from harness import engine, engine_or_not_run, open_app, wait_until
 
 
 def go(page, route):
@@ -87,3 +87,15 @@ def test_the_never_break_paths_work_by_keyboard_in_webkit():
 
 def test_the_app_opens_offline_in_webkit():
     offline(engine("webkit"))
+
+
+def test_the_never_break_paths_work_in_firefox():
+    never_break(engine_or_not_run("firefox"))
+
+
+def test_the_never_break_paths_work_by_keyboard_in_firefox():
+    by_keyboard(engine_or_not_run("firefox"))
+
+
+def test_the_app_opens_offline_in_firefox():
+    offline(engine_or_not_run("firefox"))

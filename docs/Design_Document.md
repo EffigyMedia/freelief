@@ -1088,7 +1088,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   middle). The designs are still data in `config.json`, so no image ships. Every shape in every
   design stays at least 24 px at a 360 px width, and a test keeps two diamonds side by side from
   overlapping, because a shared edge is hard to tap. — Rejected: designs from image files (size,
-  and no names for the shapes). — 2026-10-09 (owner; UNT-091)
+  and no names for the shapes). — 2026-10-09 (owner; UNT-091) *Amended 2026-10-09 (owner, RLG-047;
+  UNT-107): every shape is now at least 44 px at a 360 px width; see "Every mandala shape is at least
+  44 px on a phone". Noted 2026-10-10 (AUD-125, UNT-136).*
 - **Every pitched sound that plays with the music is in its key, C major.** — Owner request
   (RLG-046). The pads play C, Am, F and G, so the key is C major (C D E F G A B). Every fixed note
   was already in the key. The rain's drops had a random pitch (a narrow noise band at 1190 to

@@ -270,7 +270,9 @@ def cmd_test(args: argparse.Namespace) -> int:
         print("[FAIL] no test files collected")
         return 1
 
+    import harness
     passed = failed = 0
+    not_run = []
     for file in files:
         spec = importlib.util.spec_from_file_location(file.stem, file)
         module = importlib.util.module_from_spec(spec)
@@ -291,22 +293,20 @@ def cmd_test(args: argparse.Namespace) -> int:
                 function()
                 print(f"[ OK ] {file.name}::{name}")
                 passed += 1
+            except harness.NotRun as reason:
+                print(f"[SKIP] {file.name}::{name}: {reason}")
+                not_run.append(f"{file.name}::{name}")
             except Exception as error:
                 print(f"[FAIL] {file.name}::{name}: {error}")
                 if not isinstance(error, AssertionError):
                     traceback.print_exc()
                 failed += 1
-    print(f"\n{passed} passed, {failed} failed")
-    # Firefox is a supported browser, so a run without it says so plainly (AUD-028).
-    if not firefox_starts():
-        print("[WARN] Firefox did not run: its engine cannot start on this machine (see RLG-033)")
+    print(f"\n{passed} passed, {failed} failed, {len(not_run)} not run")
+    # A test that could not run is named, so a missing supported browser stays visible (AUD-028). The
+    # warning comes from the tests that did not run, not from a probe of the engine.
+    if not_run:
+        print(f"[WARN] {len(not_run)} test(s) did not run on this machine: " + ", ".join(not_run))
     return 0 if failed == 0 else 1
-
-
-def firefox_starts() -> bool:
-    probe = subprocess.run([str(VENV_PY), "-c", "import sys; sys.path.insert(0, 'tools/tests'); import harness; "
-                            "harness.engine('firefox')"], cwd=ROOT, capture_output=True, text=True)
-    return probe.returncode == 0
 
 
 def run_handler(shipped: set[str]):
