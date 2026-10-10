@@ -4,7 +4,7 @@
 >
 > This is the companion to the Software Requirements Specification, not a summary of it. The specification says what the software must do; this says what is decided, what is not, and where the work has got to.
 >
-> Store stamp `11065cf93f6815a8` · 37 requirement(s) recorded
+> Store stamp `c5a2566ce134af87` · 37 requirement(s) recorded
 
 ## The problem
 
@@ -98,8 +98,8 @@ Not built (decided 2026-10-07):
 - **REQ-032** — Freelief offers a ripple pond: the person touches still water, or presses a key, and soft ripples spread from that point, by touch, mouse or keyboard, with no score and no failure.
 - **REQ-033** — Freelief offers mandala coloring: the person chooses a soft color and taps or selects a part of a mandala to fill it, by touch, mouse or keyboard, with every part named for a screen reader, and with no score and no failure.
 - **REQ-035** — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
-- **REQ-036** — Freelief offers the Visualizer, an activity with nothing to do: the person chooses Off, Music, Nature (rain or waves, chosen in Settings) or Both, soft shapes fade in and out, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Its sound is the background sound: it keeps playing on every screen until the person chooses Off or presses Stop in the sound bar under the header, breathing lowers it, and it waits while urgent help is open.
-- **REQ-037** — Freelief keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
+- **REQ-036** — Freelief offers the Visualizer, an activity with nothing to do: soft shapes fade in and out, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Background sound is chosen on every screen in the header's sound bar: a music note, a raindrop and a wave, each a toggle; rain and waves replace each other, music plays with either, and a tap while the speaker is off turns sound on. The sound keeps playing on every screen until its button is tapped again, breathing lowers it, it waits while urgent help is open, and nothing about it is stored.
+- **REQ-037** — Freelief keeps the screen on while breathing or the Visualizer runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, or always while it runs; 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
 
 ### Could have
 
@@ -131,4 +131,4 @@ Of the 34 requirement(s) in the specification, 0 (0%) have had their verificatio
 
 ---
 
-Generated 2026-10-09T17:33:54-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.
+Generated 2026-10-09T22:10:08-04:00 by `Commands/prd.py`. The specification is generated beside it by `Commands/srs.py`, from these same records.

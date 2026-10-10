@@ -190,6 +190,8 @@ def test_a_board_can_be_solved_by_drag_and_one_drag_is_one_move():
     with open_app(viewport={"width": 360, "height": 740}) as (page, _, _):
         go(page, "unblock")
         cell = page.locator(".unblock-board").evaluate("e => e.clientWidth") / SIZE
+        # The header is three rows tall, so the board is scrolled fully into view before any drag.
+        page.locator(".unblock-board").evaluate("e => e.scrollIntoView({ block: 'end' })")
         first = True
         for name, steps in path:
             box = block(page, name).bounding_box()
@@ -206,6 +208,10 @@ def test_a_board_can_be_solved_by_drag_and_one_drag_is_one_move():
                 # Undo takes back the whole drag at once, then the drag is done again.
                 page.locator(".unblock-undo").click()
                 assert block(page, name).get_attribute("aria-label") == label
+                # The click on Undo may scroll the page, so the block is measured again.
+                page.locator(".unblock-board").evaluate("e => e.scrollIntoView({ block: 'end' })")
+                box = block(page, name).bounding_box()
+                x, y = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
                 page.mouse.move(x, y)
                 page.mouse.down()
                 page.mouse.move(x + dx, y + dy, steps=10)

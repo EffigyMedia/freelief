@@ -139,8 +139,6 @@ PRIVACY_WORDS = {
     "rhythm": "rhythm",
     "sounds": "sound",
     "theme": "colors",
-    "calmMode": "Visualizer",
-    "natureSound": "nature",
     "awakeMinutes": "screen stays on",
     "helpRegion": "country",
     "haptics": "vibration",
@@ -281,7 +279,7 @@ def test_the_design_names_every_setting_that_is_stored():
     design = (freelief.ROOT / "docs" / "Design_Document.md").read_text("utf-8")
     row = re.search(r"^\| \*\*Settings\*\* \|(.*)$", design, re.M).group(1)
     words = dict(PRIVACY_WORDS, sounds="sound", theme="theme", helpRegion="region", openOn="opens",
-                 awakeMinutes="screen stays on", calmMode="Visualizer's sound")
+                 awakeMinutes="screen stays on")
     absent = [k for k in keys if words[k].lower() not in row.lower()]
     assert not absent, f"the design's Settings definition does not name: {absent}"
 

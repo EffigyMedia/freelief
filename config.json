@@ -807,22 +807,10 @@
     "maxShapes": 6,
     "minSize": 50,
     "maxSize": 130,
-    "modes": [
-      "off",
-      "music",
-      "nature",
-      "both"
-    ],
-    "defaultMode": "music",
     "bothMix": {
       "music": 0.9,
       "nature": 0.6
     },
-    "natureChoices": [
-      "rain",
-      "waves"
-    ],
-    "natureDefault": "rain",
     "duckRoutes": [
       "breathe"
     ]
@@ -831,7 +819,8 @@
     "idleMinutesChoices": [
       10,
       30,
-      60
+      60,
+      0
     ],
     "idleMinutesDefault": 30
   }

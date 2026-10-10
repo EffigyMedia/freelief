@@ -25,6 +25,10 @@ AudioContext.prototype.createOscillator = function () {
 RHYTHM = CONFIG["breathing"]["rhythms"][CONFIG["breathing"]["defaultRhythm"]]
 
 
+def play_music(page):
+    page.locator(".sound-choice[data-sound=music]").click()
+
+
 def go(page, route):
     page.evaluate(f"location.hash = '{route}'")
     wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 3000)
@@ -78,7 +82,7 @@ def test_sounds_off_means_no_glass():
         assert page.evaluate("window.__osc.length") == 0
 
 
-def test_the_header_sound_button_silences_at_once_and_brings_the_visualizer_back():
+def test_the_header_sound_button_silences_at_once_and_brings_the_music_back():
     # Owner, 2026-10-08: the sound switch is a speaker in the header, crossed out when off.
     with open_app(init_script=PROBE) as (page, errors, _):
         sound = page.locator("header button.sound-toggle")
@@ -86,25 +90,23 @@ def test_the_header_sound_button_silences_at_once_and_brings_the_visualizer_back
         assert sound.get_attribute("aria-pressed") == "true"
         assert sound.locator(".sound-waves").is_visible() and sound.locator(".sound-cross").is_hidden()
         page.locator(".guide").click()  # the first gesture unlocks sound
-        go(page, "calm")
+        play_music(page)
         wait_until(page, "window.__osc.length > 0", 3000)
         sound.click()
         assert sound.get_attribute("aria-pressed") == "false"
         assert sound.locator(".sound-cross").is_visible() and sound.locator(".sound-waves").is_hidden()
         wait_until(page, "window.__osc.at(-1).ctx.state === 'suspended'", 2000)
-        assert page.locator(".calm-sound-note").is_visible()
         before = page.evaluate("window.__osc.length")
         sound.click()
         wait_until(page, f"window.__osc.length > {before}", 3000)  # the music starts again
         wait_until(page, "window.__osc.at(-1).ctx.state === 'running'", 2000)
-        assert page.locator(".calm-sound-note").is_hidden()
         assert not errors, errors
 
 
 def test_the_sound_button_is_reached_by_keyboard_and_settings_has_no_sound_switch():
     with open_app(viewport={"width": 360, "height": 700}) as (page, _, _):
-        page.keyboard.press("Tab")
-        page.keyboard.press("Tab")
+        for _ in range(4):  # music, rain, waves, then the speaker
+            page.keyboard.press("Tab")
         assert page.evaluate("document.activeElement.classList.contains('sound-toggle')")
         page.keyboard.press("Enter")
         assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "false"
@@ -121,7 +123,7 @@ def test_the_sound_button_fades_out_and_in_rather_than_cutting():
     fade = CONFIG["sounds"]["muteFadeSeconds"]
     with open_app(init_script=PROBE) as (page, _, _):
         page.locator(".guide").click()
-        go(page, "calm")
+        play_music(page)
         wait_until(page, "window.__osc.length > 0 && window.__osc.at(-1).ctx.state === 'running'", 3000)
         page.locator("button.sound-toggle").click()
         assert page.evaluate("window.__osc.at(-1).ctx.state") == "running", "no hard cut: it fades first"
@@ -146,11 +148,12 @@ AudioContext.prototype.createGain = function () {
 };"""
     with open_app(init_script=PROBE + probe) as (page, _, _):
         page.locator(".guide").click()
-        go(page, "calm")
+        play_music(page)
         wait_until(page, "window.__osc.length > 0", 3000)
         page.locator("button.sound-toggle").click()
         wait_until(page, "window.__osc.at(-1).ctx.state === 'suspended'", 3000)
         assert page.evaluate("window.__gain.some(g => !g.connected)"),             "the music fading out when the audio paused was cut off, not frozen"
+        play_music(page)  # stop it while muted
         go(page, "bubbles")
         stops = page.evaluate("window.__osc.filter(o => o.stop !== null).map(o => o.stop - o.ctx.currentTime)")
         assert stops and max(stops) <= 0.01, f"no stop left scheduled for later: {max(stops)}"
@@ -211,8 +214,8 @@ AudioContext.prototype.createBiquadFilter = function () {
 };"""
     with open_app(init_script=probe) as (page, errors, _):
         page.locator(".guide").click()
-        go(page, "calm")
-        page.locator("input[name=calm-mode][value=both]").check()
+        play_music(page)
+        page.locator(".sound-choice[data-sound=rain]").click()
         wait_until(page, "window.__bands.length >= 8", 8000)
         heard = page.evaluate("window.__bands")
         wrong = [hz for hz in heard if not in_c_major(hz)]

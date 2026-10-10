@@ -53,7 +53,7 @@ def test_the_emergency_number_is_the_first_thing_to_tap():
 def test_sound_waits_while_urgent_help_is_open_and_while_the_app_is_hidden():
     with open_app(init_script=OSC_PROBE) as (page, errors, _):
         page.locator(".guide").click()  # the first gesture unlocks sound
-        go(page, "calm")
+        page.locator(".sound-choice[data-sound=music]").click()
         wait_until(page, "window.__ctx.length > 0 && window.__ctx[0].state === 'running'", 3000)
         page.locator(".help-open").click()
         wait_until(page, "window.__ctx[0].state === 'suspended'", 2000)
@@ -177,3 +177,15 @@ def test_a_breathing_tone_does_not_wake_the_audio_while_urgent_help_is_open():
         wait_until(page, "window.__ctx[0].state === 'suspended'", 2000)
         page.wait_for_timeout(7000)  # more than one breathing phase
         assert page.evaluate("window.__ctx[0].state") == "suspended"
+
+
+def test_always_keeps_the_screen_on_with_no_idle_end():
+    # RLG-048 (owner, 2026-10-09): "Always, while it runs" sets no idle time.
+    store = "localStorage.setItem('freelief.settings.v2', JSON.stringify({ awakeMinutes: 0 }));"
+    with open_app(init_script=WAKE_PROBE + SHORT_WAITS + store, route="menu") as (page, _, _):
+        go(page, "calm")
+        wait_until(page, "window.__wake.held === 1", 2000)
+        page.wait_for_timeout(1500)  # past the shortened idle time of the other choices
+        assert page.evaluate("window.__wake.held") == 1
+        go(page, "settings")
+        assert page.locator("input[name=awakeMinutes][value='0']").is_checked()

@@ -22,6 +22,11 @@ AudioContext.prototype.createOscillator = function () {
 """
 
 
+def tap(page, sound):
+    # A button in the header's sound bar (RLG-049): "music", "rain" or "waves".
+    page.locator(f".sound-choice[data-sound={sound}]").click()
+
+
 def go(page, route):
     page.evaluate(f"location.hash = '{route}'")
     wait_until(page, f"document.querySelector('main').dataset.shown === '{route}'", 3000)
@@ -31,48 +36,46 @@ LIVE_PADS = ("window.__osc.filter(o => o.node.type === 'triangle' && "
              "(o.stop === null || o.stop > o.ctx.currentTime + 3)).length")
 
 
-def test_the_music_keeps_playing_after_leaving_and_the_sound_bar_stops_it():
-    # RLG-045 (owner, 2026-10-09): the sound plays on every screen until it is turned off.
+def test_the_sound_bar_plays_on_every_screen_and_a_second_tap_stops_it():
+    # RLG-049 (owner, 2026-10-09): a music note, a raindrop and a wave in the header, always there.
     with open_app(init_script=OSC_PROBE) as (page, errors, _):
         page.locator(".guide").click()  # the first gesture unlocks sound
-        go(page, "calm")
         voices = len(CONFIG["sounds"]["pads"]["chords"][0]) * 2
+        for route in ("menu", "calm", "settings", "bubbles"):
+            go(page, route)
+            assert page.locator(".sound-bar .sound-choice").count() == 3, route
+        assert page.locator(".sound-bar").get_attribute("role") == "group"
+        music = page.locator(".sound-choice[data-sound=music]")
+        assert music.get_attribute("aria-label") == STRINGS["soundBar.music"]
+        assert music.get_attribute("aria-pressed") == "false", "nothing plays until it is chosen"
+        page.wait_for_timeout(300)
+        assert page.evaluate(LIVE_PADS) == 0
+        tap(page, "music")
+        assert music.get_attribute("aria-pressed") == "true"
         wait_until(page, f"window.__osc.length >= {voices}", 3000)
-        assert page.locator(".sound-bar").is_hidden(), "the Visualizer has its own choice, so no bar"
-        go(page, "bubbles")
-        assert page.evaluate(LIVE_PADS) >= voices, "leaving the Visualizer does not stop the music"
-        bar = page.locator(".sound-bar")
-        assert bar.is_visible() and bar.locator(".sound-bar-text").inner_text() == STRINGS["soundBar.music"]
-        stop = bar.locator(".sound-bar-stop")
-        assert stop.inner_text() == STRINGS["soundBar.stop"]
-        assert stop.get_attribute("aria-describedby") == "sound-bar-text"
-        stop.click()
-        assert bar.is_hidden()
-        assert page.evaluate("document.activeElement.tagName") == "H1", "focus moves to the heading, not lost"
+        go(page, "breathe")
+        assert page.evaluate(LIVE_PADS) >= voices, "leaving the screen does not stop the music"
+        tap(page, "music")  # a second tap stops it
+        assert music.get_attribute("aria-pressed") == "false"
         wait_until(page, f"{LIVE_PADS} === 0", 3000)
-        go(page, "calm")
-        assert page.locator("input[name=calm-mode][value=off]").is_checked(), "Stop is the same as Off"
-        before = page.evaluate("window.__osc.length")
-        page.wait_for_timeout(500)
-        assert page.evaluate("window.__osc.length") == before, "Off stays off on coming back"
         assert not errors, errors
 
 
 def test_the_sound_bar_is_reached_and_used_by_keyboard():
-    with open_app(init_script=OSC_PROBE, viewport={"width": 360, "height": 740}) as (page, _, _):
-        page.locator(".guide").click()
-        go(page, "calm")
-        go(page, "menu")
+    with open_app(init_script=OSC_PROBE, viewport={"width": 360, "height": 740}, route="menu") as (page, _, _):
         page.locator(".brand").click()
-        for _ in range(6):
+        for _ in range(8):
             page.keyboard.press("Tab")
-            if page.evaluate("document.activeElement.classList.contains('sound-bar-stop')"):
+            if page.evaluate("document.activeElement.dataset.sound === 'rain'"):
                 break
-        assert page.evaluate("document.activeElement.classList.contains('sound-bar-stop')")
-        box = page.locator(".sound-bar-stop").bounding_box()
-        assert box["height"] >= 44 and box["width"] >= 44
+        assert page.evaluate("document.activeElement.dataset.sound === 'rain'")
+        for button in page.locator(".sound-choice").all():
+            box = button.bounding_box()
+            assert box["height"] >= 44 and box["width"] >= 44
         page.keyboard.press("Enter")
-        assert page.locator(".sound-bar").is_hidden()
+        assert page.locator(".sound-choice[data-sound=rain]").get_attribute("aria-pressed") == "true"
+        page.keyboard.press("Space")
+        assert page.locator(".sound-choice[data-sound=rain]").get_attribute("aria-pressed") == "false"
 
 
 def test_breathing_lowers_the_background_sound_and_leaving_brings_it_back():
@@ -84,6 +87,7 @@ AudioContext.prototype.createGain = function () { const n = createGain.call(this
     with open_app(init_script=probe) as (page, _, _):
         page.locator(".guide").click()
         go(page, "calm")
+        tap(page, "music")
         wait_until(page, "window.__gains.length >= 2", 3000)
         bed = "window.__gains[1].gain.value"  # the master volume first, then the background's own
         # The app opened on breathing, so the background starts low and rises on the Visualizer.
@@ -93,14 +97,6 @@ AudioContext.prototype.createGain = function () { const n = createGain.call(this
         go(page, "bubbles")
         wait_until(page, f"Math.abs({bed} - 1) < 0.01", int(duck["duckSeconds"] * 1000) + 2000)
 
-
-def test_calm_is_silent_with_sounds_off_and_says_so():
-    with open_app(init_script=OSC_PROBE) as (page, _, _):
-        page.locator("button.sound-toggle").click()  # the header's sound button, off
-        go(page, "calm")
-        page.wait_for_timeout(500)
-        assert page.evaluate("window.__osc.length") == 0
-        assert page.locator(".calm-sound-note").is_visible()
 
 
 def test_shapes_come_and_go():
@@ -172,56 +168,32 @@ AudioContext.prototype.createBufferSource = function () {
 """
 
 
-def test_nature_mode_plays_looping_noise_and_is_remembered():
-    with open_app(init_script=OSC_PROBE + NOISE_PROBE) as (page, _, _):
-        page.locator(".guide").click()
-        go(page, "calm")
-        assert page.locator("input[name=calm-mode][value=music]").is_checked()
-        wait_until(page, "window.__osc.length > 0", 3000)
-        music = page.evaluate("window.__osc.length")
-        page.locator("input[name=calm-mode][value=nature]").check()
-        wait_until(page, "window.__noise.some(n => n.loop)", 3000)
-        assert page.evaluate(f"window.__osc.slice(0, {music}).every(o => o.stop !== null)"), "the music stops for nature"
-        go(page, "breathe")
-        assert page.locator(".sound-bar-text").inner_text() == \
-            STRINGS["soundBar.nature"].format(nature=STRINGS["soundBar.nature.rain"])
-        go(page, "calm")
-        assert page.locator("input[name=calm-mode][value=nature]").is_checked(), "the choice is remembered"
-
-
-def test_waves_replace_rain_when_chosen_in_settings_and_the_choice_is_kept():
-    # RLG-043: Nature plays rain or waves. Waves have no rain drops (no band-pass filters).
-    probe = NOISE_PROBE + """
+def test_rain_and_waves_replace_each_other_and_music_plays_with_either():
+    # RLG-049: the raindrop and the wave flip-flop; the music note plays beside either one.
+    probe = OSC_PROBE + NOISE_STOP_PROBE + """
 window.__bands = 0;
 const createFilter = AudioContext.prototype.createBiquadFilter;
 AudioContext.prototype.createBiquadFilter = function () {
   const n = createFilter.call(this); setTimeout(() => { if (n.type === 'bandpass') window.__bands += 1; }, 0); return n; };"""
-    with open_app(init_script=probe) as (page, errors, _):
-        page.locator(".guide").click()
-        go(page, "settings")
-        assert page.locator("input[name=natureSound][value=rain]").is_checked()
-        page.locator("input[name=natureSound][value=waves]").check()
-        page.reload()
-        wait_until(page, "document.documentElement.dataset.ready === 'true'", 5000)
-        go(page, "settings")
-        assert page.locator("input[name=natureSound][value=waves]").is_checked(), "saved, reloaded, read"
+    live_noise = "window.__noise.filter(n => n.node.loop && !n.stopped).length"
+    pressed = "els => els.map(e => e.getAttribute('aria-pressed'))"
+    with open_app(init_script=probe, route="menu") as (page, errors, _):
         page.locator(".brand").click()
-        go(page, "calm")
-        page.locator("input[name=calm-mode][value=nature]").check()
-        wait_until(page, "window.__noise.some(n => n.loop)", 3000)
+        tap(page, "rain")
+        wait_until(page, f"{live_noise} === 1", 3000)
+        wait_until(page, "window.__bands > 0", 3000)  # rain has drops
+        tap(page, "waves")
+        assert page.locator(".sound-choice").evaluate_all(pressed) == ["false", "false", "true"], "waves replace rain"
+        wait_until(page, f"{live_noise} === 1", 3000)
+        bands = page.evaluate("window.__bands")
         page.wait_for_timeout(800)
-        assert page.evaluate("window.__bands") == 0, "waves, not rain: no drops"
-        go(page, "menu")
-        assert page.locator(".sound-bar-text").inner_text() == \
-            STRINGS["soundBar.nature"].format(nature=STRINGS["soundBar.nature.waves"])
+        assert page.evaluate("window.__bands") == bands, "waves have no rain drops"
+        tap(page, "music")
+        assert page.locator(".sound-choice").evaluate_all(pressed) == ["true", "false", "true"]
+        tap(page, "waves")
+        wait_until(page, f"{live_noise} === 0", 4000)
+        assert page.locator(".sound-choice").evaluate_all(pressed) == ["true", "false", "false"]
         assert not errors, errors
-
-
-def test_a_saved_rain_choice_from_before_becomes_nature():
-    store = "localStorage.setItem('freelief.settings.v2', JSON.stringify({ calmMode: 'rain' }));"
-    with open_app(init_script=f"if (!sessionStorage.seeded) {{ {store} sessionStorage.seeded = 1; }}") as (page, _, _):
-        go(page, "calm")
-        assert page.locator("input[name=calm-mode][value=nature]").is_checked()
 
 
 NOISE_STOP_PROBE = """
@@ -238,23 +210,20 @@ AudioContext.prototype.createBufferSource = function () {
 """
 
 
-def test_both_mode_plays_music_and_rain_together_and_stops_both():
+def test_music_and_rain_play_together_and_each_stops_on_its_own_tap():
     live_pads = ("window.__osc.filter(o => o.node.type === 'triangle' && "
                  "(o.stop === null || o.stop > o.ctx.currentTime)).length")
     live_rain = "window.__noise.filter(n => n.node.loop && !n.stopped).length"
     with open_app(init_script=OSC_PROBE + NOISE_STOP_PROBE) as (page, errors, _):
         page.locator(".guide").click()
-        go(page, "calm")
-        page.locator("input[name=calm-mode][value=both]").check()
-        # Both plays the pads (triangle waves) and the looping rain together, and leaving keeps them.
+        tap(page, "music")
+        tap(page, "rain")
         pads = len(CONFIG["sounds"]["pads"]["chords"][0]) * 2
         wait_until(page, f"{live_pads} >= {pads} && {live_rain} >= 1", 3000)
-        go(page, "breathe")
+        go(page, "bubbles")
         assert page.evaluate(f"{live_pads} >= {pads} && {live_rain} >= 1"), "leaving keeps both"
-        go(page, "calm")
-        assert page.locator("input[name=calm-mode][value=both]").is_checked(), "the choice is remembered"
-        # Off stops everything: the music fades within 2 s, the rain stops at once.
-        page.locator("input[name=calm-mode][value=off]").check()
+        tap(page, "music")
+        tap(page, "rain")
         wait_until(page, f"{live_pads} === 0 && {live_rain} === 0", 4000)
         assert not errors, errors
         mix = CONFIG["calm"]["bothMix"]
@@ -339,14 +308,6 @@ def test_the_header_stays_at_the_top_while_the_page_scrolls():
         assert page.locator("dialog.help").evaluate("d => d.open"), "help is one tap away mid-page"
 
 
-def test_a_visualizer_opened_before_any_tap_starts_its_sound_at_the_first_tap():
-    # A browser allows sound only after a gesture. The bar must never name a sound that is silent.
-    with open_app(init_script=OSC_PROBE, route="calm") as (page, _, _):
-        page.wait_for_timeout(500)
-        assert page.evaluate("window.__osc.length") == 0, "nothing plays before a gesture"
-        page.locator("h1").click()
-        wait_until(page, "window.__osc.length > 0", 3000)
-
 
 def test_any_key_ends_the_black_screen_and_the_page_under_a_cover_cannot_be_reached():
     # web-interface-review, 2026-10-09: the label says any key; Tab must not reach hidden controls.
@@ -373,7 +334,7 @@ window.setTimeout = (callback, ms, ...rest) => realTimeout(callback, ms >= 9000 
     voices = len(CONFIG["sounds"]["pads"]["chords"][0]) * 2
     with open_app(init_script=probe) as (page, _, _):
         page.locator(".guide").click()
-        go(page, "calm")
+        tap(page, "music")
         wait_until(page, f"window.__osc.length >= {voices}", 3000)
         page.locator(".help-open").click()
         page.wait_for_timeout(300)
@@ -386,11 +347,9 @@ window.setTimeout = (callback, ms, ...rest) => realTimeout(callback, ms >= 9000 
 
 
 def test_reset_settings_never_starts_the_music_or_turns_sound_on():
-    # AUD-114: on the Visualizer choose Off and mute; Reset in Settings must leave both alone.
+    # AUD-114: with sound muted, Reset in Settings must not start a sound or turn sound back on.
     with open_app(init_script=OSC_PROBE) as (page, errors, _):
         page.locator(".guide").click()
-        go(page, "calm")
-        page.locator("input[name=calm-mode][value=off]").check()
         page.locator("button.sound-toggle").click()
         go(page, "settings")
         before = page.evaluate("window.__osc.length")
@@ -399,8 +358,29 @@ def test_reset_settings_never_starts_the_music_or_turns_sound_on():
         page.wait_for_timeout(500)
         assert page.evaluate("window.__osc.length") == before, "no sound starts"
         assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "false", "sound stays off"
-        assert page.locator(".sound-bar").is_hidden()
-        page.locator("button.sound-toggle").click()  # sound on again: still nothing plays
-        page.wait_for_timeout(500)
-        assert page.evaluate("window.__osc.length") == before
+        assert page.locator(".sound-choice[aria-pressed=true]").count() == 0
         assert not errors, errors
+
+
+def test_a_tap_on_a_sound_while_muted_turns_sound_on():
+    # Owner, 2026-10-09: a tap on a sound means "I want to hear it".
+    with open_app(init_script=OSC_PROBE) as (page, _, _):
+        page.locator(".guide").click()
+        page.locator("button.sound-toggle").click()
+        assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "false"
+        tap(page, "music")
+        assert page.locator("button.sound-toggle").get_attribute("aria-pressed") == "true"
+        wait_until(page, "window.__osc.length > 0", 3000)
+
+
+def test_a_new_visit_starts_silent():
+    # Nothing is saved about what plays: Freelief never starts a sound by itself.
+    with open_app(init_script=OSC_PROBE) as (page, _, _):
+        page.locator(".guide").click()
+        tap(page, "music")
+        page.reload()
+        wait_until(page, "document.documentElement.dataset.ready === 'true'", 5000)
+        assert page.locator(".sound-choice[aria-pressed=true]").count() == 0
+        page.locator(".guide").click()
+        page.wait_for_timeout(500)
+        assert page.evaluate("window.__osc.filter(o => o.node.type === 'triangle').length") == 0

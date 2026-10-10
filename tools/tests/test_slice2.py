@@ -45,14 +45,19 @@ def test_the_menu_is_home_and_reaches_every_screen_by_keyboard():
         assert not errors, errors
 
 
-def test_the_settings_gear_is_at_the_top_right_on_every_screen():
+def test_the_header_is_three_centered_rows_on_every_screen():
+    # Owner, 2026-10-09 (RLG-049): the name; music, rain, waves, sound and Settings; then urgent help.
     with open_app(route=None, viewport={"width": 360, "height": 640}) as (page, _, _):
         for screen in ("menu", "breathe", "calm", "about"):
             go(page, screen)
             gear = page.locator("a.gear")
             assert gear.get_attribute("aria-label") == "Settings", screen
-            box = gear.bounding_box()
-            assert box["x"] + box["width"] > 360 - 40 and box["y"] < 60, f"{screen}: gear at {box}"
+            rows = [page.locator(sel).bounding_box() for sel in (".brand", ".top-actions", ".help-open")]
+            assert rows[0]["y"] + rows[0]["height"] <= rows[1]["y"] + 1, f"{screen}: the name is above the buttons"
+            assert rows[1]["y"] + rows[1]["height"] <= rows[2]["y"] + 1, f"{screen}: urgent help is the third line"
+            for box in rows:
+                middle = box["x"] + box["width"] / 2
+                assert abs(middle - 180) <= 2, f"{screen}: a row is not centered: {box}"
         page.locator("a.gear").click()
         wait_until(page, "document.querySelector('main').dataset.shown === 'settings'", 2000)
 
@@ -151,7 +156,7 @@ def test_only_a_changed_setting_is_stored_so_a_new_default_still_arrives():
 
 V1_STORE = """
 localStorage.setItem('freelief.settings.v1', JSON.stringify(
-  { rhythm: 'box', sounds: true, theme: 'dark', calmMode: 'music', helpRegion: 'auto', haptics: false }));
+  { rhythm: 'box', sounds: true, theme: 'dark', helpRegion: 'auto', haptics: false }));
 """
 
 
@@ -199,7 +204,7 @@ def test_the_rhythm_shows_under_the_breathing_circle():
 def test_an_inherited_name_in_storage_is_ignored():
     # AUD-030: a stored "constructor" rhythm once broke the guide.
     seed = ("localStorage.setItem('freelief.settings.v2', JSON.stringify("
-            "{ rhythm: 'constructor', theme: '__proto__', calmMode: 'toString', openOn: 'hasOwnProperty' }));")
+            "{ rhythm: 'constructor', theme: '__proto__', openOn: 'hasOwnProperty' }));")
     with open_app(init_script=seed, route=None) as (page, errors, _):
         assert page.evaluate("document.querySelector('main').dataset.shown") == "menu"
         go(page, "breathe")

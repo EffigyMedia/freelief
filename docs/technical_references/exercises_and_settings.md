@@ -18,9 +18,7 @@ Every exercise, activity and screen exports `start(container, ctx)` and `stop()`
 | `audio` | `audio.js`, for the screen's own tones and cues. |
 | `haptic` | `haptics.pulse(name)`, one short vibration. |
 | `keepAwake` | `wakelock.keepAwake()`, which returns a release function. |
-| `rhythm`, `soundsOn`, `calmMode` | Read-only setting values at start. |
-| `saveCalmMode(mode)` | Saves the Visualizer's sound choice through the shell (AUD-066). |
-| `startBackground()` | Starts the saved background sound if nothing plays now. |
+| `rhythm`, `soundsOn` | Read-only setting values at start. |
 
 A screen never touches Settings or storage itself. `screens/settings.js` is the one exception: it
 imports `settings.js` and `crisis.regionList()` directly.
@@ -160,16 +158,9 @@ polite live line. The SVG is one tab stop (roving `tabindex`):
 - Enter or Space fills the part.
 
 ## The Visualizer (`activities/calm.js`, route `#calm`)
-The activity with nothing to do. The person chooses the background sound, and soft shapes fade in
-and out.
-
-**The sound choice** is a `<fieldset>` of four radio buttons from `config.json` → `calm.modes`:
-**Off**, **Music**, **Nature** and **Both**. Nature plays rain or waves, as the `natureSound`
-setting chooses. A hint under the choice says so. The screen does not play the sound itself. It
-calls `ctx.startBackground()` at start, and a new choice calls `ctx.saveCalmMode()`. The shell
-saves it, and `background.js` plays it (see Background sound). The sound keeps playing after the
-person leaves the screen. While the sound setting is off, the screen shows a note that sound is
-off.
+The activity with nothing to do: soft shapes fade in and out. It has no sound choice of its own
+(RLG-049). The sound bar in the header plays music, rain or waves on every screen, this one too;
+its hidden intro says so.
 
 **The shapes.** The field adds one SVG shape every `calm.shapeEveryMs`, up to `maxShapes`. Each
 shape lives `shapeLifeSeconds` in a CSS animation: `calm-come-and-go` (a fade, slow growth and a
@@ -202,10 +193,10 @@ At boot, `initSettings()` does this:
 1. If no v2 store exists, it migrates the v1 store (`legacyStorageKey`). Only a value that differs
    from today's default carries over, and a stored `box` rhythm is dropped. Then it deletes the v1
    key.
-2. It maps an old `calmMode` of `rain` to `nature`.
-3. It keeps a stored value only if it passes its check. A rhythm must exist in `config.json`. A
-   theme, a `calmMode`, a `natureSound`, an `openOn` or an `awakeMinutes` must be in its list of
-   choices. `sounds` and
+2. It keeps a stored value only if it passes its check, so a value that is no longer a setting
+   (`calmMode` and `natureSound`, removed in v0.8.2) is dropped. A rhythm must exist in
+   `config.json`. A theme, an `openOn` or an `awakeMinutes` must be in its list of choices
+   (`awakeMinutes` 0 means Always). `sounds` and
    `haptics` must be booleans. `helpRegion` must be `auto` or two capital letters. Checks use own
    keys only.
 
@@ -216,13 +207,11 @@ visit only. Listeners (`onSettingChange`) let the shell act on a change at once.
 |---|---|---|
 | `rhythm` | Settings | `breathing.defaultRhythm` |
 | `openOn` ("When Freelief opens") | Settings | `settings.openOnDefault` (`menu`) |
-| `natureSound` (rain or waves) | Settings | `calm.natureDefault` |
 | `awakeMinutes` ("Keep the screen on") | Settings | `wakeLock.idleMinutesDefault` (30) |
 | `theme` | Settings | `theme.default` (`system`) |
 | `haptics` (vibration) | Settings | `haptics.enabledByDefault` |
 | `helpRegion` | Settings | `crisis.defaultRegion` (`auto`) |
 | `sounds` | The header's sound button | `sounds.enabledByDefault` |
-| `calmMode` | The Visualizer, or Stop in the sound bar | `calm.defaultMode` |
 
 Theme: `system` removes `html[data-theme]`; `dark` or `light` sets it, and the CSS gives the
 attribute priority over `prefers-color-scheme`. A saved region that is no longer curated shows as
@@ -267,27 +256,24 @@ are natural sounds and are not tuned. A test cannot listen; the sound tests coun
 as `createOscillator` calls, instead. **How a sound sounds is for the owner to judge on a device.**
 
 ## Background sound (`background.js`) and the sound bar
-**The background sound** is music, nature or both, which keeps playing on every screen until the
-person turns it off (RLG-045). The Visualizer chooses it. `background.js` only plays. It never
-touches storage, and it never starts a sound by itself.
-- `play(mode)` stops what plays and starts `off`, `music`, `nature` or `both`. The same choice
-  again does nothing, so the music does not restart when the person comes back to the Visualizer.
-- `both` plays the nature sound under the music, at the levels in `calm.bothMix`.
-- `setNature(sound)` changes rain or waves, and restarts only when nature plays now.
-- `restart()` starts the chosen sound again. The shell calls it when the sound button turns sound
-  back on, and at the first gesture if the Visualizer opened before one.
-
-The shell connects it to Settings. A change of `calmMode` calls `play()`, and a change of
-`natureSound` calls `setNature()`.
+**The background sound** is music, and rain or waves, which keeps playing on every screen until the
+person stops it (RLG-045, RLG-049). `background.js` only plays. It never touches storage, and it
+never starts a sound by itself, so each visit starts silent.
+- `toggle(sound)` turns `music`, `rain` or `waves` on or off. Rain and waves replace each other;
+  music plays with either. Both parts start again at their new levels, because the mix changes:
+  with both, the nature sound sits under the music (`calm.bothMix`).
+- `current()` gives `{ music, nature }`; `playing()` says whether anything plays.
+- `hold()` stops the loops while sound is held (urgent help open, app hidden), so no notes queue
+  in the paused clock (AUD-113). `restart()` starts what plays again.
 
 **Ducking.** On each route change, the shell calls `audio.duck()`. On a route in
 `calm.duckRoutes` (breathing), the `bed` volume falls to `sounds.background.duckLevel` over
 `duckSeconds`, so the background sits under the breathing tones. On other routes it comes back up.
 
-**The sound bar** sits in the header, so it stays in a landmark and in sight as the page scrolls.
-While a background sound plays and the sound setting is on, every screen except the Visualizer
-shows it: "Playing: music and rain", with a **Stop** button. Stop sets `calmMode` to `off`, the
-same as Off in the Visualizer. Then focus moves to the screen's heading, because the bar goes away.
+**The sound bar** (RLG-049) is three round toggle buttons in the header's middle row, on every
+screen: a music note, a raindrop and a wave, in a `role="group"` named "Background sound". Each has
+a fixed name and `aria-pressed`, and a pressed button is filled. A tap calls `toggle()`; a tap that
+turns a sound on while the speaker is off also turns sound on.
 
 ## Vibration (`haptics.js`)
 One short vibration for a single triggered event in an activity (REQ-034), never for anything
@@ -306,7 +292,7 @@ screen sleep, and nothing fails.
 
 The lock has an end (AUD-103, REQ-037). Each touch or key starts an idle time again. After the time
 in `awakeMinutes` (10, 30 or 60 minutes) with no input, the module releases the lock, and the
-exercise goes on; the next touch takes it back. No countdown is shown. Breathing releases the lock
+exercise goes on; the next touch takes it back. With 0 (Always, RLG-048) there is no idle time. No countdown is shown. Breathing releases the lock
 when it is paused and takes it again on resume. Only one request is in flight at a time, and a lock
 granted after the screen stopped wanting it is released at once (AUD-081).
 

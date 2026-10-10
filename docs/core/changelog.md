@@ -10,6 +10,16 @@ audit.
 
 ---
 
+<a id="v0-8-2"></a>
+## [0.8.2] - 2026-10-09
+- **Header**: three centered lines: the name; then music, rain and waves, the speaker and Settings;
+  then **Need urgent help?** on its own line. [RLG-049](../fragments/RLG-049.md).
+- **Sound**: a tap on the music note, the raindrop or the wave plays that sound on every screen,
+  and a second tap stops it. Rain and waves replace each other. The Visualizer and Settings no
+  longer have their own sound choices, and each visit starts silent.
+- **Keep the screen on**: a new **Always, while it runs** choice. [RLG-048](../fragments/RLG-048.md).
+  180 tests.
+
 <a id="v0-8-1"></a>
 ## [0.8.1] - 2026-10-09
 - **Color a mandala**: every shape is now at least 44 px on a phone, so each one is easy to tap.

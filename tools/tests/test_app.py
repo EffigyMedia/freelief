@@ -46,9 +46,11 @@ def test_no_request_leaves_the_origin():
 
 
 def test_help_opens_and_closes_by_keyboard():
-    # REQ-009: every control by keyboard. The help control is the first stop on Tab.
+    # REQ-009: every control by keyboard. Help is the third line of the header (owner, 2026-10-09),
+    # so it is the sixth stop on Tab, after the five round buttons: the order follows what is seen.
     with open_app() as (page, _, _):
-        page.keyboard.press("Tab")
+        for _ in range(6):
+            page.keyboard.press("Tab")
         assert page.evaluate("document.activeElement.classList.contains('help-open')")
         page.keyboard.press("Enter")
         assert page.locator("dialog.help").evaluate("d => d.open")
@@ -61,10 +63,11 @@ def test_help_opens_and_closes_by_keyboard():
 
 def test_pause_and_resume_by_keyboard():
     with open_app() as (page, _, _):
-        # Tab order: urgent help, sound, the Settings gear, Back to menu, then the screen's controls.
+        # Tab order: urgent help, sound, the Settings gear, the three sound-bar buttons, Back to
+        # menu, then the screen's controls.
         assert page.evaluate("document.querySelector('.nav-back').compareDocumentPosition("
                              "document.querySelector('.pause')) & Node.DOCUMENT_POSITION_FOLLOWING")
-        for _ in range(5):
+        for _ in range(8):
             page.keyboard.press("Tab")
         assert page.evaluate("document.activeElement.classList.contains('pause')")
         page.keyboard.press("Space")

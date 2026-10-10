@@ -4,7 +4,8 @@
 // again when the page comes back.
 //
 // The lock has an end (AUD-103, owner 2026-10-09): after a time with no touch or key, chosen in
-// Settings (10, 30 or 60 minutes), the screen may sleep while the exercise goes on. A person who
+// Settings (10, 30 or 60 minutes), the screen may sleep while the exercise goes on. The choice
+// "Always" (0 minutes, owner 2026-10-09) keeps it on for as long as the exercise runs. A person who
 // falls asleep on Breathe does not wake to a flat phone. The next touch or key keeps it on again.
 // No countdown is shown; it is not a timer the person must beat (REQ-011).
 
@@ -48,10 +49,11 @@ function active() {
   clearTimeout(idleTimer);
   if (!wanted) return;
   idle = false;
-  idleTimer = setTimeout(() => {
+  const minutes = getSetting("awakeMinutes");
+  if (minutes > 0) idleTimer = setTimeout(() => {
     idle = true;
     dropSentinel();
-  }, getSetting("awakeMinutes") * 60 * 1000);
+  }, minutes * 60 * 1000);
   acquire();
 }
 

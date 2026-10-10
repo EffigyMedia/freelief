@@ -29,12 +29,14 @@ line, the emergency instruction and the directory link (AUD-002). Its text is in
 because it must show when `strings/en.json` cannot load.
 
 ## The header and the footer
-The header holds the name (plain text, not a link), "Need urgent help?", the sound button and the
-Settings gear. "Need urgent help?" is therefore the first stop for the Tab key.
+The header is three centered rows (RLG-049): the name (plain text, not a link); then five round
+buttons: the sound bar's music, rain and waves, the sound button and the Settings gear; then "Need
+urgent help?" on its own line, as text. The Tab order follows what is seen, so "Need urgent help?"
+is the sixth stop.
 
 - **The sound button** turns all sound on or off from every screen. It is a toggle button with the
   fixed name "Sound" and `aria-pressed`. It sets the `sounds` setting. The fade, the sound bar
-  under the header and the background sound are in `exercises_and_settings.md`.
+  and the background sound are in `exercises_and_settings.md`.
 - **The gear** is a link to `#settings` with an accessible name. Its icon is inline SVG, so no
   file ships.
 

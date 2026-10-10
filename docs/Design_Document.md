@@ -178,12 +178,12 @@ Not built (decided 2026-10-07):
 |---|---|
 | **Exercise** | A guided self-help technique: paced breathing. |
 | **Activity** | A distraction activity: the bubble field, the shape trace, Unblock, the ripple pond, mandala coloring, or the Visualizer. No score, no failure, no timer. |
-| **Visualizer** | The activity with nothing to do: music, nature (rain or waves) or both, with soft shapes that fade in and out, a full screen and a black screen. Its sound is the background sound. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
+| **Visualizer** | The activity with nothing to do: soft shapes that fade in and out, a full screen and a black screen. It has no sound choice of its own; the sound bar plays sound on every screen. Route `#calm`, module `activities/calm.js`. Its shape loop runs on timers inside the module, but the person sees no countdown, no end and no score, so it keeps the Activity rule. |
 | **Breath guide** | The visual of the paced breathing exercise. It grows on the in-breath and shrinks on the out-breath. |
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
 | **Region** | The country taken from the device language and region setting. Never from location. |
-| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, where Freelief opens (the menu or breathing), how long the screen stays on, sound on or off, vibration on or off, the light or dark theme, the Visualizer's sound (off, music, nature or both), the nature sound (rain or waves), and the region for urgent help. On the device only. |
+| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, where Freelief opens (the menu or breathing), how long the screen stays on, sound on or off, vibration on or off, the light or dark theme, and the region for urgent help. What sound plays is not stored. On the device only. |
 | **Standard** | An external standard Freelief claims to meet, such as WCAG 2.2 AA. It has a level, a check date, and the tester of the manual check. |
 | **Source** | A published research citation behind a technique. |
 
@@ -195,9 +195,9 @@ restarts on the device (REQ-023, REQ-015).
 - **Exercise** — a guided self-help technique: paced breathing.
 - **Activity** — a distraction activity with no score, no failure and no timer: the bubble field,
   the shape trace, Unblock, the ripple pond, mandala coloring, or the Visualizer.
-- **Background sound** — the music, the nature sound or both, chosen in the Visualizer, which keeps
-  playing on every screen until the person chooses Off or presses Stop in the sound bar.
-- **Visualizer** — the activity with nothing to do: music, nature or both, with soft shapes, a full
+- **Background sound** — music, and rain or waves, chosen with the three buttons of the sound bar
+  in the header; it keeps playing on every screen until the person taps its button again.
+- **Visualizer** — the activity with nothing to do: soft shapes, a full
   screen and a black screen.
 - **Breath guide** — the visual that grows on the in-breath and shrinks on the out-breath.
 - **Rhythm** — a breathing preset, given as the seconds of each phase.
@@ -206,8 +206,7 @@ restarts on the device (REQ-023, REQ-015).
 - **Region** — the country taken from the device language and region setting, never from location.
 - **Settings** — the only data Freelief stores, and only the values the person changed: the
   breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, vibration
-  on or off, the theme, the Visualizer's sound, the nature sound, and the region for urgent help,
-  on the device only.
+  on or off, the theme, and the region for urgent help, on the device only.
 - **Standard** — an external standard Freelief claims, with its level, check date and tester.
 - **Source** — a published research citation behind a technique.
 <!-- END srs-definitions -->
@@ -269,11 +268,12 @@ designs, blank, and after the last it starts the first again.
 States for all: no score, no
 failure, no timer; reduced motion slows or stops the drift; a screen reader announces each item
 and its action. *Visualizer (added 2026-10-07; named 2026-10-07, UNT-034):* nothing to do; the
-person chooses Off, Music, Nature or Both, and soft shapes fade in and out. Nature plays rain or
-waves, as Settings chooses. The sound is the background sound: it keeps playing when the person
-leaves, and every other screen shows the sound bar under the header ("Playing: music and rain",
-with Stop) until the person chooses Off or presses Stop. Breathing lowers it under its tones, and
-it waits while urgent help is open. Full screen fills the screen
+soft shapes fade in and out. Sound is not chosen here: the header's sound bar, on every screen,
+has a music note, a raindrop and a wave (RLG-049). A tap plays that sound and a second tap stops
+it; rain and waves replace each other, and music plays with either. A tap while the speaker is off
+turns sound on. The sound keeps playing on every screen; breathing lowers it under its tones, and
+it waits while urgent help is open. Nothing about it is stored, so each visit starts silent. Full
+screen fills the screen
 and keeps its own "Need urgent help?" button. Black screen covers everything in black while the
 sound plays; one tap or key brings the screen back. Under reduced motion the shapes only fade. The
 screen stays awake while it runs.
@@ -293,7 +293,7 @@ the other-countries list was added. See the Decision Log.)* *(Changed 2026-10-07
 region in Settings replace the other-countries list.)*
 
 **F7 — Settings.** Rhythm preset, where Freelief opens (the menu or breathing), how long the
-screen stays on (10, 30 or 60 minutes with no touch), the nature sound (rain or waves), theme
+screen stays on (10, 30 or 60 minutes with no touch, or always while it runs), theme
 override, vibration on or off, and the region for urgent help; sound on or off is the speaker in
 the header; the Visualizer's sound choice is kept too. Reset settings puts every value back to its
 default. The screen also shows the version, whether it is saved for use with no internet, and
@@ -404,16 +404,13 @@ heading, so a screen reader announces where the person is.
 
 **Data and state.** Settings in `localStorage` under one versioned key (`freelief.settings.v2`),
 holding only the values the person changed: the breathing rhythm, where it opens, how long the
-screen stays on, sound, vibration, the theme, the Visualizer's sound, the nature sound and the
-region for urgent help. A choice of the default value is not stored. Everything else is static files cached by the
+screen stays on, sound, vibration, the theme and the region for urgent help. A choice of the default value is not stored. Everything else is static files cached by the
 service worker. Nothing is created, changed or deleted by the person except those Settings.
 
 **Contracts.** Each exercise and activity exports `start(container, ctx)` and `stop()`. `ctx`
 gives the text functions `t` and `list`, `config`, `motion`, `audio`, `haptic`, `keepAwake`, and the
-read-only setting values the screen needs (such as `rhythm`, `soundsOn` and `calmMode`). It also
-gives the Visualizer its two write paths, both owned by the shell: `saveCalmMode` saves the sound
-choice (AUD-066), and `startBackground` starts the background sound (RLG-045). No other screen
-writes a setting except Settings itself. The shell owns which screen runs. `crisis.js` exports `linesFor(regionCode)`, which returns the curated lines and the fallback.
+read-only setting values the screen needs (such as `rhythm` and `soundsOn`). No screen writes a
+setting except Settings itself; the background sound belongs to the shell's sound bar (RLG-049). The shell owns which screen runs. `crisis.js` exports `linesFor(regionCode)`, which returns the curated lines and the fallback.
 
 **Tunables (`config.json`):** every tunable has its committed default there. The groups are:
 `breathing` (rhythms and the default, 4 in and 6 out); `sounds` (every note, level and fade, the
@@ -1048,7 +1045,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   water drop keep their random pitch, because they are natural sounds, and the test excludes them
   by name. Filter corners, the rain's swell and the glass's beat are not notes. — Rejected: C-major
   notes for the pop and the water drop (owner). — 2026-10-09 (owner; UNT-093)
-- **The background sound keeps playing until it is turned off, and a sound bar shows it.** — Owner
+- **The background sound keeps playing until it is turned off, and a sound bar shows it.** *(The
+  bar and the Visualizer's choice were replaced on 2026-10-09 by the three-button bar; see that
+  entry.)* — Owner
   request (RLG-045); the owner chose the sound bar from three designs (a header sound menu with the
   Visualizer renamed, and a choice in Settings only, were not chosen). The Visualizer keeps its name
   and gains Off. Its choice is the background sound, owned by the shell through `background.js`:
@@ -1174,6 +1173,25 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   that were still too small were given fewer parts. The test now asks for 44 px in every design.
   The designs are a little simpler. — Rejected: accept 24 px (WCAG 2.5.8). — 2026-10-09 (owner;
   UNT-107)
+- **The header is three centered rows, and the sound bar is three toggle buttons.** — Owner
+  requests (RLG-049), chosen step by step with screenshots and mockups. A first reading, one
+  centered row, was shown and rejected. The header now has the name on its own line; then the five
+  round buttons: a music note, a raindrop and a wave (the sound bar), the speaker and Settings; then
+  "Need urgent help?" on its own line. A tap on a sound plays it; a tap on a sound that plays stops
+  it; rain and waves replace each other; music plays with either; a tap while the speaker is off
+  turns sound on. The bar replaces the Visualizer's Off/Music/Nature/Both choice and the Settings
+  choice of rain or waves, so `calmMode` and `natureSound` are no longer stored, and each visit
+  starts silent. "Need urgent help?" stays a text button: an icon (the owner asked about "!") would
+  make the one control a person in panic must find into a symbol to decode, and "!" reads as an
+  error. Tab follows what is seen, so help is the sixth stop. The header is about 160 px tall on a
+  phone, and `scroll-padding-top` keeps a focused control below it. — Rejected: one centered row;
+  a Play/Stop bar with the last sound remembered (built, then replaced the same day); help as an
+  icon; help on line 2 (recommended, not chosen). — 2026-10-09 (owner; UNT-108)
+  *This supersedes the sound bar with Stop in the RLG-045 entry and the Visualizer's sound choice.*
+- **Keep the screen on has an Always choice.** — Owner request (RLG-048). Beside 10, 30 and 60
+  minutes, "Always, while it runs" keeps the screen on for as long as breathing or the Visualizer
+  runs (stored as 0 minutes). The default stays 30 minutes, so the AUD-103 protection holds unless
+  the person chooses Always; its hint says it uses more battery. — 2026-10-09 (owner; UNT-108)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

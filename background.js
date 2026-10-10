@@ -1,74 +1,73 @@
-// The background sound (RLG-045, owner 2026-10-09): music, nature or both, which keeps playing on
-// every screen until it is turned off. The Visualizer starts it and chooses it; the shell shows a
-// bar with a Stop button on the other screens. Nature is rain or waves, chosen in Settings (RLG-043).
+// The background sound (RLG-045, RLG-049; owner 2026-10-09): music, and rain or waves, which keep
+// playing on every screen until they are turned off. The sound bar in the header has one button
+// for each: a tap plays that sound, and a tap on a sound that plays stops it. Rain and waves replace
+// each other; music plays with either.
 //
-// This module only plays. It never touches storage: the shell saves the choice through settings.js
-// and tells this module what to play.
+// This module only plays. It never touches storage, and nothing is saved: Freelief never starts a
+// sound by itself, so each visit starts silent.
 
 import * as audio from "./audio.js";
 
 let config = null;
-let mode = "off";
-let nature = "rain";
-let playing = { stop() {} };
+let music = false;
+let nature = null; // null, "rain" or "waves"
+let musicPart = { stop() {} };
+let naturePart = { stop() {} };
 const listeners = new Set();
 
 const NATURE = { rain: (level) => audio.rain(level), waves: (level) => audio.waves(level) };
 
-function start() {
-  if (mode === "off") return { stop() {} };
-  if (mode === "music") return audio.pads();
-  if (mode === "nature") return NATURE[nature]();
-  // Both: the nature sound sits under the music, each at its own level (config.calm.bothMix).
-  const mix = config.calm.bothMix;
-  const parts = [audio.pads(mix.music), NATURE[nature](mix.nature)];
-  return { stop() { parts.forEach((part) => part.stop()); } };
+// With both playing, the nature sound sits under the music (config.calm.bothMix).
+const musicLevel = () => (nature ? config.calm.bothMix.music : 1);
+const natureLevel = () => (music ? config.calm.bothMix.nature : 1);
+
+function startMusic() {
+  musicPart.stop();
+  musicPart = music ? audio.pads(musicLevel()) : { stop() {} };
 }
 
-export function initBackground(loaded, natureSound) {
+function startNature() {
+  naturePart.stop();
+  naturePart = nature ? NATURE[nature](natureLevel()) : { stop() {} };
+}
+
+export function initBackground(loaded) {
   config = loaded;
-  nature = natureSound;
 }
 
-// What plays now: "off", "music", "nature" or "both".
+// What plays now: { music, nature }.
 export function current() {
-  return mode;
+  return { music, nature };
 }
 
-export function natureSound() {
-  return nature;
+export function playing() {
+  return music || nature !== null;
 }
 
-// Play `next` in place of what plays now. The same choice again does nothing, so the music does not
-// restart when the person comes back to the Visualizer.
-export function play(next) {
-  if (next === mode) return;
-  playing.stop();
-  mode = next;
-  playing = start();
-  listeners.forEach((listener) => listener(mode));
-}
-
-// Rain or waves. Only the nature part restarts, and only if nature plays now.
-export function setNature(next) {
-  if (next === nature) return;
-  nature = next;
-  if (mode === "nature" || mode === "both") restart();
-}
-
-// The header's sound button came back on: start the chosen sound again. While sound is off,
-// audio.js makes every sound silent, so a restart is needed when it returns.
-export function restart() {
-  playing.stop();
-  playing = start();
+// A tap on a button in the sound bar: "music", "rain" or "waves".
+export function toggle(sound) {
+  if (sound === "music") music = !music;
+  else nature = nature === sound ? null : sound;
+  // A change in what plays changes the mix, so both parts start again at their new levels.
+  startMusic();
+  startNature();
+  listeners.forEach((listener) => listener(current()));
 }
 
 // While urgent help is open or the app is hidden, the audio clock is paused. A loop that kept
 // scheduling would queue its notes at one frozen time, and they would all play at once when sound
-// came back (AUD-113). So the loops stop while sound is held, and the choice is kept.
+// came back (AUD-113). So the loops stop while sound is held, and what plays is kept.
 export function hold() {
-  playing.stop();
-  playing = { stop() {} };
+  musicPart.stop();
+  naturePart.stop();
+  musicPart = { stop() {} };
+  naturePart = { stop() {} };
+}
+
+// Sound came back: start what plays again. While sound is off, audio.js makes every sound silent.
+export function restart() {
+  startMusic();
+  startNature();
 }
 
 export function onChange(listener) {

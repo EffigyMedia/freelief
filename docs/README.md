@@ -4,8 +4,8 @@
 
 Freelief opens on a short menu with nothing to fill in first. Breathe is first: a guide that helps
 you slow your breathing. One tap also reaches gentle activities (pop bubbles, trace a shape, the
-Unblock puzzle, a ripple pond and a mandala to color) and the Visualizer (soft music, rain or waves
-with slow shapes, which can keep playing while you use the rest of the app). Every screen has a **"Need urgent help?"** button with crisis lines for your country.
+Unblock puzzle, a ripple pond and a mandala to color) and the Visualizer (slow shapes). Music, rain or waves play from the
+buttons at the top, on every screen. Every screen has a **"Need urgent help?"** button with crisis lines for your country.
 
 - **Free and open source** (MIT license). No account, no advertising, no analytics.
   The Effigy Media name and logo are not part of the MIT license; see `LICENSE`.
