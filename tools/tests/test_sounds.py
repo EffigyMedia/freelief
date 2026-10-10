@@ -148,8 +148,9 @@ def test_the_sound_button_fades_out_and_in_rather_than_cutting():
         page.locator(".guide").click()
         play_music(page)
         wait_until(page, "window.__osc.length > 0 && window.__osc.at(-1).ctx.state === 'running'", 3000)
-        page.locator("button.sound-toggle").click()
-        assert page.evaluate("window.__osc.at(-1).ctx.state") == "running", "no hard cut: it fades first"
+        # Click and read in one step: under load, a separate read can come after the whole fade.
+        state = page.evaluate("document.querySelector('button.sound-toggle').click(), window.__osc.at(-1).ctx.state")
+        assert state == "running", "no hard cut: it fades first"
         wait_until(page, "window.__osc.at(-1).ctx.state === 'suspended'", int(fade * 1000) + 2000)
         page.locator("button.sound-toggle").click()
         wait_until(page, "window.__osc.at(-1).ctx.state === 'running'", 2000)

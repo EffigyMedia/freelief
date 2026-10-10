@@ -934,3 +934,18 @@ h1, h2, h3 { text-wrap: balance; }
 @media (forced-colors: active) {
   .garden-lines line { stroke: CanvasText; }
 }
+
+/* A phone held sideways (AUD-162): little height. The header is one row, and each play area fits
+   the height left under it, so nothing starts below the fold. Nothing is hidden or blocked. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .top { flex-direction: row; justify-content: center; gap: 0.75rem;
+    padding-top: max(0.4rem, env(safe-area-inset-top)); padding-bottom: 0.4rem; }
+  .screen-nav { padding-top: 0.5rem; }
+  main { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  .guide { width: min(50vw, calc(100dvh - 9rem), 22rem); }
+  .unblock-board { width: min(100%, 24rem, calc(100dvh - 6rem)); }
+  .garden-sand { width: min(100%, calc((100dvh - 6rem) * 4 / 3)); margin: 0 auto; }
+  .mandala-art { max-width: min(26rem, calc(100dvh - 6rem)); }
+  .bubble-field, .pond { height: calc(100dvh - 7rem); }
+  .calm-field { width: min(100%, calc(100dvh - 6rem)); margin: 0 auto; }
+}

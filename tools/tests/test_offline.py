@@ -58,7 +58,8 @@ def test_the_manifest_makes_the_app_installable():
     sizes = {icon["sizes"] for icon in manifest["icons"]}
     assert {"192x192", "512x512"} <= sizes
     assert manifest["display"] == "standalone"
-    assert manifest["orientation"] == "portrait", "owner, 2026-10-07: portrait only once installed"
+    # AUD-162 (owner, 2026-10-10): no orientation lock; iPhone ignores it and landscape must work (WCAG 1.3.4).
+    assert "orientation" not in manifest
     for icon in manifest["icons"]:
         assert (ROOT / icon["src"]).is_file(), icon["src"]
 

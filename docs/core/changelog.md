@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-29"></a>
+## [0.8.29] - 2026-10-10
+- **Landscape**: with the phone turned sideways, the header is one row and each exercise fits the
+  screen. The app no longer asks to be held upright. [AUD-162](../fragments/AUD-162.md). 214 tests.
+
 <a id="v0-8-28"></a>
 ## [0.8.28] - 2026-10-10
 - Security hardening; nothing a person sees changes. A copy of the app that another site on the

@@ -912,6 +912,9 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   orientation (the Screen Orientation API locks only in full screen), and a desktop ignores the
   setting, so in a tab and on a desktop the app still works in any shape. — Rejected: a "turn your
   phone" screen in landscape, which would block help in a crisis. — 2026-10-07 (owner; UNT-045)
+  *Superseded 2026-10-10 (owner, AUD-162; UNT-148): the lock did not hold on the owner's phone (an
+  iPhone home-screen app ignores it), and landscape rendered badly. See "Landscape works on a
+  phone".*
 - **A short vibration marks each single event in an activity; nothing continuous vibrates.** — The
   owner asked for haptic feedback, on by default with a Settings switch, for triggered events
   only. `haptics.js` sends one short pattern from `config.json` → `haptics.patterns` for a pop, a
@@ -1373,6 +1376,13 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   rise is deliberate: nothing in Freelief may start suddenly and startle a person in panic. Phone
   speakers carry little under 100 Hz, so it is heard best with headphones. — 2026-10-10 (owner;
   UNT-144)
+- **Landscape works on a phone; the manifest locks no orientation.** — AUD-162 and the owner's
+  report: turning the phone showed a three-row header that filled 42% of the height, with the play
+  area below the fold. A web app cannot hold portrait on an iPhone or in a browser tab, and WCAG 2.2
+  SC 1.3.4 (REQ-016) asks for no lock. On a short, wide screen (landscape, at most 500 px high) the
+  header is one row (about 65 px), and each play area fits the height under it. `"orientation":
+  "portrait"` is removed from the manifest. — Rejected: keeping the lock (it does not hold); a "turn
+  your phone" screen (it blocks help and fails 1.3.4). — 2026-10-10 (owner; UNT-148)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

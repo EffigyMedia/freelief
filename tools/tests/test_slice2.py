@@ -336,3 +336,18 @@ def test_a_failed_install_never_reads_as_saved_and_leaves_no_empty_cache():
             assert page.evaluate("caches.has('freelief-' + self.FREELIEF_VERSION)") is False, "an empty cache stayed"
         finally:
             context.close()
+
+
+def test_a_phone_held_sideways_shows_each_play_area_whole_under_the_header():
+    # AUD-162 (owner, 2026-10-10): a web app cannot hold portrait on iPhone or in a tab, so landscape
+    # must work. On an 844 x 390 screen the header is one row, and each play area fits the height
+    # left under it, so the person can see all of it at once.
+    areas = {"breathe": ".guide", "bubbles": ".bubble-field", "garden": ".garden-sand", "unblock": ".unblock-board",
+             "ripple": ".pond", "mandala": ".mandala-art", "calm": ".calm-field"}
+    with open_app(route="menu", viewport={"width": 844, "height": 390}) as (page, _, _):
+        header = page.evaluate("document.querySelector('header').getBoundingClientRect().height")
+        assert header <= 80, f"the header takes {header} px of 390"
+        for route, selector in areas.items():
+            go(page, route)
+            height = page.evaluate(f"document.querySelector('{selector}').getBoundingClientRect().height")
+            assert height <= 390 - header, f"{route}: {height} px does not fit under a {header} px header"
