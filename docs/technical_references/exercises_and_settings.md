@@ -194,7 +194,7 @@ At boot, `initSettings()` does this:
    from today's default carries over, and a stored `box` rhythm is dropped. Then it deletes the v1
    key.
 2. It uses a stored value only if it passes its check. A stored value it cannot read, such as a
-   setting of a newer version or one this version retired, is kept apart and written back at each
+   setting of a newer version or a value this version does not know, is kept apart and written back at each
    save, so a rollback loses no choice (AUD-121); a new choice of that setting replaces it. A name
    in `config.json` → `settings.retired` (`calmMode`, `natureSound`) is dropped instead, so a
    retired setting does not stay stored forever (AUD-146). The unit that retires a setting adds its

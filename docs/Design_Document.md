@@ -8,7 +8,7 @@ narrative and the decisions. Code, records and this document must never disagree
 
 ## 0. Document Control
 
-- **Version:** 1.5, 2026-10-10. The Change Log (section 15) says what each version changed. This line
+- **Version:** 1.6, 2026-10-10. The Change Log (section 15) says what each version changed. This line
   does not name an app version, because the design changes in many units (AUD-095).
 - **Owner:** EffigyMedia.
 - **Status:** living. The owner signed off v1.0 on 2026-10-07, and Initialize was done the same
@@ -373,7 +373,7 @@ met (REQ-016), keyboard and screen reader (REQ-009), reduced motion (REQ-010), n
 | 6 | Content and assets | Text in `strings/en.json`, owner-approved. Crisis lines in `data/crisis-lines.json`, curated and dated. Research sources in `docs/research/`. Tones generated with Web Audio at run time, so no audio files. The system font stack, so no font files. | Small, licence-free, offline. | Recorded audio; web fonts; image assets. |
 | 7 | Deployment | GitHub Pages serves the `live` branch of the public repository `EffigyMedia/freelief`. Pushing `main` deploys nothing; moving `live` is the deploy (before 1.0 with the owner's yes, from 1.0 only at a release that cleared the audit gate). Rollback moves `live` back to the previous tag (`preview-X.Y.Z` before 1.0, `vX.Y.Z` from 1.0); see the incident rule in section 9. *(Changed 2026-10-07, AUD-003: it first served `main`.)* The service worker cache name carries the app version. | Free for a public repository; HTTPS, which a service worker needs. | Netlify or another host (no need). |
 | 8 | Testing toolchain | Python 3 and Playwright, from a project-local `.venv`, as in Effigy Arcade. axe-core, from the `axe-playwright-python` package in the same venv, runs the automated accessibility check; nothing from it ships. | Real-browser tests, including offline and network-log checks. The Shared Knowledge Base already holds Playwright gotchas. | Node test runners (another toolchain); manual testing only. |
-| 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright. `run`: `python -m http.server 8000`. `test`: the Playwright harnesses. `doctor`: check Python, the venv, Playwright, the manifest, the service worker and the JSON files. `build`: none — the repository is the distributable; `build` reports that and checks the size limit. `clean`: remove `output/`. `bench`: the launch-time and size benchmark. | Matches the environment's standard commands with the fewest tools. | A bundler. |
+| 9 | Dev environment and commands | `setup`: create `.venv` and install Playwright and axe. `run`: serve the folder at `http://localhost:8000`, only the shipped files and only to this machine (AUD-118). `test`: every `test_*` function in `tools/tests/`, naming any test whose engine cannot start as not run. `doctor`: check Python, the venv, the imports, the browsers, `version.js`, the shipped JSON files, `sw.js` and the test files. `build`: none — the repository is the distributable; `build` checks the size limit, and `build --release` also a clean tree, a raised version, fresh crisis lines and a valid bench run in the log. `files`: the file audit. `clean`: remove `output/`. `bench`: the launch, urgent-help response and size benchmark. *(Rewritten 2026-10-10, AUD-174.)* | Matches the environment's standard commands with the fewest tools. | A bundler. |
 | 10 | Version control | Git. The remote is public. Push `main` freely: it deploys nothing. Moving `live` is the deploy. Before 1.0, `live` moves only with the owner's yes, recorded in the changelog entry of the version it serves, tagged `preview-X.Y.Z`, with a bench run in the performance log; `docs/README.md` names no version, so it cannot go stale (AUD-144); from 1.0 on, it moves only at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tag. *(Changed 2026-10-08, AUD-003: it first said "feature commits stay local; push at a release or for an owner device test".)* | Pages needs a public repository on a free plan; the project is open source. | A private repository. |
 | 11 | CI/CD | None in v1. The project commands are enough at this size. | Fewer moving parts. | GitHub Actions (reconsider if volunteers send pull requests). |
 
@@ -521,7 +521,7 @@ from a sibling path. The owner chose to stay on the shared origin (Decision Log,
 
 **Incidents (AUD-105, owner 2026-10-09).** A defect in the live release, such as a wrong crisis
 number or a broken start-up, is an incident. The owner may move `live` back to the previous tag at
-once, with no audit round, and records the move and its reason the same day. Before 1.0 every move
+once (for an incident in v1.0.0, before v1.0.1 exists, the newest `preview-` tag; AUD-178), with no audit round, and records the move and its reason the same day. Before 1.0 every move
 of the preview is tagged `preview-X.Y.Z` (each earlier move was tagged on 2026-10-10), and from 1.0
 each release is tagged `vX.Y.Z`, so the target always has a name (AUD-121). A rollback keeps the
 person's settings: `settings.js` writes back every stored value that the running version cannot
@@ -609,7 +609,8 @@ AUD-040.)*
 
 **Release criteria for 1.0:** every "must" requirement is met; every success criterion in Stage 2
 holds; an audit round clears the gate (`audit-gate.py` prints `GATE CLEAR`); every crisis line is
-re-checked; the manual screen-reader and keyboard checks in RLG-033 are reported; the app makes no
+re-checked; the manual screen-reader and keyboard checks in RLG-033 are reported; `docs/README.md`
+says how to install Freelief on a phone, iPhone included (RLG-064, AUD-177); the app makes no
 standards claim and no health claim (REQ-025). *(Changed 2026-10-10, RLG-056: the Standards &
 research page is removed.)*
 
@@ -1322,7 +1323,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   `preview-X.Y.Z`; the twelve earlier moves were tagged from the remote's log. `settings.js` keeps
   stored values it cannot read and writes them back, and a new choice of that setting replaces
   them. The stale local `live` branch (at v0.5.0) is deleted. — Rejected: naming the target only in
-  the changelog (a hurried owner needs one command). — 2026-10-10 (UNT-121)
+  the changelog (a hurried owner needs one command). — 2026-10-10 (UNT-121) *Amended 2026-10-10
+  (AUD-146, UNT-134): a setting named in `settings.retired` is dropped, not kept. Amended 2026-10-10
+  (AUD-178, UNT-154): before v1.0.1 exists, an incident in v1.0.0 rolls back to the newest
+  `preview-` tag.*
 - **Update now replaces a current copy only when the new one is whole.** — AUD-133: with no new
   version, Update now deleted every Freelief cache and unregistered the worker, and then the browser
   had to download the copy again; one failed file left no offline copy and no message. The worker
@@ -1384,6 +1388,14 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   header is one row (about 65 px), and each play area fits the height under it. `"orientation":
   "portrait"` is removed from the manifest. — Rejected: keeping the lock (it does not hold); a "turn
   your phone" screen (it blocks help and fails 1.3.4). — 2026-10-10 (owner; UNT-148)
+- **A retired setting is dropped; a screen opens help through the shell; Feedback keeps its draft.**
+  — Round UNT-124's Low findings, recorded here by AUD-172. (1) `settings.retired` lists setting
+  names a version retired (`calmMode`, `natureSound`); Settings drops them at the next save, while
+  every other unknown name is still kept for a rollback (AUD-146, v0.8.20). (2) `ctx.openHelp()` is
+  how a screen opens urgent help; the Kaleidoscope no longer clicks the shell's button by its class
+  (AUD-151, v0.8.21). (3) Feedback keeps the message and its kind in memory while the app is open,
+  and stores nothing (AUD-153); its GitHub note says it needs an internet connection (AUD-154).
+  — 2026-10-10 (UNT-134, UNT-135)
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP
@@ -1656,3 +1668,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   documentation sweep: the product overview, vocabulary, F5, F7, the module table (Zen Garden's row,
   the Kaleidoscope's row), the tunables, the risk table and section 7 row 10 now match the code; the
   Standard term is withdrawn; the UNT-105 entry is marked superseded.
+- **v1.6 — 2026-10-10** — App v0.8.20 to v0.8.32: retired settings dropped; help through ctx; the
+  Feedback draft and its offline note; unique garden names; the Unblock slide with transform; the
+  offline status that checks every file; one continuous rake sound; no rings in Zen Garden; the
+  plucked mandala note; thunder in the rain; the planted-cache guard; fixed findings in-flight until a
+  round; agreed requirements in the sweep; landscape on a phone with no orientation lock; the palette
+  icons; a release waits for a valid bench run; Update now checked, cleaned up and bounded; a failed
+  screen stopped and no audio without a gesture; one guarded test server. Section 7 row 9 rewritten.

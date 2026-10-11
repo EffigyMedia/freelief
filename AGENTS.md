@@ -104,7 +104,7 @@ only one changed. A rebuild that changes nothing wastes time and tokens.
 ## What this is
 
 **Freelief** — a free, open-source, offline web app that helps anyone through a panic attack or
-acute anxiety in the moment, with paced breathing, gentle distraction activities and a visualizer. Built
+acute anxiety in the moment, with paced breathing, gentle distraction activities and the Kaleidoscope. Built
 in **plain HTML, CSS and JavaScript** with **no framework, no dependency and no build step**, as a
 **progressive web app served from GitHub Pages**, phone first and fully usable on a desktop.
 
@@ -177,7 +177,7 @@ Summaries — the canonical procedures live in `<env-root>/Process/Development_P
 | **Track this: …** | `python <env-root>/Commands/fragment.py new --kind ruling --type feature --status requested --title "…"`; do not start it. |
 | **Resume** | Run `python <env-root>/Commands/thread.py show`. **Verify the working tree is clean.** Uncommitted work is an interrupted unit: ask, never silently commit or discard. Then run `doctor`. |
 | **Release** | Only when something ships, in this order. **1. Prepare:** re-check every crisis line and update its date; bump the version; commit. **2. Validate:** run the file audit (`python tools/freelief.py files`); purge `output/previews/`; the owner runs `bench` on a quiet machine and the run is logged (exit 2 means busy, not valid; `build --release` fails until the log holds a valid run of this version, AUD-159); run `build --release` (the size check, a clean tree, a version bump after the last shipped change, and every crisis line and the directory checked within `crisis.maxCheckAgeDays`); **verify `test` and `doctor` are green**. **3. Gate:** run audit rounds until `audit-gate.py` prints `GATE CLEAR`; a fix made for a round goes back to step 1. The tagged commit is the audited commit. **4. Tag** that commit; push the commit and the tag. **5. Deploy last:** `git push origin vX.Y.Z:live`. |
-| **Incident** | A defect in the live release (a wrong crisis number, a broken start-up). The owner may move `live` back to the previous tag at once, with no round: before 1.0 the previous `preview-X.Y.Z` tag (`git tag -l "preview-*" --sort=-v:refname`), from 1.0 the previous release tag: `git push --force origin <tag>:live`. Settings that a newer version wrote survive the rollback: a save keeps every value the running version cannot read (AUD-121). Record the move and its reason the same day (changelog and a fragment). A fix forward is a Release whose round covers only the lenses the fix touches (AUD-105). |
+| **Incident** | A defect in the live release (a wrong crisis number, a broken start-up). The owner may move `live` back to the previous tag at once, with no round: before 1.0 the previous `preview-X.Y.Z` tag (`git tag -l "preview-*" --sort=-v:refname`), from 1.0 the previous release tag, and for an incident in v1.0.0, before v1.0.1 exists, the newest `preview-` tag (AUD-178): `git push --force origin <tag>:live`. Settings that a newer version wrote survive the rollback: a save keeps every value the running version cannot read (AUD-121). Record the move and its reason the same day (changelog and a fragment). A fix forward is a Release whose round covers only the lenses the fix touches (AUD-105). |
 | **Perform audit** | Run a round per `Audit_and_Testing.md`: four lenses, one finding to a fragment; change no code. **A unit that fixes an `AUD-` finding sets it to `in-flight`, never to `built`**; only a round's re-check (`audit-round.py record --apply-rechecks`) moves it to `built` or back to `requested` (owner, AUD-160). |
 
 ## Commands
@@ -224,8 +224,8 @@ the Chrome already on the machine. Run from the repo root:
   for an exercise or activity, `ITEMS` in `screens/menu.js` and `QUIET_FOOTER` in `app.js` (AUD-100;
   `test_repo.py` and `test_offline.py` check them). **A removed or renamed screen is swept in the
   same unit** from every place that names it: the design (the module table, the tunables, the
-  F-flows, the vocabulary, the risk table), the agreed `REQ-` records (with a history line), the
-  technical references, the `config.json` groups, the
+  F-flows, the vocabulary, the risk table), the agreed `REQ-` records (with a history line),
+  `docs/research/sources.md`, the technical references, the `config.json` groups, the
   strings, the issue templates in `.github/`, `docs/README.md`, and the owed checks in RLG-033
   (AUD-143). `test_repo.py` fails on a retired screen name in a shipped string or a template.
 - **The Kaleidoscope** (`activities/calm.js`, route `#calm`; first called the Visualizer) — a slow
@@ -293,7 +293,8 @@ the Chrome already on the machine. Run from the repo root:
   `preview-X.Y.Z` and pushes the tag (`git push origin preview-X.Y.Z`), so a rollback has a target
   (AUD-121). Each move also runs `bench` and records the run in `docs/performance/log.md` from the
   draft in `output/bench-log-draft.md`, valid or not, so a regression is found at the version that
-  caused it (AUD-135). From 1.0 on, `live` moves only
+  caused it (AUD-135). The thread never names the version `live` serves: the newest `preview-` tag
+  does, so the thread cannot go stale at a move (AUD-071). From 1.0 on, `live` moves only
   at a release, after `audit-gate.py` prints `GATE CLEAR`, to a tagged commit:
   `git push origin vX.Y.Z:live`.
 - **Never commit** (see `.gitignore`): tokens, keys or passwords; `.venv/`; `output/`;

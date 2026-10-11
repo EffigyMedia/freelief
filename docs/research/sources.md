@@ -1,13 +1,13 @@
 # Research sources
 
-The published research behind each exercise and activity in Freelief (REQ-024). This file is the
-written record behind `data/research.json`, which the Standards and research page shows. **Keep the
-two in step:** every source in `data/research.json` has an entry here, under its source id and with
-its DOI link, and `tools/tests/test_repo.py` fails when one is missing.
+The published research behind each exercise and activity in Freelief, kept as a record. **No screen
+shows it** (owner, 2026-10-10, RLG-056): the Standards and research page, `data/research.json` and
+the test that kept the two in step are removed, and the app makes no claim from these sources.
+*(Rewritten 2026-10-10, AUD-171.)*
 
 **The strength of the evidence is stated honestly**, because REQ-025 forbids any claim beyond these
 sources. Each entry says what was tested, on whom, and what it found, and the date it was checked.
-The sections follow the techniques in `data/research.json`. A source that backs two techniques has
+The sections follow the activities. A source that backs two techniques has
 its full note in the first section and a pointer in the second.
 
 These sources support the *techniques*. No study has tested Freelief itself.
@@ -70,23 +70,12 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
   review of whole games, not of a bubble field, and not of a panic attack. **No study has tested
   this activity itself.**
 
-## Trace a shape (technique `trace`)
+## Zen Garden (technique `garden`)
 
-- **[engelhard2010]** Engelhard, I. M., van den Hout, M. A., Janssen, W. C., & van der Beek, J.
-  (2010). Eye movements reduce vividness and emotionality of "flashforwards". *Behaviour Research
-  and Therapy*, 48(5), 442–447. https://doi.org/10.1016/j.brat.2010.01.003 — checked 2026-10-09.
-  *Evidence:* a laboratory experiment with a non-clinical sample. People held images of feared
-  future events in mind while they made eye movements, or with no second task. With eye movements,
-  they rated the images as less vivid and less emotional. The authors explain this as the two
-  tasks competing for working memory. It tested eye movements, not tracing a shape with a finger.
-- **[lee2013]** Lee, C. W., & Cuijpers, P. (2013). A meta-analysis of the contribution of eye
-  movements in processing emotional memories. *Journal of Behavior Therapy and Experimental
-  Psychiatry*, 44(2), 231–239. https://doi.org/10.1016/j.jbtep.2012.11.001 — checked 2026-10-09.
-  *Evidence:* a meta-analysis of 15 clinical trials (EMDR with and without eye movements) and 11
-  laboratory studies, 849 participants in all. Eye movements added a moderate effect in therapy
-  (d = 0.41) and a large one in the laboratory (d = 0.74), strongest on vividness. It is about
-  distressing memories and eye movements, not about panic or a tracing task. **No study has tested
-  this activity itself.**
+No study has tested raking sand, and no source specific to it has been checked in a session. Like
+the other activities it is offered as a gentle distraction for the moment; the sources under "About
+all the activities" below apply (webb2012; helbiglang2010 for the caveat). *(Added 2026-10-10,
+AUD-171.)*
 
 ## Unblock (technique `unblock`)
 
@@ -139,7 +128,7 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
   Only the mandala group had significantly lower anxiety than the reading group.
   Short-term, small, and none of these studies was about a panic attack.
 
-## Visualizer: music, rain and waves (technique `calm`)
+## Kaleidoscope, with music, rain and waves (technique `calm`; the Visualizer until 2026-10-10)
 
 - **[dewitte2020]** de Witte, M., Spruit, A., van Hooren, S., Moonen, X., & Stams, G.-J. (2020).
   Effects of music interventions on stress-related outcomes: A systematic review and two
@@ -178,14 +167,14 @@ or Europe PMC; their notes come from the UNT-049 check, and they say so.
   *Evidence and caveat:* a systematic review. Behaviors used to escape anxiety, which can include
   distraction, may keep an anxiety disorder going in the long term, though the evidence is mixed.
   **This is why Freelief offers distraction for the moment and never presents it as a way to
-  overcome panic.** A person with frequent attacks is better served by a professional, and the
-  Standards and research page says so.
+  overcome panic.** A person with frequent attacks is better served by a professional, and About
+  says so (`about.selfHelp2`).
 
 ## Removed 2026-10-08 (UNT-032)
 
 The owner removed 5-4-3-2-1 grounding and calming statements on 2026-10-07 (UNT-032), because their
 research was weak. This file kept their sections until 2026-10-08 (AUD-063). They are kept here as a
-record only. No screen uses them, and `data/research.json` does not cite them.
+record only. No screen uses them, and `data/research.json` (removed 2026-10-10) did not cite them.
 
 ### 5-4-3-2-1 grounding
 
@@ -233,3 +222,25 @@ than vytal2012 and pallavicini2021, so they are no longer cited. Their notes are
   second experiment showed that both the reminder and the game were needed. Again about memories,
   not panic. **No study has tested this activity itself.**
 
+## Removed 2026-10-10 (RLG-055, UNT-115)
+
+Zen Garden replaced Trace a shape. Its two sources were about eye movements and working memory; their
+notes are kept here as a record.
+
+### Trace a shape (technique `trace`)
+
+- **[engelhard2010]** Engelhard, I. M., van den Hout, M. A., Janssen, W. C., & van der Beek, J.
+  (2010). Eye movements reduce vividness and emotionality of "flashforwards". *Behaviour Research
+  and Therapy*, 48(5), 442–447. https://doi.org/10.1016/j.brat.2010.01.003 — checked 2026-10-09.
+  *Evidence:* a laboratory experiment with a non-clinical sample. People held images of feared
+  future events in mind while they made eye movements, or with no second task. With eye movements,
+  they rated the images as less vivid and less emotional. The authors explain this as the two
+  tasks competing for working memory. It tested eye movements, not tracing a shape with a finger.
+- **[lee2013]** Lee, C. W., & Cuijpers, P. (2013). A meta-analysis of the contribution of eye
+  movements in processing emotional memories. *Journal of Behavior Therapy and Experimental
+  Psychiatry*, 44(2), 231–239. https://doi.org/10.1016/j.jbtep.2012.11.001 — checked 2026-10-09.
+  *Evidence:* a meta-analysis of 15 clinical trials (EMDR with and without eye movements) and 11
+  laboratory studies, 849 participants in all. Eye movements added a moderate effect in therapy
+  (d = 0.41) and a large one in the laboratory (d = 0.74), strongest on vividness. It is about
+  distressing memories and eye movements, not about panic or a tracing task. **No study has tested
+  this activity itself.**
