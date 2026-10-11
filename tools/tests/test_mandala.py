@@ -120,12 +120,18 @@ def test_new_mandala_starts_a_blank_new_design():
 
 
 def test_every_shape_in_every_design_is_a_large_target_on_a_phone():
-    with open_app(viewport={"width": 360, "height": 740}) as (page, _, _):
+    # Upright and held sideways (AUD-190: the landscape layout once shrank the shapes under 44 px).
+    for viewport in ({"width": 360, "height": 740}, {"width": 667, "height": 375}, {"width": 844, "height": 390}):
+        _every_shape_is_large(viewport)
+
+
+def _every_shape_is_large(viewport):
+    with open_app(viewport=viewport) as (page, _, _):
         go(page, "mandala")
         for design in range(len(SETTINGS["designs"])):
             sizes = page.locator(".mandala-part").evaluate_all(
                 "els => els.map(e => { const b = e.getBoundingClientRect(); return Math.min(b.width, b.height); })")
-            assert min(sizes) >= 44, f"design {design}: smallest shape {min(sizes):.1f}px (the stress checks: 44 px)"
+            assert min(sizes) >= 44, f"{viewport}, design {design}: smallest shape {min(sizes):.1f}px (44 px)"
             swatch = page.locator("input[name=mandala-color]").first.bounding_box()
             assert swatch["width"] >= 44 and swatch["height"] >= 44
             page.locator(".new-mandala").click()

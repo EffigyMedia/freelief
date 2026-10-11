@@ -945,7 +945,8 @@ h1, h2, h3 { text-wrap: balance; }
   .guide { width: min(50vw, calc(100dvh - 9rem), 22rem); }
   .unblock-board { width: min(100%, 24rem, calc(100dvh - 6rem)); }
   .garden-sand { width: min(100%, calc((100dvh - 6rem) * 4 / 3)); margin: 0 auto; }
-  .mandala-art { max-width: min(26rem, calc(100dvh - 6rem)); }
+  /* The mandala keeps its portrait size, so every shape stays a 44 px target; the page scrolls
+     to it (AUD-190). */
   .bubble-field, .pond { height: calc(100dvh - 7rem); }
   .calm-field { width: min(100%, calc(100dvh - 6rem)); margin: 0 auto; }
 }

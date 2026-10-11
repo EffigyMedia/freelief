@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-33"></a>
+## [0.8.33] - 2026-10-11
+- **Color Mandalas**: with the phone turned sideways, every shape stays large enough to tap easily;
+  the page scrolls to the mandala. [AUD-190](../fragments/AUD-190.md). 220 tests.
+
 <a id="v0-8-32"></a>
 ## [0.8.32] - 2026-10-10
 - **Sound**: on iPhone, sound should come back after a call to a crisis line; Freelief never starts

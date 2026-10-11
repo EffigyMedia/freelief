@@ -341,9 +341,10 @@ def test_a_failed_install_never_reads_as_saved_and_leaves_no_empty_cache():
 def test_a_phone_held_sideways_shows_each_play_area_whole_under_the_header():
     # AUD-162 (owner, 2026-10-10): a web app cannot hold portrait on iPhone or in a tab, so landscape
     # must work. On an 844 x 390 screen the header is one row, and each play area fits the height
-    # left under it, so the person can see all of it at once.
+    # left under it, so the person can see all of it at once. The mandala keeps its 44 px shapes
+    # instead and scrolls (AUD-190).
     areas = {"breathe": ".guide", "bubbles": ".bubble-field", "garden": ".garden-sand", "unblock": ".unblock-board",
-             "ripple": ".pond", "mandala": ".mandala-art", "calm": ".calm-field"}
+             "ripple": ".pond", "calm": ".calm-field"}
     with open_app(route="menu", viewport={"width": 844, "height": 390}) as (page, _, _):
         header = page.evaluate("document.querySelector('header').getBoundingClientRect().height")
         assert header <= 80, f"the header takes {header} px of 390"
