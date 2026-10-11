@@ -449,6 +449,10 @@ def test_a_release_needs_a_valid_bench_run_of_its_version_in_the_log():
         log.write_text(nl.join(busy + ["## 2026-10-11 — quiet run (v1.2.3)", row, ""]), "utf-8")
         assert freelief.valid_bench_logged("1.2.3", log)
         assert not freelief.valid_bench_logged("1.2.4", log), "the run must be of this version"
+        # AUD-183: a valid run that missed a target does not let a release through.
+        failing = ["## 2026-10-12 — quiet but slow (v1.3.0)", row.replace("| OK |", "| FAIL |"), ""]
+        log.write_text(nl.join(failing), "utf-8")
+        assert not freelief.valid_bench_logged("1.3.0", log), "a run with a FAIL row passed the gate"
 
 
 def test_every_test_server_is_the_guarded_one():

@@ -125,13 +125,15 @@ def test_every_crisis_line_is_dated_and_dialable():
 
 def test_reduced_motion_keeps_the_guide_still():
     # REQ-010: no animation when the device asks for reduced motion.
+    # The guide sets its still shape once when the first phase begins (AUD-184: under load that can
+    # be later than a fixed wait), so the reads start after the first count shows.
     with open_app(reduced_motion="reduce") as (page, _, _):
-        page.wait_for_timeout(300)
+        wait_until(page, "document.querySelector('.guide-count').textContent !== ''", 5000)
+        page.wait_for_timeout(100)
         first = page.locator(".guide-circle").evaluate("e => getComputedStyle(e).transform")
         page.wait_for_timeout(1500)
         later = page.locator(".guide-circle").evaluate("e => getComputedStyle(e).transform")
         assert first == later, "the guide moved under reduced motion"
-        wait_until(page, "document.querySelector('.guide-count').textContent !== ''", 1500)
 
 
 def test_targets_are_at_least_44_pixels():

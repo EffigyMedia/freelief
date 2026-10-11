@@ -117,13 +117,15 @@ def version_not_raised(cwd: Path = ROOT) -> list[str]:
 
 
 def valid_bench_logged(version: str, log: Path = ROOT / "docs" / "performance" / "log.md") -> bool:
-    """Whether the performance log holds a valid bench run of this version (AUD-159): an entry whose
-    heading names the version and is not marked NOT VALID, with the urgent-help response in its table.
+    """Whether the performance log holds a valid, passing bench run of this version (AUD-159,
+    AUD-183): an entry whose heading names the version and is not marked NOT VALID, with the
+    urgent-help response in its table and no row that missed its target (FAIL).
     A release waits for one; the owner runs bench on a quiet machine (owner, 2026-10-10)."""
     text = log.read_text("utf-8") if log.is_file() else ""
     for entry in re.split(r"^## ", text, flags=re.M)[1:]:
         heading = entry.split("\n", 1)[0]
-        if f"(v{version})" in heading and "NOT VALID" not in heading and "Response: Need urgent help?" in entry:
+        if (f"(v{version})" in heading and "NOT VALID" not in heading and "Response: Need urgent help?" in entry
+                and "| FAIL |" not in entry):
             return True
     return False
 
@@ -388,7 +390,7 @@ def cmd_build(args: argparse.Namespace) -> int:
     for problem, items in (("not committed, so not what Pages deploys", dirty),
                            ("changed after the last version bump, or the version not raised", late),
                            (f"crisis data checked more than {config['crisis']['maxCheckAgeDays']} days ago", stale),
-                           ("not measured on a quiet machine (run bench there and log it; AUD-159)", unmeasured)):
+                           ("no valid, passing bench run in the log (run bench on a quiet machine and log it; AUD-159, AUD-183)", unmeasured)):
         if not items:
             continue
         if args.release:

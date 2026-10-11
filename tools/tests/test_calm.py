@@ -408,7 +408,7 @@ def test_the_rain_brings_soft_low_thunder_that_never_starts_suddenly():
     assert thunder["cutoffHz"] <= 200, "low end only, no crack"
     assert thunder["riseSeconds"] >= 0.5, "it swells in; it never starts suddenly"
     assert thunder["everySecondsMin"] >= 30, "rare"
-    probe = """
+    probe = r"""
 const realFetch = window.fetch;
 window.fetch = async (input, init) => {
   const response = await realFetch(input, init);
