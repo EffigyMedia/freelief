@@ -216,7 +216,7 @@ def cmd_doctor(_: argparse.Namespace) -> int:
             else:
                 print(f"[WARN] {name} cannot start here, so its browser tests do not run "
                       "(install the Microsoft Visual C++ runtime; see RLG-033)")
-    check(read_version() is not None, "version.js holds FREELIEF_VERSION = \"X.Y.Z\"")
+    check(read_version() is not None, f"version.js holds FREELIEF_VERSION = \"{read_version() or 'X.Y.Z'}\"")
     import json
     # Every JSON file that ships; a missing one fails, it is not skipped (AUD-035).
     for name in ("manifest.webmanifest", "config.json", "strings/en.json", "data/crisis-lines.json",

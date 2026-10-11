@@ -43,8 +43,9 @@ Seven runs; the median and the worst are recorded. Results go to `output/bench.j
 | Input to visible response (REQ-027) | < 100 ms | 77 ms | — | +25%, and never over 100 ms |
 | Shipped size (REQ-028) | < 250 KB (was 150 KB until 2026-10-07) | 239.8 KB | — | any growth is noted in the log |
 
-`tools/bench.py` holds these medians in `BASELINE` and prints `FLAG`, without failing, when a timing
-is over +25% or the size has grown; only a missed target fails (AUD-058). Keep the two in step.
+`tools/bench.py` reads these medians from this table (`read_baseline()`, their one source; AUD-123)
+and prints `FLAG`, without failing, when a timing is over +25% or the size has grown; only a missed
+target fails (AUD-058).
 
 *Before the re-baseline (v0.1.0): launch to the breathing guide 110 ms; Pause response 10 ms;
 41.3 KB. At v0.5.10: 155 ms, 69 ms, 130.3 KB.* The urgent-help response is close to its target: a

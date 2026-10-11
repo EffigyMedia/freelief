@@ -26,7 +26,7 @@ RESPONSE_TARGET_MS = 100
 
 # The recorded baseline (docs/performance/baseline.md) and its tolerance. Over tolerance prints FLAG
 # but does not fail: a flagged metric goes into docs/performance/log.md, and only a missed target
-# fails (AUD-058). Keep these in step with baseline.md when it is re-baselined.
+# fails (AUD-058). read_baseline() reads them from baseline.md, their one source (AUD-123).
 def read_baseline() -> dict:
     """The baseline figures from docs/performance/baseline.md, its one source (AUD-123)."""
     import re

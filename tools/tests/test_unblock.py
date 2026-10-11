@@ -194,6 +194,9 @@ def test_a_board_can_be_solved_by_drag_and_one_drag_is_one_move():
         page.locator(".unblock-board").evaluate("e => e.scrollIntoView({ block: 'end' })")
         first = True
         for name, steps in path:
+            # A block is measured only when no slide is running: under load a slide can still be
+            # moving when the next drag starts, and the drag would begin off the block.
+            wait_until(page, "document.getAnimations().length === 0", 3000)
             box = block(page, name).bounding_box()
             x, y = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
             across = "across" in block(page, name).get_attribute("class")
@@ -210,6 +213,7 @@ def test_a_board_can_be_solved_by_drag_and_one_drag_is_one_move():
                 assert block(page, name).get_attribute("aria-label") == label
                 # The click on Undo may scroll the page, so the block is measured again.
                 page.locator(".unblock-board").evaluate("e => e.scrollIntoView({ block: 'end' })")
+                wait_until(page, "document.getAnimations().length === 0", 3000)
                 box = block(page, name).bounding_box()
                 x, y = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
                 page.mouse.move(x, y)

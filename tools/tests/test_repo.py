@@ -449,3 +449,13 @@ def test_a_release_needs_a_valid_bench_run_of_its_version_in_the_log():
         log.write_text(nl.join(busy + ["## 2026-10-11 — quiet run (v1.2.3)", row, ""]), "utf-8")
         assert freelief.valid_bench_logged("1.2.3", log)
         assert not freelief.valid_bench_logged("1.2.4", log), "the run must be of this version"
+
+
+def test_every_test_server_is_the_guarded_one():
+    # AUD-129, re-opened by round UNT-139: test_engines.py built its own server with no guards. Every
+    # test server now comes from harness.start_server or harness.serve.
+    tests = freelief.ROOT / "tools" / "tests"
+    # test_repo.py builds a server on purpose: it tests the handler of `run` itself.
+    hits = [p.name for p in tests.glob("test_*.py") if p.name != "test_repo.py"
+            and ("SimpleHTTPRequestHandler" in p.read_text("utf-8") or "HTTPServer(" in p.read_text("utf-8"))]
+    assert not hits, hits

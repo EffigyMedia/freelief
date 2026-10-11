@@ -68,8 +68,9 @@ class _QuietHandler(http.server.SimpleHTTPRequestHandler):
         return super().send_head()
 
 
-def serve(directory: Path, cache_control: str = "no-store") -> str:
-    """Serve a directory on a new free localhost port; return its URL."""
+def start_server(directory: Path, cache_control: str = "no-store"):
+    """Serve a directory on a new free localhost port, with the guards of `run` (AUD-118, AUD-129).
+    Returns (url, server); a test that must take the network away stops the server itself."""
     shipped = None
     if directory.resolve() == ROOT:
         import sys
@@ -82,8 +83,14 @@ def serve(directory: Path, cache_control: str = "no-store") -> str:
     # A browser that closes a page mid-download aborts the socket; that is not a test failure.
     server.handle_error = lambda request, address: None
     threading.Thread(target=server.serve_forever, daemon=True).start()
+    return f"http://localhost:{server.server_address[1]}/", server
+
+
+def serve(directory: Path, cache_control: str = "no-store") -> str:
+    """Serve a directory on a new free localhost port; return its URL. Every test server is this one."""
+    url, server = start_server(directory, cache_control)
     atexit.register(server.shutdown)
-    return f"http://localhost:{server.server_address[1]}/"
+    return url
 
 
 def base_url() -> str:

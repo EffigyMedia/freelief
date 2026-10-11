@@ -51,15 +51,9 @@ def by_keyboard(browser):
 def offline(browser):
     # The app opens with no network once it has been installed (REQ-008), in this engine too. WebKit
     # in Playwright cannot navigate while a context is set offline, so the server is stopped instead.
-    import functools
-    import http.server
-    import threading
-    from harness import ROOT
-    handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(ROOT))
-    handler.log_message = lambda *args: None
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
-    threading.Thread(target=server.serve_forever, daemon=True).start()
-    url = f"http://localhost:{server.server_address[1]}/"
+    # The same guarded server as every other test (AUD-129), stopped here to take the network away.
+    from harness import ROOT, start_server
+    url, server = start_server(ROOT)
     context = browser.new_context(service_workers="allow")
     try:
         page = context.new_page()
