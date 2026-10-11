@@ -1203,7 +1203,7 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
 - **An incident rolls back at once; a fix forward runs a scoped round.** — AUD-105: after 1.0 a wrong
   crisis number or a broken start-up had no fast path, because `live` moves only after a full round.
   The owner chose: the owner may move `live` back to the previous release tag at once, with no
-  round (`git push --force origin vPREVIOUS:live`). The move is recorded the same day in the
+  round (`git push --force origin vPREVIOUS:live`; *corrected 2026-10-10, AUD-182: `git push --force origin "<tag>^{commit}:refs/heads/live"`*). The move is recorded the same day in the
   changelog and a fragment, with the reason. A rollback reaches installed copies: the older
   `version.js` names another cache, so its worker installs and takes over at the next open, as any
   update does. A fix forward is a release with a scoped round: only the lenses the fix touches. —

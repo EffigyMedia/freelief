@@ -459,3 +459,12 @@ def test_every_test_server_is_the_guarded_one():
     hits = [p.name for p in tests.glob("test_*.py") if p.name != "test_repo.py"
             and ("SimpleHTTPRequestHandler" in p.read_text("utf-8") or "HTTPServer(" in p.read_text("utf-8"))]
     assert not hits, hits
+
+
+def test_the_documented_live_moves_push_a_commit_to_the_branch():
+    # AUD-182: the tags are annotated, so `<tag>:live` is refused or makes a tag named live.
+    agents = (freelief.ROOT / "AGENTS.md").read_text("utf-8")
+    pushes = re.findall(r"git push[^`]*live", agents)
+    assert pushes, "AGENTS.md names no live push"
+    bad = [p for p in pushes if "^{commit}:refs/heads/live" not in p]
+    assert not bad, bad

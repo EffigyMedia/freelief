@@ -27,6 +27,14 @@ this log is only for changes to *how we work* (process/instructions).
 
 -->
 
+## 2026-10-11
+
+### Push a tag's commit to the full branch name when live moves
+- **Instruction:** every deploy, preview move and rollback pushes `"<tag>^{commit}:refs/heads/live"`, never `<tag>:live`.
+- **Why:** AUD-182. The `preview-` and release tags are annotated. Git refuses to write a tag object to an existing branch, and when no branch `live` exists it makes a tag named `live` and reports success. Shown in a scratch repository on 2026-10-11.
+- **Encoded in:** `AGENTS.md` (the Release and Incident rows; Conventions, the remote); design Decision Log (AUD-105 entry).
+- Agent, 2026-10-11.
+
 ## 2026-10-10
 
 ### A release waits for one valid bench run, made by the owner on a quiet machine
