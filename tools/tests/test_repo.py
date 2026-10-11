@@ -140,6 +140,7 @@ PRIVACY_WORDS = {
     "awakeMinutes": "screen stays on",
     "helpRegion": "country",
     "haptics": "vibration",
+    "thunder": "thunder",
     "openOn": "opens",
 }
 

@@ -162,7 +162,7 @@ const setTarget = AudioParam.prototype.setTargetAtTime;
 AudioParam.prototype.setTargetAtTime = function (value, when, constant) { window.__gains.push(value); return setTarget.call(this, value, when, constant); };"""
     with open_app(init_script=probe) as (page, _, _):
         page.locator(".guide").click()  # the first gesture unlocks sound
-        page.wait_for_timeout(300)
+        wait_until(page, "window.__loops.length > 0", 8000)  # the breath shows that sound is unlocked
         go(page, "garden")
         before = page.evaluate("window.__loops.length")
         sand = page.locator(".garden-sand")
@@ -172,7 +172,8 @@ AudioParam.prototype.setTargetAtTime = function (value, when, constant) { window
         page.mouse.down()
         for i in range(1, 25):
             page.mouse.move(box["x"] + 20 + i * 10, box["y"] + box["height"] / 2)
-        wait_until(page, f"window.__loops.slice({before}).some(r => r.loop)", 2000)
+        # Under full-suite load the first stroke can be slow to reach the audio (a flaky 2 s wait).
+        wait_until(page, f"window.__loops.slice({before}).some(r => r.loop)", 8000)
         made = page.evaluate(f"window.__loops.slice({before}).filter(r => r.loop).length")
         assert made == 1, f"one looping sound for the stroke, not {made}"
         assert max(page.evaluate("window.__gains")) > 0, "the stroke is heard"

@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `8dbed7d738e13cf9` · 31 requirement(s) specified, 7 not yet
+> Store stamp `ab66d0f9a66f504b` · 31 requirement(s) specified, 7 not yet
 
 ## 1. Introduction
 
@@ -52,8 +52,8 @@ person's settings, on the device.
   last-checked date.
 - **Region** — the country taken from the device language and region setting, never from location.
 - **Settings** — the only data Freelief stores, and only the values the person changed: the
-  breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, vibration
-  on or off, the theme, and the region for urgent help, on the device only.
+  breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, thunder in
+  the rain on or off, vibration on or off, the theme, and the region for urgent help, on the device only.
 - **Source** — a published research citation behind a technique, kept as a record in
   `docs/research/sources.md`. The app shows none and claims no standard (RLG-056).
 
@@ -190,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-10T20:09:46-04:00 by `Commands/srs.py` from 38 requirement record(s).
+Generated 2026-10-11T09:04:41-04:00 by `Commands/srs.py` from 38 requirement record(s).

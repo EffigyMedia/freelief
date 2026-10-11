@@ -64,6 +64,14 @@ export function start(container, ctx) {
         </label>
         <p id="haptics-hint" class="hint small-hint">${t("settings.hapticsHint")}</p>
       </div>
+      <div class="toggle">
+        <label class="choice">
+          <input type="checkbox" name="thunder" ${getSetting("thunder") ? "checked" : ""}
+                 aria-describedby="thunder-hint">
+          <span>${t("settings.thunder")}</span>
+        </label>
+        <p id="thunder-hint" class="hint small-hint">${t("settings.thunderHint")}</p>
+      </div>
       <div class="region-setting">
         <label class="field-label" for="help-region">${t("settings.region")}</label>
         <select id="help-region" class="country-select" aria-describedby="region-hint">
@@ -102,6 +110,8 @@ export function start(container, ctx) {
     input.addEventListener("change", () => setSetting("theme", input.value)));
   container.querySelector("input[name=haptics]").addEventListener("change", (event) =>
     setSetting("haptics", event.target.checked));
+  container.querySelector("input[name=thunder]").addEventListener("change", (event) =>
+    setSetting("thunder", event.target.checked));
   const region = container.querySelector("#help-region");
   // A saved region that is no longer curated shows as Automatic, which is what the dialog does.
   region.value = [...region.options].some((o) => o.value === getSetting("helpRegion")) ? getSetting("helpRegion") : "auto";

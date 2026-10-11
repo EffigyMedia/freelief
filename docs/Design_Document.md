@@ -183,7 +183,7 @@ Not built (decided 2026-10-07):
 | **Rhythm** | A breathing preset: the length in seconds of each phase (in, hold, out, hold). |
 | **Crisis line** | A phone, text or web service for a person in danger. It has a region, a name, how to reach it, and a last-checked date. |
 | **Region** | The country taken from the device language and region setting. Never from location. |
-| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, where Freelief opens (the menu or breathing), how long the screen stays on, sound on or off, vibration on or off, the light or dark theme, and the region for urgent help. What sound plays is not stored. On the device only. |
+| **Settings** | The only stored data, and only the values the person changed: the breathing rhythm, where Freelief opens (the menu or breathing), how long the screen stays on, sound on or off, thunder in the rain on or off (off by default, AUD-194), vibration on or off, the light or dark theme, and the region for urgent help. What sound plays is not stored. On the device only. |
 | ~~**Standard**~~ | *Withdrawn 2026-10-10 (RLG-056): Freelief claims no standard.* |
 | **Source** | A published research citation behind a technique, kept as a record in `docs/research/sources.md`; the app shows none (RLG-056). |
 
@@ -205,8 +205,8 @@ restarts on the device (REQ-023, REQ-015).
   last-checked date.
 - **Region** — the country taken from the device language and region setting, never from location.
 - **Settings** — the only data Freelief stores, and only the values the person changed: the
-  breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, vibration
-  on or off, the theme, and the region for urgent help, on the device only.
+  breathing rhythm, where Freelief opens, how long the screen stays on, sound on or off, thunder in
+  the rain on or off, vibration on or off, the theme, and the region for urgent help, on the device only.
 - **Source** — a published research citation behind a technique, kept as a record in
   `docs/research/sources.md`. The app shows none and claims no standard (RLG-056).
 <!-- END srs-definitions -->
@@ -1396,6 +1396,10 @@ All owner-decided 2026-10-07 in the design interview unless a line says otherwis
   (AUD-151, v0.8.21). (3) Feedback keeps the message and its kind in memory while the app is open,
   and stores nothing (AUD-153); its GitHub note says it needs an internet connection (AUD-154).
   — 2026-10-10 (UNT-134, UNT-135)
+- **Thunder is a setting, off by default.** — AUD-194 and the owner's ruling by the question tool:
+  some people fear storms, and rain alone must be calm. "Thunder in the rain" in Settings turns it on;
+  each roll asks the setting, so a change counts at once. — Rejected: thunder always on; on by
+  default. — 2026-10-11 (owner; UNT-162) *This amends "The rain has soft, distant thunder".*
 - **The worker's update check skips the HTTP cache, and the tests now face real caching.** — The
   test server always sent `no-store`, so no test met GitHub Pages' `max-age=600` (AUD-013). A new
   test serves the app that way, and it found that the update check took `version.js` from the HTTP

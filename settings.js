@@ -30,6 +30,7 @@ function validators(config) {
     rhythm: (v) => Object.hasOwn(config.breathing.rhythms, v),
     sounds: (v) => typeof v === "boolean",
     haptics: (v) => typeof v === "boolean",
+    thunder: (v) => typeof v === "boolean",
     theme: (v) => config.theme.choices.includes(v),
     // "auto", or a two-letter region code. crisis.js shows the general route for a region it does
     // not have, so a code that is no longer curated is safe.
@@ -68,6 +69,7 @@ export function initSettings(config) {
     theme: config.theme.default,
     helpRegion: config.crisis.defaultRegion,
     haptics: config.haptics.enabledByDefault,
+    thunder: config.sounds.rain.thunder.enabledByDefault,
     openOn: config.settings.openOnDefault,
     awakeMinutes: config.wakeLock.idleMinutesDefault,
   };

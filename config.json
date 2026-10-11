@@ -162,7 +162,8 @@
         "secondsMax": 9,
         "firstAfterSeconds": 20,
         "everySecondsMin": 40,
-        "everySecondsMax": 90
+        "everySecondsMax": 90,
+        "enabledByDefault": false
       }
     },
     "drop": {

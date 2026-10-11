@@ -417,6 +417,7 @@ window.fetch = async (input, init) => {
   data.sounds.rain.thunder.firstAfterSeconds = 0.3;
   return new Response(JSON.stringify(data), { headers: { "Content-Type": "application/json" } });
 };
+localStorage.setItem('freelief.settings.v2', JSON.stringify({ thunder: true }));  // on by choice (AUD-194)
 window.__low = [];
 const createFilter = AudioContext.prototype.createBiquadFilter;
 AudioContext.prototype.createBiquadFilter = function () {
@@ -424,3 +425,17 @@ AudioContext.prototype.createBiquadFilter = function () {
     with open_app(init_script=probe, route="menu") as (page, _, _):
         page.locator(".sound-choice[data-sound=rain]").click()
         wait_until(page, f"window.__low.some(([type, hz]) => type === 'lowpass' && Math.abs(hz - {thunder['cutoffHz']}) < 1)", 4000)
+
+
+def test_thunder_is_off_until_the_person_turns_it_on():
+    # AUD-194 (owner, 2026-10-11): rain alone has no thunder; the Settings switch turns it on.
+    assert CONFIG["sounds"]["rain"]["thunder"]["enabledByDefault"] is False
+    with open_app(route="settings") as (page, _, _):
+        box = page.locator("input[name=thunder]")
+        assert not box.is_checked()
+        box.focus()
+        page.keyboard.press("Space")
+        assert box.is_checked()
+        page.reload()
+        wait_until(page, "document.querySelector('main').dataset.shown === 'settings'", 5000)
+        assert page.locator("input[name=thunder]").is_checked(), "the choice is kept"

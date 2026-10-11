@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-35"></a>
+## [0.8.35] - 2026-10-11
+- **Rain**: thunder is now off unless you turn it on in Settings ("Thunder in the rain"), because
+  some people fear storms. [AUD-194](../fragments/AUD-194.md). 222 tests.
+
 <a id="v0-8-34"></a>
 ## [0.8.34] - 2026-10-11
 - **Update now**: if you leave Settings while it works, it never reloads the screen you went to;

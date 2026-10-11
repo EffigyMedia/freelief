@@ -509,6 +509,12 @@ export function rain(level = 1) {
   const rolls = new Set();
   let thunderTimer = 0;
   function roll() {
+    // Off by default, and asked again at each roll, so a change in Settings counts at once
+    // (owner, AUD-194: some people fear storms).
+    if (!getSetting("thunder")) {
+      thunderTimer = setTimeout(roll, 1000 * thunder.firstAfterSeconds);
+      return;
+    }
     const now = ctx.currentTime;
     const rumble = noise(ctx);
     rumble.loop = true;
