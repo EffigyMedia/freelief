@@ -18,6 +18,8 @@ audit.
   its audio before your first tap; a screen that fails to start lets go of everything it took.
   [AUD-165](../fragments/AUD-165.md), [AUD-166](../fragments/AUD-166.md),
   [AUD-180](../fragments/AUD-180.md). 218 tests.
+- The live preview moved to 0.8.32 on 2026-10-10, with the owner's yes by the question tool
+  ("Move live now"); tag `preview-0.8.32`; bench valid and logged (busiest load 23.3%).
 
 <a id="v0-8-31"></a>
 ## [0.8.31] - 2026-10-10
