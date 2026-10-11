@@ -6,7 +6,22 @@
 import { getSetting, setSetting, resetSettings } from "../settings.js";
 import { regionList } from "../crisis.js";
 
+// Whether Settings is the screen shown. An update that finishes after the person left must not
+// reload the page under them; the new version then takes over at the next open (AUD-191).
+let shown = false;
+
+function reloadIfStillHere() {
+  if (shown && !document.querySelector("dialog.help")?.open) location.reload();
+}
+
+// A failed update says the app still works offline only when the offline copy is whole (AUD-192).
+async function showFailure(status, t) {
+  const state = await offlineState();
+  status.textContent = t(state === "Ready" ? "settings.updateFailed" : "settings.updateFailedNotSaved");
+}
+
 export function start(container, ctx) {
+  shown = true;
   const { t, escape, config } = ctx;
   const rhythms = config.breathing.rhythmOrder;
   const themes = config.theme.choices;
@@ -177,13 +192,13 @@ async function updateNow(status, t, waitSeconds) {
   status.textContent = t("settings.updating");
   const registration = await navigator.serviceWorker?.getRegistration().catch(() => null);
   if (!registration) {
-    location.reload();
+    reloadIfStillHere();
     return;
   }
   try {
     await registration.update();
   } catch {
-    status.textContent = t("settings.updateFailed");
+    await showFailure(status, t);
     return;
   }
   const incoming = registration.installing || registration.waiting;
@@ -205,8 +220,9 @@ async function updateNow(status, t, waitSeconds) {
         incoming.removeEventListener("statechange", check);
       };
     }, waitSeconds);
-    if (settled === true) location.reload();
-    else status.textContent = t(settled === "others" ? "settings.updateOtherWindows" : "settings.updateFailed");
+    if (settled === true) reloadIfStillHere();
+    else if (settled === "others") status.textContent = t("settings.updateOtherWindows");
+    else await showFailure(status, t);
     return;
   }
   // The same version: the worker fetches every file again and replaces its copy only when all of
@@ -220,8 +236,10 @@ async function updateNow(status, t, waitSeconds) {
     else resolve(false);
     return () => navigator.serviceWorker.removeEventListener("message", heard);
   }, waitSeconds);
-  if (refreshed === true) location.reload();
-  else status.textContent = t("settings.updateFailed");
+  if (refreshed === true) reloadIfStillHere();
+  else await showFailure(status, t);
 }
 
-export function stop() {}
+export function stop() {
+  shown = false;
+}

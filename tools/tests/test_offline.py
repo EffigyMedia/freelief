@@ -626,6 +626,26 @@ Object.defineProperty(navigator, 'serviceWorker', { value: Object.assign(new Eve
     active: { postMessage() {} } }) }) });"""
     with open_app(init_script=probe, route="settings") as (page, _, _):
         page.locator(".update-now").click()
-        wait_until(page, f"document.querySelector('.update-status').textContent === {_json.dumps(strings['settings.updateFailed'])}", 5000)
+        # The stub worker never answers, so nothing shows the copy is whole (AUD-192).
+        wait_until(page, f"document.querySelector('.update-status').textContent === {_json.dumps(strings['settings.updateFailedNotSaved'])}", 8000)
         assert page.locator(".update-now").get_attribute("aria-disabled") is None, "the button is free again"
+
+
+def test_an_update_that_finishes_after_leaving_settings_does_not_reload():
+    # AUD-191: the person presses Update now and goes to Breathe; the new version must not reload
+    # the page under them. It takes over at the next open.
+    probe = r"""
+const worker = Object.assign(new EventTarget(), { state: "installed", postMessage(message) {
+  if (message === "skip") setTimeout(() => { worker.state = "activated"; worker.dispatchEvent(new Event("statechange")); }, 1500);
+} });
+Object.defineProperty(navigator, 'serviceWorker', { value: Object.assign(new EventTarget(), {
+  controller: null, ready: new Promise(() => {}), register: () => Promise.resolve(null),
+  getRegistration: () => Promise.resolve({ update: () => Promise.resolve(), installing: worker, waiting: null, active: null }) }) });"""
+    with open_app(init_script=probe, route="settings") as (page, _, _):
+        page.evaluate("window.__notReloaded = true")
+        page.locator(".update-now").click()
+        page.evaluate("location.hash = 'breathe'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'breathe'", 3000)
+        page.wait_for_timeout(2500)
+        assert page.evaluate("window.__notReloaded === true"), "the page reloaded under the person"
 

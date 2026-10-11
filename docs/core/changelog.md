@@ -12,6 +12,12 @@ audit.
 
 ---
 
+<a id="v0-8-34"></a>
+## [0.8.34] - 2026-10-11
+- **Update now**: if you leave Settings while it works, it never reloads the screen you went to;
+  the new version comes at the next open. When it fails, it says the app works with no internet only
+  if that is true. [AUD-191](../fragments/AUD-191.md), [AUD-192](../fragments/AUD-192.md). 221 tests.
+
 <a id="v0-8-33"></a>
 ## [0.8.33] - 2026-10-11
 - **Color Mandalas**: with the phone turned sideways, every shape stays large enough to tap easily;

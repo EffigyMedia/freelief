@@ -188,5 +188,9 @@ Settings shows `Version X` and `Update now`. Update now works in this order:
    failure the working copy stays and Settings says the update failed. Nothing is unregistered
    (AUD-133). Every wait for the worker ends after `settings.updateWaitSeconds` (60 s) with the same
    message, and the button is free again (AUD-179).
+5. The page reloads only while Settings is still the screen shown and urgent help is closed; if the
+   person has left, the new version takes over at the next open (AUD-191). A failure says the app
+   still works offline only when the worker reports the copy whole; otherwise it says to open
+   Freelief again while online (AUD-192).
 
 Settings in `localStorage` are kept.
