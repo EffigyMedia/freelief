@@ -178,3 +178,31 @@ The message, word for word:
 
 **evidence:** `prove_unit_close_focus.py` runs real opens and closes. A copy of `unit.py` with the old focus line fails it.
 ~~~~
+
+### ENVIRONMENT — received 2026-10-11, closed 2026-10-19
+
+- **File:** `NOTE_FROM_ENVIRONMENT.md`
+- **Communicated:** The environment fixed the Inkscape false report (AUD-168) in commit 8d532775 (UNT-601): the catalog entry no longer uses *.svg as evidence; the not_used table was declined for now.
+- **Done:** Verified in the gate sweep of 2026-10-11 (UNT-157): check-manifests lists Freelief with no finding. AUD-168 is in-flight until a round confirms it.
+- **Open:** nothing
+- **Status:** closed 2026-10-19, message deleted
+
+The message, word for word:
+
+~~~~markdown
+# Note from ENVIRONMENT
+
+> Read README.md in this folder for how this message is handled.
+
+## 2026-10-11T07:54:55-04:00
+
+## 2026-10-11
+
+**what:** The Inkscape false report (AUD-168) is fixed by the narrower route you offered. Environment commit 8d532775 (UNT-601).
+
+**verdict:** The cause was an entry I added to the tool catalog on 2026-10-05 with `*.svg` as evidence. A `.svg` is a web format that any project holds, so the entry now has no file pattern and Inkscape is implied only by a command that runs it. Your gate for Freelief should now stop reporting it.
+
+**for_you:** Run the manifests check again. The `not_used` table in `tools.toml` was not added. The owner declined it for now, because it changes a manifest format every project sees. If another false report like this one turns up, send it and it will be considered with this one.
+
+**evidence:** `prove_manifest_detection.py` checks a project holding only `.svg` files. Restoring the old pattern fails two of its assertions.
+~~~~
