@@ -4,7 +4,7 @@
 >
 > Structure follows **ISO/IEC/IEEE 29148**. A requirement appears here once it is `agreed`; a `proposed` one is still a question for the owner and a `withdrawn` one is history the store keeps.
 >
-> Store stamp `ab66d0f9a66f504b` · 31 requirement(s) specified, 7 not yet
+> Store stamp `06c8a264fcbe1b61` · 31 requirement(s) specified, 7 not yet
 
 ## 1. Introduction
 
@@ -90,7 +90,7 @@ person's settings, on the device.
 - **REQ-035** *(should)* — Freelief offers Unblock, a sliding-block puzzle: the person slides blocks along their length on a 6 by 6 board to let the blue block out through the gap in the right edge, by drag, by arrow keys on a block, or by choosing a block and using Slide buttons, with every block named for a screen reader, boards from easy to hard that are all solvable, Undo and Start again, and with no score, no move count, no timer and no losing state.
 - **REQ-036** *(should)* — Freelief offers the Kaleidoscope, an activity with nothing to do: a slow, full-width kaleidoscope of soft shapes and colors that turns, drifts in color and fades from one pattern to the next, with no flashing and no motion under reduced motion, and it has a full screen with its own Need urgent help? button and a black screen that one tap or key brings back. Background sound is chosen on every screen in the header's sound bar: a music note, a raindrop and a wave, each a toggle; rain and waves replace each other, music plays with either, and a tap while the speaker is off turns sound on. The sound keeps playing on every screen until its button is tapped again, breathing lowers it, it waits while urgent help is open, and nothing about it is stored.
 - **REQ-037** *(should)* — Freelief keeps the screen on while breathing or the Kaleidoscope runs, so the phone does not dim or lock mid-breath, and lets it sleep after a time with no touch or key that the person chooses in Settings (10, 30 or 60 minutes, or always while it runs; 30 by default), and at once while breathing is paused. A browser without the wake lock simply lets the screen sleep.
-- **REQ-038** *(should)* — Freelief offers Zen Garden: the person rakes lines in a tray of sand with a finger, a mouse or the arrow keys, and adds, moves and removes a few stones and small plants, each named for a screen reader, with lines that flow around them and a way to smooth the sand, and with no score, no timer and no end.
+- **REQ-038** *(should)* — Freelief offers Zen Garden: the person rakes lines in a tray of sand with a finger, a mouse or the arrow keys, and adds, moves and removes a few stones and small plants, each named for a screen reader, with raked lines that stop at their edges and a way to smooth the sand, and with no score, no timer and no end.
 
 ### 3.3 Usability requirements
 
@@ -190,4 +190,4 @@ How each requirement above is shown to be met. The method is recorded on the req
 
 ---
 
-Generated 2026-10-11T09:04:41-04:00 by `Commands/srs.py` from 38 requirement record(s).
+Generated 2026-10-19T10:18:19-04:00 by `Commands/srs.py` from 38 requirement record(s).

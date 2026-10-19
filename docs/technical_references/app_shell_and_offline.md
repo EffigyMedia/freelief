@@ -34,6 +34,12 @@ buttons: the sound bar's music, rain and waves, the sound button and the Setting
 urgent help?" on its own line, as text. The Tab order follows what is seen, so "Need urgent help?"
 is the sixth stop.
 
+**Held sideways** (AUD-162; the Decision Log entry "Landscape works on a phone"). Under
+`@media (orientation: landscape) and (max-height: 500px)` the header is one row (about 65 px), and
+the breathing guide, the Unblock board, the Zen Garden tray, the bubble field, the pond and the
+Kaleidoscope fit the height under it. The mandala keeps its portrait size, so its shapes stay 44 px,
+and the page scrolls to it (AUD-190). The manifest sets no orientation.
+
 - **The sound button** turns all sound on or off from every screen. It is a toggle button with the
   fixed name "Sound" and `aria-pressed`. It sets the `sounds` setting. The fade, the sound bar
   and the background sound are in `exercises_and_settings.md`.

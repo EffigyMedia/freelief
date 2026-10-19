@@ -8,7 +8,7 @@ Append-only, newest on top. Format: `Performance_Testing.md` §7.
 | Launch to first screen (the menu) | 154 ms | 183.1 ms | +19% | OK |
 | Response: Need urgent help? opens | 77 ms | 36.2 ms | -53% | OK |
 | Shipped size | 239.8 KB | 235.9 KB | -2% | OK |
-Notes: busiest CPU load 23.3%, baseline load 27.0%. Valid (busiest 23.3%, under the 32% limit). It confirms the urgent-help fix of v0.8.15 (AUD-131): 36.2 ms, from 100 to 103 ms in round UNT-124, worst 44.8 ms. The launch is 183.1 ms, +19% on the baseline and within the +25% tolerance, so the earlier FLAGs of +34% to +66% were machine load. Size 234.3 KB after the palette icons. AUD-158 has its valid run.
+Notes: busiest CPU load 23.3%, baseline load 27.0%. Valid (busiest 23.3%, under the 32% limit). It confirms the urgent-help fix of v0.8.15 (AUD-131): 36.2 ms, from 100 to 103 ms in round UNT-124, worst 44.8 ms. The launch is 183.1 ms, +19% on the baseline and within the +25% tolerance, so the earlier FLAGs of +34% to +66% were machine load. Size 235.9 KB, as the table says: 234.3 KB after the palette icons, plus 1.6 KB in v0.8.31 and v0.8.32 (corrected 2026-10-19, AUD-188). AUD-158 has its valid run.
 
 ## 2026-10-10 — Size saving 1: palette icons (v0.8.30)
 | Metric | Baseline | Now | Δ | Verdict |
