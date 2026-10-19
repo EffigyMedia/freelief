@@ -205,7 +205,14 @@
     },
     "background": {
       "duckLevel": 0.35,
-      "duckSeconds": 1.2
+      "duckSeconds": 1.2,
+      "bothMix": {
+        "music": 0.9,
+        "nature": 0.6
+      },
+      "duckRoutes": [
+        "breathe"
+      ]
     },
     "waves": {
       "volume": 0.05,
@@ -766,14 +773,7 @@
       "fadeSeconds": 7,
       "turnSeconds": 240,
       "hueSeconds": 150
-    },
-    "bothMix": {
-      "music": 0.9,
-      "nature": 0.6
-    },
-    "duckRoutes": [
-      "breathe"
-    ]
+    }
   },
   "wakeLock": {
     "idleMinutesChoices": [

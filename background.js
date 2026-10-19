@@ -17,9 +17,9 @@ const listeners = new Set();
 
 const NATURE = { rain: (level) => audio.rain(level), waves: (level) => audio.waves(level) };
 
-// With both playing, the nature sound sits under the music (config.calm.bothMix).
-const musicLevel = () => (nature ? config.calm.bothMix.music : 1);
-const natureLevel = () => (music ? config.calm.bothMix.nature : 1);
+// With both playing, the nature sound sits under the music (config.sounds.background.bothMix).
+const musicLevel = () => (nature ? config.sounds.background.bothMix.music : 1);
+const natureLevel = () => (music ? config.sounds.background.bothMix.nature : 1);
 
 function startMusic() {
   musicPart.stop();

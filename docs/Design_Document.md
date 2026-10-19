@@ -429,7 +429,7 @@ setting except Settings itself; the background sound belongs to the shell's soun
 `breathing` (rhythms and the default, 4 in and 6 out); `sounds` (every note, level and fade, the
 background volume and ducking, the rain and the waves); `haptics`; `wakeLock` (the screen-on
 choices); `bubbles`, `garden`, `unblock` (the boards), `ripple` (with its `wave`), `mandala` and
-`calm` (the Kaleidoscope, and the mix and ducking of the background sound); `theme`; `settings`; `crisis` (the directory URL
+`calm` (the Kaleidoscope only; the background sound's mix and ducking are in `sounds.background`, AUD-187); `theme`; `settings`; `crisis` (the directory URL
 and the freshness window); and `project` (the feedback links, the email address, empty until
 decided).
 

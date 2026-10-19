@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-37"></a>
+## [0.8.37] - 2026-10-19
+- Tidying; nothing a person hears changes. The background sound's mix and ducking settings move
+  beside its other settings. [AUD-187](../fragments/AUD-187.md). 223 tests.
+
 <a id="v0-8-36"></a>
 ## [0.8.36] - 2026-10-19
 - A screen that fails as it closes no longer stops the next screen from opening.

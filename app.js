@@ -294,7 +294,7 @@ async function show(name, { moveFocus }) {
   main.dataset.screen = name;
   delete main.dataset.shown;
   // A screen with its own tones lowers the background sound under them (RLG-045).
-  audio.duck(config.calm.duckRoutes.includes(name));
+  audio.duck(config.sounds.background.duckRoutes.includes(name));
   let screen;
   try {
     screen = await ROUTES[name]();

@@ -267,13 +267,13 @@ person stops it (RLG-045, RLG-049). `background.js` only plays. It never touches
 never starts a sound by itself, so each visit starts silent.
 - `toggle(sound)` turns `music`, `rain` or `waves` on or off. Rain and waves replace each other;
   music plays with either. Both parts start again at their new levels, because the mix changes:
-  with both, the nature sound sits under the music (`calm.bothMix`).
+  with both, the nature sound sits under the music (`sounds.background.bothMix`).
 - `current()` gives `{ music, nature }`; `playing()` says whether anything plays.
 - `hold()` stops the loops while sound is held (urgent help open, app hidden), so no notes queue
   in the paused clock (AUD-113). `restart()` starts what plays again.
 
 **Ducking.** On each route change, the shell calls `audio.duck()`. On a route in
-`calm.duckRoutes` (breathing), the `bed` volume falls to `sounds.background.duckLevel` over
+`sounds.background.duckRoutes` (breathing), the `bed` volume falls to `sounds.background.duckLevel` over
 `duckSeconds`, so the background sits under the breath sound. On other routes it comes back up.
 
 **The sound bar** (RLG-049) is three round toggle buttons in the header's middle row, on every

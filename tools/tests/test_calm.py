@@ -242,7 +242,7 @@ def test_music_and_rain_play_together_and_each_stops_on_its_own_tap():
         tap(page, "rain")
         wait_until(page, f"{live_pads} === 0 && {live_rain} === 0", 4000)
         assert not errors, errors
-        mix = CONFIG["calm"]["bothMix"]
+        mix = CONFIG["sounds"]["background"]["bothMix"]
         assert 0 < mix["nature"] < mix["music"] <= 1, "the nature sound sits under the music"
 
 
