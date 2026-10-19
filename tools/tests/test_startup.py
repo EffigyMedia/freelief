@@ -112,3 +112,21 @@ def test_a_menu_that_cannot_start_brings_back_the_static_fallback():
         assert "emergency" in page.locator("#fallback").inner_text().lower()
     finally:
         context.close()
+
+
+def test_a_screen_whose_stop_throws_does_not_block_the_next_screen():
+    # AUD-186: a stop() that throws once kept the person on the old screen with the address changed.
+    context = browser().new_context(viewport={"width": 390, "height": 844}, service_workers="block")
+    try:
+        context.route("**/screens/about.js*", lambda route: route.fulfill(
+            content_type="text/javascript",
+            body="export function start(c) { c.innerHTML = '<h1>About</h1>'; } "
+                 "export function stop() { throw new Error('stop failed'); }"))
+        page = context.new_page()
+        page.goto(base_url() + "#about")
+        page.wait_for_selector("html[data-ready='true']", timeout=5000)
+        wait_until(page, "document.querySelector('main').dataset.shown === 'about'", 5000)
+        page.evaluate("location.hash = 'menu'")
+        wait_until(page, "document.querySelector('main').dataset.shown === 'menu'", 5000)
+    finally:
+        context.close()

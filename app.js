@@ -284,7 +284,11 @@ function routeName() {
 let showing = 0;
 
 async function show(name, { moveFocus }) {
-  if (current) current.stop();
+  // A stop() that throws must not keep the person on the old screen (AUD-186): the error is kept
+  // for a field report, and the new screen still loads.
+  if (current) {
+    try { current.stop(); } catch (error) { console.error("Freelief could not stop a screen:", error); }
+  }
   current = null;
   const request = ++showing;
   main.dataset.screen = name;

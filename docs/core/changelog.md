@@ -12,6 +12,11 @@ audit.
 
 ---
 
+<a id="v0-8-36"></a>
+## [0.8.36] - 2026-10-19
+- A screen that fails as it closes no longer stops the next screen from opening.
+  [AUD-186](../fragments/AUD-186.md). 223 tests.
+
 <a id="v0-8-35"></a>
 ## [0.8.35] - 2026-10-11
 - **Rain**: thunder is now off unless you turn it on in Settings ("Thunder in the rain"), because
