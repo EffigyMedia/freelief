@@ -515,7 +515,10 @@ therefore replace a cached file, such as `index.html` or `data/crisis-lines.json
 version replaces the cache. That bound holds for the version tag too (AUD-157): the worker reads
 `?v=` only on a script request and only as a version name, and each activation keeps only the cache
 of the version it replaced (recorded in `freelief~state`), so a cache another site plants under a
-version's name is never served by address and is deleted at the next update. For the CSP, `'self'` is that shared origin, so it also allows a script
+version's name is never served by address. It is deleted at the next update while `freelief~state`
+holds the replaced version. When that record is missing (the first update from a version before
+0.8.28, or after another site deletes the record), the highest valid version name is kept for one
+update, so a planted cache with a higher name can stay until the update after (AUD-181). For the CSP, `'self'` is that shared origin, so it also allows a script
 from a sibling path. The owner chose to stay on the shared origin (Decision Log, 2026-10-07 and
 2026-10-08); an origin of its own (a custom domain or a dedicated account) removes this dependency.
 
